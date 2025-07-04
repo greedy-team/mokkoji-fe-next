@@ -4,4 +4,4 @@
 echo '린트 체크'
 pnpm run lint
 pnpm run lint:fix
-pnpx lint-staged
+pnpm exec lint-staged

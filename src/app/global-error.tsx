@@ -12,7 +12,7 @@ export default function GlobalError({
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);
-
+  console.log(error);
   return (
     <html lang="ko">
       <body>

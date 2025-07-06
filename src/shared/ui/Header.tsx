@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-export default function Header() {
+function Header() {
   const pathname = usePathname();
 
   return (
@@ -47,3 +47,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;

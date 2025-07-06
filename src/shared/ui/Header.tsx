@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import React from 'react';
+import NavButton from './nav-button';
 
 function Header() {
   const pathname = usePathname();
@@ -15,33 +17,32 @@ function Header() {
         Mokkoji
       </Link>
       <nav className="flex h-full items-center">
-        <Link
-          href="/clubs"
-          className={`flex h-full items-center px-3.25 no-underline ${pathname === '/clubs' ? 'border-b-3' : ''}`}
-        >
-          전체 동아리
-        </Link>
-        <Link
+        <NavButton
+          label="전체 동아리"
+          href="/club"
+          active={pathname === '/club'}
+        />
+        <NavButton
+          label="모집 공고"
           href="/recruit"
-          className={`relative flex h-full items-center px-3.25 no-underline ${pathname === '/recruit' ? 'border-b-3' : ''}`}
-        >
-          모집 공고
-        </Link>
-        <Link
+          active={pathname === '/recruit'}
+        />
+        <NavButton
+          label="즐겨찾기"
           href="/favorite"
-          className={`flex h-full items-center px-3.25 no-underline ${pathname === '/favorite' ? 'border-b-3' : ''}`}
-        >
-          즐겨찾기
-        </Link>
+          active={pathname === '/favorite'}
+        />
       </nav>
       <div className="ml-auto flex items-center gap-3.5">
         <span className="text-base font-light text-[#9C9C9C]">
           <span className="font-semibold">모꼬지님!</span> 안녕하세요
         </span>
-        <img
+        <Image
           src="/header/search.svg"
           alt="검색"
-          className="h-5 w-5 cursor-pointer"
+          width={20}
+          height={20}
+          className="cursor-pointer"
         />
       </div>
     </header>

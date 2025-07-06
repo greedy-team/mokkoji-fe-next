@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
-import { ToastContainer } from 'react-toastify';
-import CustomSessionProvider from '@/_providers/session-provider';
-import Header from '@/shared/ui/Header';
 
 const pretendard = localFont({
   src: [
@@ -60,24 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.className}`}>
-        <CustomSessionProvider>
-          <Header />
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-          {children}
-        </CustomSessionProvider>
-      </body>
+      <body className={`${pretendard.className}`}>{children}</body>
     </html>
   );
 }

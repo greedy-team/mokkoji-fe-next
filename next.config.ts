@@ -1,48 +1,59 @@
-import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
+import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  // 기존 Next.js 설정 작성
-  reactStrictMode: true,
-  // 필요하면 다른 설정 추가
+// eslint-disable-next-line import/no-mutable-exports
+let nextConfig: NextConfig = {
+  reactStrictMode: false,
+  transpilePackages: ['msw', 'next-auth'],
+  images: {
+    remotePatterns: [
+      new URL('https://way-s3.s3.ap-northeast-2.amazonaws.com/**'),
+      new URL('https://startwith-solu.s3.ap-northeast-2.amazonaws.com/**'),
+    ],
+  },
+  webpack: (config) => {
+    const newConfig = { ...config };
+
+    if (process.env.NEXT_PUBLIC_SENTRY !== 'true') {
+      newConfig.resolve = {
+        ...newConfig.resolve,
+        alias: {
+          ...newConfig.resolve?.alias,
+          '@sentry/nextjs': require.resolve('./src/sentry-dev.tsx'),
+        },
+      };
+    }
+    return newConfig;
+  },
 };
 
-const sentryWebpackPluginOptions = {
-  // Sentry Webpack 플러그인 옵션 (필요시)
-  silent: true, // 빌드 시 로그 숨기기
-};
+// Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용
+if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
+  nextConfig = withSentryConfig(nextConfig, {
+    // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
+    org: 'sejong',
 
-export default withSentryConfig(
-  withSentryConfig(nextConfig, sentryWebpackPluginOptions),
-  {
-    // For all available options, see:
-    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+    // Sentry 프로젝트 이름 – 오류가 기록될 프로젝트
+    project: 'javascript-nextjs',
 
-    org: 'sejong-univ-hv',
-    project: 'mokkoji',
-
-    // Only print logs for uploading source maps in CI
+    // CI 환경이 아닐 때는 소스맵 업로드 관련 로그를 출력하지 않음 (로컬 빌드 시 출력 줄이기)
     silent: !process.env.CI,
 
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    // 클라이언트에 대한 더 많은 소스맵을 업로드하여 오류 스택트레이스를 더 예쁘게 보여줌 (빌드 시간이 증가할 수 있음)
     widenClientFileUpload: true,
 
-    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-    // This can increase your server load as well as your hosting bill.
-    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-    // side errors will fail.
+    // 클라이언트에서 Sentry로의 요청을 Next.js 서버를 통해 프록시함
+    // - 광고 차단기 회피 가능
+    // - 서버 부하 및 비용 증가 가능성 있음
     tunnelRoute: '/monitoring',
 
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    // 콘솔에 찍히는 Sentry 관련 디버그 로그를 제거하여 번들 크기 절감
     disableLogger: true,
 
-    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
+    // Vercel의 Cron Monitor 기능 자동 설정 (App Router route handlers에서는 아직 미지원)
+    // - Sentry를 통한 스케줄 작업 모니터링 자동화
     automaticVercelMonitors: true,
-  },
-);
+  });
+}
+
+export default nextConfig;

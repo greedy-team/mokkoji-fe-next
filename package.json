@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -16,6 +16,7 @@
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
     "next": "15.3.4",
+    "next-auth": "^4.24.11",
     "pnpm": "^10.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -54,6 +55,7 @@
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "0.6.11",
     "storybook": "8.6.12",
+    "react-toastify": "^11.0.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

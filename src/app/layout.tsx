@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
+import SentryProvider from '@/_providers/sentry-provider';
+import { SessionProvider } from 'next-auth/react';
 
 const pretendard = localFont({
   src: [
@@ -57,7 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.className}`}>{children}</body>
+      <body className={`${pretendard.className}`}>
+        <SentryProvider>{children}</SentryProvider>
+      </body>
     </html>
   );
 }

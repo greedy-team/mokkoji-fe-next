@@ -1,13 +1,14 @@
 import PeriodSection from '@/entities/recruit/ui/period-section';
+import ClubDetailHeaderControl from '@/features/club/ui/club-detail-header-control';
 import getStatus from '@/shared/lib/getStatus';
 import RadiusTag from '@/shared/ui/radius-tag';
-import Image from 'next/image';
 
 interface ClubDetailHeaderProps {
   title: string;
   category: string;
   startDate: string;
   endDate: string;
+  instagramLink: string;
 }
 
 function ClubDetailHeader({
@@ -15,6 +16,7 @@ function ClubDetailHeader({
   category,
   startDate,
   endDate,
+  instagramLink,
 }: ClubDetailHeaderProps) {
   return (
     <>
@@ -28,18 +30,14 @@ function ClubDetailHeader({
             label={getStatus(endDate).text}
             className={`${getStatus(endDate).backColor} ${getStatus(endDate).fontColor} w-[60px]`}
           />
-          <PeriodSection startDate={startDate} endDate={endDate} />
+          <PeriodSection
+            startDate={startDate}
+            endDate={endDate}
+            decoration={false}
+          />
         </div>
       </header>
-      <div className="mt-2 mb-10 flex flex-row items-center gap-2">
-        <Image
-          src="/instagram.svg"
-          alt="인스타그램"
-          width={30}
-          height={30}
-          className="cursor-pointer"
-        />
-      </div>
+      <ClubDetailHeaderControl instagramLink={instagramLink} />
     </>
   );
 }

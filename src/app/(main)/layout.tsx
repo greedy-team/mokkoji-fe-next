@@ -2,7 +2,7 @@
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from '@/shared/ui/Header';
+import Header from '@/shared/ui/header';
 import { SessionProvider } from 'next-auth/react';
 
 export default function MainLayout({

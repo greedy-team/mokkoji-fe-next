@@ -4,6 +4,7 @@ import NavButton from './nav-button';
 const meta: Meta<typeof NavButton> = {
   title: 'Components/NavButton',
   component: NavButton,
+  tags: ['autodocs'],
 };
 
 export default meta;

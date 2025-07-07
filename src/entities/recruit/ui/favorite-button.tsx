@@ -8,9 +8,12 @@ function FavoriteButton({ isFavorite }: { isFavorite: boolean }) {
 
   return (
     <button
-      onClick={() => setFilled(!filled)}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setFilled(!filled);
+      }}
       aria-label="즐겨찾기 토글"
-      className="absolute right-5 bottom-5 text-black transition-colors duration-200"
+      className="absolute right-5 bottom-5 cursor-pointer text-black transition-colors duration-200"
     >
       {filled ? (
         <StarIcon fill="black" stroke="black" className="h-6 w-6" />

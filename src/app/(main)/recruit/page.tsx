@@ -1,4 +1,4 @@
-import RecruitPage from '@/views/recruit/recruit-page';
+import RecruitPage from '@/views/recruit/ui/recruit-page';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
 
 function Page({ searchParams }: RecruitItemListProps) {

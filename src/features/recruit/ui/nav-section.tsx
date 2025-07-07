@@ -21,7 +21,7 @@ export default function NavSection() {
           key={value ?? 'none'}
           label={label}
           href={`/recruit?affiliation=${value}`}
-          navProps="pb-2"
+          navProps="pb-2 text-xs"
           active={pathname === '/recruit' && (affiliation ?? '') === value}
         />
       ))}

@@ -1,17 +1,23 @@
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
+import getClubDetail from '@/views/club/api/getClubDetail';
+import convertLinkText from '@/entities/club/ui/util/convetLinkText';
 
-function ClubDetailPage() {
+async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
+  const data = await getClubDetail(await params.id);
+
   return (
     <main>
       <ClubDetailHeader
-        title="안녕"
-        category="봉사동아리"
-        startDate="2025-02-07"
-        endDate="2025-02-07"
+        title={data.name}
+        category={data.category}
+        startDate={data.recruitStartDate}
+        endDate={data.recruitEndDate}
+        instagramLink={data.instagramLink}
       />
-      <p className="mb-5 ml-5 w-[95%] text-[0.8rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]">
-        fsfaf;ajfefafafeaf eafawefwaefjwaefk aewfwea
-      </p>
+      <p
+        dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
+        className="mb-5 w-[95%] text-[0.8rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
+      />
     </main>
   );
 }

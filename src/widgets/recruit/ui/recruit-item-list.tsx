@@ -1,5 +1,6 @@
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
+import Link from 'next/link';
 import getRecruitList from '../api/getRecruitList';
 import { RecruitItemListProps } from '../model/type';
 
@@ -21,14 +22,16 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     <ul className="grid w-auto grid-cols-3 gap-4">
       {data.map((item) => (
         <li key={item.id}>
-          <RecruitItem
-            title={item.name}
-            startDate={item.recruitStartDate}
-            endDate={item.recruitEndDate}
-            description={item.description}
-            isFavorite={item.isFavorite}
-            imgUrl={item.imageURL}
-          />
+          <Link href={`/club/${item.id}`}>
+            <RecruitItem
+              title={item.name}
+              startDate={item.recruitStartDate}
+              endDate={item.recruitEndDate}
+              description={item.description}
+              isFavorite={item.isFavorite}
+              imgUrl={item.imageURL}
+            />
+          </Link>
         </li>
       ))}
     </ul>

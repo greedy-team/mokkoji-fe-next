@@ -14,7 +14,7 @@ function PeriodSection({ startDate, endDate }: PeriodSectionProps) {
     <span className="text-center text-xs font-semibold">상시모집</span>
   ) : (
     <span className="text-center text-xs font-semibold">
-      {`모집기간: ${formatToMonthDay(startDate)} ~ ${formatToMonthDay(endDate)}`}
+      {`모집기한 • ${formatToMonthDay(startDate)} ~ ${formatToMonthDay(endDate)}`}
     </span>
   );
 }

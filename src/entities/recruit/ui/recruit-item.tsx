@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
+import getStatus from '@/shared/lib/getStatus';
 import PeriodSection from './period-section';
 import FavoriteButton from './favorite-button';
 
@@ -35,7 +36,10 @@ function RecruitItem({
             <h1 className="text-xl font-bold">{title}</h1>
           </div>
         </div>
-        <RadiusTag label="모집중" className="bg-[#00E457] text-white" />
+        <RadiusTag
+          label={getStatus(endDate).text}
+          className={`${getStatus(endDate).backColor} ${getStatus(endDate).fontColor}`}
+        />
       </div>
       <div className="flex flex-row justify-between">
         <div className="w-[250px] text-sm break-words whitespace-normal">

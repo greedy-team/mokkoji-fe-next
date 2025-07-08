@@ -1,4 +1,5 @@
 import HomeHeader from '@/entities/home/ui/home-header';
+import NavigateClubList from '@/entities/home/ui/navigate-clublist';
 import HomeScrollSection from '@/entities/home/ui/scroll-section';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';
@@ -21,6 +22,9 @@ async function HomePage() {
       </div>
       <div>
         <HomeScrollSection data={data} />
+      </div>
+      <div className="fixed right-8 bottom-8 z-50">
+        <NavigateClubList />
       </div>
     </div>
   );

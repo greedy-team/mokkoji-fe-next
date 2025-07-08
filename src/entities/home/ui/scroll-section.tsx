@@ -9,9 +9,15 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
   const half = Math.ceil(data.length / 2);
   const firstRow = data.slice(0, half);
   const secondRow = data.slice(half);
+  const repeatCount = 2;
 
-  const rollingFirst = [...firstRow, ...firstRow];
-  const rollingSecond = [...secondRow, ...secondRow];
+  const rollingFirst = Array.from({ length: repeatCount }, (_, groupIdx) =>
+    firstRow.map((item) => ({ ...item, groupIdx })),
+  ).flat();
+
+  const rollingSecond = Array.from({ length: repeatCount }, (_, groupIdx) =>
+    secondRow.map((item) => ({ ...item, groupIdx })),
+  ).flat();
 
   return (
     <div>
@@ -27,7 +33,10 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
           style={{ animationDuration: '60s' }}
         >
           {rollingFirst.map((item) => (
-            <li key={item.id} className="min-w-[320px]">
+            <li
+              key={`${item.id}-row1-${item.groupIdx}`}
+              className="min-w-[320px]"
+            >
               <ScrollItem
                 title={item.name}
                 description={item.description}
@@ -41,7 +50,10 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
           style={{ animationDuration: '60s' }}
         >
           {rollingSecond.map((item) => (
-            <li key={item.id} className="min-w-[320px]">
+            <li
+              key={`${item.id}-row1-${item.groupIdx}`}
+              className="min-w-[320px]"
+            >
               <ScrollItem
                 title={item.name}
                 description={item.description}

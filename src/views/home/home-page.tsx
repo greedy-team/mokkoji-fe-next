@@ -1,5 +1,5 @@
 import HomeHeader from '@/entities/home/ui/home-header';
-import NavigateClubList from '@/entities/home/ui/navigate-clublist';
+import NavigateClubList from '@/features/home/ui/navigate-clublist';
 import HomeScrollSection from '@/entities/home/ui/scroll-section';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';

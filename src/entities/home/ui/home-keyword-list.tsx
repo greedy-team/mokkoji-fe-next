@@ -1,4 +1,7 @@
+'use client';
+
 import HomeKeyword from '@/features/home/ui/home-keyword';
+import { useRouter } from 'next/navigation';
 
 const KEYWORDS = [
   '밴드',
@@ -11,15 +14,21 @@ const KEYWORDS = [
   '마케팅',
 ];
 
-interface HomeKeywordListProps {
-  onKeywordClick: (keyword: string) => void;
-}
+function HomeKeywordList() {
+  const router = useRouter();
 
-function HomeKeywordList({ onKeywordClick }: HomeKeywordListProps) {
+  const handleKeywordClick = (keyword: string) => {
+    router.push(`/recruit?keyword=${encodeURIComponent(keyword)}`);
+  };
+
   return (
     <div className="mb-10 flex flex-wrap justify-center gap-5 px-28">
       {KEYWORDS.map((keyword) => (
-        <HomeKeyword key={keyword} keyword={keyword} onClick={onKeywordClick} />
+        <HomeKeyword
+          key={keyword}
+          keyword={keyword}
+          onClick={() => handleKeywordClick(keyword)}
+        />
       ))}
     </div>
   );

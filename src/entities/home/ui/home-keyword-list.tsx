@@ -1,4 +1,4 @@
-import HomeKeyword from '@/entities/home/ui/home-keyword';
+import HomeKeyword from '@/features/home/ui/home-keyword';
 
 const KEYWORDS = [
   '밴드',

@@ -2,12 +2,10 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-interface HomeBodyProps {
-  onSearch: (keyword: string) => void;
-}
-
-function HomeBody({ onSearch }: HomeBodyProps) {
+function HomeBody() {
+  const router = useRouter();
   const [input, setInput] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,8 +14,12 @@ function HomeBody({ onSearch }: HomeBodyProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onSearch(input);
+      handleSearch(input);
     }
+  };
+
+  const handleSearch = (keyword: string) => {
+    router.push(`/recruit?keyword=${encodeURIComponent(keyword)}`);
   };
 
   return (
@@ -37,7 +39,7 @@ function HomeBody({ onSearch }: HomeBodyProps) {
           width={25}
           height={25}
           className="cursor-pointer"
-          onClick={() => onSearch(input)}
+          onClick={() => handleSearch(input)}
         />
       </div>
     </div>

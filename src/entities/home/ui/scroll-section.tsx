@@ -1,23 +1,13 @@
 import { ClubType } from '@/shared/model/type';
 import ScrollItem from './scroll-item';
+import separateRollingData from '../lib/utils';
 
 interface HomeScrollSectionProps {
   data: ClubType[];
 }
 
 function HomeScrollSection({ data }: HomeScrollSectionProps) {
-  const half = Math.ceil(data.length / 2);
-  const firstRow = data.slice(0, half);
-  const secondRow = data.slice(half);
-  const repeatCount = 2;
-
-  const rollingFirst = Array.from({ length: repeatCount }, (_, groupIdx) =>
-    firstRow.map((item) => ({ ...item, groupIdx })),
-  ).flat();
-
-  const rollingSecond = Array.from({ length: repeatCount }, (_, groupIdx) =>
-    secondRow.map((item) => ({ ...item, groupIdx })),
-  ).flat();
+  const { rollingFirst, rollingSecond } = separateRollingData(data, 2);
 
   return (
     <div>
@@ -46,7 +36,7 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
           ))}
         </ul>
         <ul
-          className="ml-40 flex min-w-max animate-[rolling_20s_linear_infinite] gap-4 px-4 py-2 group-hover:[animation-play-state:paused]"
+          className="ml-40 flex min-w-max animate-[rolling-reverse_20s_linear_infinite] gap-4 px-4 py-2 group-hover:[animation-play-state:paused]"
           style={{ animationDuration: '60s' }}
         >
           {rollingSecond.map((item) => (

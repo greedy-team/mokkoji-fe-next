@@ -11,8 +11,8 @@ function Header() {
 
   return (
     <>
-      <div className="h-[78px]" />
-      <header className="fixed top-0 right-0 left-0 z-50 flex h-[78px] items-center border-b border-b-[#D6D6D6] bg-white px-[150px] text-base font-semibold">
+      <div className="h-[65px]" />
+      <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center border-b border-b-[#D6D6D6] bg-white px-[150px] text-base font-semibold">
         <Link href="/" className="mr-9 flex items-center text-2xl font-bold">
           <div className="mr-4 h-5 w-5 bg-gray-100" />{' '}
           {/* 로고 이미지로 대체되어야함. */}
@@ -33,6 +33,11 @@ function Header() {
             label="즐겨찾기"
             href="/favorite"
             active={pathname === '/favorite'}
+          />
+          <NavButton
+            label="고객센터"
+            href="/support"
+            active={pathname === '/support'}
           />
         </nav>
         <div className="ml-auto flex items-center gap-3.5">

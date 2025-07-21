@@ -5,11 +5,11 @@ import ScrollToTopButton from '@/features/recruit/ui/scroll-to-top-button';
 
 function RecruitPage({ searchParams }: RecruitItemListProps) {
   return (
-    <div>
+    <>
       <RecruitHeader />
       <RecruitItemList searchParams={searchParams} />
       <ScrollToTopButton />
-    </div>
+    </>
   );
 }
 

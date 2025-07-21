@@ -31,6 +31,7 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
                 title={item.name}
                 description={item.description}
                 imgUrl={item.imageURL}
+                id={item.id}
               />
             </li>
           ))}
@@ -48,6 +49,7 @@ function HomeScrollSection({ data }: HomeScrollSectionProps) {
                 title={item.name}
                 description={item.description}
                 imgUrl={item.imageURL}
+                id={item.id}
               />
             </li>
           ))}

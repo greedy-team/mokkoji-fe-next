@@ -19,6 +19,7 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        submit: 'rounded-md bg-[#CDCDCD] text-white text-base',
         none: '',
       },
       size: {
@@ -43,7 +44,7 @@ function Button({
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
-    asChild: boolean | undefined;
+    asChild?: boolean;
   }) {
   const Comp = asChild ? Slot : 'button';
 

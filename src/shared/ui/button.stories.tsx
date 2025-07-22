@@ -11,7 +11,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'radio' },
-      options: ['default', 'outline'],
+      options: ['default', 'outline', 'submit'],
     },
   },
 };
@@ -28,5 +28,11 @@ export const Default: Story = {
 export const Outline: Story = {
   args: {
     variant: 'outline',
+  },
+};
+
+export const Submit: Story = {
+  args: {
+    variant: 'submit',
   },
 };

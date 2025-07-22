@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from '@/shared/lib/utils';
 
-type Variant = 'default' | 'underline' | 'borderless';
+type Variant = 'default' | 'error';
 
 interface InputProps extends React.ComponentProps<'input'> {
   variant?: Variant;
@@ -14,9 +14,10 @@ function Input({
   ...props
 }: InputProps) {
   const variantClass = {
-    default: 'rounded-md border px-3 py-1',
-    underline: 'border-0 border-b px-0 py-1 rounded-none',
-    borderless: 'border-0 px-3 py-1',
+    default:
+      'rounded-md border text-[14px] px-3 py-1 focus-visible:border-[#00E457]',
+    error:
+      'rounded-md border  text-[14px] px-3 py-1 border-[#FF383C] bg-[#FFF4F4]',
   };
 
   return (

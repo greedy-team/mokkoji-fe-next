@@ -14,7 +14,7 @@ export interface ClubFormData {
   leaderId: string;
   instagram: string;
   description: string;
-  imageURL: string;
+  logo?: File;
 }
 
 export interface FormField {

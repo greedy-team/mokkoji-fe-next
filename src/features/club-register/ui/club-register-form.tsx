@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
@@ -17,6 +18,8 @@ const fields: FormField[] = [
 ];
 
 function ClubRegisterForm() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<ClubFormData>({
     name: '',
     category: '',
@@ -24,7 +27,7 @@ function ClubRegisterForm() {
     description: '',
     leaderId: '',
     instagram: '',
-    imageURL: '',
+    logo: undefined,
   });
   const [errors, setErrors] = useState<
     Partial<Record<keyof ClubFormData, string>>
@@ -36,37 +39,107 @@ function ClubRegisterForm() {
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setPreview(imageUrl);
+
+    setFormData((prev) => ({
+      ...prev,
+      logo: file,
+    }));
+  };
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('제출할 데이터: ', formData);
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('category', formData.category);
+    data.append('affiliation', formData.affiliation);
+    data.append('description', formData.description);
+    data.append('leaderId', formData.leaderId);
+    data.append('instagram', formData.instagram);
+
+    if (formData.logo) {
+      data.append('image', formData.logo);
+    }
 
     try {
-      const result = await postClubRegister(formData);
-      console.log('서버 응답:', result);
+      const res = await postClubRegister(data);
+      console.log('등록 성공:', res);
       alert('등록 성공!');
-    } catch (error) {
-      console.error('등록 실패:', error);
-      alert('등록 중 오류가 발생했습니다.');
+    } catch (err) {
+      console.error(err);
+      alert('등록 실패!');
     }
   };
 
   const isFormValid =
-    Object.values(formData).every((val) => val.trim() !== '') &&
-    Object.values(errors).every((msg) => !msg);
+    Object.entries(formData).every(([_, val]) =>
+      typeof val === 'string' ? val.trim() !== '' : true,
+    ) && Object.values(errors).every((msg) => !msg);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      {fields.map((field) => (
-        <ClubInput
-          key={field.name}
-          label={field.label}
-          name={field.name}
-          value={formData[field.name]}
-          type={field.type}
-          onChange={handleChange}
-          error={errors[field.name]}
-        />
-      ))}
+      {fields.map((field) => {
+        const value = formData[field.name];
+        if (typeof value !== 'string') return null;
+
+        return (
+          <ClubInput
+            key={field.name}
+            label={field.label}
+            name={field.name}
+            value={value}
+            type={field.type}
+            onChange={handleChange}
+            error={errors[field.name]}
+          />
+        );
+      })}
+      <label htmlFor="imageURL" className="my-6 flex">
+        <button
+          type="button"
+          onClick={handleClick}
+          className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4]"
+        >
+          {preview ? (
+            <Image
+              src={preview}
+              alt="미리보기 이미지"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <Image
+              src="/club-register/cameraIcon.svg"
+              alt="이미지 등록"
+              width={20}
+              height={16}
+            />
+          )}
+        </button>
+        <div className="flex flex-1 flex-col items-start justify-center gap-1 p-4">
+          <p className="font-bold">동아리 로고 이미지</p>
+          <span className="text-xs text-[#00D451]">
+            PNG, JPG 형식의 이미지를 업로드해주세요!
+          </span>
+        </div>
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        ref={inputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
       <Button
         type="submit"
         variant={isFormValid ? 'submit' : 'disabled'}

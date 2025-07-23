@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import validateField from '../util/validateField';
+import postClubRegister from '../api/postClubRegister';
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
@@ -23,6 +24,7 @@ function ClubRegisterForm() {
     description: '',
     leaderId: '',
     instagram: '',
+    imageURL: '',
   });
   const [errors, setErrors] = useState<
     Partial<Record<keyof ClubFormData, string>>
@@ -34,9 +36,18 @@ function ClubRegisterForm() {
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('제출할 데이터: ', formData);
+
+    try {
+      const result = await postClubRegister(formData);
+      console.log('서버 응답:', result);
+      alert('등록 성공!');
+    } catch (error) {
+      console.error('등록 실패:', error);
+      alert('등록 중 오류가 발생했습니다.');
+    }
   };
 
   const isFormValid =

@@ -3,6 +3,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from 'next-auth/react';
+import Header from '@/shared/ui/Header';
 
 export default function AuthLayout({
   children,
@@ -11,19 +12,22 @@ export default function AuthLayout({
 }) {
   return (
     <SessionProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      {children}
+      <div className="flex h-screen flex-col">
+        <Header />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <main className="flex-1 bg-[#F2F4F6]">{children}</main>
+      </div>
     </SessionProvider>
   );
 }

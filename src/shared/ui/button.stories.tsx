@@ -1,6 +1,7 @@
 // components/Button.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './button';
+import KakaoIcon from './kakao-icon';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
@@ -11,7 +12,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'radio' },
-      options: ['default', 'outline', 'submit', 'options'],
+      options: ['default', 'outline', 'submit', 'options', 'kakao'],
     },
   },
 };
@@ -40,5 +41,18 @@ export const Submit: Story = {
 export const Options: Story = {
   args: {
     variant: 'options',
+  },
+};
+
+export const KakaoLogin: Story = {
+  args: {
+    variant: 'kakao',
+    children: (
+      <>
+        <KakaoIcon />
+        카카오 로그인
+      </>
+    ),
+    className: 'w-full max-w-sm',
   },
 };

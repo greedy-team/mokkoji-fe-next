@@ -46,8 +46,12 @@ function ClubInput({
             value={value}
             onChange={(e) => onChange(name, e.target.value)}
             variant={error ? 'error' : 'default'}
+            maxLength={600}
             className="transition-colors duration-300"
           />
+          <p className="text-end text-xs text-[#474747]">
+            {value.length} <span className="text-[#CCCCCC]">/ 600자</span>
+          </p>
         </>
       )}
 

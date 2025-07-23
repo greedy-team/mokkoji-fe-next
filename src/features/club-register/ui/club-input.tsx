@@ -60,6 +60,7 @@ function ClubInput({
               variant={value === key ? 'optionsSelected' : 'options'}
               size="none"
               key={key}
+              type="button"
               onClick={() => onChange(name, key)}
             >
               {itemLabel}

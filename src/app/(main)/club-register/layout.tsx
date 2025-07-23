@@ -11,5 +11,5 @@ export default function Layout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  return <main className="p-25 pt-11">{children}</main>;
+  return <main className="flex justify-center py-15">{children}</main>;
 }

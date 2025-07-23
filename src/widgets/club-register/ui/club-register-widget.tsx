@@ -3,10 +3,10 @@ import ClubRegisterForm from '@/features/club-register/ui/club-register-form';
 
 function ClubRegisterWidget() {
   return (
-    <>
+    <div className="w-[30%]">
       <ClubRegisterHeader />
       <ClubRegisterForm />
-    </>
+    </div>
   );
 }
 

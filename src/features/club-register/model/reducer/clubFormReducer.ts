@@ -3,6 +3,7 @@ import { ClubFormData } from '../type';
 
 type Action =
   | { type: 'UPDATE_FIELD'; name: keyof ClubFormData; value: string }
+  | { type: 'VALIDATE_FIELD'; name: keyof ClubFormData }
   | { type: 'UPDATE_LOGO'; file: File }
   | { type: 'RESET_FORM' };
 
@@ -28,10 +29,17 @@ export default function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'UPDATE_FIELD': {
       const { name, value } = action;
-      const errorMsg = validateField(name, value);
       return {
         ...state,
         formData: { ...state.formData, [name]: value },
+      };
+    }
+    case 'VALIDATE_FIELD': {
+      const { name } = action;
+      const value = state.formData[name];
+      const errorMsg = validateField(name, value as string);
+      return {
+        ...state,
         errors: { ...state.errors, [name]: errorMsg },
       };
     }

@@ -13,6 +13,7 @@ function ClubInput({
   type,
   onChange,
   error,
+  onBlur,
 }: ClubInputProps) {
   return (
     <div className="flex flex-col gap-1.5 py-2">
@@ -34,6 +35,7 @@ function ClubInput({
           onChange={(e) => onChange(name, e.target.value)}
           variant={error ? 'error' : 'default'}
           className="transition-colors duration-300"
+          onBlur={() => onBlur(name)}
         />
       )}
 
@@ -48,6 +50,7 @@ function ClubInput({
             variant={error ? 'error' : 'default'}
             maxLength={600}
             className="transition-colors duration-300"
+            onBlur={() => onBlur(name)}
           />
           <p className="text-end text-xs text-[#474747]">
             {value.length} <span className="text-[#CCCCCC]">/ 600자</span>
@@ -66,6 +69,7 @@ function ClubInput({
               key={key}
               type="button"
               onClick={() => onChange(name, key)}
+              onBlur={() => onBlur(name)}
             >
               {itemLabel}
             </Button>

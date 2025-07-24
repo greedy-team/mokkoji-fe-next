@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useReducer, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import validateField from '../util/validateField';
 import postClubRegister from '../api/postClubRegister';
+import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
@@ -20,23 +21,11 @@ const fields: FormField[] = [
 function ClubRegisterForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [formData, setFormData] = useState<ClubFormData>({
-    name: '',
-    category: '',
-    affiliation: '',
-    description: '',
-    leaderId: '',
-    instagram: '',
-    logo: undefined,
-  });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof ClubFormData, string>>
-  >({});
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { formData, errors } = state;
 
-  const handleChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    const errorMsg = validateField(name as keyof ClubFormData, value);
-    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
+  const handleChange = (name: keyof ClubFormData, value: string) => {
+    dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,10 +35,7 @@ function ClubRegisterForm() {
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
 
-    setFormData((prev) => ({
-      ...prev,
-      logo: file,
-    }));
+    dispatch({ type: 'UPDATE_LOGO', file });
   };
 
   const handleClick = () => {
@@ -100,7 +86,9 @@ function ClubRegisterForm() {
             name={field.name}
             value={value}
             type={field.type}
-            onChange={handleChange}
+            onChange={(name, newValue) =>
+              handleChange(name as keyof ClubFormData, newValue)
+            }
             error={errors[field.name]}
           />
         );

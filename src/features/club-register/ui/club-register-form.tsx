@@ -7,6 +7,7 @@ import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import postClubRegister from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
+import isFormValid from '../util/isFormVaild';
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
@@ -70,11 +71,7 @@ function ClubRegisterForm() {
     }
   };
 
-  const allFieldsFilled = Object.entries(formData).every(([_, val]) => {
-    return typeof val !== 'string' || val.trim() !== '';
-  });
-  const noErrors = Object.values(errors).every((msg) => !msg);
-  const isFormValid = allFieldsFilled && noErrors;
+  const isValid = isFormValid({ formData, errors });
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -133,11 +130,7 @@ function ClubRegisterForm() {
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />
-      <Button
-        type="submit"
-        variant={isFormValid ? 'submit' : 'disabled'}
-        size="lg"
-      >
+      <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
         등록하기
       </Button>
     </form>

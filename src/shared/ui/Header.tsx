@@ -35,6 +35,11 @@ function Header() {
             active={pathname === '/favorite'}
           />
           <NavButton
+            label="동아리 등록"
+            href="/club-register"
+            active={pathname === '/club-register'}
+          />
+          <NavButton
             label="고객센터"
             href="/support"
             active={pathname === '/support'}

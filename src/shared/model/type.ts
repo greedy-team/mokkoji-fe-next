@@ -9,9 +9,10 @@ export enum ClubCategory {
   CULTURAL_ART = 'CULTURAL_ART',
   ACADEMIC_CULTURAL = 'ACADEMIC_CULTURAL',
   VOLUNTEER_SOCIAL = 'VOLUNTEER_SOCIAL',
+  SOCIAL = 'SOCIAL',
   SPORTS = 'SPORTS',
   RELIGIOUS = 'RELIGIOUS',
-  SOCIAL = 'SOCIAL',
+  ETC = 'ETC',
 }
 
 export enum ClubAffiliation {
@@ -34,3 +35,18 @@ export interface ClubType {
   imageURL: string;
   isFavorite: boolean | undefined;
 }
+
+export const ClubCategoryLabel: Record<ClubCategory, string> = {
+  [ClubCategory.CULTURAL_ART]: '문화/예술',
+  [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양',
+  [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
+  [ClubCategory.SPORTS]: '체육',
+  [ClubCategory.RELIGIOUS]: '종교',
+  [ClubCategory.SOCIAL]: '친목',
+  [ClubCategory.ETC]: '기타',
+};
+
+export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
+  [ClubAffiliation.CENTRAL_CLUB]: '중앙 동아리',
+  [ClubAffiliation.DEPARTMENT_CLUB]: '가인준 동아리',
+};

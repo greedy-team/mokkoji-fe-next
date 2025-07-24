@@ -1,10 +1,11 @@
 export interface ClubInputProps {
   label: string;
-  name: string;
+  name: keyof ClubFormData;
   value: string;
   type: string;
   onChange: (name: string, value: string) => void;
   error: string | undefined;
+  onBlur: (name: keyof ClubFormData) => void;
 }
 
 export interface ClubFormData {

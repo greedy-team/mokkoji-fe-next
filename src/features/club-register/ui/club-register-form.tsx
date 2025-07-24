@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
-import validateField from '../util/validateField';
 import postClubRegister from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
@@ -40,6 +39,10 @@ function ClubRegisterForm() {
 
   const handleClick = () => {
     inputRef.current?.click();
+  };
+
+  const handleBlur = (name: keyof ClubFormData) => {
+    dispatch({ type: 'VALIDATE_FIELD', name });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,6 +93,7 @@ function ClubRegisterForm() {
               handleChange(name as keyof ClubFormData, newValue)
             }
             error={errors[field.name]}
+            onBlur={handleBlur}
           />
         );
       })}

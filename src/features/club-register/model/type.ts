@@ -23,3 +23,14 @@ export interface FormField {
   name: keyof ClubFormData;
   type: string;
 }
+
+export interface StateProp {
+  formData: ClubFormData;
+  errors: Partial<Record<keyof ClubFormData, string>>;
+}
+
+export type Action =
+  | { type: 'UPDATE_FIELD'; name: keyof ClubFormData; value: string }
+  | { type: 'VALIDATE_FIELD'; name: keyof ClubFormData }
+  | { type: 'UPDATE_LOGO'; file: File }
+  | { type: 'RESET_FORM' };

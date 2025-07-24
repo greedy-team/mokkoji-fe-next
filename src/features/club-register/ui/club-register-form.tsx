@@ -81,10 +81,11 @@ function ClubRegisterForm() {
     }
   };
 
-  const isFormValid =
-    Object.entries(formData).every(([_, val]) =>
-      typeof val === 'string' ? val.trim() !== '' : true,
-    ) && Object.values(errors).every((msg) => !msg);
+  const allFieldsFilled = Object.entries(formData).every(([_, val]) => {
+    return typeof val !== 'string' || val.trim() !== '';
+  });
+  const noErrors = Object.values(errors).every((msg) => !msg);
+  const isFormValid = allFieldsFilled && noErrors;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

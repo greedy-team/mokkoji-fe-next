@@ -3,14 +3,14 @@
 import Image from 'next/image';
 import postFavoriteClub from '../api/postFavoriteClub';
 
-interface ClubDetailHeaderControlProps {
+interface RecruitDetailHeaderControlProps {
   instagramLink: string;
   clubId: number;
 }
-function ClubDetailHeaderControl({
+function RecruitDetailHeaderControl({
   instagramLink,
   clubId,
-}: ClubDetailHeaderControlProps) {
+}: RecruitDetailHeaderControlProps) {
   const handleFavorite = async () => {
     // 토큰 검증 로직 추가하기
 
@@ -51,4 +51,4 @@ function ClubDetailHeaderControl({
   );
 }
 
-export default ClubDetailHeaderControl;
+export default RecruitDetailHeaderControl;

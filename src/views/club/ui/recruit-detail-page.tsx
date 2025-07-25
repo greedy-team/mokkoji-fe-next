@@ -1,13 +1,18 @@
-import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
+import RecruitDetailHeader from '@/entities/recruit/lib/ui/recruit-detail-header';
 import getClubDetail from '@/views/club/api/getClubDetail';
-import convertLinkText from '@/entities/club/util/convetLinkText';
+import convertLinkText from '@/entities/recruit/lib/util/convetLinkText';
+import RecruitDetailCommentWidget from '@/widgets/recruit-detail/ui/recruit-detail-comment-widget';
 
-async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
+async function RecruitDetailPage({
+  params,
+}: {
+  params: { id: Promise<string> };
+}) {
   const data = await getClubDetail(await params.id);
 
   return (
     <main>
-      <ClubDetailHeader
+      <RecruitDetailHeader
         title={data.name}
         category={data.category}
         startDate={data.recruitStartDate}
@@ -19,8 +24,9 @@ async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
         className="mb-5 w-[95%] text-[1rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
       />
+      <RecruitDetailCommentWidget clubId={Number(params.id)} />
     </main>
   );
 }
 
-export default ClubDetailPage;
+export default RecruitDetailPage;

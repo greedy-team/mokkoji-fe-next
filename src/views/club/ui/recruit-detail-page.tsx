@@ -1,6 +1,6 @@
-import RecruitDetailHeader from '@/entities/recruit/lib/ui/recruit-detail-header';
+import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
 import getClubDetail from '@/views/club/api/getClubDetail';
-import convertLinkText from '@/entities/recruit/lib/util/convetLinkText';
+import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import RecruitDetailCommentWidget from '@/widgets/recruit-detail/ui/recruit-detail-comment-widget';
 
 async function RecruitDetailPage({

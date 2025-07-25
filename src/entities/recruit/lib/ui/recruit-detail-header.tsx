@@ -1,9 +1,9 @@
 import PeriodSection from '@/entities/recruit/ui/period-section';
-import ClubDetailHeaderControl from '@/features/club/ui/club-detail-header-control';
+import RecruitDetailHeaderControl from '@/features/recruit-detail/ui/club-detail-header-control';
 import getStatus from '@/shared/lib/getStatus';
 import RadiusTag from '@/shared/ui/radius-tag';
 
-interface ClubDetailHeaderProps {
+interface RecruitDetailHeaderProps {
   title: string;
   category: string;
   startDate: string;
@@ -12,14 +12,14 @@ interface ClubDetailHeaderProps {
   clubId: number;
 }
 
-function ClubDetailHeader({
+function RecruitDetailHeader({
   title,
   category,
   startDate,
   endDate,
   instagramLink,
   clubId,
-}: ClubDetailHeaderProps) {
+}: RecruitDetailHeaderProps) {
   return (
     <>
       <header className="border-b border-b-[#D6D6D6] pb-4">
@@ -39,9 +39,12 @@ function ClubDetailHeader({
           />
         </div>
       </header>
-      <ClubDetailHeaderControl instagramLink={instagramLink} clubId={clubId} />
+      <RecruitDetailHeaderControl
+        instagramLink={instagramLink}
+        clubId={clubId}
+      />
     </>
   );
 }
 
-export default ClubDetailHeader;
+export default RecruitDetailHeader;

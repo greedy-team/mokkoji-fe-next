@@ -11,6 +11,7 @@ export interface ClubDetailType {
   instagramLink: string;
   recruitPost: string;
 }
+
 export interface ClubDetailData {
   data: ClubDetailType;
 }

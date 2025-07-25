@@ -10,5 +10,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="px-[20%] py-[5%]">{children}</main>;
+  return <main className="px-[20%] py-[4%]">{children}</main>;
 }

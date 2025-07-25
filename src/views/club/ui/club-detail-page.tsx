@@ -13,10 +13,11 @@ async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
         startDate={data.recruitStartDate}
         endDate={data.recruitEndDate}
         instagramLink={data.instagramLink}
+        clubId={Number(params.id)}
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
-        className="mb-5 w-[95%] text-[0.8rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
+        className="mb-5 w-[95%] text-[1rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
       />
     </main>
   );

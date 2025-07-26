@@ -2,7 +2,7 @@ import nextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import ky from 'ky';
 
-export const { auth, handlers, signIn, signOut } = nextAuth({
+export const authOptions = {
   secret: '1004',
   providers: [
     CredentialsProvider({
@@ -104,4 +104,4 @@ export const { auth, handlers, signIn, signOut } = nextAuth({
       };
     },
   },
-});
+};

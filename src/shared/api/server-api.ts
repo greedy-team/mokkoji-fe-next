@@ -2,7 +2,7 @@ import ky, { HTTPError } from 'ky';
 import { auth } from '@/auth';
 
 const serverApi = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   hooks: {
     beforeRequest: [
       // TODO: 추후 구현

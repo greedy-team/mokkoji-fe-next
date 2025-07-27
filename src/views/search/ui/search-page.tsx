@@ -7,13 +7,13 @@ interface SearchPageProps {
 
 async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
-  
+
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex w-full flex-col items-center">
       <SearchInput />
       <SearchResults keyword={params.q} />
     </div>
   );
 }
 
-export default SearchPage; 
+export default SearchPage;

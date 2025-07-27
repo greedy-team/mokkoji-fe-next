@@ -1,7 +1,4 @@
-import {
-  ApiResponse,
-  ClubList,
-} from '@/shared/model/type';
+import { ApiResponse, ClubList } from '@/shared/model/type';
 import serverApi from '@/shared/api/server-api';
 
 interface SearchClubsParams {
@@ -12,7 +9,7 @@ interface SearchClubsParams {
 
 async function searchClubs(params: SearchClubsParams) {
   const searchParams = new URLSearchParams();
-  
+
   searchParams.set('keyword', params.keyword);
   searchParams.set('page', String(params.page || 1));
   searchParams.set('size', String(params.size || 10));
@@ -26,4 +23,4 @@ async function searchClubs(params: SearchClubsParams) {
   return response.data.clubs;
 }
 
-export default searchClubs; 
+export default searchClubs;

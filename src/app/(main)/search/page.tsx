@@ -8,4 +8,4 @@ function Page({ searchParams }: PageProps) {
   return <SearchPage searchParams={searchParams} />;
 }
 
-export default Page; 
+export default Page;

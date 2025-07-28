@@ -2,6 +2,7 @@ import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import getClubDetail from '@/views/club/api/getClubDetail';
 import convertLinkText from '@/entities/club/util/convetLinkText';
 
+// TODO: 추후 프롭스 드릴링 해결 필요
 async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
   const data = await getClubDetail(await params.id);
 

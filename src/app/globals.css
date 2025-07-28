@@ -14,11 +14,15 @@
       transform: translateX(-50%);
     }
   }
-  
+
   --animate-rolling-reverse: rolling-reverse 20s linear infinite;
   @keyframes rolling-reverse {
-    0% { transform: translateX(-50%); }
-    100% { transform: translateX(0); }
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
 }
 
@@ -141,4 +145,16 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+  color: #333 !important; /* 모든 요일 동일 색 */
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend abbr {
+  color: #333 !important; /* 주말도 동일 색 */
+}
+
+.react-calendar__month-view__days__day abbr::after {
+  content: none !important;
 }

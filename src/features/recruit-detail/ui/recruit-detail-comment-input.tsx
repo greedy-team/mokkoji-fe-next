@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import StarRating from './rating-component';
@@ -20,18 +21,18 @@ function RecruitDetailCommentInput({ clubId }: RecruitDetailCommentInputProps) {
 
   const handleAddComment = async () => {
     if (!value || rating === 0) {
-      alert('내용과 별점을 모두 입력해주세요.');
+      toast.warn('내용과 별점을 모두 입력해주세요.');
       return;
     }
 
     try {
       await postComment(clubId, value, rating);
-      alert('댓글이 등록되었습니다.');
+      toast.success('댓글이 등록되었습니다.');
       setValue('');
       setRating(0);
     } catch (err) {
       console.error(err);
-      alert('댓글 등록 중 오류가 발생했습니다.');
+      toast.error('댓글 등록 중 오류가 발생했습니다.');
     }
   };
 

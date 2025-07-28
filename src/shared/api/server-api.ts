@@ -5,17 +5,15 @@ const serverApi = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   hooks: {
     beforeRequest: [
-      // TODO: 추후 구현
-      // async (req) => {
-      //   if (!req.headers.get('Authorization')) {
-      //     const session = await auth();
-      //     req.headers.set('Authorization', `Bearer ${session?.accessToken}`);
-      //   }
-      // },
+      async (req) => {
+        if (!req.headers.get('Authorization')) {
+          const session = await auth();
+          req.headers.set('Authorization', `Bearer ${session?.accessToken}`);
+        }
+      },
     ],
     beforeError: [
       async (error) => {
-        console.log(error);
         if (error instanceof HTTPError) {
           switch (error.response.status) {
             case 400:

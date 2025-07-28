@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: 할 작업 내용
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
 ---
 
 ## 어떤 기능인가요?

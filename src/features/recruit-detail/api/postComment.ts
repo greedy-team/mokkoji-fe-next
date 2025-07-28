@@ -12,9 +12,6 @@ export default async function postComment(
           content,
           rate,
         },
-        headers: {
-          Authorization: 'Bearer ', // 나중에 여기에 로그인 토큰 추가
-        },
       })
       .json();
 

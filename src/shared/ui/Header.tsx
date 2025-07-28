@@ -49,13 +49,15 @@ function Header() {
           <span className="text-base font-light text-[#9C9C9C]">
             <span className="font-semibold">모꼬지님!</span> 안녕하세요
           </span>
-          <Image
-            src="/header/search.svg"
-            alt="검색"
-            width={20}
-            height={20}
-            className="cursor-pointer"
-          />
+          <Link href="/search">
+            <Image
+              src="/header/search.svg"
+              alt="검색"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </Link>
         </div>
       </header>
     </>

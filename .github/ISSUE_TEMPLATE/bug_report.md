@@ -4,7 +4,6 @@ about: 버그 이슈
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## 어떤 버그인가요?

@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import NavButton from './nav-button';
 
 function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <>
@@ -18,7 +20,7 @@ function Header() {
           {/* 로고 이미지로 대체되어야함. */}
           Mokkoji
         </Link>
-        <nav className="flex h-full items-center">
+        <nav className="flex h-full items-center gap-6 whitespace-nowrap">
           <NavButton
             label="전체 동아리"
             href="/club"
@@ -47,7 +49,18 @@ function Header() {
         </nav>
         <div className="ml-auto flex items-center gap-3.5">
           <span className="text-base font-light text-[#9C9C9C]">
-            <span className="font-semibold">모꼬지님!</span> 안녕하세요
+            {session?.user?.name ? (
+              <span className="flex gap-2 font-semibold whitespace-nowrap">
+                <span className="font-bold text-gray-400">
+                  {session?.user?.name}님!
+                </span>
+                안녕하세요
+              </span>
+            ) : (
+              <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
+                로그인
+              </Link>
+            )}
           </span>
           <Link href="/search">
             <Image

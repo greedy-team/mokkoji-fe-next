@@ -66,7 +66,7 @@ function ClubInput({
             <Button
               variant={value === key ? 'optionsSelected' : 'options'}
               size="none"
-              key={key}
+              key={`${name}-${itemLabel}`}
               type="button"
               onClick={() => onChange(name, key)}
               onBlur={() => onBlur(name)}

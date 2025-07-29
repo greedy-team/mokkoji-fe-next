@@ -27,7 +27,7 @@ function Header() {
           <NavButton
             label="모집 공고"
             href="/recruit"
-            active={pathname === '/recruit'}
+            active={pathname.startsWith('/recruit')}
           />
           <NavButton
             label="즐겨찾기"

@@ -10,7 +10,7 @@ interface ScrollItemProps {
 
 function ScrollItem({ title, description, imgUrl, id }: ScrollItemProps) {
   return (
-    <Link href={`/club/${id}`}>
+    <Link href={`/recruit/${id}`}>
       <div className="relative h-[191px] w-[448px] cursor-pointer rounded-2xl bg-[#F2F4F6] p-5 hover:bg-[#e8e8e8]">
         <div className="mb-8 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2">

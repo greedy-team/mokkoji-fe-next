@@ -1,9 +1,7 @@
-'use client';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { SessionProvider } from 'next-auth/react';
 import Header from '@/shared/ui/Header';
+import { SessionProvider } from 'next-auth/react';
 
 export default function AuthLayout({
   children,

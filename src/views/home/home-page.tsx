@@ -13,7 +13,7 @@ async function HomePage() {
       <div>
         <HomeScrollSection />
       </div>
-      <div className="fixed right-2 bottom-4 z-50 lg:right-8 lg:bottom-8">
+      <div className="fixed right-2 bottom-14 z-50 lg:right-8 lg:bottom-8">
         <NavigateClubList />
       </div>
     </>

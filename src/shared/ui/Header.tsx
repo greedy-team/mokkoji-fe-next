@@ -15,10 +15,17 @@ function Header() {
     <>
       <div className="h-[65px]" />
       <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center border-b border-b-[#D6D6D6] bg-white px-[150px] text-base font-semibold">
-        <Link href="/" className="mr-9 flex items-center text-2xl font-bold">
-          <div className="mr-4 h-5 w-5 bg-gray-100" />{' '}
-          {/* 로고 이미지로 대체되어야함. */}
-          Mokkoji
+        <Link
+          href="/"
+          className="mr-9 flex items-center gap-1.5 text-2xl font-bold"
+        >
+          <img
+            src="/header/mokkojiLogo.svg"
+            alt="모꼬지 로고"
+            width={24}
+            height={24}
+          />
+          <span>Mokkoji</span>
         </Link>
         <nav className="flex h-full items-center gap-6 whitespace-nowrap">
           <NavButton

@@ -36,7 +36,7 @@ function Header() {
   return (
     <>
       <div className="h-[65px]" />
-      <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center border-b border-b-[#D6D6D6] bg-white px-[150px] text-base font-semibold">
+      <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center bg-white text-base font-semibold shadow-md sm:px-8 lg:px-[150px]">
         <Link
           href="/"
           className="mr-9 flex items-center gap-1.5 text-2xl font-bold"
@@ -49,7 +49,7 @@ function Header() {
           />
           <span>Mokkoji</span>
         </Link>
-        <nav className="flex h-full items-center gap-6 whitespace-nowrap">
+        <nav className="scrollbar-hide flex h-full items-center gap-4 overflow-auto whitespace-nowrap">
           <NavButton
             label="전체 동아리"
             href="/club"

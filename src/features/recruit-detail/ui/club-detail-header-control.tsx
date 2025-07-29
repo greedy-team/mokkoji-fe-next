@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import postFavoriteClub from '../api/postFavoriteClub';
 
 interface RecruitDetailHeaderControlProps {
@@ -16,10 +17,10 @@ function RecruitDetailHeaderControl({
 
     try {
       const res = await postFavoriteClub(clubId); // 토큰 추가하기
-      console.log('즐겨찾기 성공:', res);
+      toast.success('즐겨찾기 성공.');
     } catch (err) {
+      toast.error('즐겨찾기 등록 중 오류가 발생했습니다.');
       console.error('즐겨찾기 실패:', err);
-      alert('즐겨찾기 등록 중 오류가 발생했습니다.');
     }
   };
 

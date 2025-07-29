@@ -1,12 +1,27 @@
-import { ClubType } from '@/shared/model/type';
+import getRecruitList from '@/widgets/recruit/api/getRecruitList';
 import ScrollItem from './scroll-item';
 import separateRollingData from '../lib/utils';
 
-interface HomeScrollSectionProps {
-  data: ClubType[];
-}
+async function HomeScrollSection() {
+  let data;
+  try {
+    data = await getRecruitList({
+      page: 1,
+      size: 14,
+      keyword: '',
+      category: undefined,
+      affiliation: undefined,
+      recruitStatus: undefined,
+    });
+  } catch (err) {
+    console.error('에러 발생:', err);
+    return (
+      <p className="text-red-500">
+        스크롤 섹션 데이터를 불러오는 데 실패했습니다.
+      </p>
+    );
+  }
 
-function HomeScrollSection({ data }: HomeScrollSectionProps) {
   const { rollingFirst, rollingSecond } = separateRollingData(data, 2);
 
   return (

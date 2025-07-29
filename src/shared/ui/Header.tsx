@@ -23,8 +23,8 @@ function Header() {
         <nav className="flex h-full items-center gap-6 whitespace-nowrap">
           <NavButton
             label="전체 동아리"
-            href="/club"
-            active={pathname === '/club'}
+            href="/club/all"
+            active={pathname === '/club/all'}
           />
           <NavButton
             label="모집 공고"
@@ -57,7 +57,7 @@ function Header() {
                 안녕하세요
               </span>
             ) : (
-              <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
+              <Link href="/login" className="whitespace-nowrap">
                 로그인
               </Link>
             )}

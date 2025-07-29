@@ -5,18 +5,18 @@ import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 
 async function HomePage() {
   return (
-    <div>
-      <div className="px-[25%]">
+    <>
+      <div className="px-5 lg:px-[25%]">
         <HomeHeader />
         <HomeSearchWidget />
       </div>
       <div>
         <HomeScrollSection />
       </div>
-      <div className="fixed right-8 bottom-8 z-50">
+      <div className="fixed right-2 bottom-4 z-50 lg:right-8 lg:bottom-8">
         <NavigateClubList />
       </div>
-    </div>
+    </>
   );
 }
 

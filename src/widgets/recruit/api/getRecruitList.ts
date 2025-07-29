@@ -10,10 +10,10 @@ import serverApi from '@/shared/api/server-api';
 interface GetRecruitListParams {
   page: number;
   size: number;
-  keyword: string | undefined;
-  category: ClubCategory | undefined;
-  affiliation: ClubAffiliation | undefined;
-  recruitStatus: string | undefined;
+  keyword?: string;
+  category?: ClubCategory;
+  affiliation?: ClubAffiliation;
+  recruitStatus?: string;
 }
 
 async function getRecruitList(params: GetRecruitListParams, auth?: boolean) {

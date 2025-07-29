@@ -1,4 +1,4 @@
-import CustomCalendar from '@/features/favorite/custom-calendar';
+import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 
 function FavoriteDateSection() {
   return (

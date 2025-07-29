@@ -1,7 +1,7 @@
-import ClubDetailPage from '@/views/club/ui/club-detail-page';
+import RecruitDetailPage from '@/views/club/ui/recruit-detail-page';
 
 function Page({ params }: { params: { id: Promise<string> } }) {
-  return <ClubDetailPage params={params} />;
+  return <RecruitDetailPage params={params} />;
 }
 
 export default Page;

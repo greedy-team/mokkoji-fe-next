@@ -9,7 +9,7 @@ function LoginButton() {
     <Button
       variant="kakao"
       onClick={() => signIn('kakao')}
-      className="flex h-12 w-full cursor-pointer justify-around text-base font-medium"
+      className="mt-20 flex h-12 w-full cursor-pointer justify-around text-base font-medium"
     >
       <KakaoIcon />
       카카오 로그인

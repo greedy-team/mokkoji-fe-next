@@ -3,10 +3,10 @@ import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 
 function FavoritePage() {
   return (
-    <main>
+    <>
       <FavoriteItemSection />
       <FavoriteDateSection />
-    </main>
+    </>
   );
 }
 

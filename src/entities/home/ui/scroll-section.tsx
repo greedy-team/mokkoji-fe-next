@@ -1,12 +1,23 @@
-import { ClubType } from '@/shared/model/type';
+import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ScrollItem from './scroll-item';
 import separateRollingData from '../lib/utils';
 
-interface HomeScrollSectionProps {
-  data: ClubType[];
-}
+async function HomeScrollSection() {
+  let data;
+  try {
+    data = await getRecruitList({
+      page: 1,
+      size: 14,
+      keyword: '',
+      category: undefined,
+      affiliation: undefined,
+      recruitStatus: undefined,
+    });
+  } catch (err) {
+    return <ErrorBoundaryUi />;
+  }
 
-function HomeScrollSection({ data }: HomeScrollSectionProps) {
   const { rollingFirst, rollingSecond } = separateRollingData(data, 2);
 
   return (

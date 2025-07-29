@@ -5,14 +5,14 @@ import KakaoIcon from '@/shared/ui/kakao-icon';
 
 function LoginButton() {
   const handleKakaoLogin = () => {
-    console.log('카카오 로그인 시도');
+    const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
+    window.location.href = kakaoAuthURL;
   };
-
   return (
     <Button
       variant="kakao"
       onClick={handleKakaoLogin}
-      className="flex h-12 w-full cursor-pointer justify-around text-base font-medium"
+      className="mt-20 flex h-12 w-full cursor-pointer justify-around text-base font-medium"
     >
       <KakaoIcon />
       카카오 로그인

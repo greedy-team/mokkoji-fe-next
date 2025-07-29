@@ -18,7 +18,7 @@ export default function NavSection() {
     <div className="mr-12 flex flex-row gap-4">
       {navItems.map(({ label, value }) => (
         <NavButton
-          key={value ?? 'none'}
+          key={value}
           label={label}
           href={`/recruit?affiliation=${value}`}
           navProps="pb-2 text-xs"

@@ -1,5 +1,3 @@
-'use client';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/shared/ui/Header';

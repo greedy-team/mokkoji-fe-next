@@ -4,18 +4,19 @@ import {
   ClubList,
   ClubAffiliation,
 } from '@/shared/model/type';
+import authApi from '@/shared/api/auth-api';
 import serverApi from '@/shared/api/server-api';
 
 interface GetRecruitListParams {
   page: number;
   size: number;
-  keyword: string | undefined;
-  category: ClubCategory | undefined;
-  affiliation: ClubAffiliation | undefined;
-  recruitStatus: string | undefined;
+  keyword?: string;
+  category?: ClubCategory;
+  affiliation?: ClubAffiliation;
+  recruitStatus?: string;
 }
 
-async function getRecruitList(params: GetRecruitListParams) {
+async function getRecruitList(params: GetRecruitListParams, auth?: boolean) {
   const rawParams = {
     page: params.page,
     size: params.size,
@@ -33,11 +34,20 @@ async function getRecruitList(params: GetRecruitListParams) {
     }
   });
 
-  const response: ApiResponse<ClubList> = await serverApi
-    .get('clubs', {
-      searchParams,
-    })
-    .json();
+  let response: ApiResponse<ClubList>;
+  if (auth) {
+    response = await authApi
+      .get('clubs', {
+        searchParams,
+      })
+      .json<ApiResponse<ClubList>>();
+  } else {
+    response = await serverApi
+      .get('clubs', {
+        searchParams,
+      })
+      .json<ApiResponse<ClubList>>();
+  }
 
   return response.data.clubs;
 }

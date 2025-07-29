@@ -21,9 +21,9 @@ export default function NavButton({
     <Link
       href={href}
       className={clsx(
-        'flex h-full items-center px-3.25 no-underline',
+        'flex h-full items-center px-3.25 no-underline transition-colors duration-500 hover:border-b-2 hover:border-[#585858]',
         navProps,
-        active ? 'border-b-2 border-black' : '',
+        active ? 'border-b-3 border-black' : '',
       )}
     >
       {label}

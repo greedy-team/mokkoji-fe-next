@@ -1,6 +1,6 @@
-import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import getClubDetail from '@/views/club/api/getClubDetail';
-import convertLinkText from '@/entities/club/util/convetLinkText';
+import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
+import ClubDetailHeaderControl from '@/features/recruit-detail/ui/club-detail-header-control';
 
 // TODO: 추후 프롭스 드릴링 해결 필요
 async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
@@ -8,12 +8,9 @@ async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
 
   return (
     <main>
-      <ClubDetailHeader
-        title={data.name}
-        category={data.category}
-        startDate={data.recruitStartDate}
-        endDate={data.recruitEndDate}
+      <ClubDetailHeaderControl
         instagramLink={data.instagramLink}
+        clubId={Number(params.id)}
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}

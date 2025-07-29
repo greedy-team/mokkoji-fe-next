@@ -29,7 +29,7 @@ function Header() {
           <NavButton
             label="모집 공고"
             href="/recruit"
-            active={pathname === '/recruit'}
+            active={pathname.startsWith('/recruit')}
           />
           <NavButton
             label="즐겨찾기"
@@ -62,13 +62,15 @@ function Header() {
               </Link>
             )}
           </span>
-          <Image
-            src="/header/search.svg"
-            alt="검색"
-            width={20}
-            height={20}
-            className="cursor-pointer"
-          />
+          <Link href="/search">
+            <Image
+              src="/header/search.svg"
+              alt="검색"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </Link>
         </div>
       </header>
     </>

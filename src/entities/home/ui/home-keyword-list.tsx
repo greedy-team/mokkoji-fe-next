@@ -1,7 +1,4 @@
-'use client';
-
-import HomeKeyword from '@/features/home/ui/home-keyword';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const KEYWORDS = [
   '밴드',
@@ -15,20 +12,16 @@ const KEYWORDS = [
 ];
 
 function HomeKeywordList() {
-  const router = useRouter();
-
-  const handleKeywordClick = (keyword: string) => {
-    router.push(`/recruit?keyword=${encodeURIComponent(keyword)}`);
-  };
-
   return (
     <div className="mb-10 flex flex-wrap justify-center gap-5 px-28">
       {KEYWORDS.map((keyword) => (
-        <HomeKeyword
+        <Link
           key={keyword}
-          keyword={keyword}
-          onClick={() => handleKeywordClick(keyword)}
-        />
+          href={`/search?q=${keyword}`}
+          className="w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-5 py-2 text-xl font-semibold transition-colors hover:bg-[#dadddf]"
+        >
+          {keyword}
+        </Link>
       ))}
     </div>
   );

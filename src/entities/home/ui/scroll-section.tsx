@@ -1,4 +1,5 @@
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ScrollItem from './scroll-item';
 import separateRollingData from '../lib/utils';
 
@@ -14,12 +15,7 @@ async function HomeScrollSection() {
       recruitStatus: undefined,
     });
   } catch (err) {
-    console.error('에러 발생:', err);
-    return (
-      <p className="text-red-500">
-        스크롤 섹션 데이터를 불러오는 데 실패했습니다.
-      </p>
-    );
+    return <ErrorBoundaryUi />;
   }
 
   const { rollingFirst, rollingSecond } = separateRollingData(data, 2);

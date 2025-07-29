@@ -3,13 +3,35 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import NavButton from './nav-button';
 
 function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [showSearch, setShowSearch] = useState(false);
+  const wrapperRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setShowSearch(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (!showSearch) {
+      wrapperRef.current?.reset();
+    }
+  }, [showSearch]);
 
   return (
     <>
@@ -69,15 +91,38 @@ function Header() {
               </Link>
             )}
           </span>
-          <Link href="/search">
-            <Image
-              src="/header/search.svg"
-              alt="검색"
-              width={20}
-              height={20}
-              className="cursor-pointer"
+          <form
+            action="/search"
+            method="GET"
+            ref={wrapperRef}
+            className="flex items-center"
+          >
+            <input
+              type="text"
+              name="keyword"
+              placeholder="검색어를 입력해주세요"
+              className={`border- z-10 border-b-2 px-2 py-2 text-sm transition-all duration-300 ease-in-out outline-none focus-within:border-[#00E804] ${showSearch ? 'mr-2 w-52 opacity-100' : 'w-0 overflow-hidden opacity-0'}`}
+              autoComplete="off"
             />
-          </Link>
+            <button
+              type={showSearch ? 'submit' : 'button'}
+              onClick={(e) => {
+                if (!showSearch) {
+                  e.preventDefault();
+                  setShowSearch(true);
+                }
+              }}
+              className="flex items-center justify-center"
+            >
+              <Image
+                src="/header/search.svg"
+                alt="검색"
+                width={20}
+                height={20}
+                className="cursor-pointer"
+              />
+            </button>
+          </form>
         </div>
       </header>
     </>

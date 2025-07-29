@@ -1,12 +1,13 @@
- ## 기술 스택 선정 이유
+## 기술 스택 선정 이유
 
- ### next-auth
- - 로그인 간편화
- - 소셜 로그인(OAuth) → Google, Kakao, Github 등 쉽게 연동 가능
- - 쿠키를 통한 로직 관리
- - CSRF 보호, JWT 자동 암호화, Secure Cookie 처리
- - getServerSession(), auth() 같은 API 제공으로 서버-클라이언트 인증 일관성 유지
- 
+### next-auth
+
+- 로그인 간편화
+- 소셜 로그인(OAuth) → Google, Kakao, Github 등 쉽게 연동 가능
+- 쿠키를 통한 로직 관리
+- CSRF 보호, JWT 자동 암호화, Secure Cookie 처리
+- getServerSession(), auth() 같은 API 제공으로 서버-클라이언트 인증 일관성 유지
+
 ### next-auth 설정
 
 - providers: Credentials, Google, GitHub 등의 인증 공급자를 지정합니다.
@@ -18,9 +19,7 @@
 - callbacks.jwt: JWT가 생성되거나 업데이트될 때 호출되며, 반환하는 값은 암호화되어 쿠키에 저장됩니다.
 - callbacks.session: jwt 콜백이 반환하는 token을 받아, 세션이 확인될 때마다 호출되며, 반환하는 값은 클라이언트에서 확인할 수 있습니다. (2번 이상 호출될 수 있습니다)
 
- > next-auth를 사용하지 않고, 그냥 구현하면 무엇이 문제인가?
-
-
+> next-auth를 사용하지 않고, 그냥 구현하면 무엇이 문제인가?
 
 ### next-auth 버전
 
@@ -29,5 +28,11 @@
 - nextjs15 버전과의 호환성 문제로 beta 버전 사용
 
 ### react-calendar
+
 - 캘린더 로직 단순화
 - 개발 시간 단축
+
+### ky
+
+- axios 비해 훨씬 경량화
+-

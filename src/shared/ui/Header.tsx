@@ -57,7 +57,9 @@ function Header() {
                 안녕하세요
               </span>
             ) : (
-              <Link href="/login?callbackUrl=/">로그인</Link>
+              <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
+                로그인
+              </Link>
             )}
           </span>
           <Image

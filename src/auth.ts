@@ -1,3 +1,4 @@
+import ky from 'ky';
 import NextAuth from 'next-auth';
 import KakaoProvider from 'next-auth/providers/kakao';
 
@@ -26,17 +27,36 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     jwt: async ({ token, account }) => {
       if (account?.provider === 'kakao') {
-        return {
-          ...token,
-          accessToken: account.access_token,
-        };
+        const kakaoAccessToken = account.access_token;
+        console.log('account', account);
+
+        try {
+          const res = await ky.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/users/auth/login`,
+            {
+              json: { kakaoAccessToken },
+            },
+          );
+          const data = await res.json();
+          console.log('data', data);
+          return {
+            ...token,
+            accessToken: (data as any).accessToken,
+            refreshToken: (data as any).refreshToken,
+          };
+        } catch (err) {
+          console.error('Failed to get custom token from backend', err);
+        }
       }
+
       return token;
     },
     session: async ({ session, token }) => {
+      // TODO: 추후 수정 필요
       return {
         ...session,
         accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
       };
     },
     redirect: async ({ url, baseUrl }) => {

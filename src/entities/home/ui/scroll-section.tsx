@@ -22,7 +22,7 @@ async function HomeScrollSection() {
 
   return (
     <div>
-      <div className="flex flex-col items-center pt-40 pb-13">
+      <div className="flex flex-col items-center pt-20 pb-13">
         <p className="text-[26px] font-bold text-[#00E804]">HOT!</p>
         <p className="text-[26px] font-bold text-[#4E5968]">
           세종대학교의 인기 동아리

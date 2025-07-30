@@ -13,7 +13,7 @@ const KEYWORDS = [
 
 function HomeKeywordList() {
   return (
-    <div className="mb-10 flex flex-wrap justify-center gap-5 px-28">
+    <div className="mb-5 flex flex-wrap justify-center gap-5 px-28">
       {KEYWORDS.map((keyword) => (
         <Link
           key={keyword}

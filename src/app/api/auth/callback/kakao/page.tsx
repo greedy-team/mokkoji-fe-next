@@ -22,7 +22,7 @@ export default function KakaoCallback() {
 
         document.cookie = `accessToken=${response.accessToken}; path=/; max-age=${60 * 60 * 24}; secure;`;
 
-        router.push('/dashboard');
+        router.push('/');
       } catch (error) {
         console.error('카카오 로그인 실패:', error);
       }

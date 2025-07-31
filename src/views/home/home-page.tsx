@@ -4,6 +4,7 @@ import HomeScrollSection from '@/entities/home/ui/scroll-section';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import HomeDownButton from '@/features/home/ui/page-down-button';
 import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
+import FeatureIntroduceWidget from '@/widgets/home/ui/feature-intoduce-widget';
 
 async function HomePage() {
   return (
@@ -16,9 +17,10 @@ async function HomePage() {
         <HomeDownButton />
       </div>
       <div className="px-[10%]">
-        <div>
-          <ClubCardWidget />
-        </div>
+        <ClubCardWidget />
+      </div>
+      <div className="bg-[linear-gradient(to_bottom,_#FFFFFF_0%,_#F8FAFB_5%,_#F8FAFB_95%,_#FFFFFF_100%)] px-[10%]">
+        <FeatureIntroduceWidget />
       </div>
       <div>
         <HomeScrollSection />

@@ -20,7 +20,7 @@ async function ClubCardWidget() {
         <ClubTextCard />
         <CardSilder data={data} />
       </div>
-      <div className="flex h-[300px] w-full items-center pt-20">
+      <div className="flex h-[300px] w-full items-center pt-20 pb-60">
         <RecruitVerticalCarousel data={data} />
         <RecruitTextCard />
       </div>

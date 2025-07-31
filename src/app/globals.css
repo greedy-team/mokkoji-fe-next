@@ -86,6 +86,13 @@
   animation-delay: 0.1s;
 }
 
+.animate-fade-left-2 {
+  opacity: 0;
+  transform: translateX(-100px);
+  animation: fade-left 0.8s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
 .reveal-rightToleft {
   opacity: 0;
   pointer-events: none;
@@ -110,7 +117,7 @@
 .reveal-1 {
   opacity: 0;
   animation: reveal 0.5s ease-out forwards;
-  animation-delay: 1.0s;
+  animation-delay: 1s;
 }
 
 .reveal-2 {

@@ -79,6 +79,16 @@
   }
 }
 
+@keyframes open {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
 .animate-fade-left {
   opacity: 0;
   transform: translateX(-40px);
@@ -124,6 +134,15 @@
   opacity: 0;
   animation: reveal 0.5s ease-out forwards;
   animation-delay: 1.4s;
+}
+
+.laptop {
+  opacity: 0;
+  transform-style: preserve-3d;
+  transform-origin: bottom center;
+  transform: rotateX(90deg);
+  animation: open 0.5s ease-out forwards;
+  animation-delay: 0.3s;
 }
 
 body {

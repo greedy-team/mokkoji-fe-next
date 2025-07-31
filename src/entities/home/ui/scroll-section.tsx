@@ -10,9 +10,6 @@ async function HomeScrollSection() {
       page: 1,
       size: 14,
       keyword: '',
-      category: undefined,
-      affiliation: undefined,
-      recruitStatus: undefined,
     });
   } catch (err) {
     return <ErrorBoundaryUi />;

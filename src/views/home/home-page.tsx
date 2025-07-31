@@ -26,9 +26,6 @@ async function HomePage() {
       <div className="px-[10%]">
         <HelpCardWidget />
       </div>
-      <div>
-        <HomeScrollSection />
-      </div>
       <div className="fixed right-8 bottom-8 z-50">
         <NavigateClubList />
       </div>

@@ -3,6 +3,7 @@ import NavigateClubList from '@/features/home/ui/navigate-clublist';
 import HomeScrollSection from '@/entities/home/ui/scroll-section';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import HomeDownButton from '@/features/home/ui/page-down-button';
+import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
 
 async function HomePage() {
   return (
@@ -14,7 +15,12 @@ async function HomePage() {
       <div className="mb-10 flex h-[72px] justify-center">
         <HomeDownButton />
       </div>
-      <div id="scroll-target">
+      <div className="px-[10%]">
+        <div>
+          <ClubCardWidget />
+        </div>
+      </div>
+      <div>
         <HomeScrollSection />
       </div>
       <div className="fixed right-8 bottom-8 z-50">

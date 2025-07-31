@@ -158,3 +158,11 @@ body {
 .react-calendar__month-view__days__day abbr::after {
   content: none !important;
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE 및 Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

@@ -154,6 +154,12 @@ html {
   scroll-behavior: smooth;
 }
 
+@layer utilities {
+  p, h1, h4 {
+    @apply cursor-default;
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

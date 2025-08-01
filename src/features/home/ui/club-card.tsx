@@ -21,28 +21,21 @@ interface CardSliderProps {
 
 function CardSilder({ data }: CardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [randomData, setRandomData] = useState<CardSliderProps['data']>([]);
-
-  useEffect(() => {
-    const shuffled = [...data].sort(() => Math.random() - 0.5);
-    const sliced = shuffled.slice(0, 10);
-    setRandomData(sliced);
-  }, [data]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % randomData.length);
+      setCurrentIndex((prev) => (prev + 1) % data.length);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [randomData.length]);
+  }, [data.length]);
 
   return (
     <div className="relative flex h-[300px] w-[50%] items-center justify-center overflow-hidden">
       <FadeEgde variant="left" />
       <FadeEgde variant="right" />
       <div className="relative flex items-center justify-center">
-        {randomData.map((item, idx) => {
+        {data.map((item, idx) => {
           const offset = idx - currentIndex;
           const isActive = offset === 0;
           const translateX = offset * movePx;

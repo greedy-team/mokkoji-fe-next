@@ -8,20 +8,17 @@ async function ClubCardWidget() {
   const data = await getRecruitList({
     page: 1,
     size: 100,
-    keyword: '',
-    category: undefined,
-    affiliation: undefined,
-    recruitStatus: undefined,
   });
+  const shuffled = [...data].sort(() => Math.random() - 0.5);
 
   return (
     <div className="flex flex-col gap-40">
       <div id="scroll-target" className="flex h-[300px] items-center pt-20">
         <ClubTextCard />
-        <CardSilder data={data} />
+        <CardSilder data={shuffled.slice(0, 10)} />
       </div>
       <div className="flex h-[300px] w-full items-center pt-20 pb-60">
-        <RecruitVerticalCarousel data={data} />
+        <RecruitVerticalCarousel data={shuffled.slice(10, 20)} />
         <RecruitTextCard />
       </div>
     </div>

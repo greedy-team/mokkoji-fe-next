@@ -1,29 +1,24 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import RadiusTag from '@/shared/ui/radius-tag';
-import getStatus from '@/shared/lib/getStatus';
-import PeriodSection from '@/entities/recruit/ui/period-section';
 import FavoriteButton from '@/entities/recruit/ui/favorite-button';
 
 interface ClubItemProps {
   title: string;
-  startDate: string;
-  endDate: string;
   description: string;
   isFavorite?: boolean;
   imgUrl?: string;
   category?: string;
+  clubId: string;
 }
 
 function ClubItem({
   title,
-  startDate,
-  endDate,
   description,
   isFavorite,
   imgUrl,
   category,
+  clubId,
 }: ClubItemProps) {
   return (
     <div className="h-min-[142px] relative w-auto rounded-sm bg-[#F8F8F8] p-5">
@@ -44,7 +39,7 @@ function ClubItem({
           {description}
         </div>
       </div>
-      <FavoriteButton isFavorite={isFavorite || false} />
+      <FavoriteButton isFavorite={isFavorite || false} clubId={clubId} />
     </div>
   );
 }

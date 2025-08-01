@@ -9,6 +9,8 @@ declare module 'next-auth' {
 
   interface User {
     role?: string;
+    accessToken?: string;
+    refreshToken?: string;
   }
 
   interface JWT {

@@ -3,31 +3,24 @@
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import KakaoIcon from '@/shared/ui/kakao-icon';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import loginAction from '../api/loginAction';
+import { signIn } from 'next-auth/react';
 
 function LoginForm() {
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
-
-  const router = useRouter();
 
   const handleKakaoLogin = () => {
     const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}`;
     window.location.href = kakaoAuthURL;
   };
 
-  const handleLogin = async () => {
-    const result = await loginAction({ studentId, password });
-
-    if (result.success) {
-      router.push('/');
-    } else {
-      toast.error(`로그인 실패: ${result.message}`);
-    }
+  const handleSubmit = async () => {
+    await signIn('credentials', {
+      redirect: true,
+      studentId,
+      password,
+    });
   };
-
   return (
     <div className="mt-20 w-full space-y-4">
       <input
@@ -45,7 +38,7 @@ function LoginForm() {
         className="w-full rounded border px-3 py-2"
       />
       <Button
-        onClick={handleLogin}
+        onClick={handleSubmit}
         className="h-10 w-full bg-black font-medium text-white"
       >
         로그인

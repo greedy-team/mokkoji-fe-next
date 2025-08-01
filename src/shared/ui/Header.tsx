@@ -10,6 +10,7 @@ import NavButton from './nav-button';
 function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
+
   const [showSearch, setShowSearch] = useState(false);
   const wrapperRef = useRef<HTMLFormElement>(null);
 
@@ -41,7 +42,7 @@ function Header() {
           href="/"
           className="mr-9 flex items-center gap-1.5 text-2xl font-bold"
         >
-          <img
+          <Image
             src="/header/mokkojiLogo.svg"
             alt="모꼬지 로고"
             width={24}
@@ -86,9 +87,15 @@ function Header() {
                 안녕하세요
               </span>
             ) : (
-              <Link href="/login" className="whitespace-nowrap">
-                로그인
-              </Link>
+              <div className="flex gap-2 whitespace-nowrap">
+                <Link href="/register" className="whitespace-nowrap">
+                  회원가입
+                </Link>
+                <span className="whitespace-nowrap">|</span>
+                <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
+                  로그인
+                </Link>
+              </div>
             )}
           </span>
           <form

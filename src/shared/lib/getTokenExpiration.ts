@@ -1,9 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
 
-function getTokenExpiration(token: string) {
-  const decoded = jwtDecode(token);
-  return decoded.exp
-    ? Math.floor((decoded.exp - Date.now() / 1000) / 60)
-    : null;
+export default function getTokenExpiration(token: string): number | null {
+  try {
+    const decoded = jwtDecode<{ exp?: number }>(token);
+    return decoded.exp ? decoded.exp * 1000 : null;
+  } catch (e) {
+    console.error('Failed to decode token', e);
+    return null;
+  }
 }
-export default getTokenExpiration;

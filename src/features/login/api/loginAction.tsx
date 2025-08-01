@@ -11,7 +11,7 @@ export default async function loginAction({
 }) {
   try {
     await signIn('credentials', {
-      redirect: false,
+      redirect: true,
       studentId,
       password,
     });

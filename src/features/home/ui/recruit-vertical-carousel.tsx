@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import FadeEgde from '@/shared/ui/fade-edge';
+import cn from '@/shared/lib/utils';
 import isRecruiting from '../util/isRecruiting';
 
 interface CardSliderProps {
@@ -60,8 +62,8 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
       ref={containerRef}
       className="relative h-[300px] w-[50%] overflow-hidden perspective-[1200px]"
     >
-      <div className="pointer-events-none absolute top-0 left-0 z-20 h-20 w-full bg-gradient-to-t from-transparent to-white" />
-      <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-20 w-full bg-gradient-to-b from-transparent to-white" />
+      <FadeEgde variant="top" />
+      <FadeEgde variant="bottom" />
       <div
         className="relative h-full w-full"
         style={{
@@ -82,11 +84,12 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
           return (
             <div
               key={item.id}
-              className="absolute top-1/2 left-0 w-full -translate-y-1/2"
+              className={cn(
+                isVisible ? 'opacity-0' : 'opacity-100',
+                'absolute top-1/2 left-0 w-full -translate-y-1/2 transform-3d',
+              )}
               style={{
                 transform: `rotateX(${rotateX}deg) translateZ(${radius}px)`,
-                transformStyle: 'preserve-3d',
-                opacity: isVisible ? 1 : 0,
               }}
             >
               <div className="mx-auto h-[160px] w-[300px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)]">
@@ -102,7 +105,12 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                     <h1 className="text-sm font-bold">{item.name}</h1>
                   </div>
                   <div
-                    className={`rounded-full px-2 py-1 text-[10px] ${status === '모집 중' ? 'bg-[#00E457] text-white' : 'bg-[#E9E7E7] text-[#9C9C9C]'}`}
+                    className={cn(
+                      status === '모집 중'
+                        ? 'bg-[#00E457] text-white'
+                        : 'bg-[#E9E7E7] text-[#9C9C9C]',
+                      'rounded-full px-2 py-1 text-[10px]',
+                    )}
                   >
                     {status}
                   </div>

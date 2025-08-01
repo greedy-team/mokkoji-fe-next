@@ -12,7 +12,6 @@ function CategoryCard() {
             height={200}
           />
         </AnimateOnView>
-        <div className="pointer-events-none absolute top-0 left-0 z-20 h-full w-80 bg-gradient-to-r from-[#F8FAFB] to-transparent" />
       </div>
     </div>
   );

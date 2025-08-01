@@ -22,16 +22,10 @@ const visibleCount = 10;
 const angleStep = 360 / visibleCount;
 
 function RecruitVerticalCarousel({ data }: CardSliderProps) {
-  const [randomData, setRandomData] = useState<CardSliderProps['data']>([]);
   const [scrollAngle, setScrollAngle] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(0);
   const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    const shuffled = [...data].sort(() => Math.random() - 0.5);
-    setRandomData(shuffled.slice(0, visibleCount));
-  }, [data]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +66,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
           transition: 'transform 0.1s ease-out',
         }}
       >
-        {randomData.map((item, idx) => {
+        {data.map((item, idx) => {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
@@ -85,7 +79,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
             <div
               key={item.id}
               className={cn(
-                isVisible ? 'opacity-0' : 'opacity-100',
+                isVisible ? 'opacity-100' : 'opacity-0',
                 'absolute top-1/2 left-0 w-full -translate-y-1/2 transform-3d',
               )}
               style={{

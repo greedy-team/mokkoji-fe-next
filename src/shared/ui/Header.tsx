@@ -5,7 +5,7 @@ import HeaderLogin from '@/features/header/ui/header-login';
 import Image from 'next/image';
 import NavButton from './nav-button';
 
-function Header() {
+async function Header() {
   return (
     <>
       <div className="h-[65px]" />

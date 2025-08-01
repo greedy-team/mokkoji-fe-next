@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import NavLink from '@/shared/ui/nav-Item';
+import FadeEgde from '@/shared/ui/fade-edge';
+import cn from '@/shared/lib/utils';
 
 const movePx = 250;
 
@@ -36,8 +39,8 @@ function CardSilder({ data }: CardSliderProps) {
 
   return (
     <div className="relative flex h-[300px] w-[50%] items-center justify-center overflow-hidden">
-      <div className="pointer-events-none absolute top-0 left-0 z-20 h-full w-20 bg-gradient-to-r from-white to-transparent" />
-      <div className="pointer-events-none absolute top-0 right-0 z-20 h-full w-20 bg-gradient-to-l from-white to-transparent" />
+      <FadeEgde variant="left" />
+      <FadeEgde variant="right" />
       <div className="relative flex items-center justify-center">
         {randomData.map((item, idx) => {
           const offset = idx - currentIndex;
@@ -45,19 +48,11 @@ function CardSilder({ data }: CardSliderProps) {
           const translateX = offset * movePx;
 
           return (
-            <Link
+            <NavLink
               href={`/recruit/${item.id}`}
               key={item.id}
-              className={`absolute transition-all duration-500 ease-in-out ${
-                isActive
-                  ? 'z-10 scale-100 opacity-100'
-                  : 'z-0 scale-90 opacity-40'
-              }`}
-              style={{
-                transform: `translateX(${translateX}px)`,
-                width: isActive ? 320 : 200,
-                height: isActive ? 180 : 140,
-              }}
+              isActive={isActive}
+              translateX={translateX}
             >
               <div className="h-full w-full rounded-md bg-[#fefefe] p-4 shadow-xl transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(0,0,0,0.2)]">
                 <div className="mb-4 flex items-center gap-4">
@@ -70,19 +65,25 @@ function CardSilder({ data }: CardSliderProps) {
                       {item.category}
                     </span>
                     <h1
-                      className={`${isActive ? 'text-lg' : 'text-sm'} font-bold transition-all duration-500`}
+                      className={cn(
+                        isActive ? 'text-lg' : 'text-sm',
+                        'font-bold transition-all duration-500',
+                      )}
                     >
                       {item.name}
                     </h1>
                   </div>
                 </div>
                 <div
-                  className={`${isActive ? 'text-sm' : 'text-xs'} text-gray-600 transition-all duration-500`}
+                  className={cn(
+                    isActive ? 'text-sm' : 'text-xs',
+                    'text-gray-600 transition-all duration-500',
+                  )}
                 >
                   {item.description}
                 </div>
               </div>
-            </Link>
+            </NavLink>
           );
         })}
       </div>

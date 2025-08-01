@@ -99,7 +99,7 @@ function Header() {
           >
             <input
               type="text"
-              name="keyword"
+              name="q"
               placeholder="검색어를 입력해주세요"
               className={`border- z-10 border-b-2 px-2 py-2 text-sm transition-all duration-300 ease-in-out outline-none focus-within:border-[#00E804] ${showSearch ? 'mr-2 w-52 opacity-100' : 'w-0 overflow-hidden opacity-0'}`}
               autoComplete="off"

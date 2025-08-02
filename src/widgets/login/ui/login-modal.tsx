@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import LoginWidget from '@/widgets/login/ui/login-widget';
 
 interface LoginModalProps {
@@ -10,49 +9,38 @@ interface LoginModalProps {
 }
 
 function LoginModal({ open, onClose }: LoginModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
     if (open) {
-      document.addEventListener('keydown', handleKeyDown);
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
     }
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [open, onClose]);
+  }, [open]);
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === modalRef.current) {
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return undefined;
+
+    const handleCancel = (e: Event) => {
+      e.preventDefault();
       onClose();
-    }
-  };
+    };
+    dialog.addEventListener('cancel', handleCancel);
 
-  if (!open) return null;
+    return () => {
+      dialog.removeEventListener('cancel', handleCancel);
+    };
+  }, [onClose]);
 
-  return createPortal(
-    <div
-      ref={modalRef}
-      onClick={handleBackdropClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === ' ') {
-          onClose();
-        }
-      }}
-      aria-label="모달 닫기 배경"
+  return (
+    <dialog
+      ref={dialogRef}
+      className="fixed top-1/2 left-1/2 z-10 w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-none bg-white p-8"
     >
-      <div className="relative w-[400px] rounded-2xl bg-white p-8">
-        <LoginWidget />
-      </div>
-    </div>,
-    document.body,
+      <LoginWidget />
+    </dialog>
   );
 }
 

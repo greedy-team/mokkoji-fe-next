@@ -61,7 +61,7 @@ function HeaderLogin() {
             회원가입
           </Link>
           <span className="whitespace-nowrap">|</span>
-          <Link href="/login" className="whitespace-nowrap">
+          <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
             로그인
           </Link>
         </div>

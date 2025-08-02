@@ -8,6 +8,9 @@ import UserInfoType from './entities/my/model/type';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
+  pages: {
+    error: '/login?callbackUrl=/',
+  },
   providers: [
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -19,7 +22,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         studentId: { label: '학번', type: 'text' },
         password: { label: '비밀번호', type: 'password' },
       },
-      async authorize(credentials) {
+
+      async authorize(credentials): Promise<any> {
         try {
           const response = await serverApi.post('users/auth/login', {
             json: credentials,

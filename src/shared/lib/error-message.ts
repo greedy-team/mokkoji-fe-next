@@ -12,7 +12,7 @@ function ErrorMessage(error: Error) {
       case 404:
         throw new Error('요청한 자원을 찾을 수 없습니다.');
       case 409:
-        throw new Error('이미 등록된 솔루션입니다.');
+        throw new Error('이미 등록된 동아리입니다.');
       case 500:
         throw new Error('서버 오류가 발생했습니다. 다시 시도해주세요.');
       default:

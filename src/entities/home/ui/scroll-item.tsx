@@ -11,15 +11,15 @@ interface ScrollItemProps {
 function ScrollItem({ title, description, imgUrl, id }: ScrollItemProps) {
   return (
     <Link href={`/recruit/${id}`}>
-      <div className="relative h-[191px] w-[448px] cursor-pointer rounded-2xl bg-[#F2F4F6] p-5 hover:bg-[#e8e8e8]">
-        <div className="mb-8 flex flex-row items-center justify-between">
-          <div className="flex flex-row items-center gap-2">
-            <Avatar className="size-12">
+      <div className="relative h-[120px] w-[250px] cursor-pointer rounded-2xl bg-[#F2F4F6] p-5 hover:bg-[#e8e8e8] lg:h-[191px] lg:w-[448px]">
+        <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
+          <div className="flex flex-row items-center gap-3">
+            <Avatar className="size-6 lg:size-12">
               <AvatarImage src={imgUrl} />
               <AvatarFallback>{title}</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-xl font-bold">{title}</h1>
+              <h1 className="text-sm font-bold lg:text-xl">{title}</h1>
             </div>
           </div>
         </div>

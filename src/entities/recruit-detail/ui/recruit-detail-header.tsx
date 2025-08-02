@@ -24,8 +24,8 @@ function RecruitDetailHeader({
     <>
       <header className="cursor-default border-b border-b-[#D6D6D6] pb-4">
         <div className="mb-4 flex flex-row items-center gap-5">
-          <h1 className="text-4xl font-bold">{title}</h1>
-          <p className="text-4xl font-bold text-[#9C9C9C]">{category} 동아리</p>
+          <h1 className="text-xl font-bold">{title}</h1>
+          <p className="text-xl font-bold text-[#9C9C9C]">{category} 동아리</p>
         </div>
         <div className="mb-2 flex flex-row items-center gap-2 text-xl">
           <RadiusTag

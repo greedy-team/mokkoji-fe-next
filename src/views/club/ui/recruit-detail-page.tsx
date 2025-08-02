@@ -22,7 +22,7 @@ async function RecruitDetailPage({
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
-        className="mb-5 w-[95%] text-[1rem] leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
+        className="mb-3 w-[95%] text-xs leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
       />
       <RecruitDetailCommentWidget clubId={Number(params.id)} />
     </main>

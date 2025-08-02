@@ -5,10 +5,12 @@ import { useSession, signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
+import LoginModal from '@/widgets/login/ui/login-modal';
 
 function HeaderLogin() {
   const { data: session, status } = useSession();
   const [showLogout, setShowLogout] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
@@ -61,9 +63,16 @@ function HeaderLogin() {
             회원가입
           </Link>
           <span className="whitespace-nowrap">|</span>
-          <Link href="/login?callbackUrl=/" className="whitespace-nowrap">
+          <button
+            onClick={() => setIsLoginOpen(true)}
+            className="cursor-pointer whitespace-nowrap"
+          >
             로그인
-          </Link>
+          </button>
+          <LoginModal
+            open={isLoginOpen}
+            onClose={() => setIsLoginOpen(false)}
+          />
         </div>
       )}
     </span>

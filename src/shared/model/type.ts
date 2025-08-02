@@ -50,3 +50,10 @@ export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
   [ClubAffiliation.CENTRAL_CLUB]: '중앙 동아리',
   [ClubAffiliation.DEPARTMENT_CLUB]: '가인준 동아리',
 };
+
+export enum UserRole {
+  GREEDY_ADMIN = 'GREEDY_ADMIN',
+  CLUB_ADMIN = 'CLUB_ADMIN',
+  CLUB_MASTER = 'CLUB_MASTER',
+  USER = 'USER',
+}

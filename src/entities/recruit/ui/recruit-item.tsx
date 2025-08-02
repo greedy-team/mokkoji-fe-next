@@ -13,6 +13,7 @@ interface RecruitItemProps {
   description: string;
   isFavorite?: boolean;
   imgUrl?: string;
+  clubId: string;
 }
 
 function RecruitItem({
@@ -22,6 +23,7 @@ function RecruitItem({
   description,
   isFavorite,
   imgUrl,
+  clubId,
 }: RecruitItemProps) {
   return (
     <div className="h-min-[142px] relative w-auto rounded-sm bg-[#F8F8F8] p-5">
@@ -46,7 +48,7 @@ function RecruitItem({
           {description}
         </div>
       </div>
-      <FavoriteButton isFavorite={isFavorite || false} />
+      <FavoriteButton isFavorite={isFavorite || false} clubId={clubId} />
     </div>
   );
 }

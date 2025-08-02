@@ -1,6 +1,9 @@
-import ky from 'ky';
 import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import KakaoProvider from 'next-auth/providers/kakao';
+import getTokenExpiration from './shared/lib/getTokenExpiration';
+import serverApi from './shared/api/server-api';
+import { LoginSuccessResponse } from './features/login/model/type';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
@@ -9,54 +12,66 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       clientId: process.env.KAKAO_CLIENT_ID as string,
       clientSecret: process.env.KAKAO_SECRET_KEY as string,
     }),
-    // TODO: 추후 로그인 구현
-    // CredentialsProvider({
-    //   name: 'credentials',
-    //   credentials: {
-    //     email: { label: '이메일', type: 'text' },
-    //     password: { label: '비밀번호', type: 'password' },
-    //   },
-    //   async authorize(credentials) {
-    //     return { id: '1', name: '테스트', email: credentials?.email };
-    //   },
-    // }),
+    CredentialsProvider({
+      name: 'credentials',
+      credentials: {
+        studentId: { label: '학번', type: 'text' },
+        password: { label: '비밀번호', type: 'password' },
+      },
+      async authorize(credentials): Promise<any> {
+        try {
+          const response = await serverApi.post('users/auth/login', {
+            json: credentials,
+          });
+          const data: LoginSuccessResponse = await response.json();
+          console.log('request', data.data);
+          return {
+            accessToken: data.data.accessToken,
+            refreshToken: data.data.refreshToken,
+          };
+        } catch (error) {
+          console.error('[authorize error]', error);
+          return null;
+        }
+      },
+    }),
   ],
   callbacks: {
-    signIn: async () => {
-      return true;
-    },
-    jwt: async ({ token, account }) => {
+    jwt: async ({ token, account, user }) => {
+      // 소셜 로그인
       if (account?.provider === 'kakao') {
-        const kakaoAccessToken = account.access_token;
-        console.log('account', account);
+        return {
+          ...token,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+        };
+      }
 
-        try {
-          const res = await ky.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/users/auth/login`,
-            {
-              json: { kakaoAccessToken },
-            },
-          );
-          const data = await res.json();
-          console.log('data', data);
-          return {
-            ...token,
-            accessToken: (data as any).accessToken,
-            refreshToken: (data as any).refreshToken,
-          };
-        } catch (err) {
-          console.error('Failed to get custom token from backend', err);
-        }
+      if (user && account?.provider === 'credentials') {
+        const expiredTime = getTokenExpiration(user.accessToken as string);
+        return {
+          ...token,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          expiresAt: expiredTime,
+        };
+      }
+
+      // accessToken 만료 체크
+      if (Date.now() > (token.expiresAt as number)) {
+        console.warn('accessToken expired, but no refresh logic yet');
+        return {};
       }
 
       return token;
     },
     session: async ({ session, token }) => {
-      // TODO: 추후 수정 필요
+      console.log('token', token);
       return {
         ...session,
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
+        expiresAt: token.expiresAt,
       };
     },
     redirect: async ({ url, baseUrl }) => {

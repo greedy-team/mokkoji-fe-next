@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
+import Image from 'next/image';
 import NavButton from './nav-button';
 
 function Header() {
@@ -13,7 +14,7 @@ function Header() {
           href="/"
           className="mr-9 flex items-center gap-1.5 text-2xl font-bold"
         >
-          <img
+          <Image
             src="/header/mokkojiLogo.svg"
             alt="모꼬지 로고"
             width={24}

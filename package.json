@@ -21,6 +21,7 @@
     "@storybook/experimental-addon-test": "8.6.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "jwt-decode": "^4.0.0",
     "ky": "^1.8.1",
     "lucide-react": "^0.525.0",
     "next": "15.3.4",

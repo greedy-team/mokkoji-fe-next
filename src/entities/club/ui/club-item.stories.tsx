@@ -9,12 +9,11 @@ const meta: Meta<typeof ClubItem> = {
   tags: ['autodocs'],
   args: {
     title: '모각코 모집합니다',
-    startDate: '2025-07-01',
-    endDate: '2025-07-20',
     description:
       '함께 공부하고 성장하는 모각코 활동입니다.\n자유롭게 신청해주세요!',
     isFavorite: false,
     imgUrl: 'https://avatars.githubusercontent.com/u/9919?s=200&v=4',
+    clubId: '1',
   },
 };
 

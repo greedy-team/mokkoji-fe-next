@@ -3,7 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import KakaoProvider from 'next-auth/providers/kakao';
 import getTokenExpiration from './shared/lib/getTokenExpiration';
 import serverApi from './shared/api/server-api';
-import { LoginSuccessResponse } from './features/login/model/type';
+import {
+  LoginSuccessResponse,
+  RoleResponse,
+} from './features/login/model/type';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
@@ -24,10 +27,20 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             json: credentials,
           });
           const data: LoginSuccessResponse = await response.json();
-          console.log('request', data.data);
+
+          if (!data) return null;
+
+          const rolesRes = await serverApi.get('users/roles', {
+            headers: {
+              Authorization: `Bearer ${data.data.accessToken}`,
+            },
+          });
+          const roleData: RoleResponse = await rolesRes.json();
+
           return {
             accessToken: data.data.accessToken,
             refreshToken: data.data.refreshToken,
+            role: roleData.data.role,
           };
         } catch (error) {
           console.error('[authorize error]', error);
@@ -54,6 +67,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
           expiresAt: expiredTime,
+          role: user.role,
         };
       }
 
@@ -72,6 +86,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
         expiresAt: token.expiresAt,
+        role: token.role,
       };
     },
     redirect: async ({ url, baseUrl }) => {

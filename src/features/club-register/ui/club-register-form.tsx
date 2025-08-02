@@ -98,14 +98,15 @@ function ClubRegisterForm() {
         <button
           type="button"
           onClick={handleClick}
-          className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4]"
+          className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#F4F4F4]"
         >
           {preview ? (
             <Image
               src={preview}
               alt="미리보기 이미지"
-              width={100}
-              height={100}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="80px"
             />
           ) : (
             <Image
@@ -122,14 +123,14 @@ function ClubRegisterForm() {
             PNG, JPG 형식의 이미지를 업로드해주세요!
           </span>
         </div>
+        <input
+          type="file"
+          accept="image/*"
+          ref={inputRef}
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
       </label>
-      <input
-        type="file"
-        accept="image/*"
-        ref={inputRef}
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-      />
       <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
         등록하기
       </Button>

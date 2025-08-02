@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import KakaoIcon from '@/shared/ui/kakao-icon';
 import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 function LoginForm() {
+  const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,11 +18,19 @@ function LoginForm() {
   };
 
   const handleSubmit = async () => {
-    await signIn('credentials', {
-      redirect: true,
+    const result: any = await signIn('credentials', {
+      redirect: false,
       studentId,
       password,
     });
+
+    if (result?.error) {
+      toast.dismiss();
+      toast.error('학번 또는 비밀번호를 확인해주세요.');
+    }
+    if (result?.ok) {
+      router.push('/');
+    }
   };
   return (
     <div className="mt-20 w-full space-y-4">

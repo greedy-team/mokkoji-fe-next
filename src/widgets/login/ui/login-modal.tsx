@@ -42,14 +42,14 @@ function LoginModal({ open, onClose }: LoginModalProps) {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === ' ') {
           onClose();
         }
       }}
       aria-label="모달 닫기 배경"
     >
       <div className="relative w-[400px] rounded-2xl bg-white p-8">
-        <LoginWidget />
+        <LoginWidget onClose={onClose} />
       </div>
     </div>,
     document.body,

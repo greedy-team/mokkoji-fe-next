@@ -13,8 +13,8 @@ export interface ClubFormData {
   category: string;
   affiliation: string;
   leaderId: string;
-  instagram: string;
-  description: string;
+  instagram?: string;
+  description?: string;
   logo?: File;
 }
 

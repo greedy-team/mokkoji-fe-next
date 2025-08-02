@@ -55,5 +55,5 @@ export enum UserRole {
   GREEDY_ADMIN = 'GREEDY_ADMIN',
   CLUB_ADMIN = 'CLUB_ADMIN',
   CLUB_MASTER = 'CLUB_MASTER',
-  USER = 'USER',
+  NORMAL = 'NORMAL',
 }

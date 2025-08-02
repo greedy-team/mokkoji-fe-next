@@ -1,11 +1,16 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
-import Image from 'next/image';
+import { auth } from '@/auth';
 import NavButton from './nav-button';
+import { UserRole } from '../model/type';
 
-function Header() {
+async function Header() {
+  const session = await auth();
+  const role = session?.role;
+
   return (
     <>
       <div className="h-[65px]" />
@@ -26,7 +31,16 @@ function Header() {
           <NavButton label="전체 동아리" href="/club/all" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite" />
-          <NavButton label="동아리 등록" href="/club-register" />
+          {role && role !== UserRole.NORMAL && (
+            <NavButton
+              label={
+                role === UserRole.CLUB_MASTER
+                  ? '동아리 정보 수정'
+                  : '동아리 등록'
+              }
+              href="/club-register"
+            />
+          )}
           <NavButton label="고객센터" href="/support" />
         </nav>
         <div className="ml-auto flex items-center gap-3.5">

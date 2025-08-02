@@ -3,11 +3,16 @@
 import { useReducer, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
+import { UserRole } from '@/shared/model/type';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
-import postClubRegister from '../api/postClubRegister';
+import { patchClubManage, postClubRegister } from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
+
+interface RoleProps {
+  role: string;
+}
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
@@ -18,11 +23,20 @@ const fields: FormField[] = [
   { label: '인스타그램', name: 'instagram', type: 'input' },
 ];
 
-function ClubRegisterForm() {
+const fieldsForManager: FormField[] = [
+  { label: '동아리 이름', name: 'name', type: 'input' },
+  { label: '카테고리', name: 'category', type: 'options' },
+  { label: '소속', name: 'affiliation', type: 'options' },
+  { label: '동아리 회장 학번', name: 'leaderId', type: 'input' },
+];
+
+function ClubRegisterForm({ role }: RoleProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
+  const selectedField =
+    role === UserRole.CLUB_MASTER ? fields : fieldsForManager;
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -53,16 +67,21 @@ function ClubRegisterForm() {
     data.append('name', formData.name);
     data.append('category', formData.category);
     data.append('affiliation', formData.affiliation);
-    data.append('description', formData.description);
     data.append('leaderId', formData.leaderId);
-    data.append('instagram', formData.instagram);
+
+    if (formData.description && formData.instagram) {
+      data.append('description', formData.description);
+      data.append('instagram', formData.instagram);
+    }
 
     if (formData.logo) {
       data.append('image', formData.logo);
     }
 
     try {
-      const res = await postClubRegister(data);
+      let res;
+      if (role === UserRole.CLUB_MASTER) res = await postClubRegister(data);
+      else res = await patchClubManage(data);
       console.log('등록 성공:', res);
       alert('등록 성공!');
     } catch (err) {
@@ -71,11 +90,11 @@ function ClubRegisterForm() {
     }
   };
 
-  const isValid = isFormValid({ formData, errors });
+  const isValid = isFormValid({ formData, errors }, role);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      {fields.map((field) => {
+      {selectedField.map((field) => {
         const value = formData[field.name];
         if (typeof value !== 'string') return null;
 
@@ -94,43 +113,45 @@ function ClubRegisterForm() {
           />
         );
       })}
-      <label htmlFor="imageURL" className="my-6 flex">
-        <button
-          type="button"
-          onClick={handleClick}
-          className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#F4F4F4]"
-        >
-          {preview ? (
-            <Image
-              src={preview}
-              alt="미리보기 이미지"
-              fill
-              style={{ objectFit: 'cover' }}
-              sizes="80px"
-            />
-          ) : (
-            <Image
-              src="/club-register/cameraIcon.svg"
-              alt="이미지 등록"
-              width={20}
-              height={16}
-            />
-          )}
-        </button>
-        <div className="flex flex-1 flex-col items-start justify-center gap-1 p-4">
-          <p className="font-bold">동아리 로고 이미지</p>
-          <span className="text-xs text-[#00D451]">
-            PNG, JPG 형식의 이미지를 업로드해주세요!
-          </span>
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          ref={inputRef}
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-        />
-      </label>
+      {role === UserRole.CLUB_MASTER && (
+        <label htmlFor="imageURL" className="my-6 flex">
+          <button
+            type="button"
+            onClick={handleClick}
+            className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#F4F4F4]"
+          >
+            {preview ? (
+              <Image
+                src={preview}
+                alt="미리보기 이미지"
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="80px"
+              />
+            ) : (
+              <Image
+                src="/club-register/cameraIcon.svg"
+                alt="이미지 등록"
+                width={20}
+                height={16}
+              />
+            )}
+          </button>
+          <div className="flex flex-1 flex-col items-start justify-center gap-1 p-4">
+            <p className="font-bold">동아리 로고 이미지</p>
+            <span className="text-xs text-[#00D451]">
+              PNG, JPG 형식의 이미지를 업로드해주세요!
+            </span>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            ref={inputRef}
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+        </label>
+      )}
       <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
         등록하기
       </Button>

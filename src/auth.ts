@@ -66,7 +66,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         };
       }
 
-      // accessToken 만료 체크
       if (Date.now() > (token.expiresAt as number)) {
         try {
           const response = await serverApi.post('users/auth/refresh', {

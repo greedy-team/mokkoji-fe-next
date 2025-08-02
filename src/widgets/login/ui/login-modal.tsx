@@ -49,7 +49,7 @@ function LoginModal({ open, onClose }: LoginModalProps) {
       aria-label="모달 닫기 배경"
     >
       <div className="relative w-[400px] rounded-2xl bg-white p-8">
-        <LoginWidget onClose={onClose} />
+        <LoginWidget />
       </div>
     </div>,
     document.body,

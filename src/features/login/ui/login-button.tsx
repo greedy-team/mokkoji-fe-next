@@ -8,11 +8,7 @@ import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 
-interface LoginFormProps {
-  onClose: () => void;
-}
-
-function LoginForm({ onClose }: LoginFormProps) {
+function LoginForm() {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +29,6 @@ function LoginForm({ onClose }: LoginFormProps) {
       return;
     }
     router.push('/');
-    onClose();
   };
 
   return (

@@ -28,7 +28,7 @@ function LoginForm() {
       toast.error('학번 또는 비밀번호를 확인해주세요.');
       return;
     }
-    router.push('/');
+    router.refresh();
   };
 
   return (

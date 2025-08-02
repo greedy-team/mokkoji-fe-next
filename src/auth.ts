@@ -71,12 +71,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       if (Date.now() > (token.expiresAt as number)) {
+        console.log('만료!!');
         try {
           const response = await serverApi.post('users/auth/refresh', {
             headers: {
               Authorization: `Bearer ${token.refreshToken}`,
             },
           });
+          console.log('refresh response', response);
+
           const data: LoginSuccessResponse = await response.json();
           return {
             ...token,

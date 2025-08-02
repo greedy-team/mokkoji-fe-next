@@ -13,12 +13,12 @@ const KEYWORDS = [
 
 function HomeKeywordList() {
   return (
-    <div className="mb-5 flex flex-wrap justify-center gap-5 px-28">
+    <div className="mb-2 flex flex-wrap justify-center gap-3 lg:mb-10 lg:gap-5 lg:px-28">
       {KEYWORDS.map((keyword) => (
         <Link
           key={keyword}
           href={`/search?q=${keyword}`}
-          className="w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-5 py-2 text-xl font-semibold transition-colors hover:bg-[#dadddf]"
+          className="text-md w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-3 py-1 font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
         >
           {keyword}
         </Link>

@@ -11,7 +11,7 @@ function HomeHeader() {
         </span>
         를 한곳에서 만나보세요.
       </p>
-      <p className="text-3xl font-bold">
+      <p className="text-md font-bold lg:text-3xl">
         관심 있는 동아리를 찾고,{' '}
         <span className="bg-[linear-gradient(to_right,_#00E804_0%,_#3AE2EB_73%,_#3AA1EB_100%)] bg-clip-text text-transparent">
           새로운 사람들

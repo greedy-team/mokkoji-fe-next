@@ -1,20 +1,18 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavButtonProps {
   label: string;
   navProps?: string;
-  active?: boolean;
   href: string;
 }
 
-export default function NavButton({
-  label,
-  active = false,
-  navProps,
-  href,
-}: NavButtonProps) {
+export default function NavButton({ label, navProps, href }: NavButtonProps) {
+  const pathname = usePathname();
+  const active = pathname.startsWith(href);
+
   return (
     <Link
       href={href}

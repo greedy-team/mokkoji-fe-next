@@ -6,7 +6,7 @@ import ClubItem from '@/entities/club/ui/club-item';
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
 
-async function RecruitItemList({ searchParams }: RecruitItemListProps) {
+async function ClubItemList({ searchParams }: RecruitItemListProps) {
   let data;
   try {
     data = await getRecruitList(
@@ -46,4 +46,4 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
   );
 }
 
-export default RecruitItemList;
+export default ClubItemList;

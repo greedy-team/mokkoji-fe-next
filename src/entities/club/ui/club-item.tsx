@@ -21,7 +21,7 @@ function ClubItem({
   clubId,
 }: ClubItemProps) {
   return (
-    <div className="h-min-[142px] relative w-auto rounded-sm bg-[#F8F8F8] p-5">
+    <div className="relative h-[170px] w-auto rounded-sm bg-[#F8F8F8] p-5">
       <div className="mb-8 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Avatar className="size-12">

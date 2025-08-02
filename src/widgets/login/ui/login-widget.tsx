@@ -1,11 +1,15 @@
 import LoginHeader from '@/entities/login/ui/login-header';
 import LoginButton from '@/features/login/ui/login-button';
 
-function LoginWidget() {
+interface LoginWidgetProps {
+  onClose: () => void;
+}
+
+function LoginWidget({ onClose }: LoginWidgetProps) {
   return (
     <>
       <LoginHeader />
-      <LoginButton />
+      <LoginButton onClose={onClose} />
     </>
   );
 }

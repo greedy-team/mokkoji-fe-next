@@ -8,7 +8,11 @@ import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 
-function LoginForm() {
+interface LoginFormProps {
+  onClose: () => void;
+}
+
+function LoginForm({ onClose }: LoginFormProps) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -26,10 +30,10 @@ function LoginForm() {
     if (result?.error) {
       toast.dismiss();
       toast.error('학번 또는 비밀번호를 확인해주세요.');
+      return;
     }
-    if (result?.ok) {
-      router.push('/');
-    }
+    router.push('/');
+    onClose();
   };
 
   return (

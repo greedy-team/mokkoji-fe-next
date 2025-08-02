@@ -1,26 +1,43 @@
 'use client';
 
-import { useState } from 'react';
-import { StarIcon, Star } from 'lucide-react';
+import { useState, startTransition } from 'react';
+import serverApi from '@/shared/api/server-api';
+import { useSession } from 'next-auth/react';
+import FavoriteThread from './favorite-thread';
 
-function FavoriteButton({ isFavorite }: { isFavorite: boolean }) {
-  const [filled, setFilled] = useState(isFavorite);
+interface FavoriteButtonProps {
+  isFavorite: boolean;
+  clubId: string;
+}
+
+function FavoriteButton({ isFavorite, clubId }: FavoriteButtonProps) {
+  const [favorite, setFavorite] = useState(isFavorite);
+
+  const { data: session, status } = useSession();
+
+  const handleToggle = async () => {
+    if (status !== 'authenticated') return;
+    try {
+      const headers = {
+        Authorization: `Bearer ${session?.accessToken}`,
+      };
+
+      if (!favorite) {
+        await serverApi.post(`favorites/${clubId}`, { headers });
+      } else {
+        await serverApi.delete(`favorites/${clubId}`, { headers });
+      }
+    } catch (error) {
+      console.error('즐겨찾기 요청 실패:', error);
+    }
+
+    startTransition(async () => {
+      setFavorite((prev: boolean) => !prev);
+    });
+  };
 
   return (
-    <button
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        setFilled(!filled);
-      }}
-      aria-label="즐겨찾기 토글"
-      className="absolute right-5 bottom-5 cursor-pointer text-black transition-colors duration-200"
-    >
-      {filled ? (
-        <StarIcon fill="black" stroke="black" className="h-6 w-6" />
-      ) : (
-        <Star className="h-6 w-6" />
-      )}
-    </button>
+    <FavoriteThread favorite={favorite} setFavoriteAction={handleToggle} />
   );
 }
 

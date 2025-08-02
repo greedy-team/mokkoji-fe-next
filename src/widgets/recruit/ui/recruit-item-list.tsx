@@ -8,16 +8,19 @@ import { RecruitItemListProps } from '../model/type';
 async function RecruitItemList({ searchParams }: RecruitItemListProps) {
   let data;
   try {
-    data = await getRecruitList({
-      page: Number((await searchParams).page || 1),
-      size: Number((await searchParams).size || 10),
-      keyword: (await searchParams).keyword?.toUpperCase() || '',
-      category: (await searchParams).category?.toUpperCase() as ClubCategory,
-      affiliation: (
-        await searchParams
-      ).affiliation?.toUpperCase() as ClubAffiliation,
-      recruitStatus: (await searchParams).recruitStatus,
-    });
+    data = await getRecruitList(
+      {
+        page: Number((await searchParams).page || 1),
+        size: Number((await searchParams).size || 10),
+        keyword: (await searchParams).keyword?.toUpperCase() || '',
+        category: (await searchParams).category?.toUpperCase() as ClubCategory,
+        affiliation: (
+          await searchParams
+        ).affiliation?.toUpperCase() as ClubAffiliation,
+        recruitStatus: (await searchParams).recruitStatus,
+      },
+      true,
+    );
   } catch (error) {
     return <ErrorBoundaryUi />;
   }
@@ -34,6 +37,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
               description={item.description}
               isFavorite={item.isFavorite}
               imgUrl={item.imageURL}
+              clubId={String(item.id)}
             />
           </Link>
         </li>

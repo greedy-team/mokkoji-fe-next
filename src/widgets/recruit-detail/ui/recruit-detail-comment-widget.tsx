@@ -1,6 +1,8 @@
 import RecruitDetailComment from '@/entities/recruit-detail/ui/recruit-detail-comment';
 import RecruitDetailCommentInput from '@/features/recruit-detail/ui/recruit-detail-comment-input';
-// import { getClubDetailComments } from '../api/getClubDetailComments';
+import { auth } from '@/auth';
+import getClubDetailComments from '../api/getClubDetailComments';
+import { CommentType } from '../model/type';
 
 interface CommentWidgetProps {
   clubId: number;
@@ -36,15 +38,21 @@ const comments = [
 ];
 
 async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
-  // const { comments } = await getClubDetailComments(clubId);
+  const session = await auth();
+  let commentList: CommentType[] = [];
+  if (session?.accessToken) {
+    const data = await getClubDetailComments(clubId, session?.accessToken);
+    commentList = data.data.comments;
+  }
+  console.log(commentList);
 
   return (
     <section className="mt-13">
       <p className="cursor-default text-base font-semibold">
-        댓글 {comments.length}
+        댓글 {commentList.length}
       </p>
       <RecruitDetailCommentInput clubId={clubId} />
-      <RecruitDetailComment comments={comments} />
+      <RecruitDetailComment comments={commentList} />
     </section>
   );
 }

@@ -8,7 +8,8 @@ async function RecruitDetailPage({
 }: {
   params: { id: Promise<string> };
 }) {
-  const data = await getClubDetail(await params.id);
+  const id = await params.id;
+  const data = await getClubDetail(id);
 
   return (
     <main>

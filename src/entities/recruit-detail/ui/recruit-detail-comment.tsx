@@ -27,7 +27,7 @@ function RecruitDetailComment({ comments }: RecruitDetailCommentProps) {
           <div className="flex flex-1 flex-col gap-1.5">
             <div className="flex items-center gap-2">
               <span className="text-xs text-[#A4A4A4]">
-                {timeAgo(comment.created_at)}
+                {timeAgo(comment.time)}
               </span>
               <StarRating rate={comment.rate} />
             </div>

@@ -12,10 +12,20 @@ export interface ClubFormData {
   name: string;
   category: string;
   affiliation: string;
-  leaderId: string;
+  leaderId?: string;
   instagram?: string;
   description?: string;
   logo?: File;
+}
+
+export interface ClubInfoData {
+  name: string;
+  category: string;
+  affiliation: string;
+  leaderId?: string;
+  instagram?: string;
+  description?: string;
+  logo?: string;
 }
 
 export interface FormField {
@@ -27,6 +37,17 @@ export interface FormField {
 export interface StateProp {
   formData: ClubFormData;
   errors: Partial<Record<keyof ClubFormData, string>>;
+}
+
+export interface ManageClub {
+  clubId: number;
+  clubName: string;
+}
+
+export interface GetManagedClubResponse {
+  data: {
+    clubs: ManageClub[];
+  };
 }
 
 export type Action =

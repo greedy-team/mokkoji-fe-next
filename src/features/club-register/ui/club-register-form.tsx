@@ -1,17 +1,21 @@
 'use client';
 
-import { useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import { UserRole } from '@/shared/model/type';
 import ClubInput from './club-input';
-import { ClubFormData, FormField } from '../model/type';
+import { ClubFormData, FormField, ManageClub } from '../model/type';
 import { patchClubManage, postClubRegister } from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
 
 interface RoleProps {
   role: string;
+  accessToken: string;
+  clubData?: ManageClub;
+  clubInfoData?: ClubFormData;
+  clubLogo?: string;
 }
 
 const fields: FormField[] = [
@@ -19,7 +23,6 @@ const fields: FormField[] = [
   { label: '카테고리', name: 'category', type: 'options' },
   { label: '소속', name: 'affiliation', type: 'options' },
   { label: '동아리 소개', name: 'description', type: 'textarea' },
-  { label: '동아리 회장 학번', name: 'leaderId', type: 'input' },
   { label: '인스타그램', name: 'instagram', type: 'input' },
 ];
 
@@ -30,13 +33,37 @@ const fieldsForManager: FormField[] = [
   { label: '동아리 회장 학번', name: 'leaderId', type: 'input' },
 ];
 
-function ClubRegisterForm({ role }: RoleProps) {
+function ClubRegisterForm({
+  role,
+  accessToken,
+  clubData,
+  clubInfoData,
+  clubLogo,
+}: RoleProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
   const selectedField =
-    role === UserRole.CLUB_MASTER ? fields : fieldsForManager;
+    role === UserRole.CLUB_ADMIN ? fieldsForManager : fields;
+  console.log(clubInfoData);
+  useEffect(() => {
+    if (!clubInfoData) return;
+
+    Object.entries(clubInfoData).forEach(([key, value]) => {
+      if (typeof value === 'string') {
+        dispatch({
+          type: 'UPDATE_FIELD',
+          name: key as keyof ClubFormData,
+          value,
+        });
+      }
+    });
+
+    if (clubLogo) {
+      setPreview(clubLogo);
+    }
+  }, [clubInfoData]);
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -67,9 +94,9 @@ function ClubRegisterForm({ role }: RoleProps) {
     data.append('name', formData.name);
     data.append('category', formData.category);
     data.append('affiliation', formData.affiliation);
-    data.append('leaderId', formData.leaderId);
 
-    if (formData.description && formData.instagram) {
+    if (formData.description && formData.instagram && formData.leaderId) {
+      data.append('leaderId', formData.leaderId);
       data.append('description', formData.description);
       data.append('instagram', formData.instagram);
     }
@@ -80,8 +107,11 @@ function ClubRegisterForm({ role }: RoleProps) {
 
     try {
       let res;
-      if (role === UserRole.CLUB_MASTER) res = await postClubRegister(data);
-      else res = await patchClubManage(data);
+      if (accessToken) {
+        if (role === UserRole.CLUB_MASTER)
+          res = await patchClubManage(data, accessToken, clubData?.clubId);
+        else res = await postClubRegister(data, accessToken);
+      }
       console.log('등록 성공:', res);
       alert('등록 성공!');
     } catch (err) {

@@ -1,5 +1,6 @@
 import { CommentType } from '@/widgets/recruit-detail/model/type';
 import timeAgo from '../util/timeAgo';
+import StarRating from './review-star';
 
 interface RecruitDetailCommentProps {
   comments: CommentType[];
@@ -23,10 +24,10 @@ function RecruitDetailComment({ comments }: RecruitDetailCommentProps) {
           </div>
           <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-base font-extrabold">{comment.id}</span>
               <span className="text-xs text-[#A4A4A4]">
                 {timeAgo(comment.time)}
               </span>
+              <StarRating rate={comment.rate} />
             </div>
             <p className="font-medium">{comment.content}</p>
           </div>

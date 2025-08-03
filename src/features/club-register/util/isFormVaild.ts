@@ -8,14 +8,7 @@ export default function isFormValid(
   const isClubMaster = role === UserRole.CLUB_MASTER;
 
   const requiredFields = isClubMaster
-    ? [
-        'name',
-        'category',
-        'affiliation',
-        'description',
-        'leaderId',
-        'instagram',
-      ]
+    ? ['name', 'category', 'affiliation', 'description', 'instagram']
     : ['name', 'category', 'affiliation', 'leaderId'];
 
   const allFilled = requiredFields.every((key) => {

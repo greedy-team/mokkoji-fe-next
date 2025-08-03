@@ -46,7 +46,7 @@ function ClubRegisterForm({
   const { formData, errors } = state;
   const selectedField =
     role === UserRole.CLUB_ADMIN ? fieldsForManager : fields;
-  console.log(clubInfoData);
+
   useEffect(() => {
     if (!clubInfoData) return;
 
@@ -91,16 +91,14 @@ function ClubRegisterForm({
     e.preventDefault();
 
     const data = new FormData();
+
     data.append('name', formData.name);
     data.append('category', formData.category);
     data.append('affiliation', formData.affiliation);
 
-    if (formData.description && formData.instagram && formData.leaderId) {
-      data.append('leaderId', formData.leaderId);
-      data.append('description', formData.description);
-      data.append('instagram', formData.instagram);
-    }
-
+    if (formData.description) data.append('description', formData.description);
+    if (formData.leaderId) data.append('leaderId', formData.leaderId);
+    if (formData.instagram) data.append('instagram', formData.instagram);
     if (formData.logo) {
       data.append('image', formData.logo);
     }
@@ -108,12 +106,16 @@ function ClubRegisterForm({
     try {
       let res;
       if (accessToken) {
-        if (role === UserRole.CLUB_MASTER)
-          res = await patchClubManage(data, accessToken, clubData?.clubId);
-        else res = await postClubRegister(data, accessToken);
+        if (role === UserRole.CLUB_MASTER && clubData?.clubId) {
+          res = await patchClubManage(data, accessToken, clubData.clubId);
+          console.log('수정 성공:', res);
+          alert('수정 성공!');
+        } else {
+          res = await postClubRegister(data, accessToken);
+          console.log('등록 성공:', res);
+          alert('등록 성공!');
+        }
       }
-      console.log('등록 성공:', res);
-      alert('등록 성공!');
     } catch (err) {
       console.error(err);
       alert('등록 실패!');

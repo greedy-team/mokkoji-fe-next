@@ -7,8 +7,21 @@ let nextConfig: NextConfig = {
   transpilePackages: ['msw', 'next-auth'],
   images: {
     remotePatterns: [
-      new URL('https://way-s3.s3.ap-northeast-2.amazonaws.com/**'),
-      new URL('https://startwith-solu.s3.ap-northeast-2.amazonaws.com/**'),
+      {
+        protocol: 'https',
+        hostname: 'way-s3.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'startwith-solu.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mokkoji-app-data.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
     ],
   },
   webpack: (config) => {

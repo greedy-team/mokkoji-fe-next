@@ -35,7 +35,7 @@ export async function patchClubManage(
 ) {
   const response = await serverApi
     .patch(`clubs/manage/${clubId}`, {
-      json: data,
+      body: data,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -45,6 +45,24 @@ export async function patchClubManage(
   return response;
 }
 
+/*
+export async function patchClubManage(
+  data: FormData,
+  accessToken: string,
+  clubId?: number,
+) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clubs/manage/${clubId}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: data,
+  });
+
+  const result = await response.json();
+  return result;
+}
+*/
 export async function getManagedClubInfo(
   accessToken: string,
   clubId?: number,

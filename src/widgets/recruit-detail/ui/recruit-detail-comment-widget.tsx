@@ -10,7 +10,9 @@ interface CommentWidgetProps {
 
 async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
   const session = await auth();
+  const accessToken = session?.accessToken;
   let commentList: CommentType[] = [];
+
   if (session?.accessToken) {
     const data = await getClubDetailComments(clubId, session?.accessToken);
     commentList = data.data.comments;
@@ -18,7 +20,11 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
 
   return (
     <section className="mt-13">
-      <RecruitDetailCommentInput clubId={clubId} count={commentList.length} />
+      <RecruitDetailCommentInput
+        clubId={clubId}
+        count={commentList.length}
+        accessToken={accessToken}
+      />
       <RecruitDetailComment comments={commentList} />
     </section>
   );

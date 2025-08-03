@@ -4,13 +4,17 @@ export default async function postComment(
   clubId: number,
   content: string,
   rate: number,
+  accessToken: string,
 ) {
   try {
     const response = await serverApi
-      .post(`/comments/${clubId}`, {
+      .post(`comments/${clubId}`, {
         json: {
           content,
           rate,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .json();

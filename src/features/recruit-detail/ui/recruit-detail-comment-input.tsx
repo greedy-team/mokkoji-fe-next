@@ -10,11 +10,13 @@ import postComment from '../api/postComment';
 interface RecruitDetailCommentInputProps {
   clubId: number;
   count: number;
+  accessToken?: string;
 }
 
 function RecruitDetailCommentInput({
   clubId,
   count,
+  accessToken,
 }: RecruitDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
@@ -22,21 +24,35 @@ function RecruitDetailCommentInput({
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
+  console.log(accessToken);
+  const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
 
-  const handleAddComment = async () => {
+    if (!accessToken) {
+      toast.warn('로그인을 먼저 해주세요.');
+      return;
+    }
+
     if (!value || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.');
       return;
     }
 
     try {
-      await postComment(clubId, value, rating);
+      await postComment(clubId, value, rating, accessToken);
       toast.success('댓글이 등록되었습니다.');
       setValue('');
       setRating(0);
     } catch (err) {
-      console.error(err);
-      toast.error('댓글 등록 중 오류가 발생했습니다.');
+      if (err instanceof Error) {
+        if (err.message === '권한이 없습니다.') {
+          toast.error('리뷰는 한 개만 작성 가능합니다!');
+        } else {
+          toast.error(err.message || '댓글 등록 중 오류가 발생했습니다.');
+        }
+      } else {
+        toast.error('댓글 등록 중 오류가 발생했습니다.');
+      }
     }
   };
 

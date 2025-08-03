@@ -3,6 +3,6 @@ export interface CommentType {
   content: string;
   rate: number;
   isModified: boolean;
-  time: string;
+  created_at: string;
   isWriter: boolean;
 }

@@ -9,9 +9,13 @@ import postComment from '../api/postComment';
 
 interface RecruitDetailCommentInputProps {
   clubId: number;
+  count: number;
 }
 
-function RecruitDetailCommentInput({ clubId }: RecruitDetailCommentInputProps) {
+function RecruitDetailCommentInput({
+  clubId,
+  count,
+}: RecruitDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -37,15 +41,19 @@ function RecruitDetailCommentInput({ clubId }: RecruitDetailCommentInputProps) {
   };
 
   return (
-    <form className="my-4 mb-15 flex flex-col items-end">
+    <form className="my-4 mb-15 flex flex-col gap-2">
+      <div className="mb-4 flex flex-col gap-1">
+        <p className="font-semibold">이 동아리 어때요?</p>
+        <StarRating value={rating} onChange={setRating} />
+      </div>
+      <p className="cursor-default text-base font-semibold">댓글 {count}</p>
       <Textarea
         value={value}
         onChange={handleChange}
         variant="comment"
         placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
       />
-      <div className="flex w-full items-center justify-between gap-4">
-        <StarRating value={rating} onChange={setRating} />
+      <div className="flex justify-end">
         <Button
           variant="submit"
           onClick={handleAddComment}

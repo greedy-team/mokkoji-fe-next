@@ -32,13 +32,10 @@ function FavoriteButton({ isFavorite, clubId }: FavoriteButtonProps) {
       } else {
         await serverApi.delete(`favorites/${clubId}`, { headers });
       }
+      setFavorite((prev: boolean) => !prev);
     } catch (error) {
       console.error('즐겨찾기 요청 실패:', error);
     }
-
-    startTransition(async () => {
-      setFavorite((prev: boolean) => !prev);
-    });
   };
 
   return (

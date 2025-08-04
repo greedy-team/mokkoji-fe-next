@@ -1,4 +1,4 @@
-import RecruitDetailComment from '@/entities/recruit-detail/ui/recruit-detail-comment';
+import RecruitDetailComment from '@/features/recruit-detail/ui/recruit-detail-comment';
 import RecruitDetailCommentInput from '@/features/recruit-detail/ui/recruit-detail-comment-input';
 import { auth } from '@/auth';
 import getClubDetailComments from '../api/getClubDetailComments';
@@ -25,7 +25,11 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
         count={commentList.length}
         accessToken={accessToken}
       />
-      <RecruitDetailComment comments={commentList} />
+      <RecruitDetailComment
+        comments={commentList}
+        accessToken={accessToken}
+        clubId={clubId}
+      />
     </section>
   );
 }

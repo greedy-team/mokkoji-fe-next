@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import StarRating from './rating-component';
-import postComment from '../api/postComment';
+import { postComment } from '../api/postComment';
 
 interface RecruitDetailCommentInputProps {
   clubId: number;
@@ -24,7 +24,7 @@ function RecruitDetailCommentInput({
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
-  console.log(accessToken);
+
   const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -60,7 +60,7 @@ function RecruitDetailCommentInput({
     <form className="my-4 mb-15 flex flex-col gap-2">
       <div className="mb-4 flex flex-col gap-1">
         <p className="font-semibold">이 동아리 어때요?</p>
-        <StarRating value={rating} onChange={setRating} />
+        <StarRating value={rating} size="large" onChange={setRating} />
       </div>
       <p className="cursor-default text-base font-semibold">댓글 {count}</p>
       <Textarea

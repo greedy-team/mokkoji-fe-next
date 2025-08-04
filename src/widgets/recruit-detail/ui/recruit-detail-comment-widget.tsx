@@ -15,7 +15,7 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
 
   if (session?.accessToken) {
     const data = await getClubDetailComments(clubId, session?.accessToken);
-    commentList = data.data.comments;
+    commentList = data.data.comments.reverse();
   }
 
   return (

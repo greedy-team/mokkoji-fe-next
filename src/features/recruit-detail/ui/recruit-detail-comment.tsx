@@ -1,11 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
+import { toast } from 'react-toastify';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
+import revalidateComments from '@/app/actions/revalidate-comments';
 import StarRating from '../../../entities/recruit-detail/ui/review-star';
 import timeAgo from '../../../entities/recruit-detail/util/timeAgo';
 import RecruitDetailCommentEdit from './recruit-detail-comment-edit';
+import { deleteComment } from '../api/postComment';
 
 interface RecruitDetailCommentProps {
   clubId: number;
@@ -19,7 +22,30 @@ export default function RecruitDetailComment({
   accessToken,
 }: RecruitDetailCommentProps) {
   const [edit, setEdit] = useState<number | null>(null);
-  console.log(comments);
+
+  const handleDeleteComment = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    commentId: number,
+  ) => {
+    e.preventDefault();
+
+    if (!accessToken) {
+      toast.warn('로그인을 먼저 해주세요.');
+      return;
+    }
+
+    try {
+      await deleteComment(commentId, accessToken);
+      toast.success('댓글이 삭제되었습니다.');
+
+      startTransition(async () => {
+        await revalidateComments(clubId);
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error('댓글 등록 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3.5">
@@ -71,7 +97,10 @@ export default function RecruitDetailComment({
                         />
                       </button>
                       <span className="mx-1 h-full border-l" />
-                      <button className="cursor-pointer px-1 text-[12px]">
+                      <button
+                        className="cursor-pointer px-1 text-[12px]"
+                        onClick={(e) => handleDeleteComment(e, comment.id)}
+                      >
                         X
                       </button>
                     </div>

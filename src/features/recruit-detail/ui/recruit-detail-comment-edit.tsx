@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import { revalidateComments } from '@/app/actions/revalidate-comments';
+import revalidateComments from '@/app/actions/revalidate-comments';
 import StarRating from './rating-component';
 import { patchComment } from '../api/postComment';
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
+import revalidateComments from '@/app/actions/revalidate-comments';
 import StarRating from './rating-component';
 import { postComment } from '../api/postComment';
 
@@ -43,6 +44,10 @@ function RecruitDetailCommentInput({
       toast.success('댓글이 등록되었습니다.');
       setValue('');
       setRating(0);
+
+      startTransition(async () => {
+        await revalidateComments(clubId);
+      });
     } catch (err) {
       if (err instanceof Error) {
         if (err.message === '권한이 없습니다.') {

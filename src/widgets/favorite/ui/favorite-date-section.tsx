@@ -2,39 +2,46 @@
 
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import { useEffect, useState } from 'react';
-import { FavoriteDateList } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { useSession } from 'next-auth/react';
 import getFavoriteByDate from '../api/getFavoriteByDate';
 
 function FavoriteDateSection() {
   const [value, setValue] = useState<Date>(new Date());
-  const [data, setData] = useState<FavoriteDateList[]>([]);
+  const [data, setData] = useState<FavoriteDateItem[]>([]);
+  const { data: session, status } = useSession();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const year = value.getFullYear();
-  //       const month = String(value.getMonth() + 1).padStart(2, '0');
-  //       const yearMonth = `${year}-${month}`;
-  //       const response = await getFavoriteByDate({ yearMonth });
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching favorite clubs:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [value]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (status === 'unauthenticated' || !session?.accessToken) return;
+        const year = value.getFullYear();
+        const month = String(value.getMonth() + 1).padStart(2, '0');
+        const yearMonth = `${year}-${month}`;
+        const response = await getFavoriteByDate({
+          yearMonth,
+          accessToken: session?.accessToken,
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching favorite clubs:', error);
+      }
+    };
+    fetchData();
+  }, [value, session]);
 
   const filteredClubs = data.filter((club) => {
-    const start = new Date(club.data.recruitStart);
-    const end = new Date(club.data.recruitEnd);
+    const start = new Date(club.recruitStart);
+    const end = new Date(club.recruitEnd);
 
     return value >= start && value <= end;
   });
 
-  const formatDate = (dateString: Date) => {
-    const month = dateString.getMonth() + 1;
-    const day = dateString.getDate();
-    const weekday = dateString.toLocaleDateString('ko-KR', {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const weekday = date.toLocaleDateString('ko-KR', {
       weekday: 'short',
     });
     return `${month}/${day}, ${weekday}`;
@@ -53,14 +60,14 @@ function FavoriteDateSection() {
             <ul className="space-y-1">
               {filteredClubs.map((club) => (
                 <li
-                  key={club.data.clubName}
+                  key={club.clubName}
                   className="flex flex-row space-x-2 text-xs font-normal"
                 >
                   <p>
-                    {formatDate(club.data.recruitStart)} ~{' '}
-                    {formatDate(club.data.recruitEnd)}
+                    {formatDate(club.recruitStart)} ~{' '}
+                    {formatDate(club.recruitEnd)}
                   </p>
-                  <p>{club.data.clubName}</p>
+                  <p>{club.clubName}</p>
                 </li>
               ))}
             </ul>

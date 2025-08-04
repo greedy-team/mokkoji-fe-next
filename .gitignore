@@ -44,3 +44,5 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 /src/app/test
+
+.eslintcache

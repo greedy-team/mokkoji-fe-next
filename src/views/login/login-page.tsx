@@ -1,4 +1,4 @@
-import LoginWidget from '@/widgets/login/login-widget';
+import LoginWidget from '@/widgets/login/ui/login-widget';
 
 function LoginPage() {
   return <LoginWidget />;

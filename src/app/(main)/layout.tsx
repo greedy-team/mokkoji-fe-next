@@ -15,14 +15,13 @@ export default function MainLayout({
         <Header />
         <ToastContainer
           position="top-right"
-          autoClose={3000}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
           rtl={false}
-          pauseOnFocusLoss
           draggable
-          pauseOnHover
+          toastClassName="!z-[9999]"
           theme="light"
         />
         <main className="flex-grow">{children}</main>

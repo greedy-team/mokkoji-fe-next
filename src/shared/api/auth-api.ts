@@ -9,8 +9,9 @@ const authApi = ky.create({
       async (req) => {
         if (!req.headers.get('Authorization')) {
           const session = await auth();
-          console.log('session', session);
-          req.headers.set('Authorization', `Bearer ${session?.accessToken}`);
+          if (session?.accessToken) {
+            req.headers.set('Authorization', `Bearer ${session?.accessToken}`);
+          }
         }
       },
     ],

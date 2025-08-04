@@ -12,7 +12,7 @@ interface RecruitItemProps {
   endDate: string;
   description: string;
   isFavorite?: boolean;
-  imgUrl?: string;
+  logo?: string;
   clubId: string;
 }
 
@@ -22,7 +22,7 @@ function RecruitItem({
   endDate,
   description,
   isFavorite,
-  imgUrl,
+  logo,
   clubId,
 }: RecruitItemProps) {
   return (
@@ -30,7 +30,7 @@ function RecruitItem({
       <div className="mb-8 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Avatar className="size-12">
-            <AvatarImage src={imgUrl} />
+            <AvatarImage src={logo} />
             <AvatarFallback>{title}</AvatarFallback>
           </Avatar>
           <div>

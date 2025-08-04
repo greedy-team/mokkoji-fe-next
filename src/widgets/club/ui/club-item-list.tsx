@@ -36,7 +36,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
               category={item.category}
               description={item.description}
               isFavorite={item.isFavorite}
-              imgUrl={item.imageURL}
+              logo={item.logo}
               clubId={String(item.id)}
             />
           </Link>

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
@@ -14,7 +13,7 @@ interface CardSliderProps {
     id: number;
     category: string;
     name: string;
-    imageURL: string;
+    logo: string;
     description: string;
   }[];
 }
@@ -50,7 +49,7 @@ function CardSilder({ data }: CardSliderProps) {
               <div className="h-full w-full rounded-md bg-[#fefefe] p-4 shadow-xl transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(0,0,0,0.2)]">
                 <div className="mb-4 flex items-center gap-4">
                   <Avatar className={`${isActive ? 'size-12' : 'size-10'}`}>
-                    <AvatarImage src={item.imageURL} />
+                    <AvatarImage src={item.logo} />
                     <AvatarFallback>{item.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">

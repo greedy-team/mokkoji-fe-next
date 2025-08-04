@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function NavigateClubList() {
+function NavigateClubList() {
   return (
     <Button
       asChild
@@ -17,3 +17,5 @@ export default function NavigateClubList() {
     </Button>
   );
 }
+
+export default NavigateClubList;

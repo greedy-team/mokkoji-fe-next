@@ -23,7 +23,7 @@ async function FavoriteItemSection({ data, login }: FavoriteItemSectionProps) {
               clubId={String(item.id)}
               category={item.category}
               isFavorite={item.isFavorite}
-              imgUrl={item.imageURL}
+              logo={item.logo}
             />
           </Link>
         ))}

@@ -6,6 +6,7 @@ import serverApi from './shared/api/server-api';
 import { LoginSuccessResponse } from './features/login/model/type';
 import UserInfoType from './entities/my/model/type';
 
+// TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
   pages: {
@@ -88,7 +89,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           console.error('[refresh error]', error);
-          return null;
+          signOut();
         }
       }
       return token;

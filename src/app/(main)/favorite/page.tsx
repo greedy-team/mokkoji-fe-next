@@ -1,7 +1,7 @@
 import FavoritePage from '@/views/favorite/ui/favorite-page';
 import { SearchParams } from '@/views/favorite/model/type';
 
-function Page({ searchParams }: { searchParams: SearchParams }) {
+function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
   return <FavoritePage searchParams={searchParams} />;
 }
 

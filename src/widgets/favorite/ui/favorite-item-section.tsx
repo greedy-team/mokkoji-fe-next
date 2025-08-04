@@ -30,7 +30,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       <h1 className="mb-5 text-base font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.pagination?.totalElements}개
       </h1>
-      <ul className="grid w-auto grid-cols-3 gap-4">
+      <ul className="grid min-h-[360px] w-auto grid-cols-3 gap-4">
         {data.clubs.map((item) => (
           <Link href={`/club/${item.id}`} key={item.id}>
             <ClubItem

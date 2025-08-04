@@ -1,11 +1,14 @@
 export interface SearchParams {
-  searchParams: Promise<{ page?: string; size?: string }>;
+  page?: string;
+  size?: string;
+}
+
+export interface FavoriteDateItem {
+  clubName: string;
+  recruitStart: string;
+  recruitEnd: string;
 }
 
 export interface FavoriteDateList {
-  data: {
-    clubName: string;
-    recruitStart: Date;
-    recruitEnd: Date;
-  };
+  data: FavoriteDateItem[];
 }

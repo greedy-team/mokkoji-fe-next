@@ -30,7 +30,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     <ul className="grid w-auto grid-cols-3 gap-4">
       {data?.map((item) => (
         <li key={item.id}>
-          <Link href={`/club/${item.id}`}>
+          <Link href={`/recruit/${item.id}`}>
             <ClubItem
               title={item.name}
               category={item.category}

@@ -52,10 +52,7 @@ function RecruitDetailCommentEdit({
       setValue('');
       setRating(0);
       onCancel();
-
-      startTransition(async () => {
-        await revalidateComments(clubId);
-      });
+      revalidateComments(clubId);
     } catch (err) {
       console.error(err);
       toast.error('댓글 등록 중 오류가 발생했습니다.');

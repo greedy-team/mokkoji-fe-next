@@ -37,13 +37,10 @@ export default function RecruitDetailComment({
     try {
       await deleteComment(commentId, accessToken);
       toast.success('댓글이 삭제되었습니다.');
-
-      startTransition(async () => {
-        await revalidateComments(clubId);
-      });
+      revalidateComments(clubId);
     } catch (err) {
       console.error(err);
-      toast.error('댓글 등록 중 오류가 발생했습니다.');
+      toast.error('댓글 삭제 중 오류가 발생했습니다.');
     }
   };
 

@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import getStatus from '@/shared/lib/getStatus';
 import PeriodSection from './period-section';
-import FavoriteButton from './favorite-button';
+import FavoriteButton from '../../../shared/ui/favorite-button';
 
 interface RecruitItemProps {
   title: string;

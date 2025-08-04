@@ -6,9 +6,10 @@ import { ClubType } from '@/shared/model/type';
 
 interface FavoriteDateSectionProps {
   data: ClubType[];
+  login: boolean;
 }
 
-function FavoriteDateSection({ data }: FavoriteDateSectionProps) {
+function FavoriteDateSection({ data, login }: FavoriteDateSectionProps) {
   const [value, setValue] = useState<Date>(new Date());
 
   const filteredClubs = data.filter((club) => {

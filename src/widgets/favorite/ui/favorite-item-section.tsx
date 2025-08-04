@@ -4,10 +4,11 @@ import { ClubType } from '@/shared/model/type';
 
 interface FavoriteItemSectionProps {
   data: ClubType[];
+  login: boolean;
 }
 
-async function FavoriteItemSection({ data }: FavoriteItemSectionProps) {
-  return (
+async function FavoriteItemSection({ data, login }: FavoriteItemSectionProps) {
+  return login ? (
     <div>
       <h1 className="mb-5 text-base font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.length}개
@@ -28,6 +29,10 @@ async function FavoriteItemSection({ data }: FavoriteItemSectionProps) {
         ))}
       </ul>
     </div>
+  ) : (
+    <h1 className="mb-5 text-base font-bold text-[#00E457]">
+      로그인 후 이용하실 수 있습니다.
+    </h1>
   );
 }
 

@@ -3,6 +3,7 @@
 import { useState, startTransition } from 'react';
 import serverApi from '@/shared/api/server-api';
 import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 import FavoriteThread from './favorite-thread';
 
 interface FavoriteButtonProps {
@@ -16,7 +17,11 @@ function FavoriteButton({ isFavorite, clubId }: FavoriteButtonProps) {
   const { data: session, status } = useSession();
 
   const handleToggle = async () => {
-    if (status !== 'authenticated') return;
+    if (status !== 'authenticated' || !session?.accessToken) {
+      toast.dismiss();
+      toast.error('로그인 후 이용하실 수 있습니다 .');
+      return;
+    }
     try {
       const headers = {
         Authorization: `Bearer ${session?.accessToken}`,

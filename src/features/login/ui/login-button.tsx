@@ -2,57 +2,80 @@
 
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import KakaoIcon from '@/shared/ui/kakao-icon';
 import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import Input from '@/shared/ui/input';
+import { Eye, EyeOff } from 'lucide-react';
 
 function LoginForm() {
+  const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleKakaoLogin = () => {
-    const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}`;
-    window.location.href = kakaoAuthURL;
-  };
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
-  const handleSubmit = async () => {
-    await signIn('credentials', {
-      redirect: true,
+    const result: any = await signIn('credentials', {
+      redirect: false,
       studentId,
       password,
     });
+
+    if (result?.error) {
+      toast.dismiss();
+      toast.error('학번 또는 비밀번호를 확인해주세요.');
+      return;
+    }
+    router.refresh();
   };
+
   return (
-    <div className="mt-20 w-full space-y-4">
-      <input
+    <form
+      onSubmit={handleSubmit}
+      className="mt-10 flex w-full flex-col space-y-2"
+    >
+      <label htmlFor="studentId" className="font-medium">
+        학번
+      </label>
+      <Input
         type="text"
         placeholder="학번"
         value={studentId}
         onChange={(e) => setStudentId(e.target.value)}
         className="w-full rounded border px-3 py-2"
       />
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full rounded border px-3 py-2"
-      />
+
+      <label htmlFor="password" className="font-medium">
+        비밀번호
+      </label>
+      <div className="relative">
+        <Input
+          type={showPassword ? 'text' : 'password'}
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full rounded border px-3 py-2 pr-10"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-500"
+          aria-label="비밀번호 보기 토글"
+        >
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
+
       <Button
-        onClick={handleSubmit}
-        className="h-10 w-full bg-black font-medium text-white"
+        type="submit"
+        disabled={studentId === '' || password === ''}
+        className="mt-5 h-10 w-full bg-black font-medium text-white"
       >
-        로그인
+        확인
       </Button>
-      <Button
-        variant="kakao"
-        onClick={handleKakaoLogin}
-        className="flex h-12 w-full cursor-pointer justify-around text-base font-medium"
-      >
-        <KakaoIcon />
-        카카오 로그인
-        <span />
-      </Button>
-    </div>
+    </form>
   );
 }
 

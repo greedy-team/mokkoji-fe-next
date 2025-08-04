@@ -12,5 +12,4 @@ function RecruitPage({ searchParams }: RecruitItemListProps) {
     </>
   );
 }
-
 export default RecruitPage;

@@ -6,7 +6,7 @@ export interface ClubDetailType {
   description: string;
   recruitStartDate: string;
   recruitEndDate: string;
-  imageURL: string;
+  logo: string;
   isFavorite: boolean;
   instagramLink: string;
   recruitPost: string;

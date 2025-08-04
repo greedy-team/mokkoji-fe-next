@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
+
 function HomeDownButton() {
   const handleScroll = () => {
-    console.log('click');
     const target = document.getElementById('scroll-target');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -11,7 +12,7 @@ function HomeDownButton() {
 
   return (
     <button onClick={handleScroll}>
-      <img
+      <Image
         src="/main/downArrow.svg"
         alt="아래 스크롤"
         width={46}

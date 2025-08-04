@@ -14,7 +14,7 @@ const meta: Meta<typeof RecruitItem> = {
     description:
       '함께 공부하고 성장하는 모각코 활동입니다.\n자유롭게 신청해주세요!',
     isFavorite: false,
-    imgUrl: 'https://avatars.githubusercontent.com/u/9919?s=200&v=4',
+    logo: 'https://avatars.githubusercontent.com/u/9919?s=200&v=4',
   },
 };
 

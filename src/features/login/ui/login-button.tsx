@@ -14,6 +14,11 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [errors, setErrors] = useState<{
+    studentId?: string;
+    password?: string;
+  }>({});
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
@@ -28,7 +33,20 @@ function LoginForm() {
       toast.error('학번 또는 비밀번호를 확인해주세요.');
       return;
     }
+
     router.refresh();
+  };
+
+  // ✅ 공백 검사 핸들러
+  const handleBlur = (field: 'studentId' | 'password', value: string) => {
+    if (value.trim() === '') {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: `${field === 'studentId' ? '학번을' : '비밀번호를'} 입력해주세요!`,
+      }));
+    } else {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
   };
 
   return (
@@ -36,26 +54,51 @@ function LoginForm() {
       onSubmit={handleSubmit}
       className="mt-10 flex w-full flex-col space-y-2"
     >
-      <label htmlFor="studentId" className="font-medium">
+      <label
+        htmlFor="studentId"
+        className="flex flex-row gap-2 text-xs font-medium"
+      >
         학번
+        {errors.studentId && (
+          <p className="text-[#FF383C]">*{errors.studentId}</p>
+        )}
       </label>
       <Input
         type="text"
         placeholder="학번"
         value={studentId}
-        onChange={(e) => setStudentId(e.target.value)}
+        onChange={(e) => {
+          setStudentId(e.target.value);
+          if (errors.studentId)
+            setErrors((prev) => ({
+              ...prev,
+              studentId,
+            }));
+        }}
+        onBlur={() => handleBlur('studentId', studentId)}
         className="w-full rounded border px-3 py-2"
       />
 
-      <label htmlFor="password" className="font-medium">
+      <label
+        htmlFor="password"
+        className="flex flex-row gap-2 text-xs font-medium"
+      >
         비밀번호
+        {errors.password && (
+          <p className="text-[#FF383C]">*{errors.password}</p>
+        )}
       </label>
       <div className="relative">
         <Input
           type={showPassword ? 'text' : 'password'}
           placeholder="비밀번호"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (errors.password)
+              setErrors((prev) => ({ ...prev, password: undefined }));
+          }}
+          onBlur={() => handleBlur('password', password)}
           className="w-full rounded border px-3 py-2 pr-10"
         />
         <button

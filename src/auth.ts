@@ -72,7 +72,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       if (Date.now() > (token.expiresAt as number)) {
-        console.log('만료!!');
+        console.log('만료!!', token.refreshToken);
         try {
           const response = await serverApi.post('users/auth/refresh', {
             headers: {
@@ -90,6 +90,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         } catch (error) {
           console.error('[refresh error]', error);
           signOut();
+          return null;
         }
       }
       return token;

@@ -20,6 +20,7 @@ export default function MainLayout({
           newestOnTop={false}
           closeOnClick
           rtl={false}
+          pauseOnHover={false}
           draggable
           toastClassName="!z-[9999]"
           theme="light"

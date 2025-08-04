@@ -1,16 +1,19 @@
 import getClubDetail from '@/views/club/api/getClubDetail';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import ClubDetailHeaderControl from '@/features/recruit-detail/ui/club-detail-header-control';
+import { ClubDetailParams } from '@/views/club/model/type';
 
 // TODO: 추후 프롭스 드릴링 해결 필요
-async function ClubDetailPage({ params }: { params: { id: Promise<string> } }) {
-  const data = await getClubDetail(await params.id);
+async function ClubDetailPage({ params }: ClubDetailParams) {
+  const { id } = await params;
+  const data = await getClubDetail(id);
 
   return (
     <main>
       <ClubDetailHeaderControl
-        instagramLink={data.instagramLink}
-        clubId={Number(params.id)}
+        instagram={data.instagram}
+        clubId={Number(id)}
+        isFavorite={data.isFavorite}
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}

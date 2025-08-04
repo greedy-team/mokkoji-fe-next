@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import FavoriteButton from '@/entities/recruit/ui/favorite-button';
+import FavoriteButton from '@/shared/ui/favorite-button';
 
 interface ClubItemProps {
   title: string;

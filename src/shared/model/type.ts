@@ -62,3 +62,7 @@ export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
   [ClubAffiliation.CENTRAL_CLUB]: '중앙 동아리',
   [ClubAffiliation.DEPARTMENT_CLUB]: '가인준 동아리',
 };
+
+export interface DetailParams {
+  params: Promise<{ id: string }>;
+}

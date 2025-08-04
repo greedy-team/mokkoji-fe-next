@@ -4,10 +4,16 @@ import { useState } from 'react';
 interface StarRatingProps {
   maxStars?: number;
   value: number;
+  size: string;
   onChange: (rating: number) => void;
 }
 
-function StarRating({ maxStars = 5, value, onChange }: StarRatingProps) {
+function StarRating({
+  maxStars = 5,
+  value,
+  size = 'large',
+  onChange,
+}: StarRatingProps) {
   const [hovered, setHovered] = useState(0);
 
   const handleKeyDown = (
@@ -30,7 +36,7 @@ function StarRating({ maxStars = 5, value, onChange }: StarRatingProps) {
             key={starIndex}
             role="button"
             tabIndex={0}
-            className="cursor-pointer p-1"
+            className={`cursor-pointer ${size === 'large' ? 'p-1' : 'p-0.5'}`}
             onMouseEnter={() => setHovered(starIndex)}
             onMouseLeave={() => setHovered(0)}
             onClick={() => onChange(starIndex)}
@@ -38,7 +44,7 @@ function StarRating({ maxStars = 5, value, onChange }: StarRatingProps) {
             aria-label={`${starIndex}점`}
           >
             <Star
-              className={`h-6 w-6 transition-colors duration-300 ${
+              className={`${size === 'large' ? 'h-6 w-6' : 'h-4 w-4'} transition-colors duration-300 ${
                 isFilled ? 'fill-[#00E457] text-[#00E457]' : 'text-gray-300'
               }`}
             />

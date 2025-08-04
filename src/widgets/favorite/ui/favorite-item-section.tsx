@@ -1,17 +1,27 @@
 import ClubItem from '@/entities/club/ui/club-item';
 import Link from 'next/link';
 import { ClubType } from '@/shared/model/type';
+import Pagination from '@/shared/ui/pagination';
 
 interface FavoriteItemSectionProps {
   data: ClubType[];
   login: boolean;
+  page: number;
+  size: number;
+  total: number;
 }
 
-async function FavoriteItemSection({ data, login }: FavoriteItemSectionProps) {
+function FavoriteItemSection({
+  data,
+  login,
+  page,
+  size,
+  total,
+}: FavoriteItemSectionProps) {
   return login ? (
     <div>
       <h1 className="mb-5 text-base font-bold text-[#00E457]">
-        즐겨찾기 한 동아리 {data.length}개
+        즐겨찾기 한 동아리 {total}개
       </h1>
       <ul className="grid w-auto grid-cols-3 gap-4">
         {data.map((item) => (
@@ -28,6 +38,7 @@ async function FavoriteItemSection({ data, login }: FavoriteItemSectionProps) {
           </Link>
         ))}
       </ul>
+      <Pagination page={page} size={size} total={total} />
     </div>
   ) : (
     <h1 className="mb-5 text-base font-bold text-[#00E457]">

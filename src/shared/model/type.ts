@@ -32,8 +32,20 @@ export interface ClubType {
   description: string;
   recruitStartDate: string;
   recruitEndDate: string;
-  imageURL: string;
+  logo: string;
   isFavorite: boolean | undefined;
+}
+
+export interface Pagination {
+  page: number;
+  size: number;
+  totalPages: number;
+  totalElements: number;
+}
+
+export interface FavoriteList {
+  clubs: ClubType[];
+  pagination: Pagination;
 }
 
 export const ClubCategoryLabel: Record<ClubCategory, string> = {

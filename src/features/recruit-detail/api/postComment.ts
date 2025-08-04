@@ -51,3 +51,20 @@ export async function patchComment(
     throw error;
   }
 }
+
+export async function deleteComment(commentId: number, accessToken: string) {
+  try {
+    const response = await serverApi
+      .delete(`comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .json();
+
+    return response;
+  } catch (error) {
+    console.error('댓글 삭제 실패:', error);
+    throw error;
+  }
+}

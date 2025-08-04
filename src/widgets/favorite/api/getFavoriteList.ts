@@ -1,11 +1,16 @@
 import authApi from '@/shared/api/auth-api';
-import { ApiResponse, ClubType } from '@/shared/model/type';
+import { ApiResponse, FavoriteList } from '@/shared/model/type';
 
-async function getFavoriteList() {
-  const response: ApiResponse<ClubType[]> = await authApi
-    .get('favorites')
+interface GetFavoriteListParams {
+  page: number;
+  size: number;
+}
+
+async function getFavoriteList({ page, size }: GetFavoriteListParams) {
+  const response: ApiResponse<FavoriteList> = await authApi
+    .get(`favorites?page=${page}&size=${size}`)
     .json();
-  return response;
+  return response.data;
 }
 
 export default getFavoriteList;

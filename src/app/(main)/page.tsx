@@ -1,4 +1,4 @@
-import HomePage from '@/views/home/home-page';
+import HomePage from '@/views/home/ui/home-page';
 
 function Page() {
   return <HomePage />;

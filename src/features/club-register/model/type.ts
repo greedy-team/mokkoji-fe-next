@@ -15,7 +15,7 @@ export interface ClubFormData {
   leaderId: string;
   instagram: string;
   description: string;
-  logo?: File;
+  logo?: string;
 }
 
 export interface FormField {
@@ -32,5 +32,14 @@ export interface StateProp {
 export type Action =
   | { type: 'UPDATE_FIELD'; name: keyof ClubFormData; value: string }
   | { type: 'VALIDATE_FIELD'; name: keyof ClubFormData }
-  | { type: 'UPDATE_LOGO'; file: File }
-  | { type: 'RESET_FORM' };
+  | { type: 'RESET_FORM' }
+  | { type: 'UPDATE_MULTIPLE_FIELDS'; payload: Partial<ClubFormData> };
+
+export interface EditResponseField {
+  updateLog: string;
+  deleteLog: string;
+}
+
+export interface EditResponse {
+  data: EditResponseField;
+}

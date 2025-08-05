@@ -4,9 +4,10 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
+import { ClubInfoType } from '@/shared/model/type';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
-import postClubRegister from '../api/postClubRegister';
+import { patchClubInfo } from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
 
@@ -14,30 +15,44 @@ const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
   { label: '카테고리', name: 'category', type: 'options' },
   { label: '소속', name: 'affiliation', type: 'options' },
-  { label: '동아리 회장 학번', name: 'leaderId', type: 'input' },
+  { label: '동아리 소개', name: 'description', type: 'textarea' },
+  { label: '인스타그램', name: 'instagram', type: 'input' },
 ];
 
 interface ClubNameProp {
-  clubName?: string;
+  clubInfo?: ClubInfoType;
   accessToken?: string;
+  clubId?: number;
 }
 
-function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
-  // const inputRef = useRef<HTMLInputElement | null>(null);
-  // const [preview, setPreview] = useState<string | null>(null);
+function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (clubName) {
-      dispatch({ type: 'UPDATE_FIELD', name: 'name', value: clubName });
+    if (clubInfo) {
+      dispatch({
+        type: 'UPDATE_MULTIPLE_FIELDS',
+        payload: {
+          name: clubInfo.name,
+          category: clubInfo.category,
+          affiliation: clubInfo.affiliation,
+          description: clubInfo.description ?? '',
+          instagram: clubInfo.instagram ?? '',
+        },
+      });
+
+      setPreview(clubInfo.logo);
     }
-  }, [clubName]);
+  }, [clubInfo]);
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
-  /*
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -45,13 +60,15 @@ function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
 
-    dispatch({ type: 'UPDATE_LOGO', file });
+    const fileName = file.name;
+    setLogoFile(file);
+
+    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: fileName });
   };
 
   const handleClick = () => {
     inputRef.current?.click();
   };
-  */
 
   const handleBlur = (name: keyof ClubFormData) => {
     dispatch({ type: 'VALIDATE_FIELD', name });
@@ -59,6 +76,11 @@ function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!clubId) {
+      toast.warn('조금 뒤에 다시 시도해주세요');
+      return;
+    }
 
     if (!accessToken) {
       toast.warn('로그인을 먼저 해주세요!');
@@ -69,10 +91,30 @@ function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
     data.append('name', formData.name);
     data.append('category', formData.category);
     data.append('affiliation', formData.affiliation);
-    data.append('leaderId', formData.leaderId);
+    data.append('description', formData.description);
+    data.append('instagram', formData.instagram);
+
+    if (formData.logo) {
+      data.append('logo', formData.logo);
+    }
 
     try {
-      await postClubRegister(data, accessToken);
+      const res = await patchClubInfo(clubId, data, accessToken);
+      const { updateLog, deleteLog } = res.data;
+
+      if (logoFile && updateLog) {
+        await fetch(updateLog, {
+          method: 'PUT',
+          body: logoFile,
+          headers: {
+            'Content-Type': logoFile.type,
+          },
+        });
+      }
+
+      if (deleteLog) {
+        await fetch(deleteLog, { method: 'DELETE' });
+      }
       toast.success('등록 성공!');
     } catch (err) {
       console.error(err);
@@ -103,7 +145,7 @@ function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
           />
         );
       })}
-      {/* <label htmlFor="imageURL" className="my-6 flex">
+      <label htmlFor="imageURL" className="my-6 flex">
         <button
           type="button"
           onClick={handleClick}
@@ -138,7 +180,7 @@ function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
         ref={inputRef}
         onChange={handleFileChange}
         style={{ display: 'none' }}
-      /> */}
+      />
       <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
         등록하기
       </Button>

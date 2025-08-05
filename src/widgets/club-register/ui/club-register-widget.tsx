@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import ClubEditForm from '@/features/club-register/ui/club-edit-form';
 import ClubRegisterForm from '@/features/club-register/ui/club-register-form';
 import { getClubInfo } from '@/shared/api/manage-api';
-import { DetailParams, UserRole } from '@/shared/model/type';
+import { ClubInfoType, DetailParams, UserRole } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import { toast } from 'react-toastify';
 
@@ -11,12 +11,12 @@ async function ClubRegisterWidget({ params }: DetailParams) {
   const accessToken = session?.accessToken;
   const role = session?.role;
   const { id } = await getParams({ params });
-  let clubName: string | undefined;
+  let clubInfo: ClubInfoType | undefined;
 
   try {
     if (accessToken) {
       const response = await getClubInfo(Number(id), accessToken);
-      clubName = response.data.name;
+      clubInfo = response.data;
     }
   } catch (err) {
     console.error(err);
@@ -31,7 +31,13 @@ async function ClubRegisterWidget({ params }: DetailParams) {
       {(role === UserRole.CLUB_ADMIN || role === UserRole.GREEDY_ADMIN) && (
         <ClubRegisterForm accessToken={accessToken} />
       )}
-      {role === UserRole.CLUB_MASTER && <ClubEditForm />}
+      {role === UserRole.CLUB_MASTER && (
+        <ClubEditForm
+          clubInfo={clubInfo}
+          accessToken={accessToken}
+          clubId={Number(id)}
+        />
+      )}
     </div>
   );
 }

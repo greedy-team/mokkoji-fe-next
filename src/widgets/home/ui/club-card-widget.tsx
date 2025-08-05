@@ -3,12 +3,18 @@ import ClubTextCard from '@/entities/home/ui/club-text-card';
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carousel';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function ClubCardWidget() {
-  const data = await getRecruitList({
-    page: 1,
-    size: 100,
-  });
+  let data;
+  try {
+    data = await getRecruitList({
+      page: 1,
+      size: 100,
+    });
+  } catch (err) {
+    return <ErrorBoundaryUi />;
+  }
   const shuffled = [...data].sort(() => Math.random() - 0.5);
 
   return (

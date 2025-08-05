@@ -10,7 +10,7 @@ interface CardSliderProps {
   data: {
     id: number;
     name: string;
-    imageURL: string;
+    logo: string;
     description: string;
     recruitStartDate: string;
     recruitEndDate: string;
@@ -89,7 +89,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
               <div className="mx-auto h-[160px] w-[300px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)]">
                 <div className="mb-4 flex items-center justify-between gap-4">
                   <Avatar className="size-10">
-                    <AvatarImage src={item.imageURL} />
+                    <AvatarImage src={item.logo} />
                     <AvatarFallback>{item.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-1 flex-col">

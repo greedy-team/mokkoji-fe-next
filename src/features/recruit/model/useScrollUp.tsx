@@ -14,11 +14,7 @@ function useScrollUp() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  return { visible, scrollToTop };
+  return { visible };
 }
 
 export default useScrollUp;

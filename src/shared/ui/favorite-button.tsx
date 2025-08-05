@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, startTransition } from 'react';
+import { useState } from 'react';
 import serverApi from '@/shared/api/server-api';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
@@ -9,9 +9,14 @@ import FavoriteThread from './favorite-thread';
 interface FavoriteButtonProps {
   isFavorite: boolean;
   clubId: string;
+  customClass?: string;
 }
 
-function FavoriteButton({ isFavorite, clubId }: FavoriteButtonProps) {
+function FavoriteButton({
+  isFavorite,
+  clubId,
+  customClass,
+}: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
 
   const { data: session, status } = useSession();
@@ -32,17 +37,18 @@ function FavoriteButton({ isFavorite, clubId }: FavoriteButtonProps) {
       } else {
         await serverApi.delete(`favorites/${clubId}`, { headers });
       }
+      setFavorite((prev: boolean) => !prev);
     } catch (error) {
       console.error('즐겨찾기 요청 실패:', error);
     }
-
-    startTransition(async () => {
-      setFavorite((prev: boolean) => !prev);
-    });
   };
 
   return (
-    <FavoriteThread favorite={favorite} setFavoriteAction={handleToggle} />
+    <FavoriteThread
+      favorite={favorite}
+      setFavoriteAction={handleToggle}
+      customClass={customClass}
+    />
   );
 }
 

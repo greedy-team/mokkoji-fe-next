@@ -25,7 +25,7 @@ async function Header() {
         <nav className="scrollbar-hide flex h-full items-center gap-4 overflow-auto whitespace-nowrap">
           <NavButton label="전체 동아리" href="/club/all" />
           <NavButton label="모집 공고" href="/recruit" />
-          <NavButton label="즐겨찾기" href="/favorite" />
+          <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           <NavButton label="동아리 등록" href="/club-register" />
           <NavButton label="고객센터" href="/support" />
         </nav>

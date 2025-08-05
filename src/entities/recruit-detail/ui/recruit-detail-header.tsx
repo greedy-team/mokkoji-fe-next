@@ -8,8 +8,9 @@ interface RecruitDetailHeaderProps {
   category: string;
   startDate: string;
   endDate: string;
-  instagramLink: string;
+  instagram: string;
   clubId: number;
+  isFavorite: boolean;
 }
 
 function RecruitDetailHeader({
@@ -17,8 +18,9 @@ function RecruitDetailHeader({
   category,
   startDate,
   endDate,
-  instagramLink,
+  instagram,
   clubId,
+  isFavorite,
 }: RecruitDetailHeaderProps) {
   return (
     <>
@@ -40,8 +42,9 @@ function RecruitDetailHeader({
         </div>
       </header>
       <RecruitDetailHeaderControl
-        instagramLink={instagramLink}
+        instagram={instagram}
         clubId={clubId}
+        isFavorite={isFavorite}
       />
     </>
   );

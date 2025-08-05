@@ -13,6 +13,7 @@ interface RecruitDetailCommentEditProps {
   commentId: number;
   content: string;
   rate: number;
+  accessToken?: string;
   onCancel: () => void;
 }
 
@@ -21,6 +22,7 @@ function RecruitDetailCommentEdit({
   commentId,
   content,
   rate,
+  accessToken,
   onCancel,
 }: RecruitDetailCommentEditProps) {
   const [value, setValue] = useState(content);
@@ -33,13 +35,18 @@ function RecruitDetailCommentEdit({
   const handlePatchComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!accessToken) {
+      toast.warn('로그인을 먼저 해주세요.');
+      return;
+    }
+
     if (!value || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.');
       return;
     }
 
     try {
-      await patchComment(commentId, value, rating);
+      await patchComment(commentId, value, rating, accessToken);
       toast.success('댓글이 수정되었습니다.');
       setValue('');
       setRating(0);

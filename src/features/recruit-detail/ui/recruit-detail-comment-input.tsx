@@ -40,7 +40,7 @@ function RecruitDetailCommentInput({
     }
 
     try {
-      await postComment(clubId, value, rating);
+      await postComment(clubId, value, rating, accessToken);
       toast.success('댓글이 등록되었습니다.');
       setValue('');
       setRating(0);

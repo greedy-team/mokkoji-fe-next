@@ -46,15 +46,16 @@ function RecruitDetailCommentInput({
       setRating(0);
       revalidateComments(clubId);
     } catch (err) {
+      let errorMessage = '댓글 등록 중 오류가 발생했습니다.';
       if (err instanceof Error) {
         if (err.message === '권한이 없습니다.') {
-          toast.error('리뷰는 한 개만 작성 가능합니다!');
+          errorMessage = '리뷰는 한 개만 작성 가능합니다!';
         } else {
-          toast.error(err.message || '댓글 등록 중 오류가 발생했습니다.');
+          errorMessage = err.message;
         }
-      } else {
-        toast.error('댓글 등록 중 오류가 발생했습니다.');
       }
+
+      toast.error(errorMessage);
     }
   };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import NavButton from '@/shared/ui/nav-button';
+import AffiliationNavButton from './affiliation-nav-button';
 
 const navItems = [
   { label: '중앙동아리', value: 'central_club' },
@@ -16,11 +16,12 @@ export default function NavSection({ href }: NavSectionProps) {
   return (
     <div className="mr-12 flex flex-row gap-4">
       {navItems.map(({ label, value }) => (
-        <NavButton
+        <AffiliationNavButton
           key={value}
           label={label}
           href={`${href}?affiliation=${value}`}
           navProps="pb-2 text-xs"
+          value={value}
         />
       ))}
     </div>

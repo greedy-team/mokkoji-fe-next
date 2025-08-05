@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { startTransition, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
 import revalidateComments from '@/app/actions/revalidate-comments';
@@ -35,7 +35,7 @@ export default function RecruitDetailComment({
     }
 
     try {
-      await deleteComment(commentId, accessToken);
+      await deleteComment(commentId);
       toast.success('댓글이 삭제되었습니다.');
       revalidateComments(clubId);
     } catch (err) {
@@ -66,7 +66,6 @@ export default function RecruitDetailComment({
               <RecruitDetailCommentEdit
                 clubId={clubId}
                 commentId={comment.id}
-                accessToken={accessToken}
                 content={comment.content}
                 rate={comment.rate}
                 onCancel={() => setEdit(null)}

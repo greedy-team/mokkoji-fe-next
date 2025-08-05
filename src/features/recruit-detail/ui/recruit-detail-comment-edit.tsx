@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
@@ -13,7 +13,6 @@ interface RecruitDetailCommentEditProps {
   commentId: number;
   content: string;
   rate: number;
-  accessToken?: string;
   onCancel: () => void;
 }
 
@@ -22,10 +21,8 @@ function RecruitDetailCommentEdit({
   commentId,
   content,
   rate,
-  accessToken,
   onCancel,
 }: RecruitDetailCommentEditProps) {
-  const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(content);
   const [rating, setRating] = useState(rate);
 
@@ -36,18 +33,13 @@ function RecruitDetailCommentEdit({
   const handlePatchComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요.');
-      return;
-    }
-
     if (!value || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.');
       return;
     }
 
     try {
-      await patchComment(commentId, value, rating, accessToken);
+      await patchComment(commentId, value, rating);
       toast.success('댓글이 수정되었습니다.');
       setValue('');
       setRating(0);

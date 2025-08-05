@@ -1,20 +1,16 @@
-import serverApi from '@/shared/api/server-api';
+import authApi from '@/shared/api/auth-api';
 
 export async function postComment(
   clubId: number,
   content: string,
   rate: number,
-  accessToken: string,
 ) {
   try {
-    const response = await serverApi
+    const response = await authApi
       .post(`comments/${clubId}`, {
         json: {
           content,
           rate,
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
         },
       })
       .json();
@@ -30,17 +26,13 @@ export async function patchComment(
   commentId: number,
   content: string,
   rate: number,
-  accessToken: string,
 ) {
   try {
-    const response = await serverApi
+    const response = await authApi
       .patch(`comments/${commentId}`, {
         json: {
           content,
           rate,
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
         },
       })
       .json();
@@ -52,15 +44,9 @@ export async function patchComment(
   }
 }
 
-export async function deleteComment(commentId: number, accessToken: string) {
+export async function deleteComment(commentId: number) {
   try {
-    const response = await serverApi
-      .delete(`comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .json();
+    const response = await authApi.delete(`comments/${commentId}`).json();
 
     return response;
   } catch (error) {

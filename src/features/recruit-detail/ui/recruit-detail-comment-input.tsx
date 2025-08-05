@@ -1,6 +1,6 @@
 'use client';
 
-import { startTransition, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
@@ -40,7 +40,7 @@ function RecruitDetailCommentInput({
     }
 
     try {
-      await postComment(clubId, value, rating, accessToken);
+      await postComment(clubId, value, rating);
       toast.success('댓글이 등록되었습니다.');
       setValue('');
       setRating(0);

@@ -1,3 +1,4 @@
+import cn from '@/shared/lib/utils';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
 
@@ -36,7 +37,7 @@ function StarRating({
             key={starIndex}
             role="button"
             tabIndex={0}
-            className={`cursor-pointer ${size === 'large' ? 'p-1' : 'p-0.5'}`}
+            className={cn('cursor-pointer', size === 'large' ? 'p-1' : 'p-0.5')}
             onMouseEnter={() => setHovered(starIndex)}
             onMouseLeave={() => setHovered(0)}
             onClick={() => onChange(starIndex)}
@@ -44,9 +45,11 @@ function StarRating({
             aria-label={`${starIndex}점`}
           >
             <Star
-              className={`${size === 'large' ? 'h-6 w-6' : 'h-4 w-4'} transition-colors duration-300 ${
-                isFilled ? 'fill-[#00E457] text-[#00E457]' : 'text-gray-300'
-              }`}
+              className={cn(
+                'transition-colors duration-300',
+                size === 'large' ? 'h-6 w-6' : 'h-4 w-4',
+                isFilled ? 'fill-[#00E457] text-[#00E457]' : 'text-gray-300',
+              )}
             />
           </div>
         );

@@ -27,6 +27,7 @@ async function Header() {
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           <NavButton label="동아리 등록" href="/club-register" />
+          <NavButton label="모집 공고 등록" href="/post-recruitment" />
           <NavButton label="고객센터" href="/support" />
         </nav>
         <div className="ml-auto flex items-center gap-3.5">

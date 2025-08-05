@@ -2,16 +2,21 @@
 
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
-import getWeekdays from './util/get-week-days';
 
-function CustomCalendar() {
-  const [value, setValue] = useState<Date>(new Date());
+import getWeekdays from '../util/get-week-days';
 
+interface CustomCalendarProps {
+  value: Date;
+  setValue: (value: Date) => void;
+}
+
+function CustomCalendar({ value, setValue }: CustomCalendarProps) {
   const formatNavigation = ({ date }: { date: Date }) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
+
+    console.log('바뀐 날', value);
 
     return (
       <div className="flex flex-row items-center gap-2 pl-2">

@@ -1,6 +1,7 @@
 'use client';
 
-import { useReducer } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
@@ -17,16 +18,40 @@ const fields: FormField[] = [
 ];
 
 interface ClubNameProp {
+  clubName?: string;
   accessToken?: string;
 }
 
-function ClubRegisterForm({ accessToken }: ClubNameProp) {
+function ClubEditForm({ clubName, accessToken }: ClubNameProp) {
+  // const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
+
+  useEffect(() => {
+    if (clubName) {
+      dispatch({ type: 'UPDATE_FIELD', name: 'name', value: clubName });
+    }
+  }, [clubName]);
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
+  /*
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setPreview(imageUrl);
+
+    dispatch({ type: 'UPDATE_LOGO', file });
+  };
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+  */
 
   const handleBlur = (name: keyof ClubFormData) => {
     dispatch({ type: 'VALIDATE_FIELD', name });
@@ -78,6 +103,42 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
           />
         );
       })}
+      {/* <label htmlFor="imageURL" className="my-6 flex">
+        <button
+          type="button"
+          onClick={handleClick}
+          className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4]"
+        >
+          {preview ? (
+            <Image
+              src={preview}
+              alt="미리보기 이미지"
+              width={100}
+              height={100}
+            />
+          ) : (
+            <Image
+              src="/club-register/cameraIcon.svg"
+              alt="이미지 등록"
+              width={20}
+              height={16}
+            />
+          )}
+        </button>
+        <div className="flex flex-1 flex-col items-start justify-center gap-1 p-4">
+          <p className="font-bold">동아리 로고 이미지</p>
+          <span className="text-xs text-[#00D451]">
+            PNG, JPG 형식의 이미지를 업로드해주세요!
+          </span>
+        </div>
+      </label>
+      <input
+        type="file"
+        accept="image/*"
+        ref={inputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      /> */}
       <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
         등록하기
       </Button>
@@ -85,4 +146,4 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
   );
 }
 
-export default ClubRegisterForm;
+export default ClubEditForm;

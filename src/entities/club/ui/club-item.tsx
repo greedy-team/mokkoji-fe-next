@@ -1,13 +1,13 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import FavoriteButton from '@/entities/recruit/ui/favorite-button';
+import FavoriteButton from '@/shared/ui/favorite-button';
 
 interface ClubItemProps {
   title: string;
   description: string;
   isFavorite?: boolean;
-  imgUrl?: string;
+  logo?: string;
   category?: string;
   clubId: string;
 }
@@ -16,16 +16,16 @@ function ClubItem({
   title,
   description,
   isFavorite,
-  imgUrl,
+  logo,
   category,
   clubId,
 }: ClubItemProps) {
   return (
-    <div className="h-min-[142px] relative w-auto rounded-sm bg-[#F8F8F8] p-5">
+    <div className="relative h-[170px] w-auto rounded-sm bg-[#F8F8F8] p-5">
       <div className="mb-8 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Avatar className="size-12">
-            <AvatarImage src={imgUrl} />
+            <AvatarImage src={logo} />
             <AvatarFallback>{title}</AvatarFallback>
           </Avatar>
           <div>

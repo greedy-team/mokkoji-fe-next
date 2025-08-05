@@ -6,6 +6,7 @@ import serverApi from './shared/api/server-api';
 import { LoginSuccessResponse } from './features/login/model/type';
 import UserInfoType from './entities/my/model/type';
 
+// TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
   pages: {
@@ -71,12 +72,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       if (Date.now() > (token.expiresAt as number)) {
+        console.log('만료!!', token.refreshToken);
         try {
           const response = await serverApi.post('users/auth/refresh', {
             headers: {
               Authorization: `Bearer ${token.refreshToken}`,
             },
           });
+          console.log('refresh response', response);
+
           const data: LoginSuccessResponse = await response.json();
           return {
             ...token,
@@ -85,6 +89,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           console.error('[refresh error]', error);
+          signOut();
           return null;
         }
       }

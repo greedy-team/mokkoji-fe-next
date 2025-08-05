@@ -38,7 +38,7 @@ async function HomeScrollSection() {
               <ScrollItem
                 title={item.name}
                 description={item.description}
-                imgUrl={item.imageURL}
+                logo={item.logo}
                 id={item.id}
               />
             </li>
@@ -56,7 +56,7 @@ async function HomeScrollSection() {
               <ScrollItem
                 title={item.name}
                 description={item.description}
-                imgUrl={item.imageURL}
+                logo={item.logo}
                 id={item.id}
               />
             </li>

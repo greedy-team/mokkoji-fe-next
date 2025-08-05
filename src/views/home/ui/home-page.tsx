@@ -1,11 +1,11 @@
 import HomeHeader from '@/entities/home/ui/home-header';
 import NavigateClubList from '@/features/home/ui/navigate-clublist';
-import HomeScrollSection from '@/entities/home/ui/scroll-section';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import HomeDownButton from '@/features/home/ui/page-down-button';
 import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
 import FeatureIntroduceWidget from '@/widgets/home/ui/feature-intoduce-widget';
 import HelpCardWidget from '@/widgets/home/ui/help-card-widget';
+import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 
 async function HomePage() {
   return (
@@ -29,6 +29,7 @@ async function HomePage() {
       <div className="fixed right-2 bottom-14 z-50 lg:right-8 lg:bottom-8">
         <NavigateClubList />
       </div>
+      <ScrollTopButton />
     </>
   );
 }

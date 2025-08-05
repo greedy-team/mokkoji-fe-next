@@ -66,7 +66,10 @@ function ManageModal({
                   type="button"
                   className="hover:border-[#00D451]"
                 >
-                  <Link href={`/club-register/${club.clubId}`}>
+                  <Link
+                    href={`/club-register/${club.clubId}`}
+                    onClick={onClose}
+                  >
                     {club.clubName}
                   </Link>
                 </Button>

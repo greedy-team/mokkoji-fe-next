@@ -84,3 +84,21 @@ export interface GetClubManageInfoResponse {
     clubs: ManageClub[];
   };
 }
+
+export interface ClubInfoType {
+  id: number;
+  name: string;
+  category: string;
+  affiliation: string;
+  description: string;
+  logo: string;
+  instagram: string;
+  recruitStartDate: string;
+  recruitEndDate: string;
+  isFavorite: boolean;
+  recruitPost: string;
+}
+
+export interface ClubInfoResponse {
+  data: ClubInfoType;
+}

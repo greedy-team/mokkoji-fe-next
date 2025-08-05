@@ -1,5 +1,5 @@
 import serverApi from '@/shared/api/server-api';
-import { GetClubManageInfoResponse } from '../model/type';
+import { ClubInfoResponse, GetClubManageInfoResponse } from '../model/type';
 
 export default async function getClubManageInfo(
   accessToken: string,
@@ -11,6 +11,21 @@ export default async function getClubManageInfo(
       },
     })
     .json<GetClubManageInfoResponse>();
+
+  return response;
+}
+
+export async function getClubInfo(
+  clubId: number,
+  accessToken: string,
+): Promise<ClubInfoResponse> {
+  const response = await serverApi
+    .get(`clubs/${clubId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .json<ClubInfoResponse>();
 
   return response;
 }

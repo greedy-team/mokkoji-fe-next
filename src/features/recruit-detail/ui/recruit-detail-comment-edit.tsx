@@ -30,7 +30,7 @@ function RecruitDetailCommentEdit({
     setValue(e.target.value);
   };
 
-  const handlePatchComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePatchComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!value || rating === 0) {
@@ -52,7 +52,7 @@ function RecruitDetailCommentEdit({
   };
 
   return (
-    <form className="flex w-full flex-col gap-2">
+    <form onSubmit={handlePatchComment} className="flex w-full flex-col gap-2">
       <StarRating value={rating} size="small" onChange={setRating} />
       <div className="flex w-full items-end gap-2">
         <Textarea
@@ -67,7 +67,7 @@ function RecruitDetailCommentEdit({
         </Button>
         <Button
           variant="submit"
-          onClick={handlePatchComment}
+          type="submit"
           className="px-5 py-2"
           disabled={!value || rating === 0}
         >

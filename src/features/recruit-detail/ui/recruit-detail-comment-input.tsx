@@ -26,7 +26,7 @@ function RecruitDetailCommentInput({
     setValue(e.target.value);
   };
 
-  const handleAddComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!accessToken) {
@@ -59,7 +59,10 @@ function RecruitDetailCommentInput({
   };
 
   return (
-    <form className="my-4 mb-15 flex flex-col gap-2">
+    <form
+      onSubmit={handleAddComment}
+      className="my-4 mb-15 flex flex-col gap-2"
+    >
       <div className="mb-4 flex flex-col gap-1">
         <p className="font-semibold">이 동아리 어때요?</p>
         <StarRating value={rating} size="large" onChange={setRating} />
@@ -74,7 +77,7 @@ function RecruitDetailCommentInput({
       <div className="flex justify-end">
         <Button
           variant="submit"
-          onClick={handleAddComment}
+          type="submit"
           className="h-[43px] w-[113px]"
           disabled={!value || rating === 0}
         >

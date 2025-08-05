@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import getStatus from '@/shared/lib/getStatus';
 import PeriodSection from './period-section';
-import FavoriteButton from './favorite-button';
+import FavoriteButton from '../../../shared/ui/favorite-button';
 
 interface RecruitItemProps {
   title: string;
@@ -12,7 +12,7 @@ interface RecruitItemProps {
   endDate: string;
   description: string;
   isFavorite?: boolean;
-  imgUrl?: string;
+  logo?: string;
   clubId: string;
 }
 
@@ -22,15 +22,15 @@ function RecruitItem({
   endDate,
   description,
   isFavorite,
-  imgUrl,
+  logo,
   clubId,
 }: RecruitItemProps) {
   return (
-    <div className="h-min-[142px] relative w-auto rounded-sm bg-[#F8F8F8] p-5">
+    <div className="relative h-[170px] w-auto rounded-sm bg-[#F8F8F8] p-5">
       <div className="mb-8 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Avatar className="size-12">
-            <AvatarImage src={imgUrl} />
+            <AvatarImage src={logo} />
             <AvatarFallback>{title}</AvatarFallback>
           </Avatar>
           <div>

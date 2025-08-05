@@ -11,7 +11,7 @@ interface NavButtonProps {
   href: string;
 }
 
-export default function NavButton({ label, navProps, href }: NavButtonProps) {
+function NavButton({ label, navProps, href }: NavButtonProps) {
   const pathname = usePathname();
   const active = pathname.startsWith(href);
 
@@ -28,3 +28,5 @@ export default function NavButton({ label, navProps, href }: NavButtonProps) {
     </Link>
   );
 }
+
+export default NavButton;

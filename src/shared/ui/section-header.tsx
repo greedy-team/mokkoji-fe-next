@@ -10,7 +10,7 @@ function SectionHeader({
   children?: ReactNode;
 }) {
   return (
-    <header className="mb-8">
+    <header className="mb-8" id="top">
       <nav className="mb-3 flex flex-row justify-between">
         <h1 className="text-xl font-bold text-[#00E457]">{title}</h1>
         {children}

@@ -18,6 +18,7 @@ export enum ClubCategory {
 export enum ClubAffiliation {
   CENTRAL_CLUB = 'CENTRAL_CLUB',
   DEPARTMENT_CLUB = 'DEPARTMENT_CLUB',
+  SMALL_GROUP = 'SMALL_GROUP',
 }
 
 export interface ClubList {
@@ -59,10 +60,47 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
-  [ClubAffiliation.CENTRAL_CLUB]: '중앙 동아리',
-  [ClubAffiliation.DEPARTMENT_CLUB]: '가인준 동아리',
+  [ClubAffiliation.CENTRAL_CLUB]: '중앙동아리',
+  [ClubAffiliation.DEPARTMENT_CLUB]: '학과동아리',
+  [ClubAffiliation.SMALL_GROUP]: '소모임',
 };
+
+export enum UserRole {
+  GREEDY_ADMIN = 'GREEDY_ADMIN',
+  CLUB_ADMIN = 'CLUB_ADMIN',
+  CLUB_MASTER = 'CLUB_MASTER',
+  NORMAL = 'NORMAL',
+}
 
 export interface DetailParams {
   params: Promise<{ id: string }>;
+}
+
+export interface ManageClub {
+  clubId: number;
+  clubName: string;
+}
+
+export interface GetClubManageInfoResponse {
+  data: {
+    clubs: ManageClub[];
+  };
+}
+
+export interface ClubInfoType {
+  id: number;
+  name: string;
+  category: string;
+  affiliation: string;
+  description: string;
+  logo: string;
+  instagram: string;
+  recruitStartDate: string;
+  recruitEndDate: string;
+  isFavorite: boolean;
+  recruitPost: string;
+}
+
+export interface ClubInfoResponse {
+  data: ClubInfoType;
 }

@@ -1,12 +1,23 @@
 import serverApi from '@/shared/api/server-api';
 import { CommentType } from '../model/type';
 
+interface CommentsResponse {
+  data: {
+    comments: CommentType[];
+  };
+}
+
 export default async function getClubDetailComments(
   clubId: number,
-): Promise<{ comments: CommentType[] }> {
+  accessToken: string,
+): Promise<CommentsResponse> {
   const response = await serverApi
-    .get(`comments/${clubId}`)
-    .json<{ comments: CommentType[] }>();
+    .get(`comments/${clubId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .json<CommentsResponse>();
 
   return response;
 }

@@ -7,7 +7,6 @@ import getParams from '@/shared/util/getParams';
 
 async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
-
   const data = await getClubDetail(id);
 
   return (

@@ -35,7 +35,7 @@ function StarRating({ rate }: StarRatingProps) {
         .map((_) => (
           <Image
             key={crypto.randomUUID()}
-            src="/detail/comment/starempty.svg"
+            src="/detail/comment/starEmpty.svg"
             alt="빈 별"
             width={16}
             height={14}

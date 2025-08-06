@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ClubType } from '@/shared/model/type';
+import { toast } from 'react-toastify';
 import searchClubs from '../api/searchClubs';
 
 interface SearchResultsProps {
@@ -12,7 +13,7 @@ interface ClubItemProps {
 
 function ClubItem({ club }: ClubItemProps) {
   return (
-    <Link href={`/recruit/${club.id}`}>
+    <Link href={`/club/${club.id}`}>
       <article className="mb-3 cursor-pointer rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50">
         <header className="mb-2">
           <div className="flex items-center gap-2">
@@ -37,7 +38,7 @@ async function SearchResults({ keyword }: SearchResultsProps) {
     try {
       clubs = await searchClubs({ keyword });
     } catch {
-      // 검색 실패 시 빈 배열 유지
+      toast.error('검색 중 오류가 발생했습니다.');
     }
   }
 

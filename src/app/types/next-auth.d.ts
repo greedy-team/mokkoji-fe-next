@@ -8,6 +8,7 @@ declare module 'next-auth' {
     refreshToken?: string;
     expiresAt?: number;
     user?: UserInfoType;
+    role?: string;
   }
 
   interface User {

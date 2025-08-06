@@ -12,10 +12,10 @@ export interface ClubFormData {
   name: string;
   category: string;
   affiliation: string;
-  leaderId: string;
+  clubMasterStudentId: string;
   instagram: string;
   description: string;
-  logo?: File;
+  logo?: string;
 }
 
 export interface FormField {
@@ -32,5 +32,14 @@ export interface StateProp {
 export type Action =
   | { type: 'UPDATE_FIELD'; name: keyof ClubFormData; value: string }
   | { type: 'VALIDATE_FIELD'; name: keyof ClubFormData }
-  | { type: 'UPDATE_LOGO'; file: File }
-  | { type: 'RESET_FORM' };
+  | { type: 'RESET_FORM' }
+  | { type: 'UPDATE_MULTIPLE_FIELDS'; payload: Partial<ClubFormData> };
+
+export interface EditResponseField {
+  updateLogo: string;
+  deleteLogo: string;
+}
+
+export interface EditResponse {
+  data: EditResponseField;
+}

@@ -11,7 +11,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
     data = await getRecruitList(
       {
         page: Number((await searchParams).page || 1),
-        size: Number((await searchParams).size || 10),
+        size: Number((await searchParams).size || 100),
         keyword: (await searchParams).keyword?.toUpperCase() || '',
         category: (await searchParams).category?.toUpperCase() as ClubCategory,
         affiliation: (
@@ -26,7 +26,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
   }
 
   return (
-    <ul className="grid w-auto grid-cols-3 gap-4">
+    <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {data?.map((item) => (
         <li key={item.id}>
           <Link href={`/recruit/${item.id}`}>

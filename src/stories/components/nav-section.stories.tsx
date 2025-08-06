@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import NavSection from './nav-section';
+import NavSection from '../../shared/ui/nav-section';
 
 const meta: Meta<typeof NavSection> = {
-  title: 'Shared/NavSection',
+  title: 'Components/NavSection',
   component: NavSection,
   tags: ['autodocs'],
   args: {

@@ -10,5 +10,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="px-[20%] py-[4%]">{children}</main>;
+  return (
+    <main className="flex flex-col items-center justify-center p-3 pt-10">
+      {children}
+    </main>
+  );
 }

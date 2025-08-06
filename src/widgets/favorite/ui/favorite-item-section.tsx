@@ -27,10 +27,10 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
   }
   return login ? (
     <>
-      <h1 className="mb-5 text-base font-bold text-[#00E457]">
+      <h1 className="mb-5 w-full text-base font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.pagination?.totalElements}개
       </h1>
-      <ul className="grid min-h-[360px] w-auto grid-cols-3 gap-4">
+      <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {data.clubs.map((item) => (
           <Link href={`/recruit/${item.id}`} key={item.id}>
             <ClubItem

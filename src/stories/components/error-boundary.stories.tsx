@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ErrorBoundary from './error-boundary-ui';
+import ErrorBoundary from '../../shared/ui/error-boundary-ui';
 
 const meta: Meta<typeof ErrorBoundary> = {
-  title: 'Common/ErrorBoundary',
+  title: 'Components/ErrorBoundary',
   component: ErrorBoundary,
   tags: ['autodocs'],
   args: {

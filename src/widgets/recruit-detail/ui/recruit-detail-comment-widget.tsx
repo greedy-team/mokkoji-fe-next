@@ -19,7 +19,7 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
   }
 
   return (
-    <section className="mt-13">
+    <section className="mt-13 w-full">
       <RecruitDetailCommentInput
         clubId={clubId}
         count={commentList.length}

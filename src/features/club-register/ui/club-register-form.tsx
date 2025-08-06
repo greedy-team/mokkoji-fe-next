@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
-import postClubRegister from '../api/postClubRegister';
+import { postClubRegister } from '../api/postClubRegister';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
 
@@ -13,7 +13,7 @@ const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
   { label: '카테고리', name: 'category', type: 'options' },
   { label: '소속', name: 'affiliation', type: 'options' },
-  { label: '동아리 회장 학번', name: 'leaderId', type: 'input' },
+  { label: '동아리 회장 학번', name: 'clubMasterStudentId', type: 'input' },
 ];
 
 interface ClubNameProp {
@@ -40,11 +40,12 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
       return;
     }
 
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('category', formData.category);
-    data.append('affiliation', formData.affiliation);
-    data.append('leaderId', formData.leaderId);
+    const data = {
+      name: formData.name,
+      category: formData.category,
+      affiliation: formData.affiliation,
+      clubMasterStudentId: formData.clubMasterStudentId,
+    };
 
     try {
       await postClubRegister(data, accessToken);
@@ -55,7 +56,7 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
     }
   };
 
-  const isValid = isFormValid({ formData, errors });
+  const isValid = isFormValid({ formData, errors }, fields);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -7,7 +7,7 @@ export const initialState: StateProp = {
     category: '',
     affiliation: '',
     description: '',
-    leaderId: '',
+    clubMasterStudentId: '',
     instagram: '',
     logo: '',
   },

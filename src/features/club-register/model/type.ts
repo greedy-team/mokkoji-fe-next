@@ -12,7 +12,7 @@ export interface ClubFormData {
   name: string;
   category: string;
   affiliation: string;
-  leaderId: string;
+  clubMasterStudentId: string;
   instagram: string;
   description: string;
   logo?: string;
@@ -36,8 +36,8 @@ export type Action =
   | { type: 'UPDATE_MULTIPLE_FIELDS'; payload: Partial<ClubFormData> };
 
 export interface EditResponseField {
-  updateLog: string;
-  deleteLog: string;
+  updateLogo: string;
+  deleteLogo: string;
 }
 
 export interface EditResponse {

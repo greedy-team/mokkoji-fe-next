@@ -1,12 +1,28 @@
 import serverApi from '@/shared/api/server-api';
 import { EditResponse } from '../model/type';
 
-export default async function postClubRegister(
-  data: FormData,
+interface ClubRegisterRequest {
+  name: string;
+  category: string;
+  affiliation: string;
+  clubMasterStudentId: string;
+}
+
+interface ClubUpdateRequest {
+  name: string;
+  category: string;
+  affiliation: string;
+  description: string;
+  instagram: string;
+  logo: string;
+}
+
+export async function postClubRegister(
+  data: ClubRegisterRequest,
   accessToken: string,
 ) {
   const response = await serverApi
-    .post('clubs/manage', {
+    .post('clubs', {
       json: data,
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -19,11 +35,11 @@ export default async function postClubRegister(
 
 export async function patchClubInfo(
   clubId: number,
-  data: FormData,
+  data: ClubUpdateRequest,
   accessToken: string,
 ): Promise<EditResponse> {
   const response = await serverApi
-    .post(`clubs/manage/${clubId}`, {
+    .patch(`clubs/manage/${clubId}`, {
       json: data,
       headers: {
         Authorization: `Bearer ${accessToken}`,

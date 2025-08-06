@@ -9,6 +9,9 @@ export interface RecruitmentDetail {
   createdAt: string; // ISO 날짜 문자열
   imageUrls: string[];
   recruitForm: string;
+  isFavorite: boolean;
+  instagram: string;
+  category: string;
 }
 
 export interface RecruitmentDetailResponse {

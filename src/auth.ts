@@ -3,7 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import KakaoProvider from 'next-auth/providers/kakao';
 import getTokenExpiration from './shared/lib/getTokenExpiration';
 import serverApi from './shared/api/server-api';
-import { LoginSuccessResponse } from './features/login/model/type';
+import {
+  LoginSuccessResponse,
+  RoleResponse,
+} from './features/login/model/type';
 import UserInfoType from './entities/my/model/type';
 
 // TODO: 추후 루시아로 변경
@@ -62,13 +65,32 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (user && account?.provider === 'credentials') {
         const expiredTime = getTokenExpiration(user.accessToken as string);
-        return {
-          ...token,
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
-          expiresAt: expiredTime,
-          user: user.user,
-        };
+
+        try {
+          const headers = {
+            Authorization: `Bearer ${user.accessToken}`,
+          };
+          const rolesRes = await serverApi.get('users/roles', { headers });
+          const rolesData: RoleResponse = await rolesRes.json();
+
+          return {
+            ...token,
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
+            expiresAt: expiredTime,
+            user: user.user,
+            role: rolesData.data.role,
+          };
+        } catch (error) {
+          console.error('[role fetch error]', error);
+          return {
+            ...token,
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
+            expiresAt: expiredTime,
+            user: user.user,
+          };
+        }
       }
 
       if (Date.now() > (token.expiresAt as number)) {
@@ -101,6 +123,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         refreshToken: token.refreshToken,
         expiresAt: token.expiresAt,
         user: token.user,
+        role: token.role,
       } as Session;
     },
     redirect: async ({ url, baseUrl }) => {

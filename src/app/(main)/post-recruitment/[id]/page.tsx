@@ -1,10 +1,10 @@
 import { auth } from '@/auth';
-import { UserRole } from '@/shared/model/type';
+import { DetailParams, UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import PostRecruitmentPage from '@/views/post-recruitment/post-recruitment-page';
 import { redirect } from 'next/navigation';
 
-async function Page() {
+async function Page({ params }: DetailParams) {
   const session = await auth();
   const role = session?.role;
 
@@ -19,7 +19,7 @@ async function Page() {
   ) {
     return <ErrorBoundaryUi message="페이지 접근 권한이 없습니다." />;
   }
-  return <PostRecruitmentPage />;
+  return <PostRecruitmentPage params={params} />;
 }
 
 export default Page;

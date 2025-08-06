@@ -6,8 +6,8 @@ import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
-import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
+import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },

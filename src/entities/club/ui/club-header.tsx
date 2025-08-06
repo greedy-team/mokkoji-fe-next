@@ -7,7 +7,7 @@ function RecruitHeader() {
       title="전체 동아리"
       description="우리 학교엔 이런 동아리들이 있어요."
     >
-      <NavSection href="/club/all" />
+      <NavSection href="/club" />
     </SectionHeader>
   );
 }

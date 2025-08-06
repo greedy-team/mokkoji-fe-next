@@ -14,7 +14,6 @@ export const Active: Story = {
   args: {
     label: '모집 공고',
     href: '#',
-    active: true,
   },
 };
 
@@ -22,6 +21,5 @@ export const Inactive: Story = {
   args: {
     label: '모집 공고',
     href: '#',
-    active: false,
   },
 };

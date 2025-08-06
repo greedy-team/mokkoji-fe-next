@@ -1,10 +1,9 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
-import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-
 import ClubItem from '@/entities/club/ui/club-item';
 import getRecruitList from '@/widgets/recruit/api/getRecruitList';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
 async function ClubItemList({ searchParams }: RecruitItemListProps) {
   let data;
@@ -23,7 +22,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
       true,
     );
   } catch (error) {
-    return <ErrorBoundaryUi />;
+    return <ClubCustomErrorBoundary />;
   }
 
   return (

@@ -8,7 +8,7 @@ import revalidateComments from '@/app/actions/revalidate-comments';
 import StarRating from './rating-component';
 import { patchComment } from '../api/postComment';
 
-interface RecruitDetailCommentEditProps {
+interface ClubDetailCommentEditProps {
   clubId: number;
   commentId: number;
   content: string;
@@ -17,14 +17,14 @@ interface RecruitDetailCommentEditProps {
   onCancel: () => void;
 }
 
-function RecruitDetailCommentEdit({
+function ClubDetailCommentEdit({
   clubId,
   commentId,
   content,
   rate,
   accessToken,
   onCancel,
-}: RecruitDetailCommentEditProps) {
+}: ClubDetailCommentEditProps) {
   const [value, setValue] = useState(content);
   const [rating, setRating] = useState(rate);
 
@@ -85,4 +85,4 @@ function RecruitDetailCommentEdit({
   );
 }
 
-export default RecruitDetailCommentEdit;
+export default ClubDetailCommentEdit;

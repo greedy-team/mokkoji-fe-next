@@ -2,26 +2,21 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
-import revalidateComments from '@/app/actions/revalidate-comments';
-import StarRating from '../../../entities/recruit-detail/ui/review-star';
-import timeAgo from '../../../entities/recruit-detail/util/timeAgo';
-import RecruitDetailCommentEdit from './recruit-detail-comment-edit';
-import { deleteComment } from '../api/postComment';
+import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';
 
-interface RecruitDetailCommentProps {
+interface ClubDetailCommentProps {
   clubId: number;
   comments: CommentType[];
   accessToken: string | undefined;
 }
 
-export default function RecruitDetailComment({
+export default function ClubDetailComment({
   clubId,
   comments,
   accessToken,
-}: RecruitDetailCommentProps) {
+}: ClubDetailCommentProps) {
   const [edit, setEdit] = useState<number | null>(null);
 
   return (
@@ -43,7 +38,7 @@ export default function RecruitDetailComment({
               />
             </div>
             {isEditing ? (
-              <RecruitDetailCommentEdit
+              <ClubDetailCommentEdit
                 clubId={clubId}
                 commentId={comment.id}
                 content={comment.content}

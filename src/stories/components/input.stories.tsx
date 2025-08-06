@@ -1,6 +1,6 @@
 // src/shared/ui/input.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import Input from './input';
+import Input from '../../shared/ui/input';
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',

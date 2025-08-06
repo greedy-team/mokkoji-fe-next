@@ -8,9 +8,9 @@ import getParams from '@/shared/util/getParams';
 async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getClubDetail(id);
-  console.log(data);
+  console.log('detailData', data);
   return (
-    <main>
+    <>
       <RecruitDetailHeader
         title={data.name}
         category={data.category}
@@ -22,10 +22,10 @@ async function RecruitDetailPage({ params }: DetailParams) {
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
-        className="mb-3 w-[95%] text-xs leading-[1.4] whitespace-pre-wrap text-black max-[770px]:w-[90%]"
+        className="mb-3 max-w-4xl text-xs leading-[1.4] whitespace-pre-wrap text-black"
       />
       <RecruitDetailCommentWidget clubId={Number(id)} />
-    </main>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import NavButton from './nav-button';
+import NavButton from '../../shared/ui/nav-button';
 
 const meta: Meta<typeof NavButton> = {
   title: 'Components/NavButton',

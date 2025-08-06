@@ -14,7 +14,7 @@ function RecruitDetailHeaderControl({
   clubId,
 }: RecruitDetailHeaderControlProps) {
   return (
-    <div className="mt-5 mb-10 flex flex-row items-center gap-3.5">
+    <div className="mt-5 mb-10 flex w-full flex-row items-center gap-3.5">
       <div className="rounded-full border-1 border-black p-1">
         <FavoriteButton
           clubId={clubId.toString()}

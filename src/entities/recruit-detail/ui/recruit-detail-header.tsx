@@ -10,7 +10,7 @@ interface RecruitDetailHeaderProps {
   endDate: string;
   instagram: string;
   clubId: number;
-  isFavorite: boolean;
+  isFavorite?: boolean;
 }
 
 function RecruitDetailHeader({
@@ -24,7 +24,7 @@ function RecruitDetailHeader({
 }: RecruitDetailHeaderProps) {
   return (
     <>
-      <header className="cursor-default border-b border-b-[#D6D6D6] pb-4">
+      <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">
         <div className="mb-4 flex flex-row items-center gap-5">
           <h1 className="text-xl font-bold">{title}</h1>
           <p className="text-xl font-bold text-[#9C9C9C]">{category} 동아리</p>
@@ -44,7 +44,7 @@ function RecruitDetailHeader({
       <RecruitDetailHeaderControl
         instagram={instagram}
         clubId={clubId}
-        isFavorite={isFavorite}
+        isFavorite={isFavorite || false}
       />
     </>
   );

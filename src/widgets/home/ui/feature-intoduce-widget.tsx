@@ -12,7 +12,7 @@ function FeatureIntroduceWidget() {
       </div>
       <div className="relative flex h-[550px] w-full items-center pt-20">
         <div
-          className="pointer-events-none absolute top-0 left-0 z-20 h-full w-full"
+          className="pointer-events-none absolute top-0 left-0 z-10 mt-[15%] h-[50%] w-full"
           style={{
             backgroundImage:
               'linear-gradient(to right, #F8FAFB 25%, transparent 60%)',

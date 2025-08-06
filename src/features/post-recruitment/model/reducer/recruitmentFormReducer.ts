@@ -3,13 +3,12 @@ import { Action, StateProp } from '../type';
 
 export const initialState: StateProp = {
   formData: {
-    name: '',
-    category: '',
-    affiliation: '',
-    description: '',
-    clubMasterStudentId: '',
-    instagram: '',
-    logo: '',
+    title: '',
+    imageUrls: [],
+    content: '',
+    recruitStart: '',
+    recruitEnd: '',
+    recruitForm: '',
   },
   errors: {},
 };
@@ -30,15 +29,6 @@ export default function reducer(state: StateProp, action: Action): StateProp {
       return {
         ...state,
         errors: { ...state.errors, [name]: errorMsg },
-      };
-    }
-    case 'UPDATE_MULTIPLE_FIELDS': {
-      return {
-        ...state,
-        formData: {
-          ...state.formData,
-          ...action.payload,
-        },
       };
     }
     case 'RESET_FORM': {

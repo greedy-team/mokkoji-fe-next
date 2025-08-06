@@ -5,9 +5,14 @@ export default function isFormValid(
   fields: FormField[],
 ) {
   const allFilled = fields
-    .filter((field) => field.name !== 'instagram')
+    .filter((field) => field.name !== 'imageUrls')
     .every((field) => {
       const val = formData[field.name as keyof typeof formData];
+
+      if (Array.isArray(val)) {
+        return val.length > 0;
+      }
+
       return typeof val === 'string' && val.trim() !== '';
     });
 

@@ -2,7 +2,7 @@ import AnimateOnView from '@/features/home/util/animate-viewport';
 
 function CategoryTextCard() {
   return (
-    <div className="z-50 flex h-full w-[50%] flex-col justify-center">
+    <div className="z-20 flex h-full w-[50%] flex-col justify-center">
       <AnimateOnView animation="animate-fade-left">
         <h4 className="text-2xl font-bold text-[#00E457]">
           카테고리 별 동아리 검색

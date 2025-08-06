@@ -3,7 +3,7 @@ import HelpTextCard from '@/entities/home/ui/help-text-card';
 
 function HelpCardWidget() {
   return (
-    <div className="mb-60 flex h-[300px] items-center pt-60">
+    <div className="mb-60 flex h-[300px] items-center pt-60 pb-40">
       <HelpCard />
       <HelpTextCard />
     </div>

@@ -8,8 +8,8 @@ import SharedLoading from '@/shared/ui/loading';
 function ClubPage({ searchParams }: RecruitItemListProps) {
   return (
     <>
-      <ClubHeader />
       <Suspense fallback={<SharedLoading />}>
+        <ClubHeader />
         <ClubItemList searchParams={searchParams} />
       </Suspense>
       <ScrollTopButton />

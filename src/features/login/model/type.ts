@@ -6,3 +6,5 @@ interface LoginRes {
 }
 
 export interface LoginSuccessResponse extends ApiResponse<LoginRes> {}
+
+export interface RoleResponse extends ApiResponse<{ role: string }> {}

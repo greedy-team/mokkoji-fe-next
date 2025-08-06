@@ -12,7 +12,9 @@ function useCalendarDeadline(
 
   const deadlineMap = useMemo(() => {
     const map = new Map<string, string[]>();
-
+    if (!data) {
+      return map;
+    }
     data.forEach((item) => {
       const dateKey = new Date(item.recruitEnd).toDateString();
       if (!map.has(dateKey)) {

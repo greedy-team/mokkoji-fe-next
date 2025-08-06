@@ -1,6 +1,14 @@
-interface SearchParams {
+export interface SearchParams {
   page?: string;
   size?: string;
 }
 
-export default SearchParams;
+export interface FavoriteDateItem {
+  clubName: string;
+  recruitStart: string;
+  recruitEnd: string;
+}
+
+export interface FavoriteDateList {
+  data: FavoriteDateItem[];
+}

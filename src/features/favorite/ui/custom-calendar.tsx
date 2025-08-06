@@ -3,62 +3,83 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
+import { FavoriteDateItem } from '@/views/favorite/model/type';
+import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
+import formatNavigation from '@/entities/favorite/ui/format-navigation';
 import getWeekdays from '../util/get-week-days';
+import useCalendarDeadline from '../model/useCalendarDeadline';
 
 interface CustomCalendarProps {
   value: Date;
   setValue: (value: Date) => void;
+  data: FavoriteDateItem[];
 }
 
-function CustomCalendar({ value, setValue }: CustomCalendarProps) {
-  const formatNavigation = ({ date }: { date: Date }) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    console.log('바뀐 날', value);
-
-    return (
-      <div className="flex flex-row items-center gap-2 pl-2">
-        <span className="text-sm font-bold text-gray-900">{`${year}     ${month}월 ${day}일, `}</span>
-        <span className="text-sm font-normal text-gray-600">
-          {getWeekdays(date)}
-        </span>
-      </div>
-    );
-  };
+function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
+  const {
+    modalOpen,
+    setModalOpen,
+    selectedClubs,
+    handleDateClick,
+    deadlineMap,
+  } = useCalendarDeadline(data, setValue);
 
   return (
-    <Calendar
-      onChange={(val) => setValue(val as Date)} // 단일 Date만 처리
-      value={value}
-      locale="ko-KR"
-      className="h-[350px]!rounded-xl w-[500px]! rounded-xl! border !border-[#F8F8F8] !bg-[#F8F8F8] p-3! text-gray-800"
-      nextLabel=">"
-      prevLabel="<"
-      navigationLabel={formatNavigation}
-      formatShortWeekday={(locale, date) => getWeekdays(date)}
-      formatDay={(locale, date) => date.getDate().toString()}
-      next2Label={null}
-      prev2Label={null}
-      tileClassName={({ date, view }) => {
-        if (view === 'month') {
-          const isSelected =
-            value && date.toDateString() === value.toDateString();
+    <>
+      <Calendar
+        onChange={(val) => handleDateClick(val as Date)}
+        onActiveStartDateChange={({ activeStartDate }) => {
+          if (activeStartDate) {
+            setValue(activeStartDate);
+          }
+        }}
+        value={value}
+        locale="ko-KR"
+        className="h-[370px]! w-[700px]! rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] p-3! text-gray-800"
+        nextLabel=">"
+        prevLabel="<"
+        navigationLabel={formatNavigation}
+        formatShortWeekday={(locale, date) => getWeekdays(date)}
+        formatDay={(locale, date) => date.getDate().toString()}
+        next2Label={null}
+        prev2Label={null}
+        tileClassName={({ date, view }) => {
+          if (view !== 'month') return '';
 
-          // 모든 날짜에 border-b-2(투명)로 높이 유지
+          const dateKey = date.toDateString();
+          const isSelected = value.toDateString() === dateKey;
+          const isDeadline = deadlineMap.has(dateKey);
+
+          let borderClass = 'border-transparent!';
+          let textClass = '';
+          let fontClass = 'font-bold!';
+
+          if (isSelected) {
+            borderClass = 'border-[#00E457]!';
+            textClass = 'text-[#00E457]!';
+            fontClass = 'font-semibold!';
+          } else if (isDeadline) {
+            textClass = 'text-[#00E457]!';
+          }
+
           return `
             border-b-2!
-            ${isSelected ? 'border-[#00E457]! text-[#00E457]! font-semibold!' : 'border-transparent!'}
+            ${borderClass}
+            ${textClass}
             bg-transparent!
             hover:bg-blue-100!
             transition!
-            font-bold!
+            ${fontClass}
           `;
-        }
-        return '';
-      }}
-    />
+        }}
+      />
+      <RecruitEndModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        selectedClubs={selectedClubs}
+        date={value}
+      />
+    </>
   );
 }
 

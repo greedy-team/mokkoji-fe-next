@@ -17,6 +17,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^2.18.1",
     "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",

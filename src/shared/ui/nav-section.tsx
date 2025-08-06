@@ -1,7 +1,6 @@
 'use client';
 
-import NavButton from '@/shared/ui/nav-button';
-import { usePathname, useSearchParams } from 'next/navigation';
+import AffiliationNavButton from './affiliation-nav-button';
 
 const navItems = [
   { label: '중앙동아리', value: 'central_club' },
@@ -14,19 +13,15 @@ interface NavSectionProps {
 }
 
 export default function NavSection({ href }: NavSectionProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const affiliation = searchParams.get('affiliation');
-
   return (
     <div className="mr-12 flex flex-row gap-4">
       {navItems.map(({ label, value }) => (
-        <NavButton
+        <AffiliationNavButton
           key={value}
           label={label}
           href={`${href}?affiliation=${value}`}
           navProps="pb-2 text-xs"
-          active={pathname === href && (affiliation ?? '') === value}
+          value={value}
         />
       ))}
     </div>

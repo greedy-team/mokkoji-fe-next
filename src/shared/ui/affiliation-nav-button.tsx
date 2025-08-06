@@ -3,19 +3,24 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
-interface NavButtonProps {
+interface AffiliationNavButtonProps {
   label: string;
   navProps?: string;
   href: string;
+  value?: string;
 }
 
-function NavButton({ label, navProps, href }: NavButtonProps) {
-  const pathname = usePathname();
-  const hrefPath = href.split('?')[0];
+function AffiliationNavButton({
+  label,
+  navProps,
+  href,
+  value,
+}: AffiliationNavButtonProps) {
+  const searchParams = useSearchParams();
 
-  const active = pathname.startsWith(hrefPath);
+  const active = searchParams.get('affiliation') === value;
 
   return (
     <Link
@@ -31,4 +36,4 @@ function NavButton({ label, navProps, href }: NavButtonProps) {
   );
 }
 
-export default NavButton;
+export default AffiliationNavButton;

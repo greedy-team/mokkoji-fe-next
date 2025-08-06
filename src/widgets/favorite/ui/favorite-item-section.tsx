@@ -32,7 +32,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       </h1>
       <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {data.clubs.map((item) => (
-          <Link href={`/recruit/${item.id}`} key={item.id}>
+          <Link href={`/club/${item.id}`} key={item.id}>
             <ClubItem
               key={item.id}
               title={item.name}

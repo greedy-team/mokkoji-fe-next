@@ -8,7 +8,13 @@ export default middleware(async (req) => {
 
   const isLoggedIn = !!auth?.user;
 
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.some((route) => {
+    if (route.endsWith('/:path*')) {
+      const base = route.replace('/:path*', '');
+      return nextUrl.pathname.startsWith(base);
+    }
+    return route === nextUrl.pathname;
+  });
 
   //   /**
   //    * 1) 로그인했을 때 다시 가면 안되는 페이지 (login, signup 등)

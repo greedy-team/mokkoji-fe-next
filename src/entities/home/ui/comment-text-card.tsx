@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 function CommentTextCard() {
   return (
-    <div className="flex h-[50%] w-full flex-col items-center">
+    <div className="mb-20 flex h-[50%] w-full flex-col items-center">
       <AnimateOnView animation="animate-fade-left">
         <h4 className="mb-2 flex gap-2 text-2xl font-bold text-[#00E457]">
           <Image

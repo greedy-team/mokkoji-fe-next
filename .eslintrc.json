@@ -7,9 +7,13 @@
   },
   "plugins": ["import", "@typescript-eslint", "react", "prettier"],
   "extends": [
+    "airbnb",
+    "airbnb/hooks",
     "next/core-web-vitals",
-    "prettier"
+    "prettier",
+    "airbnb-typescript"
   ],
+
   "rules": {
     "jsx-a11y/label-has-associated-control": [
       2,
@@ -17,6 +21,7 @@
         "some": ["nesting", "id"]
       }
     ],
+    "@typescript-eslint/indent": "off",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-unused-vars": "warn",

@@ -45,7 +45,7 @@ function HeaderLogin() {
             <>
               <Link
                 href="/my"
-                className="absolute top-full left-0 mt-1 h-[35px] w-full min-w-[120px] rounded-lg bg-white pt-2.5 text-center text-xs text-[#9C9C9C] shadow-md hover:text-black"
+                className="absolute top-full left-0 mt-1 h-[35px] w-full min-w-[120px] rounded-lg bg-white pt-2.5 text-center text-xs text-[#9C9C9C] shadow-md hover:bg-[#00c94c] hover:text-black"
               >
                 <span className="ml-2">마이페이지</span>
               </Link>

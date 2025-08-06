@@ -1,15 +1,16 @@
 import { ClubFormData } from '../model/type';
 
 function validateField(name: keyof ClubFormData, value: string): string {
-  if (!value.trim()) {
+  if (name !== 'instagram' && !value.trim()) {
     return '필수 입력 항목입니다.';
   }
 
   if (
     name === 'instagram' &&
+    value.trim() !== '' &&
     !/^https:\/\/www\.instagram\.com\/[a-zA-Z0-9._]+\/?$/.test(value)
   ) {
-    return '올바른 인스타그램 계정을 입력해주세요.';
+    return '올바른 인스타그램 계정 URL을 입력해주세요.';
   }
 
   if (name === 'clubMasterStudentId' && !/^[0-9]{8}$/.test(value)) {

@@ -18,6 +18,7 @@ export enum ClubCategory {
 export enum ClubAffiliation {
   CENTRAL_CLUB = 'CENTRAL_CLUB',
   DEPARTMENT_CLUB = 'DEPARTMENT_CLUB',
+  SMALL_GROUP = 'SMALL_GROUP',
 }
 
 export interface ClubList {
@@ -60,7 +61,8 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
   [ClubAffiliation.CENTRAL_CLUB]: '중앙동아리',
-  [ClubAffiliation.DEPARTMENT_CLUB]: '가인준동아리',
+  [ClubAffiliation.DEPARTMENT_CLUB]: '학과동아리',
+  [ClubAffiliation.SMALL_GROUP]: '소모임',
 };
 
 export enum UserRole {

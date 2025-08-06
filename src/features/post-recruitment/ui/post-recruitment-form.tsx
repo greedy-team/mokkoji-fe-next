@@ -10,7 +10,7 @@ import cn from '@/shared/lib/utils';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
-import { postRecruitmentForm } from '../api/postRecruitmentForm';
+import postRecruitmentForm from '../api/postRecruitmentForm';
 import isFormValid from '../util/isFormVaild';
 
 interface ClubInfoProp {
@@ -80,7 +80,7 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
       const { id, imageUrls } = response.data;
 
       await Promise.all(
-        imageUrls.map((url, idx) =>
+        imageUrls.map((url: string, idx: number) =>
           fetch(url, {
             method: 'PUT',
             headers: {

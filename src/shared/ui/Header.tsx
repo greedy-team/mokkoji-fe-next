@@ -41,7 +41,7 @@ async function Header() {
           <span>Mokkoji</span>
         </Link>
         <nav className="scrollbar-hide flex h-full items-center gap-4 overflow-auto whitespace-nowrap">
-          <NavButton label="전체 동아리" href="/club/all" />
+          <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           {role &&

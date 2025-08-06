@@ -10,6 +10,6 @@ export const publicRoutes = [
   '/register',
   '/favorite',
   '/club/all',
-  '/recruit',
+  '/recruit/:path*',
   '/support',
 ];

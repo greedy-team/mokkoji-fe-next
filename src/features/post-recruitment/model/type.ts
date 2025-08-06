@@ -29,7 +29,18 @@ export interface StateProp {
 }
 
 export type Action =
-  | { type: 'UPDATE_FIELD'; name: keyof RecruitmentFormData; value: string }
+  | {
+      type: 'UPDATE_FIELD';
+      name: keyof RecruitmentFormData;
+      value: string | string[];
+    }
   | { type: 'VALIDATE_FIELD'; name: keyof RecruitmentFormData }
   | { type: 'UPDATE_IMAGE'; file: File }
   | { type: 'RESET_FORM' };
+
+export interface RecruitmentResponse {
+  data: {
+    id: number;
+    imageUrls: string[];
+  };
+}

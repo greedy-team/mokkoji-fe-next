@@ -12,8 +12,8 @@ import {
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
-import reducer, { initialState } from '../model/reducer/clubFormReducer';
 import isFormValid from '../util/isFormVaild';
+import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
 const fields: FormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
@@ -23,7 +23,7 @@ const fields: FormField[] = [
   { label: '인스타그램', name: 'instagram', type: 'input' },
 ];
 
-interface ClubNameProp {
+interface ClubInfoProp {
   clubInfo?: ClubInfoType;
   accessToken?: string;
   clubId?: number;
@@ -33,13 +33,13 @@ function getKeyByValue(obj: Record<string, string>, value: string) {
   return Object.keys(obj).find((key) => obj[key] === value);
 }
 
-function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
+function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  console.log(clubInfo);
+
   useEffect(() => {
     if (clubInfo) {
       dispatch({

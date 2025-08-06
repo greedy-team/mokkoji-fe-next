@@ -54,7 +54,7 @@ function ManageModal({
             <h1 className="text-xl">
               {menu === 'register'
                 ? '정보를 등록/수정할 동아리를 선택해주세요.'
-                : '동아리 모집 공고를 작성할 동아리를 선택해주세요.'}
+                : '모집 공고를 작성할 동아리를 선택해주세요.'}
             </h1>
             <div className="flex flex-wrap gap-2">
               {manageClubInfo.map((club) => (
@@ -67,7 +67,11 @@ function ManageModal({
                   className="hover:border-[#00D451]"
                 >
                   <Link
-                    href={`/club-register/${club.clubId}`}
+                    href={
+                      menu === 'register'
+                        ? `/club-register/${club.clubId}`
+                        : `/post-recruitment/${club.clubId}`
+                    }
                     onClick={onClose}
                   >
                     {club.clubName}

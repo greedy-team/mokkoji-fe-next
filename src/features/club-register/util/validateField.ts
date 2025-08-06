@@ -12,7 +12,7 @@ function validateField(name: keyof ClubFormData, value: string): string {
     return '올바른 인스타그램 계정을 입력해주세요.';
   }
 
-  if (name === 'leaderId' && !/^[0-9]{8}$/.test(value)) {
+  if (name === 'clubMasterStudentId' && !/^[0-9]{8}$/.test(value)) {
     return '동아리 회장의 학번 8자리를 입력해주세요.';
   }
 

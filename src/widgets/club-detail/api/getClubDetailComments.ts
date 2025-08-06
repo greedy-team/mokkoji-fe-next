@@ -1,5 +1,5 @@
 import serverApi from '@/shared/api/server-api';
-import { CommentType } from '../model/type';
+import { CommentType } from '../../recruit-detail/model/type';
 
 interface CommentsResponse {
   data: {

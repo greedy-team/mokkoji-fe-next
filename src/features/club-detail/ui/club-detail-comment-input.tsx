@@ -8,17 +8,17 @@ import revalidateComments from '@/app/actions/revalidate-comments';
 import StarRating from './rating-component';
 import { postComment } from '../api/postComment';
 
-interface RecruitDetailCommentInputProps {
+interface ClubDetailCommentInputProps {
   clubId: number;
   count: number;
   accessToken?: string;
 }
 
-function RecruitDetailCommentInput({
+function ClubDetailCommentInput({
   clubId,
   count,
   accessToken,
-}: RecruitDetailCommentInputProps) {
+}: ClubDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -89,4 +89,4 @@ function RecruitDetailCommentInput({
   );
 }
 
-export default RecruitDetailCommentInput;
+export default ClubDetailCommentInput;

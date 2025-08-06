@@ -1,4 +1,4 @@
-import RecruitDetailPage from '@/views/club/ui/recruit-detail-page';
+import RecruitDetailPage from '@/views/recruit/ui/recruit-detail-page';
 import { DetailParams } from '@/shared/model/type';
 
 function Page({ params }: DetailParams) {

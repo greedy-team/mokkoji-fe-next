@@ -1,14 +1,15 @@
-import RecruitDetailComment from '@/features/recruit-detail/ui/recruit-detail-comment';
-import RecruitDetailCommentInput from '@/features/recruit-detail/ui/recruit-detail-comment-input';
+import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
 import { auth } from '@/auth';
+
+import { CommentType } from '@/widgets/recruit-detail/model/type';
+import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
 import getClubDetailComments from '../api/getClubDetailComments';
-import { CommentType } from '../model/type';
 
 interface CommentWidgetProps {
   clubId: number;
 }
 
-async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
+async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
   const session = await auth();
   const accessToken = session?.accessToken;
   let commentList: CommentType[] = [];
@@ -20,12 +21,12 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
 
   return (
     <section className="mt-13 w-full">
-      <RecruitDetailCommentInput
+      <ClubDetailCommentInput
         clubId={clubId}
         count={commentList.length}
         accessToken={accessToken}
       />
-      <RecruitDetailComment
+      <ClubDetailComment
         comments={commentList}
         accessToken={accessToken}
         clubId={clubId}
@@ -34,4 +35,4 @@ async function RecruitDetailCommentWidget({ clubId }: CommentWidgetProps) {
   );
 }
 
-export default RecruitDetailCommentWidget;
+export default ClubDetailCommentWidget;

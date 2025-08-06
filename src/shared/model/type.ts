@@ -59,8 +59,8 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
-  [ClubAffiliation.CENTRAL_CLUB]: '중앙 동아리',
-  [ClubAffiliation.DEPARTMENT_CLUB]: '가인준 동아리',
+  [ClubAffiliation.CENTRAL_CLUB]: '중앙동아리',
+  [ClubAffiliation.DEPARTMENT_CLUB]: '가인준동아리',
 };
 
 export enum UserRole {

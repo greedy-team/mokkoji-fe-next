@@ -44,12 +44,17 @@ async function Header() {
           <NavButton label="전체 동아리" href="/club/all" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
-          {role && accessToken && role !== UserRole.NORMAL && (
-            <HeaderManageModal
-              manageClubInfo={manageClubInfo}
-              menu="register"
-            />
-          )}
+          {role &&
+            accessToken &&
+            role !== UserRole.NORMAL &&
+            (role === UserRole.CLUB_ADMIN || role === UserRole.GREEDY_ADMIN ? (
+              <NavButton label="동아리 등록" href="/club-register" />
+            ) : (
+              <HeaderManageModal
+                manageClubInfo={manageClubInfo}
+                menu="register"
+              />
+            ))}
           {role && accessToken && role !== UserRole.NORMAL && (
             <HeaderManageModal
               manageClubInfo={manageClubInfo}

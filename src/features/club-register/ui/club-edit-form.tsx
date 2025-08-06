@@ -4,7 +4,11 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
-import { ClubInfoType } from '@/shared/model/type';
+import {
+  ClubAffiliationLabel,
+  ClubCategoryLabel,
+  ClubInfoType,
+} from '@/shared/model/type';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
@@ -25,21 +29,26 @@ interface ClubNameProp {
   clubId?: number;
 }
 
+function getKeyByValue(obj: Record<string, string>, value: string) {
+  return Object.keys(obj).find((key) => obj[key] === value);
+}
+
 function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
-
+  console.log(clubInfo);
   useEffect(() => {
     if (clubInfo) {
       dispatch({
         type: 'UPDATE_MULTIPLE_FIELDS',
         payload: {
           name: clubInfo.name,
-          category: clubInfo.category,
-          affiliation: clubInfo.affiliation,
+          category: getKeyByValue(ClubCategoryLabel, clubInfo.category) || '',
+          affiliation:
+            getKeyByValue(ClubAffiliationLabel, clubInfo.affiliation) || '',
           description: clubInfo.description ?? '',
           instagram: clubInfo.instagram ?? '',
         },
@@ -87,23 +96,21 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
       return;
     }
 
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('category', formData.category);
-    data.append('affiliation', formData.affiliation);
-    data.append('description', formData.description);
-    data.append('instagram', formData.instagram);
-
-    if (formData.logo) {
-      data.append('logo', formData.logo);
-    }
+    const data = {
+      name: formData.name,
+      category: formData.category,
+      affiliation: formData.affiliation,
+      description: formData.description,
+      instagram: formData.instagram,
+      logo: formData.logo ?? '',
+    };
 
     try {
       const res = await patchClubInfo(clubId, data, accessToken);
-      const { updateLog, deleteLog } = res.data;
+      const { updateLogo, deleteLogo } = res.data;
 
-      if (logoFile && updateLog) {
-        await fetch(updateLog, {
+      if (logoFile && updateLogo) {
+        await fetch(updateLogo, {
           method: 'PUT',
           body: logoFile,
           headers: {
@@ -112,8 +119,8 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
         });
       }
 
-      if (deleteLog) {
-        await fetch(deleteLog, { method: 'DELETE' });
+      if (deleteLogo) {
+        await fetch(deleteLogo, { method: 'DELETE' });
       }
       toast.success('등록 성공!');
     } catch (err) {
@@ -122,7 +129,7 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubNameProp) {
     }
   };
 
-  const isValid = isFormValid({ formData, errors });
+  const isValid = isFormValid({ formData, errors }, fields);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -12,7 +12,7 @@ interface ClubItemProps {
 
 function ClubItem({ club }: ClubItemProps) {
   return (
-    <Link href={`/club/${club.id}`}>
+    <Link href={`/recruit/${club.id}`}>
       <article className="mb-3 cursor-pointer rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50">
         <header className="mb-2">
           <div className="flex items-center gap-2">

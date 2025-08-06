@@ -20,7 +20,8 @@ const buttonVariants = cva(
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00E804] to-[#33E3D0] text-xs lg:text-base font-semibold text-white shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105',
         disabled: 'rounded-md py-5 bg-[#CDCDCD] text-white text-base mt-6',
-        submit: 'rounded-md py-5 bg-[#00E457] text-white text-base mt-6',
+        submit:
+          'rounded-md py-5 bg-[#00E457] text-white text-base mt-6 hover:bg-[#00c94c] transition-colors duration-200',
         optionsSelected:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#00E457] bg-[#F1FFF6] transition-colors duration-300',
         options:

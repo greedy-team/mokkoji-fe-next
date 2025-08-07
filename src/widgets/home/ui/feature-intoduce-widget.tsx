@@ -5,12 +5,12 @@ import CommentTextCard from '@/entities/home/ui/comment-text-card';
 
 function FeatureIntroduceWidget() {
   return (
-    <div className="flex flex-col gap-20">
-      <div className="flex h-[550px] flex-col items-center pt-40">
+    <div className="flex flex-col gap-6 sm:gap-12 lg:gap-20">
+      <div className="flex h-auto flex-col items-center gap-8 pt-20 sm:pt-32 lg:h-[550px] lg:gap-0 lg:pt-40">
         <CommentTextCard />
         <CommentCard />
       </div>
-      <div className="relative flex h-[550px] w-full items-center pt-20">
+      <div className="relative flex h-auto w-full flex-col items-center gap-8 pt-30 sm:pt-16 lg:h-[550px] lg:flex-row lg:gap-0 lg:pt-20">
         <div
           className="pointer-events-none absolute top-0 left-0 z-20 h-full w-full"
           style={{
@@ -18,8 +18,15 @@ function FeatureIntroduceWidget() {
               'linear-gradient(to right, #F8FAFB 25%, transparent 60%)',
           }}
         />
-        <CategoryTextCard />
-        <CategoryCard />
+        <div className="flex w-full flex-col gap-8 lg:flex-row lg:gap-0">
+          <CategoryTextCard />
+          <div className="block lg:hidden">
+            <CategoryCard />
+          </div>
+        </div>
+        <div className="hidden lg:block">
+          <CategoryCard />
+        </div>
       </div>
     </div>
   );

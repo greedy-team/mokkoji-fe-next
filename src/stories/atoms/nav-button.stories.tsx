@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import NavButton from '../../shared/ui/nav-button';
 
 const meta: Meta<typeof NavButton> = {
-  title: 'Components/NavButton',
+  title: 'atoms/NavButton',
   component: NavButton,
   tags: ['autodocs'],
 };

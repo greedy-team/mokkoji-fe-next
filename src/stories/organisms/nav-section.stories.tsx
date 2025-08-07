@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import NavSection from '../../shared/ui/nav-section';
 
 const meta: Meta<typeof NavSection> = {
-  title: 'Components/NavSection',
+  title: 'organisms/NavSection',
   component: NavSection,
   tags: ['autodocs'],
   args: {

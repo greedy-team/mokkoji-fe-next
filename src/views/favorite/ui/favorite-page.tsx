@@ -14,8 +14,10 @@ async function FavoritePage({
 
   return (
     <>
-      <FavoriteItemSection page={page} size={size} />
-      <FavoriteDateSection />
+      <div className="max-w-6xl">
+        <FavoriteItemSection page={page} size={size} />
+        <FavoriteDateSection />
+      </div>
       <ScrollTopButton />
     </>
   );

@@ -4,8 +4,8 @@ import EmailChangeDialog from './email-change-dialog';
 async function MyPage() {
   const myInfo = await getMyInfo();
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <div className="w-[600px]">
+    <main className="flex flex-col items-center">
+      <div>
         <h1 className="text-xl font-bold">마이페이지</h1>
         <div className="mt-5 mb-7 w-full border-3 border-b border-[#F8F8F8]" />
         <ul className="space-y-4">

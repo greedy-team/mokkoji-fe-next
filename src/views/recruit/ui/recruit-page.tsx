@@ -8,10 +8,12 @@ import SharedLoading from '@/shared/ui/loading';
 function RecruitPage({ searchParams }: RecruitItemListProps) {
   return (
     <>
-      <Suspense fallback={<SharedLoading />}>
-        <RecruitHeader />
-        <RecruitItemList searchParams={searchParams} />
-      </Suspense>
+      <div className="max-w-6xl">
+        <Suspense fallback={<SharedLoading />}>
+          <RecruitHeader />
+          <RecruitItemList searchParams={searchParams} />
+        </Suspense>
+      </div>
       <ScrollTopButton />
     </>
   );

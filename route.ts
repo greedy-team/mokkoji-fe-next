@@ -9,7 +9,9 @@ export const publicRoutes = [
   '/',
   '/register',
   '/favorite',
-  '/club/all',
+  '/club',
+  '/club/:path*',
   '/recruit/:path*',
+  '/search/:path*',
   '/support',
 ];

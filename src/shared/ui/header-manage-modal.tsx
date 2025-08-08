@@ -15,7 +15,7 @@ function HeaderManageModal({ manageClubInfo, menu }: HeaderManageModalProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="flex h-full cursor-pointer items-center px-3.25 transition-colors duration-500 hover:border-b-2 hover:border-[#585858]">
+    <div className="flex h-full cursor-pointer items-center px-3 transition-colors duration-500 hover:border-b-2 hover:border-[#585858]">
       {status === 'authenticated' && session.user ? (
         <>
           <button

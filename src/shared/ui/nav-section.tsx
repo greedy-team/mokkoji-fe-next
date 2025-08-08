@@ -14,13 +14,13 @@ interface NavSectionProps {
 
 export default function NavSection({ href }: NavSectionProps) {
   return (
-    <div className="mr-12 flex flex-row gap-4">
+    <div className="flex flex-row lg:mr-12 lg:gap-4">
       {navItems.map(({ label, value }) => (
         <AffiliationNavButton
           key={value}
           label={label}
           href={`${href}?affiliation=${value}`}
-          navProps="pb-2 text-xs"
+          navProps="lg:pb-2 text-[10px] lg:text-xs"
           value={value}
         />
       ))}

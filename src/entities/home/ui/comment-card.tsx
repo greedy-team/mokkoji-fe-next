@@ -9,28 +9,31 @@ function CommentCard() {
           <Image
             src="/main/불면증염소.svg"
             alt="댓글 이미지 1"
-            width={400}
-            height={400}
+            width={230}
+            height={230}
+            className="lg:h-[400px] lg:w-[400px]"
           />
         </div>
       </AnimateOnView>
       <AnimateOnView animation="reveal-1">
-        <div className="absolute top-[35%] left-[25%] z-10">
+        <div className="absolute top-[45%] left-[15%] z-10 lg:top-[35%] lg:left-[25%]">
           <Image
             src="/main/격투기선수.svg"
             alt="댓글 이미지 2"
-            width={500}
-            height={500}
+            width={300}
+            height={300}
+            className="lg:h-[400px] lg:w-[400px]"
           />
         </div>
       </AnimateOnView>
       <AnimateOnView animation="reveal-2">
-        <div className="absolute top-[5%] left-[45%] z-20">
+        <div className="absolute top-[5%] left-[30%] z-20 lg:left-[45%]">
           <Image
             src="/main/졸린사자.svg"
             alt="댓글 이미지 2"
-            width={500}
-            height={500}
+            width={300}
+            height={300}
+            className="lg:h-[400px] lg:w-[400px]"
           />
         </div>
       </AnimateOnView>

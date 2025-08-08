@@ -2,17 +2,17 @@ import Image from 'next/image';
 
 function HomeSearch() {
   return (
-    <div className="group relative w-[619px]">
+    <div className="group relative mx-auto w-full max-w-[619px]">
       <form
         action="/search"
         method="GET"
-        className="flex items-center justify-between gap-1 pb-2 text-xl"
+        className="flex items-center justify-between gap-1 pb-2 text-base sm:text-lg lg:text-xl"
       >
         <input
           type="text"
           name="q"
           placeholder="어떤 동아리를 찾고 계신가요?"
-          className="w-[90%] py-5 indent-2 outline-none focus:placeholder-gray-300"
+          className="w-[90%] py-3 indent-2 text-sm outline-none focus:placeholder-gray-300 sm:py-4 sm:text-base lg:py-5"
         />
         <button type="submit">
           <Image
@@ -20,7 +20,7 @@ function HomeSearch() {
             alt="검색"
             width={25}
             height={25}
-            className="cursor-pointer"
+            className="h-5 w-5 cursor-pointer sm:h-6 sm:w-6 lg:h-6 lg:w-6"
           />
         </button>
       </form>

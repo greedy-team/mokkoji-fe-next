@@ -24,6 +24,10 @@ function MoblieHeader({
     setIsMenuOpen((prev) => !prev);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <>
       <button
@@ -40,20 +44,37 @@ function MoblieHeader({
         )}
       >
         <nav className="flex flex-col gap-4 py-4">
-          <NavButton label="전체 동아리" href="/club/all" />
-          <NavButton label="모집 공고" href="/recruit" />
-          <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
+          <NavButton
+            label="전체 동아리"
+            href="/club/all"
+            onItemClick={closeMenu}
+          />
+          <NavButton
+            label="모집 공고"
+            href="/recruit"
+            onItemClick={closeMenu}
+          />
+          <NavButton
+            label="즐겨찾기"
+            href="/favorite?page=1&size=6"
+            onItemClick={closeMenu}
+          />
 
           {sessionRole &&
             sessionAccessToken &&
             sessionRole !== UserRole.NORMAL &&
             (sessionRole === UserRole.CLUB_ADMIN ||
             sessionRole === UserRole.GREEDY_ADMIN ? (
-              <NavButton label="동아리 등록" href="/club-register" />
+              <NavButton
+                label="동아리 등록"
+                href="/club-register"
+                onItemClick={closeMenu}
+              />
             ) : (
               <HeaderManageModal
                 manageClubInfo={manageClubInfo}
                 menu="register"
+                onItemClick={closeMenu}
               />
             ))}
           {sessionRole &&
@@ -62,9 +83,10 @@ function MoblieHeader({
               <HeaderManageModal
                 manageClubInfo={manageClubInfo}
                 menu="recruitment"
+                onItemClick={closeMenu}
               />
             )}
-          <NavButton label="고객센터" href="/support" />
+          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
         </nav>
       </div>
     </>

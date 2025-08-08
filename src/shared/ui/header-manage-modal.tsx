@@ -8,9 +8,14 @@ import { ManageClub } from '../model/type';
 interface HeaderManageModalProps {
   manageClubInfo: ManageClub[];
   menu: string;
+  onItemClick?: () => void;
 }
 
-function HeaderManageModal({ manageClubInfo, menu }: HeaderManageModalProps) {
+function HeaderManageModal({
+  manageClubInfo,
+  menu,
+  onItemClick,
+}: HeaderManageModalProps) {
   const { data: session, status } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,7 +24,12 @@ function HeaderManageModal({ manageClubInfo, menu }: HeaderManageModalProps) {
       {status === 'authenticated' && session.user ? (
         <>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              if (onItemClick) {
+                onItemClick();
+              }
+            }}
             className="cursor-pointer whitespace-nowrap"
           >
             {menu === 'register' ? '동아리 등록' : '모집 공고 작성'}

@@ -10,11 +10,11 @@ import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 async function HomePage() {
   return (
     <>
-      <div className="px-5 lg:px-[25%]">
+      <div className="mt-20 px-5 lg:px-[25%]">
         <HomeHeader />
         <HomeSearchWidget />
       </div>
-      <div className="mb-10 flex h-[72px] justify-center">
+      <div className="mt-30 mb-30 flex h-[72px] justify-center lg:mt-0 lg:mb-10">
         <HomeDownButton />
       </div>
       <div className="px-[10%]">

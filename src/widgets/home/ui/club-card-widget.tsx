@@ -21,12 +21,12 @@ async function ClubCardWidget() {
     <div className="flex flex-col gap-40">
       <div
         id="scroll-target"
-        className="mb-40 flex h-[300px] items-center pt-20"
+        className="mb-10 flex h-fit flex-col items-center pt-30 lg:mb-40 lg:h-[300px] lg:flex-row lg:pt-20"
       >
         <ClubTextCard />
         <CardSilder data={shuffled.slice(0, 10)} />
       </div>
-      <div className="mb-60 flex h-[300px] w-full items-center pt-20">
+      <div className="mb-40 flex h-[550px] w-full flex-col-reverse items-center gap-6 pt-10 lg:mb-60 lg:h-[300px] lg:flex-row lg:gap-0 lg:pt-20">
         <RecruitVerticalCarousel data={shuffled.slice(10, 20)} />
         <RecruitTextCard />
       </div>

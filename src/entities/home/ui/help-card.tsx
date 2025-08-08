@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 function HelpCard() {
   return (
-    <div className="flex w-[50%] justify-center">
-      <div className="relative flex h-[260px] w-[400px] items-end justify-center rounded-2xl bg-[#D2FBD9]">
+    <div className="flex w-full justify-center lg:w-[50%]">
+      <div className="relative flex h-[260px] w-[400px] scale-80 items-end justify-center rounded-2xl bg-[#D2FBD9] lg:scale-100">
         <AnimateOnView animation="laptop">
           <Image
             src="/main/help.svg"

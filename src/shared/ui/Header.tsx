@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
@@ -11,7 +11,6 @@ import NavButton from './nav-button';
 import { ManageClub, UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
 import getClubManageInfo from '../api/manage-api';
-
 
 async function Header() {
   const session = await auth();
@@ -46,7 +45,7 @@ async function Header() {
           <span>Mokkoji</span>
         </Link>
         <nav className="hidden h-full flex-1 items-center justify-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
-           <NavButton label="전체 동아리" href="/club" />
+          <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           {role &&

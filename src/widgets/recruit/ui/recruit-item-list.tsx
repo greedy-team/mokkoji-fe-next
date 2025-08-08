@@ -22,7 +22,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
         <li key={item.id}>
           <Link href={`/recruit/${item.id}`}>
             <RecruitItem
-              title={item.title || ''}
+              title={item.club.name || ''}
               startDate={item.recruitStart}
               endDate={item.recruitEnd}
               description={item.club.description}

@@ -54,7 +54,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[250px] w-full overflow-hidden perspective-[1200px] sm:h-[280px] lg:h-[300px] lg:w-[50%]"
+      className="relative h-[300px] w-[50%] overflow-hidden perspective-[1200px]"
     >
       <FadeEgde variant="top" />
       <FadeEgde variant="bottom" />
@@ -86,9 +86,9 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${radius}px)`,
               }}
             >
-              <div className="mx-auto h-[140px] w-[280px] rounded-lg bg-white p-3 shadow-[0_0_8px_rgba(0,0,0,0.2)] sm:h-[160px] sm:w-[300px] sm:p-4">
-                <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4 sm:gap-4">
-                  <Avatar className="size-8 sm:size-10">
+              <div className="mx-auto h-[160px] w-[300px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)]">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <Avatar className="size-10">
                     <AvatarImage src={item.logo} />
                     <AvatarFallback>{item.name}</AvatarFallback>
                   </Avatar>
@@ -96,16 +96,14 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                     <span className="text-[8px] font-bold text-[#474747]">
                       모집 기간 • {item.recruitStartDate}~{item.recruitEndDate}
                     </span>
-                    <h1 className="text-xs font-bold sm:text-sm">
-                      {item.name}
-                    </h1>
+                    <h1 className="text-sm font-bold">{item.name}</h1>
                   </div>
                   <div
                     className={cn(
                       status === '모집 중'
                         ? 'bg-[#00E457] text-white'
                         : 'bg-[#E9E7E7] text-[#9C9C9C]',
-                      'rounded-full px-2 py-1 text-[8px] sm:text-[10px]',
+                      'rounded-full px-2 py-1 text-[10px]',
                     )}
                   >
                     {status}

@@ -26,6 +26,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(0);
   const rafRef = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,19 +43,28 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
       rafRef.current = requestAnimationFrame(animate);
     };
 
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     window.addEventListener('scroll', handleScroll, { passive: true });
     animate();
 
     return () => {
+      window.removeEventListener('resize', checkMobile);
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafRef.current!);
     };
   }, []);
 
+  const currentRadius = isMobile ? 180 : radius;
+
   return (
     <div
       ref={containerRef}
-      className="relative h-[250px] w-full overflow-hidden perspective-[1200px] sm:h-[280px] lg:h-[300px] lg:w-[50%]"
+      className="relative h-[50%] w-full overflow-hidden perspective-[1200px] lg:h-[300px] lg:w-[50%]"
     >
       <FadeEgde variant="top" />
       <FadeEgde variant="bottom" />
@@ -83,20 +93,20 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                 'absolute top-1/2 left-0 w-full -translate-y-1/2 transform-3d',
               )}
               style={{
-                transform: `rotateX(${rotateX}deg) translateZ(${radius}px)`,
+                transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <div className="mx-auto h-[140px] w-[280px] rounded-lg bg-white p-3 shadow-[0_0_8px_rgba(0,0,0,0.2)] sm:h-[160px] sm:w-[300px] sm:p-4">
-                <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4 sm:gap-4">
-                  <Avatar className="size-8 sm:size-10">
+              <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <Avatar className="size-8 lg:size-10">
                     <AvatarImage src={item.logo} />
                     <AvatarFallback>{item.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-1 flex-col">
-                    <span className="text-[8px] font-bold text-[#474747]">
+                    <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
                       모집 기간 • {item.recruitStartDate}~{item.recruitEndDate}
                     </span>
-                    <h1 className="text-xs font-bold sm:text-sm">
+                    <h1 className="text-xs font-bold lg:text-sm">
                       {item.name}
                     </h1>
                   </div>
@@ -105,13 +115,15 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                       status === '모집 중'
                         ? 'bg-[#00E457] text-white'
                         : 'bg-[#E9E7E7] text-[#9C9C9C]',
-                      'rounded-full px-2 py-1 text-[8px] sm:text-[10px]',
+                      'rounded-full px-2 py-1 text-[6px] lg:text-[10px]',
                     )}
                   >
                     {status}
                   </div>
                 </div>
-                <p className="p-1 text-xs text-gray-600">{item.description}</p>
+                <p className="line-clamp-1 overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
+                  {item.description}
+                </p>
               </div>
             </div>
           );

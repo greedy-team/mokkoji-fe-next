@@ -38,18 +38,20 @@ function FAQList() {
   };
 
   return (
-    <div className="mt-10 w-full space-y-6">
-      <h2 className="text-2xl font-bold text-[#20E86C]">FAQ</h2>
+    <div className="mt-6 w-full space-y-4 px-4 sm:mt-8 sm:space-y-6 sm:px-0 lg:mt-10">
+      <h2 className="text-lg font-bold text-[#20E86C] sm:text-xl lg:text-2xl">
+        FAQ
+      </h2>
       {faqData.map((item, idx) => (
-        <div key={item.question} className="border-b pb-4">
+        <div key={item.question} className="border-b pb-3 sm:pb-4">
           <button
-            className="w-full text-left text-sm font-semibold transition hover:text-[#20E86C]"
+            className="w-full text-left text-xs font-semibold transition hover:text-[#20E86C] sm:text-sm lg:text-base"
             onClick={() => toggle(idx)}
           >
             <span>Q. {item.question}</span>
           </button>
           {openIndex === idx && item.answer && (
-            <p className="mt-5 max-w-[500px] text-xs leading-relaxed font-semibold whitespace-pre-line text-[000000]">
+            <p className="mt-3 max-w-full text-xs leading-relaxed font-semibold whitespace-pre-line text-[#000000] sm:mt-4 sm:text-sm lg:mt-5 lg:max-w-[500px]">
               <span className="font-bold">A. </span>
               {item.answer}
             </p>

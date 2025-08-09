@@ -1,16 +1,14 @@
-'use client';
-
 import Link from 'next/link';
 import React from 'react';
+import Image from 'next/image';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
-import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
 import NavButton from './nav-button';
 import { ManageClub, UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
 import getClubManageInfo from '../api/manage-api';
+import MoblieHeader from './moblie-header';
 
 async function Header() {
   const session = await auth();
@@ -23,7 +21,7 @@ async function Header() {
       const res = await getClubManageInfo(accessToken);
       manageClubInfo = res.data.clubs;
     } catch (e) {
-      console.error('Failed to fetch manage clubs', e);
+      console.error('잠시 후 다시 시도해주세요.');
     }
   }
 
@@ -44,7 +42,7 @@ async function Header() {
           />
           <span>Mokkoji</span>
         </Link>
-        <nav className="hidden h-full flex-1 items-center justify-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
+        <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
           <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
@@ -67,33 +65,16 @@ async function Header() {
           )}
           <NavButton label="고객센터" href="/support" />
         </nav>
-
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
           <HeaderLogin />
           <HeaderSearch />
-
-          {/* 모바일 햄버거 메뉴 버튼 */}
-          <button
-            onClick={toggleMenu}
-            className="rounded-md p-2 hover:bg-gray-100 md:hidden"
-          >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <MoblieHeader
+            sessionRole={role}
+            sessionAccessToken={accessToken}
+            manageClubInfo={manageClubInfo}
+          />
         </div>
       </header>
-
-      {/* 모바일 메뉴 오버레이 */}
-      {isMenuOpen && (
-        <div className="fixed top-[60px] right-0 left-0 z-40 border-t border-gray-100 bg-white shadow-lg md:hidden">
-          <nav className="flex flex-col py-4">
-            <NavButton label="전체 동아리" href="/club/all" />
-            <NavButton label="모집 공고" href="/recruit" />
-            <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
-            <NavButton label="동아리 등록" href="/club-register" />
-            <NavButton label="고객센터" href="/support" />
-          </nav>
-        </div>
-      )}
     </>
   );
 }

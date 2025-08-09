@@ -14,13 +14,12 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
   } catch (error) {
     return <ErrorBoundaryUi />;
   }
-  console.log('data', data);
 
   return (
     <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {data?.recruitments?.map((item) => (
         <li key={item.id}>
-          <Link href={`/recruit/${item.id}`}>
+          <Link href={`/club/${item.id}`}>
             <RecruitItem
               title={item.club.name || ''}
               startDate={item.recruitStart}

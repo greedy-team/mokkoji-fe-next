@@ -60,11 +60,15 @@ function Header() {
       {isMenuOpen && (
         <div className="fixed top-[60px] right-0 left-0 z-40 border-t border-gray-100 bg-white shadow-lg md:hidden">
           <nav className="flex flex-col py-4">
-            <NavButton label="전체 동아리" href="/club/all" />
-            <NavButton label="모집 공고" href="/recruit" />
-            <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
-            <NavButton label="동아리 등록" href="/club-register" />
-            <NavButton label="고객센터" href="/support" />
+            <NavButton label="전체 동아리" href="/club/all" isMobile />
+            <NavButton label="모집 공고" href="/recruit" isMobile />
+            <NavButton
+              label="즐겨찾기"
+              href="/favorite?page=1&size=6"
+              isMobile
+            />
+            <NavButton label="동아리 등록" href="/club-register" isMobile />
+            <NavButton label="고객센터" href="/support" isMobile />
           </nav>
         </div>
       )}

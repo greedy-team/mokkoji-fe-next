@@ -9,8 +9,9 @@ interface Props {
 
 function AnimateOnView({ children, animation }: Props) {
   const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.8,
+    triggerOnce: false,
+    threshold: 0,
+    rootMargin: '0px 0px -100px 0px',
   });
 
   return (

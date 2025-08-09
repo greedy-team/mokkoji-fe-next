@@ -7,6 +7,7 @@ import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
+import ky from 'ky';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
@@ -79,21 +80,22 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
 
       const { id, imageUrls } = response.data;
 
-      await Promise.all(
-        imageUrls.map((url: string, idx: number) =>
-          fetch(url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': imageFiles[idx].type,
-            },
-            body: imageFiles[idx],
-          }),
-        ),
-      );
-
+      if (imageUrls && Array.isArray(imageUrls)) {
+        await Promise.all(
+          imageUrls.map((url: string, idx: number) =>
+            ky.put(url, {
+              headers: {
+                'Content-Type': imageFiles[idx].type,
+              },
+              body: imageFiles[idx],
+            }),
+          ),
+        );
+      } else {
+        toast.error('서버 응답에 imageUrls가 없거나 올바른 형식이 아닙니다.');
+      }
       toast.success('모집 공고가 성공적으로 업로드되었습니다!');
     } catch (error) {
-      console.error('업로드 실패:', error);
       toast.error('업로드 중 오류가 발생했습니다.');
     }
   };

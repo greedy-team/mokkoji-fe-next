@@ -7,6 +7,7 @@ import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
+import ky from 'ky';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
@@ -82,8 +83,7 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
       if (imageUrls && Array.isArray(imageUrls)) {
         await Promise.all(
           imageUrls.map((url: string, idx: number) =>
-            fetch(url, {
-              method: 'PUT',
+            ky.put(url, {
               headers: {
                 'Content-Type': imageFiles[idx].type,
               },

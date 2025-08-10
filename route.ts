@@ -14,4 +14,5 @@ export const publicRoutes = [
   '/recruit/:path*',
   '/search/:path*',
   '/support',
+  '/test/:path*',
 ];

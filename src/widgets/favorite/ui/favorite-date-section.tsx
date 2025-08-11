@@ -41,9 +41,9 @@ function FavoriteDateSection() {
       <h1 className="mt-7 mb-7 text-base font-bold text-[#00E457]">
         모집 일정
       </h1>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-col gap-2 lg:flex-row">
         <CustomCalendar value={value} setValue={setValue} data={data} />
-        <div className="flex flex-col gap-4">
+        <div className="mt-2 flex flex-col gap-4 lg:mt-0 lg:ml-4 lg:w-[300px]">
           <RecruitFavoriteList data={data} />
           <RecruitDeadlineSoonList data={data} />
         </div>

@@ -10,7 +10,7 @@ async function ClubDetailPage({ params }: DetailParams) {
   const data = await getClubDetail(id);
 
   return (
-    <>
+    <div className="max-w-[85%] min-w-[75%]">
       <ClubDetailHeader
         title={data.name}
         category={data.category}
@@ -22,10 +22,10 @@ async function ClubDetailPage({ params }: DetailParams) {
       />
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
-        className="mb-3 max-w-4xl text-xs leading-[1.4] whitespace-pre-wrap text-black"
+        className="mb-3 text-xs leading-[1.4] whitespace-pre-wrap text-black"
       />
       <ClubDetailCommentWidget clubId={Number(id)} />
-    </>
+    </div>
   );
 }
 

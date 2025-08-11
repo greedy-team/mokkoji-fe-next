@@ -44,7 +44,7 @@ async function SearchResults({ keyword }: SearchResultsProps) {
   if (!keyword) return null;
 
   return (
-    <main className="flex w-[650px] flex-col">
+    <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-8 mb-4">
         <span className="font-bold text-[#00E457]">{clubs.length}건</span>
         <span className="text-black">의 검색결과</span>

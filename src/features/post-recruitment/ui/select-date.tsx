@@ -82,7 +82,7 @@ export default function SelectDate({
   };
 
   return (
-    <div className="inline-flex items-center gap-4 rounded-md border-2 px-4 py-3 text-sm text-gray-700 focus-within:border-[#00E457]">
+    <div className="flex items-center justify-center gap-1 rounded-md border-2 py-3 text-xs text-gray-700 focus-within:border-[#00E457] lg:gap-4 lg:px-4 lg:text-sm">
       <div className="flex items-center gap-1">
         <input
           type="text"
@@ -95,7 +95,7 @@ export default function SelectDate({
               e.target.value.replace(/[^0-9]/g, '').slice(0, 4),
             )
           }
-          className="w-[40px] text-right focus:outline-none"
+          className="w-[30px] text-right focus:outline-none lg:w-[40px]"
         />
         <span>년 /</span>
         <input
@@ -107,7 +107,7 @@ export default function SelectDate({
             const valid = Math.min(Number(raw), 12).toString();
             handleDateChange('start', 'month', valid);
           }}
-          className="w-[25px] text-right focus:outline-none"
+          className="w-[22px] text-right focus:outline-none lg:w-[25px]"
         />
         <span>월 /</span>
         <input
@@ -121,7 +121,7 @@ export default function SelectDate({
             const valid = dayNum === 0 ? '' : dayNum.toString();
             handleDateChange('start', 'day', valid);
           }}
-          className="w-[25px] text-right focus:outline-none"
+          className="w-[18px] text-right focus:outline-none lg:w-[25px]"
         />
         <span>일</span>
       </div>
@@ -138,7 +138,7 @@ export default function SelectDate({
               e.target.value.replace(/[^0-9]/g, '').slice(0, 4),
             )
           }
-          className="w-[40px] text-right focus:outline-none"
+          className="w-[30px] text-right focus:outline-none lg:w-[40px]"
         />
         <span>년 /</span>
         <input
@@ -150,7 +150,7 @@ export default function SelectDate({
             const valid = Math.min(Number(raw), 12).toString();
             handleDateChange('end', 'month', valid);
           }}
-          className="w-[25px] text-right focus:outline-none"
+          className="w-[22px] text-right focus:outline-none lg:w-[25px]"
         />
         <span>월 /</span>
         <input
@@ -164,7 +164,7 @@ export default function SelectDate({
             const valid = dayNum === 0 ? '' : dayNum.toString();
             handleDateChange('end', 'day', valid);
           }}
-          className="w-[25px] text-right focus:outline-none"
+          className="w-[18px] text-right focus:outline-none lg:w-[25px]"
         />
         <span>일</span>
       </div>

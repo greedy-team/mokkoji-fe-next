@@ -22,7 +22,7 @@ async function ClubEditWidget({ params }: DetailParams) {
   }
 
   return (
-    <div className="w-[30%]">
+    <div className="w-[90%] lg:w-[30%]">
       <h1 className="my-6 text-2xl font-bold">동아리 정보 수정</h1>
       <ClubEditForm
         clubInfo={clubInfo}

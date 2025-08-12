@@ -35,7 +35,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[370px]! w-[700px]! rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] p-3! text-gray-800"
+        className="h-[310px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] p-3! text-gray-800 lg:h-[350px] lg:w-[700px]!"
         nextLabel=">"
         prevLabel="<"
         navigationLabel={formatNavigation}

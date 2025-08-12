@@ -1,12 +1,26 @@
-// components/RecruitItem.stories.tsx
-
 import type { Meta, StoryObj } from '@storybook/react';
+import { SessionProvider } from 'next-auth/react';
 import RecruitItem from '../../entities/recruit/ui/recruit-item';
 
 const meta: Meta<typeof RecruitItem> = {
-  title: 'pages/recruit/RecruitItem',
+  title: 'molecules/RecruitItem',
   component: RecruitItem,
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <SessionProvider
+        session={{
+          user: {
+            name: '홍길동',
+            email: 'test@example.com',
+          },
+          expires: '2099-01-01T00:00:00.000Z',
+        }}
+      >
+        <Story />
+      </SessionProvider>
+    ),
+  ],
   args: {
     title: '모각코 모집합니다',
     startDate: '2025-07-01',

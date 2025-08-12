@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 function HomeSearch() {
   return (
-    <div className="group relative w-[619px]">
+    <div className="group relative w-[90%] lg:w-[80%]">
       <form
         action="/search"
         method="GET"
-        className="flex items-center justify-between gap-1 pb-2 text-xl"
+        className="text:md flex items-center justify-between gap-1 pb-2 lg:text-xl"
       >
         <input
           type="text"

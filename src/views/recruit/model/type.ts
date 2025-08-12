@@ -12,6 +12,7 @@ export interface RecruitmentDetail {
   isFavorite: boolean;
   instagram: string;
   category: string;
+  clubName: string;
 }
 
 export interface RecruitmentDetailResponse {

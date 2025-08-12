@@ -1,10 +1,10 @@
 function HomeHeader() {
   return (
     <header className="flex flex-col items-center py-8 text-[#2E2E2E]">
-      <h1 className="mb-4 w-fit bg-[linear-gradient(to_right,_#00E804_0%,_#3AE2EB_73%,_#3AA1EB_100%)] bg-clip-text p-4 text-8xl font-bold text-transparent">
+      <h1 className="mb-4 w-fit bg-[linear-gradient(to_right,_#00E804_0%,_#3AE2EB_73%,_#3AA1EB_100%)] bg-clip-text p-4 text-5xl font-bold text-transparent lg:text-8xl">
         Club, set, go!
       </h1>
-      <p className="text-3xl font-bold">
+      <p className="text-md font-bold lg:text-3xl">
         세종대의 다양한{' '}
         <span className="bg-[linear-gradient(to_right,_#00E804_0%,_#3AE2EB_73%,_#3AA1EB_100%)] bg-clip-text text-transparent">
           동아리

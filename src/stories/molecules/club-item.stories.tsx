@@ -1,10 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import ClubItem from '@/entities/club/ui/club-item';
+import { SessionProvider } from 'next-auth/react';
 
 const meta: Meta<typeof ClubItem> = {
-  title: 'Pages/club/ClubItem',
+  title: 'molecules/ClubItem',
   component: ClubItem,
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <SessionProvider
+        session={{
+          user: {
+            name: '홍길동',
+            email: 'test@example.com',
+          },
+          expires: '2099-01-01T00:00:00.000Z',
+        }}
+      >
+        <Story />
+      </SessionProvider>
+    ),
+  ],
   args: {
     title: '모각코 모집합니다',
     description:

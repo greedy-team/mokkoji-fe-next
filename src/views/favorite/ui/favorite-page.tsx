@@ -14,7 +14,7 @@ async function FavoritePage({
 
   return (
     <>
-      <div className="max-w-6xl">
+      <div className="max-w-6xl px-2">
         <FavoriteItemSection page={page} size={size} />
         <FavoriteDateSection />
       </div>

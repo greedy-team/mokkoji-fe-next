@@ -4,7 +4,7 @@ import { Button } from '../../shared/ui/button';
 import KakaoIcon from '../../shared/ui/kakao-icon';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'atoms/Button',
   component: Button,
   args: {
     children: 'Click Me',

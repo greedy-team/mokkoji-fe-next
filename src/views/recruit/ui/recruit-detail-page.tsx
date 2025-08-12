@@ -9,12 +9,10 @@ async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getRecruitDetail(id);
 
-  console.log('RecruitDetailPage', data);
-
   return (
     <>
       <RecruitDetailHeader
-        title={data.title}
+        title={data.clubName}
         category={data.category}
         instagram={data.instagram}
         clubId={Number(id)}

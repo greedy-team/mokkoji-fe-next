@@ -13,11 +13,11 @@ function Search() {
         />
         <h1 className="text-2xl font-bold">무엇을 도와드릴까요?</h1>
       </header>
-      <div className="group relative w-[70%] lg:w-[38%]">
+      <div className="group relative w-[80%] lg:w-[38%]">
         <input
           type="text"
           placeholder="궁금한 점을 검색해주세요"
-          className="w-full rounded-none pr-10 pb-6 outline-none focus:ring-0 focus:outline-none"
+          className="w-full rounded-none pr-10 pb-6 indent-2 outline-none focus:ring-0 focus:outline-none"
         />
         <Image
           src="/header/search.svg"

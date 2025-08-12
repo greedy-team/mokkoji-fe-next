@@ -1,5 +1,6 @@
 'use client';
 
+import cn from '@/shared/lib/utils';
 import { useState } from 'react';
 
 interface FAQItem {
@@ -38,7 +39,10 @@ function FAQList() {
       {faqData.map((item, idx) => (
         <div key={item.question} className="border-b pb-4">
           <button
-            className="w-full text-left text-sm font-semibold transition hover:text-[#20E86C]"
+            className={cn(
+              'w-full text-left text-sm font-semibold transition hover:text-[#20E86C]',
+              openIndex === idx ? 'text-[#20E86C]' : 'text-black',
+            )}
             onClick={() => toggle(idx)}
           >
             <span>Q. {item.question}</span>

@@ -27,7 +27,7 @@ function HeaderLogin() {
   };
 
   return (
-    <span className="relative rounded-sm bg-[#F4F4F4] p-1.5 text-xs font-light text-[#9C9C9C] lg:text-sm">
+    <span className="absolute right-[22%] rounded-sm bg-[#F4F4F4] p-1.5 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
       {status === 'authenticated' && session?.user ? (
         <div
           className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"

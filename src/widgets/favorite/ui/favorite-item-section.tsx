@@ -14,6 +14,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
   const session = await auth();
   let data;
   let login;
+
   if (!session) {
     data = { clubs: [] };
     login = false;
@@ -25,12 +26,13 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
     }
     login = true;
   }
+
   return login ? (
     <>
       <h1 className="mb-5 w-full text-base font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.pagination?.totalElements}개
       </h1>
-      <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid w-auto grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
         {data.clubs.map((item) => (
           <Link href={`/club/${item.id}`} key={item.id}>
             <ClubItem

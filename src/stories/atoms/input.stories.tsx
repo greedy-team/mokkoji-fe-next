@@ -1,9 +1,10 @@
+// src/shared/ui/input.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import Textarea from './textarea';
+import Input from '../../shared/ui/input';
 
-const meta: Meta<typeof Textarea> = {
-  title: 'Components/Textarea',
-  component: Textarea,
+const meta: Meta<typeof Input> = {
+  title: 'atoms/Input',
+  component: Input,
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -14,18 +15,18 @@ const meta: Meta<typeof Textarea> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Textarea>;
+type Story = StoryObj<typeof Input>;
 
 export const Default: Story = {
   args: {
-    placeholder: '기본 텍스트에어리어',
+    placeholder: '기본 입력',
     variant: 'default',
   },
 };
 
 export const Error: Story = {
   args: {
-    placeholder: '에러 상태',
+    placeholder: '에러 상태 입력',
     variant: 'error',
   },
 };

@@ -21,6 +21,13 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
       },
       true,
     );
+    if (data.length === 0) {
+      return (
+        <p className="mt-30 text-center text-sm font-bold text-[#00E457]">
+          해당 동아리의 모집 공고가 없습니다.
+        </p>
+      );
+    }
   } catch (error) {
     return <ClubCustomErrorBoundary />;
   }

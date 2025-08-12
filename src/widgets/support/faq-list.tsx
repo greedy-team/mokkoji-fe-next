@@ -1,5 +1,6 @@
 'use client';
 
+import cn from '@/shared/lib/utils';
 import { useState } from 'react';
 
 interface FAQItem {
@@ -23,11 +24,6 @@ const faqData: FAQItem[] = [
     answer:
       '동아리 정보 수정이 필요한 경우, 관리자 페이지 또는 고객센터를 통해 요청하실 수 있습니다. 등록자 본인이 직접 수정이 불가능한 경우 운영팀에 문의해 주세요.',
   },
-  {
-    question: '커뮤니티 게시글은 누구나 작성할 수 있나요?',
-    answer:
-      '커뮤니티 게시글은 로그인한 사용자라면 누구나 자유롭게 작성하실 수 있습니다. 단, 게시판 성격에 따라 일부 제한이 있을 수 있으며, 운영 정책에 따라 관리될 수 있습니다.',
-  },
 ];
 
 function FAQList() {
@@ -43,7 +39,10 @@ function FAQList() {
       {faqData.map((item, idx) => (
         <div key={item.question} className="border-b pb-4">
           <button
-            className="w-full text-left text-sm font-semibold transition hover:text-[#20E86C]"
+            className={cn(
+              'w-full text-left text-sm font-semibold transition hover:text-[#20E86C]',
+              openIndex === idx ? 'text-[#20E86C]' : 'text-black',
+            )}
             onClick={() => toggle(idx)}
           >
             <span>Q. {item.question}</span>

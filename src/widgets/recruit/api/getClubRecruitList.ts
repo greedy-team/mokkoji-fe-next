@@ -1,20 +1,32 @@
 import authApi from '@/shared/api/auth-api';
-import { ApiResponse } from '@/shared/model/type';
+import { ApiResponse, ClubAffiliation } from '@/shared/model/type';
 import { RecruitmentResponse } from '../model/type';
 
 async function getClubRecruitList({
   page,
   size,
+  affiliation,
 }: {
   page: number;
   size: number;
+  affiliation?: ClubAffiliation;
 }) {
+  const rawParams = {
+    page,
+    size,
+    affiliation,
+  };
+
+  const searchParams = new URLSearchParams();
+
+  Object.entries(rawParams).forEach(([key, value]) => {
+    if (value !== undefined) {
+      searchParams.set(key, String(value));
+    }
+  });
   const response: ApiResponse<RecruitmentResponse> = await authApi
     .get('recruitments', {
-      searchParams: {
-        page,
-        size,
-      },
+      searchParams,
     })
     .json();
   return response.data;

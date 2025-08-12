@@ -13,11 +13,11 @@ function Search() {
         />
         <h1 className="text-2xl font-bold">무엇을 도와드릴까요?</h1>
       </header>
-      <div className="relative w-[500px]">
+      <div className="group relative w-[80%] lg:w-[38%]">
         <input
           type="text"
           placeholder="궁금한 점을 검색해주세요"
-          className="w-full rounded-none border-0 border-b border-b-[#000000] pr-10 pb-5 focus:ring-0 focus:outline-none"
+          className="w-full rounded-none pr-10 pb-6 indent-2 outline-none focus:ring-0 focus:outline-none"
         />
         <Image
           src="/header/search.svg"
@@ -26,6 +26,8 @@ function Search() {
           height={20}
           className="absolute top-1/3 right-2 -translate-y-1/2 cursor-pointer"
         />
+        <span className="pointer-events-none absolute bottom-2 left-0 h-[3px] w-full bg-gray-200" />
+        <span className="pointer-events-none absolute bottom-2 left-1/2 h-[3px] w-0 -translate-x-1/2 transform bg-gradient-to-r from-[#00E804] via-[#3AE2EB] to-[#3AA1EB] transition-all duration-300 ease-in-out group-focus-within:w-full" />
       </div>
     </div>
   );

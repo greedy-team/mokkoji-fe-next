@@ -23,11 +23,11 @@ function HeaderLogin() {
   const handleMouseLeave = () => {
     hideTimerRef.current = setTimeout(() => {
       setShowDropdown(false);
-    }, 1000);
+    }, 3000);
   };
 
   return (
-    <span className="relative rounded-sm bg-[#F4F4F4] p-1.5 text-sm font-light text-[#9C9C9C]">
+    <span className="absolute right-[22%] rounded-sm bg-[#F4F4F4] p-1.5 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
       {status === 'authenticated' && session?.user ? (
         <div
           className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"
@@ -45,14 +45,14 @@ function HeaderLogin() {
             <>
               <Link
                 href="/my"
-                className="absolute top-full left-0 mt-1 h-[35px] w-full min-w-[120px] rounded-lg bg-white pt-2.5 text-center text-xs text-[#9C9C9C] shadow-md hover:bg-[#00c94c] hover:text-black"
+                className="absolute top-full left-0 z-50 mt-1 h-[35px] w-full min-w-[120px] rounded-lg bg-white pt-2.5 text-center text-xs text-[#9C9C9C] shadow-md hover:bg-[#00c94c] hover:text-black"
               >
                 <span className="ml-2">마이페이지</span>
               </Link>
               <Button
                 onClick={() => signOut()}
                 variant="submit"
-                className="absolute top-15 left-0 mt-1 w-full min-w-[120px] rounded-lg bg-white p-1 text-xs text-[#9C9C9C] shadow-md hover:text-black"
+                className="absolute top-15 left-0 z-50 mt-1 w-full min-w-[120px] rounded-lg bg-white p-1 text-xs text-[#9C9C9C] shadow-md hover:text-black"
               >
                 <Image
                   src="/header/logout.svg"

@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 function Search() {
   return (
-    <div className="mt-6 flex w-full flex-col items-center sm:mt-8 lg:mt-10">
+    <div className="mt-20 flex w-full flex-col items-center px-5 lg:mt-4 lg:px-0">
       <header className="mb-6 flex items-center gap-2 sm:mb-8 lg:mb-10">
         <Image
           src="/support/ghost.svg"
@@ -15,7 +15,7 @@ function Search() {
           무엇을 도와드릴까요?
         </h1>
       </header>
-      <div className="relative w-full max-w-[500px] px-4 sm:px-0">
+      <div className="relative w-full max-w-[500px]">
         <input
           type="text"
           placeholder="궁금한 점을 검색해주세요"

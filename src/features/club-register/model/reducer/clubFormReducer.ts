@@ -7,9 +7,9 @@ export const initialState: StateProp = {
     category: '',
     affiliation: '',
     description: '',
-    leaderId: '',
+    clubMasterStudentId: '',
     instagram: '',
-    logo: undefined,
+    logo: '',
   },
   errors: {},
 };
@@ -32,10 +32,13 @@ export default function reducer(state: StateProp, action: Action): StateProp {
         errors: { ...state.errors, [name]: errorMsg },
       };
     }
-    case 'UPDATE_LOGO': {
+    case 'UPDATE_MULTIPLE_FIELDS': {
       return {
         ...state,
-        formData: { ...state.formData, logo: action.file },
+        formData: {
+          ...state.formData,
+          ...action.payload,
+        },
       };
     }
     case 'RESET_FORM': {

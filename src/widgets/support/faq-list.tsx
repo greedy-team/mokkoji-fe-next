@@ -38,26 +38,36 @@ function FAQList() {
   };
 
   return (
-    <div className="mt-6 w-full space-y-4 px-4 sm:mt-8 sm:space-y-6 sm:px-0 lg:mt-10">
+    <div className="mt-10 w-full space-y-4 px-5 sm:space-y-6 lg:px-0">
       <h2 className="text-lg font-bold text-[#20E86C] sm:text-xl lg:text-2xl">
-        FAQ
+        자주 묻는 질문
       </h2>
-      {faqData.map((item, idx) => (
-        <div key={item.question} className="border-b pb-3 sm:pb-4">
-          <button
-            className="w-full text-left text-xs font-semibold transition hover:text-[#20E86C] sm:text-sm lg:text-base"
-            onClick={() => toggle(idx)}
+      <div className="space-y-4 sm:space-y-6">
+        {faqData.map((item, idx) => (
+          <div
+            key={item.question}
+            className="border-b border-gray-200 pb-4 sm:pb-6"
           >
-            <span>Q. {item.question}</span>
-          </button>
-          {openIndex === idx && item.answer && (
-            <p className="mt-3 max-w-full text-xs leading-relaxed font-semibold whitespace-pre-line text-[#000000] sm:mt-4 sm:text-sm lg:mt-5 lg:max-w-[500px]">
-              <span className="font-bold">A. </span>
-              {item.answer}
-            </p>
-          )}
-        </div>
-      ))}
+            <button
+              className="w-full text-left text-sm font-semibold transition hover:text-[#20E86C] sm:text-base lg:text-lg"
+              onClick={() => toggle(idx)}
+            >
+              <span className="flex items-start gap-2">
+                <span className="font-bold text-[#20E86C]">Q.</span>
+                <span className="text-left">{item.question}</span>
+              </span>
+            </button>
+            {openIndex === idx && item.answer && (
+              <div className="mt-4 sm:mt-6">
+                <p className="text-sm leading-relaxed text-gray-700 sm:text-base lg:text-lg">
+                  <span className="font-bold text-[#20E86C]">A. </span>
+                  {item.answer}
+                </p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

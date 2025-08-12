@@ -38,20 +38,13 @@ function FAQList() {
   };
 
   return (
-    <main className="flex w-[85%] flex-col lg:w-[43%]">
-      <section className="mt-8 mb-4">
-        <h2 className="text-xl font-bold text-[#20E86C] lg:text-2xl">
-          자주 묻는 질문
-        </h2>
-      </section>
-      <section className="space-y-3">
+    <div className="w-full">
+      <h2 className="text-2xl font-bold text-[#20E86C]">자주 묻는 질문</h2>
+      <div className="mt-8 w-full space-y-6">
         {faqData.map((item, idx) => (
-          <div
-            key={item.question}
-            className="cursor-pointer rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50"
-          >
+          <div key={item.question} className="border-b border-gray-200 pb-6">
             <button
-              className="w-full text-left text-base font-semibold transition hover:text-[#20E86C] lg:text-lg"
+              className="w-full text-left text-xl font-semibold transition hover:text-[#20E86C]"
               onClick={() => toggle(idx)}
             >
               <span className="flex items-start gap-2">
@@ -60,8 +53,8 @@ function FAQList() {
               </span>
             </button>
             {openIndex === idx && item.answer && (
-              <div className="mt-4">
-                <p className="text-sm leading-relaxed text-gray-600 lg:text-base">
+              <div className="mt-6">
+                <p className="text-base leading-relaxed text-gray-700">
                   <span className="font-bold text-[#20E86C]">A. </span>
                   {item.answer}
                 </p>
@@ -69,8 +62,8 @@ function FAQList() {
             )}
           </div>
         ))}
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
 

@@ -26,7 +26,7 @@ function RecruitItem({
   clubId,
 }: RecruitItemProps) {
   return (
-    <div className="relative h-[170px] w-auto rounded-sm bg-[#F8F8F8] p-5">
+    <div className="relative min-h-[180px] w-auto rounded-sm bg-[#F8F8F8] p-5">
       <div className="mb-8 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Avatar className="size-12">
@@ -44,7 +44,7 @@ function RecruitItem({
         />
       </div>
       <div className="flex flex-row justify-between">
-        <div className="w-[280px] text-xs break-words whitespace-normal">
+        <div className="pr-7 text-xs break-words whitespace-normal">
           {description}
         </div>
       </div>

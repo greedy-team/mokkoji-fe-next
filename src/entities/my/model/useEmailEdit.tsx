@@ -36,12 +36,12 @@ function useEmailEdit(initialEmail?: string) {
     setSubmitting(true);
     try {
       await putEmail(email, status, session?.accessToken);
-      toast.success('이메일이 변경되었습니다.');
+      toast.success('이메일이 변경되었습니다.', { toastId: 'unique-toast' });
       setOpen(false);
       router.refresh();
     } catch (error) {
       console.error(error);
-      toast.error('이메일 변경에 실패했습니다.');
+      toast.error('이메일 변경에 실패했습니다.', { toastId: 'unique-toast' });
     }
   };
 

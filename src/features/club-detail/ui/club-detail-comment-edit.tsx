@@ -36,18 +36,20 @@ function ClubDetailCommentEdit({
     e.preventDefault();
 
     if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요.');
+      toast.warn('로그인을 먼저 해주세요.', { toastId: 'unique-toast' });
       return;
     }
 
     if (!value || rating === 0) {
-      toast.warn('내용과 별점을 모두 입력해주세요.');
+      toast.warn('내용과 별점을 모두 입력해주세요.', {
+        toastId: 'unique-toast',
+      });
       return;
     }
 
     try {
       await patchComment(commentId, value, rating, accessToken);
-      toast.success('댓글이 수정되었습니다.');
+      toast.success('댓글이 수정되었습니다.', { toastId: 'unique-toast' });
       setValue('');
       setRating(0);
       onCancel();

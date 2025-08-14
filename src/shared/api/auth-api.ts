@@ -1,3 +1,4 @@
+import 'server-only';
 import ky from 'ky';
 import { auth } from '@/auth';
 import ErrorMessage from '../lib/error-message';

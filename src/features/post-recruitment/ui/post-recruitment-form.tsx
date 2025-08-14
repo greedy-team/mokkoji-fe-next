@@ -8,6 +8,7 @@ import Textarea from '@/shared/ui/textarea';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
 import ky from 'ky';
+import { useRouter } from 'next/navigation';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
@@ -16,7 +17,6 @@ import isFormValid from '../util/isFormVaild';
 
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
-  accessToken?: string;
   clubId?: number;
 }
 
@@ -29,10 +29,12 @@ const fields: FormField[] = [
   { label: '이미지', name: 'imageUrls', type: 'image' },
 ];
 
-function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
+function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const { formData, errors } = state;
+  const router = useRouter();
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -64,42 +66,40 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!clubId) {
-      toast.warn('잠시 후 다시 시도해주세요.');
-      return;
-    }
-
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요.');
-      return;
-    }
-
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
-      const response = await postRecruitmentForm(formData, accessToken, clubId);
+      const res = await ky.post(`/api/dev/recruitments/${clubId}`, {
+        json: formData,
+      });
 
-      const { id, imageUrls } = response.data;
+      if (!res.ok) throw new Error('업로드 실패');
 
-      if (imageUrls && Array.isArray(imageUrls)) {
+      const data: any = await res.json();
+
+      if (Array.isArray(data.imageUrls)) {
         await Promise.all(
-          imageUrls.map((url: string, idx: number) =>
+          data.imageUrls.map((url: string, i: number) =>
             ky.put(url, {
-              headers: {
-                'Content-Type': imageFiles[idx].type,
-              },
-              body: imageFiles[idx],
+              body: imageFiles[i],
+              headers: { 'Content-Type': imageFiles[i].type },
             }),
           ),
         );
-      } else {
-        toast.error('서버 응답에 imageUrls가 없거나 올바른 형식이 아닙니다.');
       }
-      toast.success('모집 공고가 성공적으로 업로드되었습니다!');
-    } catch (error) {
-      toast.error('업로드 중 오류가 발생했습니다.');
+      toast.success('모집 공고가 성공적으로 업로드되었습니다!', {
+        toastId: 'unique-toast',
+      });
+      router.replace('/recruit');
+    } catch (err: any) {
+      console.log(err);
+      toast.error('업로드 중 오류가 발생했습니다.', {
+        toastId: 'unique-toast',
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
   const isValid = isFormValid({ formData, errors }, fields);
 
   return (
@@ -112,6 +112,7 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
         name="name"
         variant={errors.title ? 'error' : 'default'}
         value={clubInfo?.name}
+        onChange={() => undefined}
       />
       <label htmlFor="title" className="mt-4 flex gap-2 font-bold">
         제목
@@ -163,6 +164,7 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
       <Input
         id="recruitForm"
         name="recruitForm"
+        placeholder="https://example.com"
         value={formData.recruitForm}
         variant={errors.recruitForm ? 'error' : 'default'}
         onChange={(e) => handleChange('recruitForm', e.target.value)}
@@ -215,7 +217,12 @@ function PostRecruitmentForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
           </ul>
         )}
       </div>
-      <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
+      <Button
+        type="submit"
+        variant={isValid ? 'submit' : 'disabled'}
+        size="lg"
+        disabled={!isValid || isSubmitting}
+      >
         등록하기
       </Button>
     </form>

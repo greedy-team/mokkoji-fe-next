@@ -1,17 +1,13 @@
-import serverApi from '@/shared/api/server-api';
+import authApi from '@/shared/api/auth-api';
 import { RecruitmentFormData, RecruitmentResponse } from '../model/type';
 
 export default async function postRecruitmentForm(
   data: RecruitmentFormData,
-  accessToken: string,
   clubId: number,
 ): Promise<RecruitmentResponse> {
-  const response = await serverApi
+  const response = await authApi
     .post(`recruitments/${clubId}`, {
       json: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
     })
     .json<RecruitmentResponse>();
 

@@ -8,14 +8,20 @@ import { getToken } from 'next-auth/jwt';
 async function authAPi() {
   const reqLike = {
     headers: { cookie: (await headers()).get('cookie') ?? '' },
-  } as any;
+  };
 
   const jwt = await getToken({
     req: reqLike,
     secret: process.env.NEXT_AUTH_SECRET,
   });
 
-  const access = jwt?.accessToken as string | undefined;
+  if (!jwt) {
+    return ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    });
+  }
+
+  const access = jwt.accessToken;
 
   console.log('access', access);
 

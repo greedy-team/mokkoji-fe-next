@@ -119,6 +119,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     // TODO: 추후 타입 수정
     session: async ({ session, token }) => {
+      console.log('session', session);
       return {
         ...session,
         expiresAt: token.expiresAt,

@@ -1,7 +1,9 @@
+'use server';
+
 import authApi from '@/shared/api/auth-api';
 import { RecruitmentFormData, RecruitmentResponse } from '../model/type';
 
-export default async function postRecruitmentForm(
+async function postRecruitmentForm(
   data: RecruitmentFormData,
   clubId: number,
 ): Promise<RecruitmentResponse> {
@@ -15,3 +17,5 @@ export default async function postRecruitmentForm(
 
   return response;
 }
+
+export default postRecruitmentForm;

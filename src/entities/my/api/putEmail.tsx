@@ -1,14 +1,13 @@
-import serverApi from '@/shared/api/server-api';
+import authApi from '@/shared/api/auth-api';
 
-async function putEmail(email: string, status: string, accessToken?: string) {
-  if (status !== 'authenticated' || !accessToken) {
+async function putEmail(email: string, status: string) {
+  if (status !== 'authenticated') {
     throw new Error('인증되지 않은 사용자 입니다.');
   }
-  const response = await serverApi
+  const response = await (
+    await authApi()
+  )
     .put('users', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
       json: { email },
     })
     .json();

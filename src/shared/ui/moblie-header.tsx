@@ -54,7 +54,7 @@ function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
             href="/favorite?page=1&size=6"
             onItemClick={closeMenu}
           />
-
+          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
           {sessionRole &&
             sessionRole !== UserRole.NORMAL &&
             (sessionRole === UserRole.CLUB_ADMIN ||
@@ -78,7 +78,6 @@ function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
               onItemClick={closeMenu}
             />
           )}
-          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
         </nav>
       </div>
     </>

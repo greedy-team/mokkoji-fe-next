@@ -35,7 +35,7 @@ function useEmailEdit(initialEmail?: string) {
     }
     setSubmitting(true);
     try {
-      await putEmail(email, status, session?.accessToken);
+      await putEmail(email, status);
       toast.success('이메일이 변경되었습니다.', { toastId: 'unique-toast' });
       setOpen(false);
       router.refresh();

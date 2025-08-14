@@ -13,6 +13,7 @@ import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
 import isFormValid from '../util/isFormVaild';
+import postRecruitmentForm from '../api/postRecruitmentForm';
 
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
@@ -67,18 +68,15 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
+
     try {
-      const res = await ky.post(`/api/dev/recruitments/${clubId}`, {
-        json: formData,
-      });
+      const res = await postRecruitmentForm(formData, clubId!);
 
-      if (!res.ok) throw new Error('업로드 실패');
+      if (!res) throw new Error('업로드 실패');
 
-      const data: any = await res.json();
-
-      if (Array.isArray(data.imageUrls)) {
+      if (Array.isArray(res.data.imageUrls)) {
         await Promise.all(
-          data.imageUrls.map((url: string, i: number) =>
+          res.data.imageUrls.map((url: string, i: number) =>
             ky.put(url, {
               body: imageFiles[i],
               headers: { 'Content-Type': imageFiles[i].type },

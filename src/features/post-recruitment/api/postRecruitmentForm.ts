@@ -5,7 +5,9 @@ export default async function postRecruitmentForm(
   data: RecruitmentFormData,
   clubId: number,
 ): Promise<RecruitmentResponse> {
-  const response = await authApi
+  const response = await (
+    await authApi()
+  )
     .post(`recruitments/${clubId}`, {
       json: data,
     })

@@ -24,11 +24,7 @@ async function PostRecruitmentWidget({ params }: DetailParams) {
   return (
     <div className="w-[90%] lg:w-[30%]">
       <h1 className="text-2xl font-bold">모집 공고 작성</h1>
-      <PostRecruitmentForm
-        clubInfo={clubInfo}
-        accessToken={accessToken}
-        clubId={Number(id)}
-      />
+      <PostRecruitmentForm clubInfo={clubInfo} clubId={Number(id)} />
     </div>
   );
 }

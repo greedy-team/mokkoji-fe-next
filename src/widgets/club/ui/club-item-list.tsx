@@ -1,14 +1,14 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
-import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import getClubList from '@/widgets/recruit/api/getClubList';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
 async function ClubItemList({ searchParams }: RecruitItemListProps) {
   let data;
   try {
-    data = await getRecruitList(
+    data = await getClubList(
       {
         page: Number((await searchParams).page || 1),
         size: Number((await searchParams).size || 100),

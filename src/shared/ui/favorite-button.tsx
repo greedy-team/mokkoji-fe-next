@@ -22,14 +22,14 @@ function FavoriteButton({
   const { data: session, status } = useSession();
 
   const handleToggle = async () => {
-    if (status !== 'authenticated' || !session?.accessToken) {
+    if (status !== 'authenticated' || !session) {
       toast.dismiss();
       toast.error('로그인 후 이용하실 수 있습니다 .');
       return;
     }
     try {
       const headers = {
-        Authorization: `Bearer ${session?.accessToken}`,
+        Authorization: `Bearer ${session}`,
       };
 
       if (!favorite) {

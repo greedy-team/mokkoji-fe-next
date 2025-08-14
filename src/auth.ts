@@ -12,6 +12,7 @@ import UserInfoType from './entities/my/model/type';
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
+  trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',
   },
@@ -72,6 +73,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
           const rolesRes = await serverApi.get('users/roles', { headers });
           const rolesData: RoleResponse = await rolesRes.json();
+          console.log('token', token);
 
           return {
             ...token,
@@ -119,8 +121,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     session: async ({ session, token }) => {
       return {
         ...session,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
         expiresAt: token.expiresAt,
         user: token.user,
         role: token.role,

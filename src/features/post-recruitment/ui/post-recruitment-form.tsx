@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
-import postRecruitmentForm from '../api/postRecruitmentForm';
 import isFormValid from '../util/isFormVaild';
 
 interface ClubInfoProp {
@@ -112,7 +111,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         name="name"
         variant={errors.title ? 'error' : 'default'}
         value={clubInfo?.name}
-        onChange={() => undefined}
+        readOnly
       />
       <label htmlFor="title" className="mt-4 flex gap-2 font-bold">
         제목

@@ -1,5 +1,4 @@
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
-import { auth } from '@/auth';
 
 import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
@@ -10,26 +9,18 @@ interface CommentWidgetProps {
 }
 
 async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
-  const session = await auth();
-  const accessToken = session?.accessToken;
   let commentList: CommentType[] = [];
 
-  if (session?.accessToken) {
-    const data = await getClubDetailComments(clubId, session?.accessToken);
-    commentList = data.data.comments.reverse();
-  }
+  const data = await getClubDetailComments(clubId);
+  commentList = data.data.comments.reverse();
 
   return (
     <section className="mt-13 w-full">
-      <ClubDetailCommentInput
-        clubId={clubId}
-        count={commentList.length}
-        accessToken={accessToken}
-      />
+      <ClubDetailCommentInput clubId={clubId} count={commentList.length} />
       <ClubDetailComment
         comments={commentList}
-        accessToken={accessToken}
         clubId={clubId}
+        accessToken=""
       />
     </section>
   );

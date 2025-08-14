@@ -6,6 +6,7 @@ interface StarRatingProps {
   maxStars?: number;
   value: number;
   size: string;
+  disabled?: boolean;
   onChange: (rating: number) => void;
 }
 
@@ -13,6 +14,7 @@ function StarRating({
   maxStars = 5,
   value,
   size = 'large',
+  disabled,
   onChange,
 }: StarRatingProps) {
   const [hovered, setHovered] = useState(0);
@@ -37,7 +39,11 @@ function StarRating({
             key={starIndex}
             role="button"
             tabIndex={0}
-            className={cn('cursor-pointer', size === 'large' ? 'p-1' : 'p-0.5')}
+            className={cn(
+              'cursor-pointer',
+              size === 'large' ? 'p-1' : 'p-0.5',
+              disabled && 'cursor-not-allowed',
+            )}
             onMouseEnter={() => setHovered(starIndex)}
             onMouseLeave={() => setHovered(0)}
             onClick={() => onChange(starIndex)}

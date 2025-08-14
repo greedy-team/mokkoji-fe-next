@@ -22,7 +22,6 @@ function ClubDetailHeader({
   clubId,
   isFavorite,
 }: ClubDetailHeaderProps) {
-  console.log('isFavorite', isFavorite);
   return (
     <>
       <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">

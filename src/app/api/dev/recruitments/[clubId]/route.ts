@@ -5,7 +5,7 @@ import ky from 'ky';
 // eslint-disable-next-line import/prefer-default-export
 export async function POST(
   req: NextRequest,
-  { params }: { params: { clubId: string } },
+  { params }: { params: Promise<{ clubId: string }> },
 ) {
   const session = await auth();
   const token = (session as any)?.accessToken;
@@ -18,10 +18,13 @@ export async function POST(
   const body = await req.json();
 
   const out = await ky
-    .post(`https://www.mokkoji.o-r.kr/api/dev/recruitments/${params.clubId}`, {
-      json: body,
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    .post(
+      `https://www.mokkoji.o-r.kr/api/dev/recruitments/${(await params).clubId}`,
+      {
+        json: body,
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
     .json();
 
   return NextResponse.json(out, { status: 201 });

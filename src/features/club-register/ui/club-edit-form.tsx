@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import {
   ClubInfoType,
 } from '@/shared/model/type';
 import { useRouter } from 'next/navigation';
+import useDebouncedSubmit from '@/shared/model/useDebounceSubmit';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
@@ -40,8 +41,59 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  const onSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!clubId) {
+        toast.warn('조금 뒤에 다시 시도해주세요');
+        return;
+      }
+
+      const data = {
+        name: formData.name,
+        category: formData.category,
+        affiliation: formData.affiliation,
+        description: formData.description,
+        instagram: formData.instagram,
+        logo: formData.logo ?? '',
+      };
+      const res = await patchClubInfo(clubId, data);
+
+      if (!res.ok) {
+        toast.error(res.message);
+        return;
+      }
+
+      if (logoFile && res.data?.updateLogo) {
+        const resUpdateLogo = await ky.put(res.data.updateLogo, {
+          body: logoFile,
+          headers: {
+            'Content-Type': logoFile.type,
+          },
+        });
+        if (!resUpdateLogo.ok) {
+          toast.error('로고 업데이트 실패!');
+          return;
+        }
+      }
+
+      if (res.data?.deleteLogo) {
+        const resDeleteLogo = await ky.delete(res.data.deleteLogo);
+        if (!resDeleteLogo.ok) {
+          toast.error('로고 삭제 실패!');
+          return;
+        }
+      }
+      toast.success('등록 성공!');
+      router.replace('/club');
+    },
+    [clubId, formData, logoFile],
+  );
+
+  const { handleSubmit, isSubmitting } = useDebouncedSubmit(onSubmit);
 
   useEffect(() => {
     if (clubInfo) {
@@ -84,56 +136,6 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
 
   const handleBlur = (name: keyof ClubFormData) => {
     dispatch({ type: 'VALIDATE_FIELD', name });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!clubId) {
-      toast.warn('조금 뒤에 다시 시도해주세요');
-      return;
-    }
-
-    const data = {
-      name: formData.name,
-      category: formData.category,
-      affiliation: formData.affiliation,
-      description: formData.description,
-      instagram: formData.instagram,
-      logo: formData.logo ?? '',
-    };
-
-    setIsSubmitting(true);
-    const res = await patchClubInfo(clubId, data);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-
-    if (logoFile && res.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.updateLogo, {
-        body: logoFile,
-        headers: {
-          'Content-Type': logoFile.type,
-        },
-      });
-      if (!resUpdateLogo.ok) {
-        toast.error('로고 업데이트 실패!');
-        return;
-      }
-    }
-
-    if (res.data?.deleteLogo) {
-      const resDeleteLogo = await ky.delete(res.data.deleteLogo);
-      if (!resDeleteLogo.ok) {
-        toast.error('로고 삭제 실패!');
-        return;
-      }
-    }
-    toast.success('등록 성공!');
-    router.replace('/club');
-    setIsSubmitting(false);
   };
 
   const isValid = isFormValid({ formData, errors }, fields);

@@ -1,9 +1,10 @@
 'use client';
 
-import { useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
+import useDebouncedSubmit from '@/shared/model/useDebounceSubmit';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
@@ -22,31 +23,36 @@ function ClubRegisterForm() {
   const router = useRouter();
   const { formData, errors } = state;
 
+  const onSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      const data = {
+        name: formData.name,
+        category: formData.category,
+        affiliation: formData.affiliation,
+        clubMasterStudentId: formData.clubMasterStudentId,
+      };
+
+      const res = await postClubRegister(data);
+      if (!res.ok) {
+        toast.error(res.message);
+        return;
+      }
+      toast.success('등록 성공!');
+      router.replace('/club');
+    },
+    [formData],
+  );
+
+  const { handleSubmit, isSubmitting } = useDebouncedSubmit(onSubmit);
+
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
   const handleBlur = (name: keyof ClubFormData) => {
     dispatch({ type: 'VALIDATE_FIELD', name });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const data = {
-      name: formData.name,
-      category: formData.category,
-      affiliation: formData.affiliation,
-      clubMasterStudentId: formData.clubMasterStudentId,
-    };
-
-    const res = await postClubRegister(data);
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-    toast.success('등록 성공!');
-    router.replace('/club');
   };
 
   const isValid = isFormValid({ formData, errors }, fields);
@@ -72,7 +78,7 @@ function ClubRegisterForm() {
           />
         );
       })}
-      <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
+      <Button type="submit" disabled={isSubmitting || !isValid} size="lg">
         등록하기
       </Button>
     </form>

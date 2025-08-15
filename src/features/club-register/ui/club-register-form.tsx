@@ -2,6 +2,7 @@
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
@@ -18,6 +19,7 @@ const fields: FormField[] = [
 
 function ClubRegisterForm() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
   const { formData, errors } = state;
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
@@ -38,13 +40,13 @@ function ClubRegisterForm() {
       clubMasterStudentId: formData.clubMasterStudentId,
     };
 
-    try {
-      await postClubRegister(data);
-      toast.success('등록 성공!');
-    } catch (err) {
-      console.error(err);
-      toast.error('등록 실패!');
+    const res = await postClubRegister(data);
+    if (!res.ok) {
+      toast.error(res.message);
+      return;
     }
+    toast.success('등록 성공!');
+    router.replace('/club');
   };
 
   const isValid = isFormValid({ formData, errors }, fields);

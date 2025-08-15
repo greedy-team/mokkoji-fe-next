@@ -103,31 +103,37 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       logo: formData.logo ?? '',
     };
 
-    try {
-      setIsSubmitting(true);
-      const res = await patchClubInfo(clubId, data);
-      const { updateLogo, deleteLogo } = res.data;
+    setIsSubmitting(true);
+    const res = await patchClubInfo(clubId, data);
 
-      if (logoFile && updateLogo) {
-        await ky.put(updateLogo, {
-          body: logoFile,
-          headers: {
-            'Content-Type': logoFile.type,
-          },
-        });
-      }
-
-      if (deleteLogo) {
-        await ky.delete(deleteLogo);
-      }
-      toast.success('등록 성공!');
-      router.replace('/club');
-    } catch (err) {
-      console.error(err);
-      toast.error('등록 실패!');
-    } finally {
-      setIsSubmitting(false);
+    if (!res.ok) {
+      toast.error(res.message);
+      return;
     }
+
+    if (logoFile && res.data?.updateLogo) {
+      const resUpdateLogo = await ky.put(res.data.updateLogo, {
+        body: logoFile,
+        headers: {
+          'Content-Type': logoFile.type,
+        },
+      });
+      if (!resUpdateLogo.ok) {
+        toast.error('로고 업데이트 실패!');
+        return;
+      }
+    }
+
+    if (res.data?.deleteLogo) {
+      const resDeleteLogo = await ky.delete(res.data.deleteLogo);
+      if (!resDeleteLogo.ok) {
+        toast.error('로고 삭제 실패!');
+        return;
+      }
+    }
+    toast.success('등록 성공!');
+    router.replace('/club');
+    setIsSubmitting(false);
   };
 
   const isValid = isFormValid({ formData, errors }, fields);

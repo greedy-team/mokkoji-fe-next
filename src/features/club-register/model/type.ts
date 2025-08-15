@@ -42,5 +42,7 @@ export interface EditResponseField {
 }
 
 export interface EditResponse {
-  data: EditResponseField;
+  ok: boolean;
+  message: string;
+  data?: EditResponseField;
 }

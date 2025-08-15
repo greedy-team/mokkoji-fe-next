@@ -9,7 +9,7 @@ function useEmailEdit(initialEmail?: string) {
   const [email, setEmail] = useState(initialEmail ?? '');
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,6 +42,8 @@ function useEmailEdit(initialEmail?: string) {
     } catch (error) {
       console.error(error);
       toast.error('이메일 변경에 실패했습니다.', { toastId: 'unique-toast' });
+    } finally {
+      setSubmitting(false);
     }
   };
 

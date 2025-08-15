@@ -1,3 +1,5 @@
+'use server';
+
 import authApi from '@/shared/api/auth-api';
 
 async function putEmail(email: string, status: string) {

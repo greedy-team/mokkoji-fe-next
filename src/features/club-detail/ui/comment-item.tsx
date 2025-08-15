@@ -22,15 +22,12 @@ export default function CommentItem({
   ) => {
     e.preventDefault();
 
-    try {
-      await deleteComment(clubId, commentId);
-      toast.success('댓글이 삭제되었습니다.', { toastId: 'unique-toast' });
-    } catch (err) {
-      console.error(err);
-      toast.error('댓글 삭제 중 오류가 발생했습니다.', {
-        toastId: 'unique-toast',
-      });
+    const response = await deleteComment(clubId, commentId);
+    if (!response.ok) {
+      toast.error(response.message, { toastId: 'unique-toast' });
+      return;
     }
+    toast.success(response.message, { toastId: 'unique-toast' });
   };
 
   return (

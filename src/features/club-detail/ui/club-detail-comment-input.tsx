@@ -4,19 +4,17 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import { revalidateComments, postComment } from '../api/postComment';
+import { postComment } from '../api/postComment';
 import StarRating from './rating-component';
 
 interface ClubDetailCommentInputProps {
   clubId: number;
   count: number;
-  accessToken?: string;
 }
 
 function ClubDetailCommentInput({
   clubId,
   count,
-  accessToken,
 }: ClubDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
@@ -29,36 +27,22 @@ function ClubDetailCommentInput({
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요.', { toastId: 'unique-toast' });
-      return;
-    }
-
     if (!value || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.', {
         toastId: 'unique-toast',
       });
       return;
     }
-
-    try {
-      await postComment(clubId, value, rating);
-      toast.success('댓글이 등록되었습니다.', { toastId: 'unique-toast' });
-      setValue('');
-      setRating(0);
-      revalidateComments(clubId);
-    } catch (err) {
-      let errorMessage = '댓글 등록 중 오류가 발생했습니다.';
-      if (err instanceof Error) {
-        if (err.message === '권한이 없습니다.') {
-          errorMessage = '리뷰는 한 개만 작성 가능합니다!';
-        } else {
-          errorMessage = err.message;
-        }
-      }
-
-      toast.error(errorMessage);
+    setIsSubmitting(true);
+    const response = await postComment(clubId, value, rating);
+    if (!response.ok) {
+      toast.error(response.message, { toastId: 'unique-toast' });
+      return;
     }
+    toast.success(response.message, { toastId: 'unique-toast' });
+    setValue('');
+    setRating(0);
+    setIsSubmitting(false);
   };
 
   return (

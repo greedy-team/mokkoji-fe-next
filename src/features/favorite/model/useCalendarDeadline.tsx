@@ -2,16 +2,19 @@
 
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import { useState, useMemo } from 'react';
+import { FavoriteDeadLineItem } from './type';
 
 function useCalendarDeadline(
   data: FavoriteDateItem[],
   setValue: (date: Date) => void,
 ) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedClubs, setSelectedClubs] = useState<string[]>([]);
+  const [selectedClubs, setSelectedClubs] = useState<FavoriteDeadLineItem[]>(
+    [],
+  );
 
   const deadlineMap = useMemo(() => {
-    const map = new Map<string, string[]>();
+    const map = new Map<string, FavoriteDeadLineItem[]>();
     if (!data) {
       return map;
     }
@@ -20,7 +23,7 @@ function useCalendarDeadline(
       if (!map.has(dateKey)) {
         map.set(dateKey, []);
       }
-      map.get(dateKey)!.push(item.clubName);
+      map.get(dateKey)!.push({ clubId: item.clubId, clubName: item.clubName });
     });
 
     return map;

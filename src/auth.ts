@@ -5,9 +5,11 @@ import getTokenExpiration from './shared/lib/getTokenExpiration';
 import serverApi from './shared/api/server-api';
 import {
   LoginSuccessResponse,
+  ManageClubResponse,
   RoleResponse,
 } from './features/login/model/type';
 import UserInfoType from './entities/my/model/type';
+import { ManageClub, UserRole } from './shared/model/type';
 
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -73,8 +75,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
           const rolesRes = await serverApi.get('users/roles', { headers });
           const rolesData: RoleResponse = await rolesRes.json();
-          console.log('token', token);
-
+          let manageClubInfo: ManageClubResponse = { data: { clubs: [] } };
+          if (rolesData.data.role !== UserRole.NORMAL) {
+            const manageClubInfoRes = await serverApi.get(
+              'users/manage/clubs',
+              {
+                headers,
+              },
+            );
+            manageClubInfo = await manageClubInfoRes.json();
+          }
           return {
             ...token,
             accessToken: user.accessToken,
@@ -82,6 +92,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             expiresAt: expiredTime,
             user: user.user,
             role: rolesData.data.role,
+            manageClubInfo: manageClubInfo.data.clubs,
           };
         } catch (error) {
           console.error('[role fetch error]', error);
@@ -124,6 +135,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         expiresAt: token.expiresAt,
         user: token.user,
         role: token.role,
+        manageClubInfo: token.manageClubInfo,
       } as Session;
     },
     redirect: async ({ url, baseUrl }) => {

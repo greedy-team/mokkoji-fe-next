@@ -1,6 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import putEmail from '../api/putEmail';
 
@@ -9,7 +8,6 @@ function useEmailEdit(initialEmail?: string) {
   const [email, setEmail] = useState(initialEmail ?? '');
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const { status } = useSession();
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,17 +32,15 @@ function useEmailEdit(initialEmail?: string) {
       return;
     }
     setSubmitting(true);
-    try {
-      await putEmail(email, status);
-      toast.success('이메일이 변경되었습니다.', { toastId: 'unique-toast' });
-      setOpen(false);
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      toast.error('이메일 변경에 실패했습니다.', { toastId: 'unique-toast' });
-    } finally {
-      setSubmitting(false);
+    const response = await putEmail(email);
+    if (!response.ok) {
+      toast.error(response.message, { toastId: 'unique-toast' });
+      return;
     }
+    toast.success(response.message, { toastId: 'unique-toast' });
+    setOpen(false);
+    router.refresh();
+    setSubmitting(false);
   };
 
   return {

@@ -40,9 +40,8 @@ function StarRating({
             role="button"
             tabIndex={0}
             className={cn(
-              'cursor-pointer',
               size === 'large' ? 'p-1' : 'p-0.5',
-              disabled && 'cursor-not-allowed',
+              !disabled && 'cursor-pointer',
             )}
             onMouseEnter={() => setHovered(starIndex)}
             onMouseLeave={() => setHovered(0)}

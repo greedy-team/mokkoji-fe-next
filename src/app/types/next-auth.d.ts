@@ -9,6 +9,7 @@ declare module 'next-auth' {
     expiresAt?: number;
     user?: UserInfoType;
     role?: string;
+    manageClubInfo?: ManageClub[];
   }
 
   interface User {
@@ -17,13 +18,12 @@ declare module 'next-auth' {
     refreshToken?: string;
     expiresAt?: number;
     user?: UserInfoType;
+    manageClubInfo?: ManageClub[];
   }
 
   interface JWT {
     accessToken?: string;
     refreshToken?: string;
     expiresAt?: number;
-    user?: UserInfoType;
-    role?: string;
   }
 }

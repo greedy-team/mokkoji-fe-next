@@ -43,27 +43,28 @@ function ManageModal({
         </DialogHeader>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {manageClubInfo.map((club) => (
-            <Button
-              asChild
-              variant="options"
-              size="none"
-              key={club.clubId}
-              type="button"
-              className="hover:border-[#00D451]"
-            >
-              <Link
-                href={
-                  menu === 'register'
-                    ? `/club-register/${club.clubId}`
-                    : `/post-recruitment/${club.clubId}`
-                }
-                onClick={onClose}
+          {manageClubInfo.length > 0 &&
+            manageClubInfo.map((club) => (
+              <Button
+                asChild
+                variant="options"
+                size="none"
+                key={club.clubId}
+                type="button"
+                className="hover:border-[#00D451]"
               >
-                {club.clubName}
-              </Link>
-            </Button>
-          ))}
+                <Link
+                  href={
+                    menu === 'register'
+                      ? `/club-register/${club.clubId}`
+                      : `/post-recruitment/${club.clubId}`
+                  }
+                  onClick={onClose}
+                >
+                  {club.clubName}
+                </Link>
+              </Button>
+            ))}
         </div>
       </DialogContent>
     </Dialog>

@@ -5,24 +5,13 @@ import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
 import NavButton from './nav-button';
-import { ManageClub, UserRole } from '../model/type';
+import { UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
-import getClubManageInfo from '../api/manage-api';
 import MoblieHeader from './moblie-header';
 
 async function Header() {
   const session = await auth();
   const role = session?.role;
-
-  let manageClubInfo: ManageClub[] = [];
-  if (role && role !== UserRole.NORMAL) {
-    try {
-      const res = await getClubManageInfo();
-      manageClubInfo = res.data.clubs;
-    } catch (e) {
-      console.error('잠시 후 다시 시도해주세요.');
-    }
-  }
 
   return (
     <>
@@ -52,13 +41,13 @@ async function Header() {
               <NavButton label="동아리 등록" href="/club-register" />
             ) : (
               <HeaderManageModal
-                manageClubInfo={manageClubInfo}
+                manageClubInfo={session?.manageClubInfo || []}
                 menu="register"
               />
             ))}
           {role && role !== UserRole.NORMAL && (
             <HeaderManageModal
-              manageClubInfo={manageClubInfo}
+              manageClubInfo={session?.manageClubInfo || []}
               menu="recruitment"
             />
           )}
@@ -66,7 +55,10 @@ async function Header() {
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
           <HeaderLogin />
           <HeaderSearch />
-          <MoblieHeader sessionRole={role} manageClubInfo={manageClubInfo} />
+          <MoblieHeader
+            sessionRole={role}
+            manageClubInfo={session?.manageClubInfo || []}
+          />
         </div>
       </header>
     </>

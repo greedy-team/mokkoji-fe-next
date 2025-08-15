@@ -6,6 +6,7 @@ export interface ClubInputProps {
   onChange: (name: string, value: string) => void;
   error: string | undefined;
   onBlur: (name: keyof ClubFormData) => void;
+  placeholder?: string;
 }
 
 export interface ClubFormData {

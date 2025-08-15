@@ -3,21 +3,18 @@ import { toast } from 'react-toastify';
 import timeAgo from '@/entities/recruit-detail/util/timeAgo';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
 import StarRating from '@/entities/recruit-detail/ui/review-star';
-import revalidateComments from '@/app/actions/revalidate-comments';
 import { deleteComment } from '../api/postComment';
 
 interface CommentItemProps {
   clubId: number;
   comment: CommentType;
   onEdit: (commentId: number) => void;
-  accessToken?: string;
 }
 
 export default function CommentItem({
   clubId,
   comment,
   onEdit,
-  accessToken,
 }: CommentItemProps) {
   const handleDeleteComment = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -25,15 +22,9 @@ export default function CommentItem({
   ) => {
     e.preventDefault();
 
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요.');
-      return;
-    }
-
     try {
-      await deleteComment(commentId, accessToken);
+      await deleteComment(clubId, commentId);
       toast.success('댓글이 삭제되었습니다.', { toastId: 'unique-toast' });
-      revalidateComments(clubId);
     } catch (err) {
       console.error(err);
       toast.error('댓글 삭제 중 오류가 발생했습니다.', {

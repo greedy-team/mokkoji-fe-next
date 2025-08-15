@@ -45,6 +45,7 @@ async function Header() {
           <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
+          <NavButton label="고객센터" href="/support" />
           {role &&
             role !== UserRole.NORMAL &&
             (role === UserRole.CLUB_ADMIN || role === UserRole.GREEDY_ADMIN ? (
@@ -61,7 +62,6 @@ async function Header() {
               menu="recruitment"
             />
           )}
-          <NavButton label="고객센터" href="/support" />
         </nav>
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
           <HeaderLogin />

@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import revalidateComments from '@/app/actions/revalidate-comments';
+import { revalidateComments, postComment } from '../api/postComment';
 import StarRating from './rating-component';
-import { postComment } from '../api/postComment';
 
 interface ClubDetailCommentInputProps {
   clubId: number;
@@ -21,6 +20,7 @@ function ClubDetailCommentInput({
 }: ClubDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -42,7 +42,7 @@ function ClubDetailCommentInput({
     }
 
     try {
-      await postComment(clubId, value, rating, accessToken);
+      await postComment(clubId, value, rating);
       toast.success('댓글이 등록되었습니다.', { toastId: 'unique-toast' });
       setValue('');
       setRating(0);

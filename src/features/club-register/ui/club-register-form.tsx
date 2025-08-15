@@ -16,11 +16,7 @@ const fields: FormField[] = [
   { label: '동아리 회장 학번', name: 'clubMasterStudentId', type: 'input' },
 ];
 
-interface ClubNameProp {
-  accessToken?: string;
-}
-
-function ClubRegisterForm({ accessToken }: ClubNameProp) {
+function ClubRegisterForm() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
 
@@ -35,11 +31,6 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요!');
-      return;
-    }
-
     const data = {
       name: formData.name,
       category: formData.category,
@@ -48,7 +39,7 @@ function ClubRegisterForm({ accessToken }: ClubNameProp) {
     };
 
     try {
-      await postClubRegister(data, accessToken);
+      await postClubRegister(data);
       toast.success('등록 성공!');
     } catch (err) {
       console.error(err);

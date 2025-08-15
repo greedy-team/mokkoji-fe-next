@@ -1,3 +1,5 @@
+'use server';
+
 import authApi from '@/shared/api/auth-api';
 import { ClubInfoResponse, GetClubManageInfoResponse } from '../model/type';
 

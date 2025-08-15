@@ -23,8 +23,6 @@ async function authAPi() {
 
   const access = jwt.accessToken;
 
-  console.log('access', access);
-
   return ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
     hooks: {

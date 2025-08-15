@@ -1,23 +1,25 @@
-import serverApi from '@/shared/api/server-api';
+'use server';
+
+import authApi from '@/shared/api/auth-api';
+import { revalidatePath } from 'next/cache';
 
 export async function postComment(
   clubId: number,
   content: string,
   rate: number,
-  accessToken: string,
 ) {
   try {
-    const response = await serverApi
+    const response = await (
+      await authApi()
+    )
       .post(`comments/${clubId}`, {
         json: {
           content,
           rate,
         },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       })
       .json();
+    revalidatePath(`/recruit/${clubId}`);
 
     return response;
   } catch (error) {
@@ -27,24 +29,23 @@ export async function postComment(
 }
 
 export async function patchComment(
+  clubId: number,
   commentId: number,
   content: string,
   rate: number,
-  accessToken: string,
 ) {
   try {
-    const response = await serverApi
+    const response = await (
+      await authApi()
+    )
       .patch(`comments/${commentId}`, {
         json: {
           content,
           rate,
         },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       })
       .json();
-
+    revalidatePath(`/recruit/${clubId}`);
     return response;
   } catch (error) {
     console.error('댓글 수정 실패:', error);
@@ -52,19 +53,17 @@ export async function patchComment(
   }
 }
 
-export async function deleteComment(commentId: number, accessToken: string) {
+export async function deleteComment(clubId: number, commentId: number) {
   try {
-    const response = await serverApi
-      .delete(`comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .json();
-
+    const response = await (await authApi()).delete(`comments/${commentId}`);
+    revalidatePath(`/recruit/${clubId}`);
     return response;
   } catch (error) {
     console.error('댓글 삭제 실패:', error);
     throw error;
   }
+}
+
+export async function revalidateComments(clubId: number) {
+  revalidatePath(`/recruit/${clubId}`);
 }

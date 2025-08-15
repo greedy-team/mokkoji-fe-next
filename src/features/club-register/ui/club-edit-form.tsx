@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useReducer, useRef, useState } from 'react';
+import ky from 'ky';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
@@ -9,6 +10,7 @@ import {
   ClubCategoryLabel,
   ClubInfoType,
 } from '@/shared/model/type';
+import { useRouter } from 'next/navigation';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
@@ -25,7 +27,6 @@ const fields: FormField[] = [
 
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
-  accessToken?: string;
   clubId?: number;
 }
 
@@ -33,12 +34,14 @@ function getKeyByValue(obj: Record<string, string>, value: string) {
   return Object.keys(obj).find((key) => obj[key] === value);
 }
 
-function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
+function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (clubInfo) {
@@ -91,11 +94,6 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
       return;
     }
 
-    if (!accessToken) {
-      toast.warn('로그인을 먼저 해주세요!');
-      return;
-    }
-
     const data = {
       name: formData.name,
       category: formData.category,
@@ -106,12 +104,12 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
     };
 
     try {
-      const res = await patchClubInfo(clubId, data, accessToken);
+      setIsSubmitting(true);
+      const res = await patchClubInfo(clubId, data);
       const { updateLogo, deleteLogo } = res.data;
 
       if (logoFile && updateLogo) {
-        await fetch(updateLogo, {
-          method: 'PUT',
+        await ky.put(updateLogo, {
           body: logoFile,
           headers: {
             'Content-Type': logoFile.type,
@@ -120,12 +118,15 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
       }
 
       if (deleteLogo) {
-        await fetch(deleteLogo, { method: 'DELETE' });
+        await ky.delete(deleteLogo);
       }
       toast.success('등록 성공!');
+      router.replace('/club');
     } catch (err) {
       console.error(err);
       toast.error('등록 실패!');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -144,6 +145,9 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
             name={field.name}
             value={value}
             type={field.type}
+            placeholder={
+              field.name === 'instagram' ? 'https://www.instagram.com/' : ''
+            }
             onChange={(name, newValue) =>
               handleChange(name as keyof ClubFormData, newValue)
             }
@@ -188,7 +192,7 @@ function ClubEditForm({ clubInfo, accessToken, clubId }: ClubInfoProp) {
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />
-      <Button type="submit" variant={isValid ? 'submit' : 'disabled'} size="lg">
+      <Button type="submit" size="lg" disabled={!isValid || isSubmitting}>
         등록하기
       </Button>
     </form>

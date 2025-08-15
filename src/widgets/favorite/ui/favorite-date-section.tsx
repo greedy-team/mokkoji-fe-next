@@ -2,6 +2,7 @@
 
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import RecruitFavoriteList from '@/entities/favorite/ui/recruit-favorite-list';
 import RecruitDeadlineSoonList from '@/entities/favorite/ui/recruit-dead-line-list';
@@ -19,15 +20,16 @@ function FavoriteDateSection() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await getFavoriteByDate({
-          yearMonth,
-        });
+      const response = await getFavoriteByDate({
+        yearMonth,
+      });
 
-        setData(response.data);
-      } catch (error) {
-        console.error('Error fetching favorite clubs:', error);
+      if (!response.ok) {
+        toast.error(response.message, { toastId: 'unique-toast' });
+        return;
       }
+
+      setData(response.data || []);
     };
     fetchData();
   }, [value, yearMonth]);

@@ -1,5 +1,5 @@
 export interface ApiResponse<T> {
-  status: number;
+  ok: boolean;
   message: string | undefined;
   data: T;
   error: string | undefined;

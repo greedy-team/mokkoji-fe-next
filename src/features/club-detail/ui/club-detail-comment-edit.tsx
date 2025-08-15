@@ -28,19 +28,12 @@ function ClubDetailCommentEdit({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session } = useSession();
 
-  console.log(session === undefined, session, '!!');
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   const handlePatchComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!session?.role) {
-      toast.warn('로그인을 먼저 해주세요.', { toastId: 'unique-toast' });
-      return;
-    }
 
     if (!value || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.', {
@@ -49,21 +42,18 @@ function ClubDetailCommentEdit({
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      await patchComment(clubId, commentId, value, rating);
-      toast.success('댓글이 수정되었습니다.', { toastId: 'unique-toast' });
-      setValue('');
-      setRating(0);
-      onCancel();
-    } catch (err) {
-      console.error(err);
-      toast.error('댓글 등록 중 오류가 발생했습니다.', {
-        toastId: 'unique-toast',
-      });
-    } finally {
-      setIsSubmitting(false);
+    setIsSubmitting(true);
+    const response = await patchComment(clubId, commentId, value, rating);
+    if (!response.ok) {
+      toast.error(response.message, { toastId: 'unique-toast' });
+      return;
     }
+
+    toast.success(response.message, { toastId: 'unique-toast' });
+    setValue('');
+    setRating(0);
+    onCancel();
+    setIsSubmitting(false);
   };
 
   return (

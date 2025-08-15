@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import { postComment } from '../api/postComment';
@@ -18,6 +19,7 @@ function ClubDetailCommentInput({
 }: ClubDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
+  const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -52,7 +54,12 @@ function ClubDetailCommentInput({
     >
       <div className="mb-4 flex flex-col gap-1">
         <p className="font-semibold">이 동아리 어때요?</p>
-        <StarRating value={rating} size="large" onChange={setRating} />
+        <StarRating
+          value={rating}
+          size="large"
+          onChange={setRating}
+          disabled={!session}
+        />
       </div>
       <p className="cursor-default text-base font-semibold">댓글 {count}</p>
       <Textarea
@@ -60,13 +67,14 @@ function ClubDetailCommentInput({
         onChange={handleChange}
         variant="comment"
         placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
+        disabled={!session}
       />
       <div className="flex justify-end">
         <Button
           variant="submit"
           type="submit"
           className="h-[43px] w-[113px]"
-          disabled={!value || rating === 0}
+          disabled={!value || rating === 0 || isSubmitting}
         >
           댓글 남기기
         </Button>

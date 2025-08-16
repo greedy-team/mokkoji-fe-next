@@ -4,6 +4,7 @@ export interface SearchParams {
 }
 
 export interface FavoriteDateItem {
+  clubId: number;
   clubName: string;
   recruitStart: string;
   recruitEnd: string;

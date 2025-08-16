@@ -13,7 +13,7 @@ function Search() {
         />
         <h1 className="text-2xl font-bold">무엇을 도와드릴까요?</h1>
       </header>
-      <div className="group relative w-[80%] lg:w-[38%]">
+      {/* <div className="group relative w-[80%] lg:w-[38%]">
         <input
           type="text"
           placeholder="궁금한 점을 검색해주세요"
@@ -28,7 +28,7 @@ function Search() {
         />
         <span className="pointer-events-none absolute bottom-2 left-0 h-[3px] w-full bg-gray-200" />
         <span className="pointer-events-none absolute bottom-2 left-1/2 h-[3px] w-0 -translate-x-1/2 transform bg-gradient-to-r from-[#00E804] via-[#3AE2EB] to-[#3AA1EB] transition-all duration-300 ease-in-out group-focus-within:w-full" />
-      </div>
+      </div> */}
     </div>
   );
 }

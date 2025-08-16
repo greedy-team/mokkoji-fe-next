@@ -1,4 +1,7 @@
-import serverApi from '@/shared/api/server-api';
+'use server';
+
+import authAPi from '@/shared/api/auth-api';
+import ErrorHandler from '@/shared/lib/error-message';
 import { EditResponse } from '../model/type';
 
 interface ClubRegisterRequest {
@@ -17,35 +20,37 @@ interface ClubUpdateRequest {
   logo: string;
 }
 
-export async function postClubRegister(
-  data: ClubRegisterRequest,
-  accessToken: string,
-) {
-  const response = await serverApi
-    .post('clubs', {
-      json: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-    .json();
+export async function postClubRegister(data: ClubRegisterRequest) {
+  try {
+    await (
+      await authAPi()
+    )
+      .post('clubs', {
+        json: data,
+      })
+      .json();
 
-  return response;
+    return { ok: true, message: '등록이 완료되었습니다.' };
+  } catch (e) {
+    return ErrorHandler(e as Error);
+  }
 }
 
 export async function patchClubInfo(
   clubId: number,
   data: ClubUpdateRequest,
-  accessToken: string,
 ): Promise<EditResponse> {
-  const response = await serverApi
-    .patch(`clubs/manage/${clubId}`, {
-      json: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-    .json<EditResponse>();
+  try {
+    const response = await (
+      await authAPi()
+    )
+      .patch(`clubs/manage/${clubId}`, {
+        json: data,
+      })
+      .json<EditResponse>();
 
-  return response;
+    return { ok: true, message: '수정이 완료되었습니다.', data: response.data };
+  } catch (e) {
+    return ErrorHandler(e as Error);
+  }
 }

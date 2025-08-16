@@ -1,14 +1,14 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
-import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import getClubList from '@/widgets/recruit/api/getClubList';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
 async function ClubItemList({ searchParams }: RecruitItemListProps) {
   let data;
   try {
-    data = await getRecruitList(
+    data = await getClubList(
       {
         page: Number((await searchParams).page || 1),
         size: Number((await searchParams).size || 100),
@@ -23,8 +23,8 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
     );
     if (data.length === 0) {
       return (
-        <p className="mt-30 text-center text-sm font-bold text-[#00E457]">
-          해당 동아리의 모집 공고가 없습니다.
+        <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
+          해당 동아리가 없습니다.
         </p>
       );
     }

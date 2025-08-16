@@ -4,7 +4,7 @@ import AffiliationNavButton from './affiliation-nav-button';
 
 const navItems = [
   { label: '중앙동아리', value: 'CENTRAL_CLUB' },
-  { label: '기타동아리', value: 'DEPARMENT_CLUB' },
+  { label: '기타동아리', value: 'DEPARTMENT_CLUB' },
   { label: '소모임', value: 'SMALL_GROUP' },
 ];
 

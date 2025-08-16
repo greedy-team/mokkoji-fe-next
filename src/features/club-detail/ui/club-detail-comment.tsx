@@ -9,13 +9,11 @@ import CommentItem from './comment-item';
 interface ClubDetailCommentProps {
   clubId: number;
   comments: CommentType[];
-  accessToken: string | undefined;
 }
 
 export default function ClubDetailComment({
   clubId,
   comments,
-  accessToken,
 }: ClubDetailCommentProps) {
   const [edit, setEdit] = useState<number | null>(null);
 
@@ -43,16 +41,10 @@ export default function ClubDetailComment({
                 commentId={comment.id}
                 content={comment.content}
                 rate={comment.rate}
-                accessToken={accessToken}
                 onCancel={() => setEdit(null)}
               />
             ) : (
-              <CommentItem
-                clubId={clubId}
-                comment={comment}
-                onEdit={setEdit}
-                accessToken={accessToken}
-              />
+              <CommentItem clubId={clubId} comment={comment} onEdit={setEdit} />
             )}
           </div>
         );

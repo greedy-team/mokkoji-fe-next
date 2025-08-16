@@ -1,19 +1,22 @@
-import serverApi from '@/shared/api/server-api';
+'use server';
 
-async function putEmail(email: string, status: string, accessToken?: string) {
-  if (status !== 'authenticated' || !accessToken) {
-    throw new Error('인증되지 않은 사용자 입니다.');
+import authApi from '@/shared/api/auth-api';
+import ErrorHandler from '@/shared/lib/error-message';
+
+async function putEmail(email: string) {
+  try {
+    const response = await (
+      await authApi()
+    )
+      .put('users', {
+        json: { email },
+      })
+      .json();
+
+    return { ok: true, message: '이메일이 변경되었습니다.' };
+  } catch (e) {
+    return ErrorHandler(e as Error);
   }
-  const response = await serverApi
-    .put('users', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      json: { email },
-    })
-    .json();
-
-  return response;
 }
 
 export default putEmail;

@@ -1,4 +1,4 @@
-import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import getRecruitList from '@/widgets/recruit/api/getClubList';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ScrollItem from './scroll-item';
 import separateRollingData from '../lib/utils';

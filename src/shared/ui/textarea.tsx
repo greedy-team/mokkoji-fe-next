@@ -4,10 +4,16 @@ import cn from '@/shared/lib/utils';
 type Variant = 'default' | 'error' | 'comment';
 
 interface TextareaProps extends React.ComponentProps<'textarea'> {
+  disabled?: boolean;
   variant?: Variant;
 }
 
-function Textarea({ className, variant = 'default', ...props }: TextareaProps) {
+function Textarea({
+  className,
+  variant = 'default',
+  disabled,
+  ...props
+}: TextareaProps) {
   const variantClass = {
     default: 'focus-visible:border-[#00E457] text-sm',
     error: 'border-[#FF383C] bg-[#FFF4F4] text-sm',
@@ -16,6 +22,7 @@ function Textarea({ className, variant = 'default', ...props }: TextareaProps) {
 
   return (
     <textarea
+      disabled={disabled}
       data-slot="textarea"
       className={cn(
         'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex min-h-[150px] w-full min-w-0 rounded-md border-2 bg-transparent px-3 py-2 transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',

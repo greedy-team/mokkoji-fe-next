@@ -1,10 +1,15 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 // eslint-disable-next-line import/no-mutable-exports
 let nextConfig: NextConfig = {
   reactStrictMode: false,
   transpilePackages: ['msw', 'next-auth'],
+  pageExtensions: isProd
+    ? ['tsx', 'ts', 'jsx', 'js']
+    : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
     domains: ['mokkoji-app-data.s3.ap-northeast-2.amazonaws.com'],
     remotePatterns: [

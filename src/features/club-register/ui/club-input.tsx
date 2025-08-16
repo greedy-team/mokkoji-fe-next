@@ -13,6 +13,7 @@ function ClubInput({
   type,
   onChange,
   error,
+  placeholder,
   onBlur,
 }: ClubInputProps) {
   return (
@@ -36,6 +37,7 @@ function ClubInput({
           variant={error ? 'error' : 'default'}
           className="transition-colors duration-300"
           onBlur={() => onBlur(name)}
+          placeholder={placeholder}
         />
       )}
 

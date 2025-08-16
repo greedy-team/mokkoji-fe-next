@@ -46,7 +46,7 @@ function ClubItem({
       <FavoriteButton
         isFavorite={isFavorite || false}
         clubId={clubId}
-        customClass="scale-50 absolute bottom-4 right-4"
+        customClass="absolute bottom-4 right-4"
       />
     </div>
   );

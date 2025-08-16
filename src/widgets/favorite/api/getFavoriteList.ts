@@ -7,7 +7,7 @@ interface GetFavoriteListParams {
 }
 
 async function getFavoriteList({ page, size }: GetFavoriteListParams) {
-  const response: ApiResponse<FavoriteList> = await authApi
+  const response: ApiResponse<FavoriteList> = await (await authApi())
     .get(`favorites?page=${page}&size=${size}`)
     .json();
   return response.data;

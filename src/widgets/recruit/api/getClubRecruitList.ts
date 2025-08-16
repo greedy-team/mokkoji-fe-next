@@ -1,5 +1,5 @@
-import authApi from '@/shared/api/auth-api';
 import { ApiResponse, ClubAffiliation } from '@/shared/model/type';
+import authApi from '@/shared/api/auth-api';
 import { RecruitmentResponse } from '../model/type';
 
 async function getClubRecruitList({
@@ -24,7 +24,9 @@ async function getClubRecruitList({
       searchParams.set(key, String(value));
     }
   });
-  const response: ApiResponse<RecruitmentResponse> = await authApi
+  const response: ApiResponse<RecruitmentResponse> = await (
+    await authApi()
+  )
     .get('recruitments', {
       searchParams,
     })

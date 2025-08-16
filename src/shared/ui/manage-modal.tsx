@@ -43,7 +43,11 @@ function ManageModal({
         </DialogHeader>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {manageClubInfo.length > 0 &&
+          {manageClubInfo.length === 0 ? (
+            <p className="text-center text-sm text-[#00E457]">
+              등록된 동아리가 없습니다.
+            </p>
+          ) : (
             manageClubInfo.map((club) => (
               <Button
                 asChild
@@ -64,7 +68,8 @@ function ManageModal({
                   {club.clubName}
                 </Link>
               </Button>
-            ))}
+            ))
+          )}
         </div>
       </DialogContent>
     </Dialog>

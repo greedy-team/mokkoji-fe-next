@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
+import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
@@ -214,14 +215,18 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
           </ul>
         )}
       </div>
-      <Button
-        type="submit"
-        variant={isValid ? 'submit' : 'disabled'}
-        size="lg"
-        disabled={!isValid || isSubmitting}
-      >
-        등록하기
-      </Button>
+      {isSubmitting ? (
+        <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center" />
+      ) : (
+        <Button
+          type="submit"
+          variant={isValid ? 'submit' : 'disabled'}
+          size="lg"
+          disabled={!isValid || isSubmitting}
+        >
+          등록하기
+        </Button>
+      )}
     </form>
   );
 }

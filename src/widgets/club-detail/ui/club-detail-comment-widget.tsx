@@ -17,11 +17,7 @@ async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
   return (
     <section className="mt-13 w-full">
       <ClubDetailCommentInput clubId={clubId} count={commentList.length} />
-      <ClubDetailComment
-        comments={commentList}
-        clubId={clubId}
-        accessToken=""
-      />
+      <ClubDetailComment comments={commentList} clubId={clubId} />
     </section>
   );
 }

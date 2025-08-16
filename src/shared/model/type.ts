@@ -72,6 +72,13 @@ export enum UserRole {
   NORMAL = 'NORMAL',
 }
 
+export const UserRoleLabel: Record<UserRole, string> = {
+  [UserRole.GREEDY_ADMIN]: '그리디 관리자',
+  [UserRole.CLUB_ADMIN]: '동아리 관리자',
+  [UserRole.CLUB_MASTER]: '동아리장',
+  [UserRole.NORMAL]: '일반 사용자',
+};
+
 export interface DetailParams {
   params: Promise<{ id: string }>;
 }

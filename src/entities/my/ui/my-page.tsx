@@ -1,8 +1,12 @@
+import { auth } from '@/auth';
+import { UserRole, UserRoleLabel } from '@/shared/model/type';
 import getMyInfo from '../api/getMyInfo';
 import EmailChangeDialog from './email-change-dialog';
 
 async function MyPage() {
   const myInfo = await getMyInfo();
+  const session = await auth();
+
   return (
     <div className="flex flex-col items-center">
       <div className="w-auto sm:w-[500px] lg:w-[700px]">
@@ -28,6 +32,14 @@ async function MyPage() {
               initialEmail={myInfo.user.email}
               triggerClassName="text-[#00E457] bg-transparent border-none cursor-pointer ml-8"
             />
+          </li>
+          <li>
+            <span className="mr-2 font-bold">역할</span>
+            {
+              UserRoleLabel[
+                (session?.user?.role as UserRole) || UserRole.NORMAL
+              ]
+            }
           </li>
         </ul>
       </div>

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import useDebouncedSubmit from '@/shared/model/useDebounceSubmit';
+import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
@@ -36,13 +37,23 @@ function ClubRegisterForm() {
 
       const res = await postClubRegister(data);
       if (!res.ok) {
-        toast.error(res.message);
+        toast.error(res.message, {
+          toastId: 'unique-toast',
+        });
         return;
       }
-      toast.success('등록 성공!');
+      toast.success('등록 성공!', {
+        toastId: 'unique-toast',
+      });
       router.replace('/club');
     },
-    [formData],
+    [
+      formData.affiliation,
+      formData.category,
+      formData.clubMasterStudentId,
+      formData.name,
+      router,
+    ],
   );
 
   const { handleSubmit, isSubmitting } = useDebouncedSubmit(onSubmit);
@@ -78,9 +89,13 @@ function ClubRegisterForm() {
           />
         );
       })}
-      <Button type="submit" disabled={isSubmitting || !isValid} size="lg">
-        등록하기
-      </Button>
+      {isSubmitting ? (
+        <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center" />
+      ) : (
+        <Button type="submit" disabled={isSubmitting || !isValid} size="lg">
+          등록하기
+        </Button>
+      )}
     </form>
   );
 }

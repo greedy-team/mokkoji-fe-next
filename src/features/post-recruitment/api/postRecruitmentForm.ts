@@ -1,19 +1,22 @@
-import serverApi from '@/shared/api/server-api';
+'use server';
+
+import authApi from '@/shared/api/auth-api';
+import { revalidatePath } from 'next/cache';
 import { RecruitmentFormData, RecruitmentResponse } from '../model/type';
 
-export default async function postRecruitmentForm(
+async function postRecruitmentForm(
   data: RecruitmentFormData,
-  accessToken: string,
   clubId: number,
 ): Promise<RecruitmentResponse> {
-  const response = await serverApi
+  const response = await (
+    await authApi()
+  )
     .post(`recruitments/${clubId}`, {
       json: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
     })
     .json<RecruitmentResponse>();
-
+  revalidatePath('/recruit');
   return response;
 }
+
+export default postRecruitmentForm;

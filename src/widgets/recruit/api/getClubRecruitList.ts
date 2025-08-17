@@ -1,5 +1,6 @@
-import authApi from '@/shared/api/auth-api';
 import { ApiResponse, ClubAffiliation } from '@/shared/model/type';
+import authApi from '@/shared/api/auth-api';
+import ErrorHandler from '@/shared/lib/error-message';
 import { RecruitmentResponse } from '../model/type';
 
 async function getClubRecruitList({
@@ -24,12 +25,20 @@ async function getClubRecruitList({
       searchParams.set(key, String(value));
     }
   });
-  const response: ApiResponse<RecruitmentResponse> = await authApi
-    .get('recruitments', {
-      searchParams,
-    })
-    .json();
-  return response.data;
+  try {
+    const response: ApiResponse<RecruitmentResponse> = await (
+      await authApi()
+    )
+      .get('recruitments', {
+        searchParams,
+        cache: 'force-cache',
+        next: { revalidate: 3600, tags: ['recruitments'] },
+      })
+      .json();
+    return { ok: true, message: '성공', data: response.data };
+  } catch (e) {
+    return ErrorHandler(e as Error);
+  }
 }
 
 export default getClubRecruitList;

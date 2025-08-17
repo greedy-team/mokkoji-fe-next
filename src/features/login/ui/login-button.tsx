@@ -29,15 +29,15 @@ function LoginForm() {
     });
 
     if (result?.error) {
-      toast.dismiss();
-      toast.error('학번 또는 비밀번호를 확인해주세요.');
+      toast.error('학번 또는 비밀번호를 확인해주세요.', {
+        toastId: 'unique-toast',
+      });
       return;
     }
 
     router.refresh();
   };
 
-  // ✅ 공백 검사 핸들러
   const handleBlur = (field: 'studentId' | 'password', value: string) => {
     if (value.trim() === '') {
       setErrors((prev) => ({

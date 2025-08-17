@@ -1,5 +1,6 @@
 import SearchInput from '@/features/search/ui/search-input';
 import SearchResults from '@/widgets/search/ui/search-results';
+import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 
 interface SearchPageProps {
   searchParams: Promise<{ q?: string }>;
@@ -12,6 +13,7 @@ async function SearchPage({ searchParams }: SearchPageProps) {
     <div className="flex w-full flex-col items-center">
       <SearchInput />
       <SearchResults keyword={params.q} />
+      <ScrollTopButton />
     </div>
   );
 }

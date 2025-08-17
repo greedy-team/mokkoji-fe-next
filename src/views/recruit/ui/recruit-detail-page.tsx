@@ -10,7 +10,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
   const data = await getRecruitDetail(id);
 
   return (
-    <>
+    <div className="max-w-[85%] min-w-[75%]">
       <RecruitDetailHeader
         title={data.clubName}
         category={data.category}
@@ -22,7 +22,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         dangerouslySetInnerHTML={{ __html: convertLinkText(data.content) }}
         className="mb-3 max-w-4xl text-xs leading-[1.4] whitespace-pre-wrap text-black"
       />
-    </>
+    </div>
   );
 }
 

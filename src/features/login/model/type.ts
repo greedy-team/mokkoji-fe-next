@@ -7,4 +7,13 @@ interface LoginRes {
 
 export interface LoginSuccessResponse extends ApiResponse<LoginRes> {}
 
+export interface ManageClub {
+  clubId: number;
+  clubName: string;
+}
+
+export interface ManageClubResponse {
+  data: { clubs: ManageClub[] };
+}
+
 export interface RoleResponse extends ApiResponse<{ role: string }> {}

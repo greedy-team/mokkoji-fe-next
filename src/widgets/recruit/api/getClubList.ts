@@ -5,7 +5,7 @@ import {
   ClubAffiliation,
 } from '@/shared/model/type';
 import authApi from '@/shared/api/auth-api';
-import serverApi from '@/shared/api/server-api';
+import ErrorHandler from '@/shared/lib/error-message';
 
 interface GetRecruitListParams {
   page: number;
@@ -16,7 +16,7 @@ interface GetRecruitListParams {
   recruitStatus?: string;
 }
 
-async function getRecruitList(params: GetRecruitListParams, auth?: boolean) {
+async function getClubList(params: GetRecruitListParams) {
   const rawParams = {
     page: params.page,
     size: params.size,
@@ -33,23 +33,20 @@ async function getRecruitList(params: GetRecruitListParams, auth?: boolean) {
       searchParams.set(key, String(value));
     }
   });
-
-  let response: ApiResponse<ClubList>;
-  if (auth) {
-    response = await authApi
+  try {
+    const response: ApiResponse<ClubList> = await (
+      await authApi()
+    )
       .get('clubs', {
         searchParams,
+        cache: 'force-cache',
+        next: { revalidate: 3600, tags: ['clubs'] },
       })
       .json<ApiResponse<ClubList>>();
-  } else {
-    response = await serverApi
-      .get('clubs', {
-        searchParams,
-      })
-      .json<ApiResponse<ClubList>>();
+    return { ok: true, message: '성공', data: response.data };
+  } catch (e) {
+    return ErrorHandler(e as Error);
   }
-
-  return response.data.clubs;
 }
 
-export default getRecruitList;
+export default getClubList;

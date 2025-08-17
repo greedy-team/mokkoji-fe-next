@@ -1,5 +1,6 @@
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
+import Link from 'next/link';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
   const sortedData = data?.length
@@ -20,10 +21,17 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
               key={`${club.clubName}-${club.recruitStart}-${club.recruitEnd}`}
               className="flex flex-row space-x-2"
             >
-              <p>
+              <span>
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}
-              </p>
-              <p>{club.clubName}</p>
+              </span>
+              <span>
+                <Link
+                  href={`/club/${club.clubId}`}
+                  className="text-[#00E457] underline"
+                >
+                  {club.clubName}
+                </Link>
+              </span>
             </li>
           ))}
         </ul>

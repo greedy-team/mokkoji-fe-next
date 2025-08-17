@@ -5,25 +5,13 @@ import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
 import NavButton from './nav-button';
-import { ManageClub, UserRole } from '../model/type';
+import { UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
-import getClubManageInfo from '../api/manage-api';
 import MoblieHeader from './moblie-header';
 
 async function Header() {
   const session = await auth();
   const role = session?.role;
-  const accessToken = session?.accessToken;
-
-  let manageClubInfo: ManageClub[] = [];
-  if (accessToken && role && role !== UserRole.NORMAL) {
-    try {
-      const res = await getClubManageInfo(accessToken);
-      manageClubInfo = res.data.clubs;
-    } catch (e) {
-      console.error('잠시 후 다시 시도해주세요.');
-    }
-  }
 
   return (
     <>
@@ -46,32 +34,30 @@ async function Header() {
           <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
+          <NavButton label="고객센터" href="/support" />
           {role &&
-            accessToken &&
             role !== UserRole.NORMAL &&
             (role === UserRole.CLUB_ADMIN || role === UserRole.GREEDY_ADMIN ? (
               <NavButton label="동아리 등록" href="/club-register" />
             ) : (
               <HeaderManageModal
-                manageClubInfo={manageClubInfo}
+                manageClubInfo={session?.manageClubInfo || []}
                 menu="register"
               />
             ))}
-          {role && accessToken && role !== UserRole.NORMAL && (
+          {role && role !== UserRole.NORMAL && (
             <HeaderManageModal
-              manageClubInfo={manageClubInfo}
+              manageClubInfo={session?.manageClubInfo || []}
               menu="recruitment"
             />
           )}
-          <NavButton label="고객센터" href="/support" />
         </nav>
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
           <HeaderLogin />
           <HeaderSearch />
           <MoblieHeader
             sessionRole={role}
-            sessionAccessToken={accessToken}
-            manageClubInfo={manageClubInfo}
+            manageClubInfo={session?.manageClubInfo || []}
           />
         </div>
       </header>

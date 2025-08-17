@@ -39,11 +39,7 @@ function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
         )}
       >
         <nav className="flex flex-col gap-4 py-4">
-          <NavButton
-            label="전체 동아리"
-            href="/club/all"
-            onItemClick={closeMenu}
-          />
+          <NavButton label="전체 동아리" href="/club" onItemClick={closeMenu} />
           <NavButton
             label="모집 공고"
             href="/recruit"

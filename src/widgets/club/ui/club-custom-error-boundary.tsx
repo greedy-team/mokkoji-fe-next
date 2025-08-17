@@ -31,7 +31,7 @@ function ClubCustomErrorBoundary({ message }: ErrorFallbackProps) {
         <Button
           variant="outline"
           className="flex items-center gap-2"
-          onClick={() => router.replace('/club/all')}
+          onClick={() => router.replace('/club')}
         >
           <RotateCcw className="h-4 w-4" />
           새로고침

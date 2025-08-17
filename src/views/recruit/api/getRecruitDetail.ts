@@ -4,7 +4,9 @@ import { RecruitmentDetail } from '@/views/recruit/model/type';
 
 async function getRecruitDetail(id: string) {
   const response: ApiResponse<RecruitmentDetail> = await serverApi
-    .get(`recruitments/${id}`)
+    .get(`recruitments/${id}`, {
+      next: { revalidate: 3600, tags: ['recruitments', id] },
+    })
     .json();
 
   return response.data;

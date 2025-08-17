@@ -43,10 +43,10 @@ function StarRating({
               size === 'large' ? 'p-1' : 'p-0.5',
               !disabled && 'cursor-pointer',
             )}
-            onMouseEnter={() => setHovered(starIndex)}
-            onMouseLeave={() => setHovered(0)}
-            onClick={() => onChange(starIndex)}
-            onKeyDown={(e) => handleKeyDown(e, starIndex)}
+            onMouseEnter={() => !disabled && setHovered(starIndex)}
+            onMouseLeave={() => !disabled && setHovered(0)}
+            onClick={() => !disabled && onChange(starIndex)}
+            onKeyDown={(e) => !disabled && handleKeyDown(e, starIndex)}
             aria-label={`${starIndex}점`}
           >
             <Star

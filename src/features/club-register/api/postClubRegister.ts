@@ -2,6 +2,7 @@
 
 import authAPi from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
+import { revalidatePath } from 'next/cache';
 import { EditResponse } from '../model/type';
 
 interface ClubRegisterRequest {
@@ -29,6 +30,7 @@ export async function postClubRegister(data: ClubRegisterRequest) {
         json: data,
       })
       .json();
+    revalidatePath('/club');
 
     return { ok: true, message: '등록이 완료되었습니다.' };
   } catch (e) {
@@ -48,6 +50,7 @@ export async function patchClubInfo(
         json: data,
       })
       .json<EditResponse>();
+    revalidatePath('/club');
 
     return { ok: true, message: '수정이 완료되었습니다.', data: response.data };
   } catch (e) {

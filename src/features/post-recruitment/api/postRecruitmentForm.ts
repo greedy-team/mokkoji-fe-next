@@ -1,6 +1,7 @@
 'use server';
 
 import authApi from '@/shared/api/auth-api';
+import { revalidatePath } from 'next/cache';
 import { RecruitmentFormData, RecruitmentResponse } from '../model/type';
 
 async function postRecruitmentForm(
@@ -14,7 +15,7 @@ async function postRecruitmentForm(
       json: data,
     })
     .json<RecruitmentResponse>();
-
+  revalidatePath('/recruit');
   return response;
 }
 

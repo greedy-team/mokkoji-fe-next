@@ -1,3 +1,4 @@
+import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 import Search from '@/features/support/ui/search';
 import FAQList from '@/widgets/support/faq-list';
 
@@ -6,6 +7,7 @@ function SupportPage() {
     <>
       <Search />
       <FAQList />
+      <ScrollTopButton />
     </>
   );
 }

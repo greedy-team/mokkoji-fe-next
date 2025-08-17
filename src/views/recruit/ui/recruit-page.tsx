@@ -8,7 +8,7 @@ import SharedLoading from '@/shared/ui/loading';
 function RecruitPage({ searchParams }: RecruitItemListProps) {
   return (
     <>
-      <div className="max-w-6xl">
+      <div className="mx-auto sm:w-4xl lg:w-6xl">
         <Suspense fallback={<SharedLoading />}>
           <RecruitHeader />
           <RecruitItemList searchParams={searchParams} />

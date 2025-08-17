@@ -17,7 +17,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     });
     if (data.recruitments.length === 0) {
       return (
-        <p className="mt-30 w-auto text-center text-sm font-bold text-[#00E457] sm:w-[800px] lg:w-[1000px]">
+        <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
           해당 동아리의 모집 공고가 없습니다.
         </p>
       );
@@ -30,7 +30,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {data?.recruitments?.map((item) => (
         <li key={item.id}>
-          <Link href={`/club/${item.id}`}>
+          <Link href={`/recruit/${item.id}`}>
             <RecruitItem
               title={item.club.name || ''}
               startDate={item.recruitStart}
@@ -38,7 +38,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
               description={item.club.description}
               isFavorite={item.isFavorite}
               logo={item.club.logo}
-              clubId={String(item.id)}
+              clubId={String(item.club.id)}
             />
           </Link>
         </li>

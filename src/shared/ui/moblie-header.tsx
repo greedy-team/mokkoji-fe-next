@@ -9,15 +9,10 @@ import cn from '../lib/utils';
 
 interface MobileMenuClientProps {
   sessionRole?: string;
-  sessionAccessToken?: string;
   manageClubInfo: ManageClub[];
 }
 
-function MoblieHeader({
-  sessionRole,
-  sessionAccessToken,
-  manageClubInfo,
-}: MobileMenuClientProps) {
+function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -59,9 +54,8 @@ function MoblieHeader({
             href="/favorite?page=1&size=6"
             onItemClick={closeMenu}
           />
-
+          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
           {sessionRole &&
-            sessionAccessToken &&
             sessionRole !== UserRole.NORMAL &&
             (sessionRole === UserRole.CLUB_ADMIN ||
             sessionRole === UserRole.GREEDY_ADMIN ? (
@@ -77,16 +71,13 @@ function MoblieHeader({
                 onItemClick={closeMenu}
               />
             ))}
-          {sessionRole &&
-            sessionAccessToken &&
-            sessionRole !== UserRole.NORMAL && (
-              <HeaderManageModal
-                manageClubInfo={manageClubInfo}
-                menu="recruitment"
-                onItemClick={closeMenu}
-              />
-            )}
-          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
+          {sessionRole && sessionRole !== UserRole.NORMAL && (
+            <HeaderManageModal
+              manageClubInfo={manageClubInfo}
+              menu="recruitment"
+              onItemClick={closeMenu}
+            />
+          )}
         </nav>
       </div>
     </>

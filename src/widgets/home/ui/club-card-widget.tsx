@@ -1,6 +1,6 @@
 import CardSilder from '@/features/home/ui/club-card';
 import ClubTextCard from '@/entities/home/ui/club-text-card';
-import getRecruitList from '@/widgets/recruit/api/getRecruitList';
+import getRecruitList from '@/widgets/recruit/api/getClubList';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carousel';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';

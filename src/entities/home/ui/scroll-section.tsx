@@ -4,18 +4,18 @@ import ScrollItem from './scroll-item';
 import separateRollingData from '../lib/utils';
 
 async function HomeScrollSection() {
-  let data;
-  try {
-    data = await getRecruitList({
-      page: 1,
-      size: 14,
-      keyword: '',
-    });
-  } catch (err) {
+  const data = await getRecruitList({
+    page: 1,
+    size: 14,
+    keyword: '',
+  });
+  if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
-
-  const { rollingFirst, rollingSecond } = separateRollingData(data, 2);
+  const { rollingFirst, rollingSecond } = separateRollingData(
+    data.data?.clubs || [],
+    2,
+  );
 
   return (
     <div>

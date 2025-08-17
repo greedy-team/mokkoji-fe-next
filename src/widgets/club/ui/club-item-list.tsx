@@ -6,35 +6,30 @@ import { RecruitItemListProps } from '@/widgets/recruit/model/type';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
 async function ClubItemList({ searchParams }: RecruitItemListProps) {
-  let data;
-  try {
-    data = await getClubList(
-      {
-        page: Number((await searchParams).page || 1),
-        size: Number((await searchParams).size || 100),
-        keyword: (await searchParams).keyword?.toUpperCase() || '',
-        category: (await searchParams).category?.toUpperCase() as ClubCategory,
-        affiliation: (
-          await searchParams
-        ).affiliation?.toUpperCase() as ClubAffiliation,
-        recruitStatus: (await searchParams).recruitStatus,
-      },
-      true,
-    );
-    if (data.length === 0) {
-      return (
-        <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
-          해당 동아리가 없습니다.
-        </p>
-      );
-    }
-  } catch (error) {
+  const res = await getClubList({
+    page: Number((await searchParams).page || 1),
+    size: Number((await searchParams).size || 100),
+    keyword: (await searchParams).keyword?.toUpperCase() || '',
+    category: (await searchParams).category?.toUpperCase() as ClubCategory,
+    affiliation: (
+      await searchParams
+    ).affiliation?.toUpperCase() as ClubAffiliation,
+    recruitStatus: (await searchParams).recruitStatus,
+  });
+  if (!res.ok) {
     return <ClubCustomErrorBoundary />;
+  }
+  if (res.data?.clubs.length === 0) {
+    return (
+      <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
+        해당 동아리가 없습니다.
+      </p>
+    );
   }
 
   return (
     <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {data?.map((item) => (
+      {res.data?.clubs?.map((item) => (
         <li key={item.id}>
           <Link href={`/club/${item.id}`}>
             <ClubItem

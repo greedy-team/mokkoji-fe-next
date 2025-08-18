@@ -13,7 +13,7 @@ import { ManageClub, UserRole } from './shared/model/type';
 
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  secret: process.env.NEXT_AUTH_SECRET as string,
+  secret: '1004',
   trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',

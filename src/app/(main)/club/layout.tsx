@@ -1,4 +1,3 @@
-import DevTodo from '@/shared/ui/dev-to-do';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,14 +12,6 @@ export default function Layout({
 }>) {
   return (
     <main className="flex flex-col items-center justify-center px-3 pt-2 sm:pt-2 lg:pt-10">
-      <DevTodo
-        id="club"
-        todos={['test1', 'test2']}
-        name="sins051301"
-        description="test"
-        x={688}
-        y={83}
-      />
       {children}
     </main>
   );

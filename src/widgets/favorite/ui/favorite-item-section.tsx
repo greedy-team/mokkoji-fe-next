@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Pagination from '@/shared/ui/pagination';
 import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import DevTodo from '@/shared/ui/dev-to-do';
 import getFavoriteList from '../api/getFavoriteList';
 
 interface FavoriteItemSectionProps {

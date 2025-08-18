@@ -5,11 +5,11 @@ function HomeHeader() {
         Club, set, go!
       </h1>
       <p className="text-md font-bold lg:text-3xl">
-        세종대의 다양한{' '}
+        세종대의 다양한 동아리를{' '}
         <span className="bg-[linear-gradient(to_right,_#00E804_0%,_#3AE2EB_73%,_#3AA1EB_100%)] bg-clip-text text-transparent">
-          동아리
+          모꼬지
         </span>
-        를 한곳에서 만나보세요.
+        에서 만나보세요.
       </p>
       <p className="text-md font-bold lg:text-3xl">
         관심 있는 동아리를 찾고,{' '}

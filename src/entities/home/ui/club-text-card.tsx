@@ -8,7 +8,7 @@ function ClubTextCard() {
       </AnimateOnView>
       <AnimateOnView animation="reveal">
         <p className="my-1 w-full text-3xl font-bold lg:my-3 lg:w-[90%]">
-          우리 학교의 동아리들을 한눈에 확인해요.
+          세종대 동아리들을 한눈에 확인해요.
         </p>
       </AnimateOnView>
       <AnimateOnView animation="reveal-rightToleft">

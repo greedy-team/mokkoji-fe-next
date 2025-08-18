@@ -6,16 +6,16 @@ import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carouse
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function ClubCardWidget() {
-  let data;
-  try {
-    data = await getRecruitList({
-      page: 1,
-      size: 100,
-    });
-  } catch (err) {
+  const data = await getRecruitList({
+    page: 1,
+    size: 100,
+  });
+  if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
-  const shuffled = [...data].sort(() => Math.random() - 0.5);
+  const shuffled = [...(data.data?.clubs || [])].sort(
+    () => Math.random() - 0.5,
+  );
 
   return (
     <div className="flex flex-col gap-40">

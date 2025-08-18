@@ -18,11 +18,6 @@ let nextConfig: NextConfig = {
         hostname: 'way-s3.s3.ap-northeast-2.amazonaws.com',
         pathname: '**',
       },
-      // {
-      //   protocol: 'https',
-      //   hostname: 'startwith-solu.s3.ap-northeast-2.amazonaws.com',
-      //   pathname: '**',
-      // },
       {
         protocol: 'https',
         hostname: 'api.dicebear.com',

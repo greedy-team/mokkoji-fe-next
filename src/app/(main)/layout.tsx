@@ -18,7 +18,10 @@ export default function MainLayout({
         <div className="flex min-h-screen flex-col">
           <Header />
           {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
-            <DevCursorGlobal />
+            <>
+              <DevCursorGlobal />
+              <DevTodoTracker />
+            </>
           )}
           <ToastContainer
             position="top-right"
@@ -35,7 +38,6 @@ export default function MainLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
         </div>
-        <DevTodoTracker />
       </DevTodoProvider>
     </SessionProvider>
   );

@@ -9,7 +9,7 @@ function RadiusTag({ className, label }: RadiusTagProps) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center rounded-full px-2 py-[6px] text-center text-[10px] lg:py-1 lg:text-xs',
+        'inline-flex items-center justify-center rounded-full px-3 py-[6px] text-center text-[10px] lg:py-1 lg:text-xs',
         className,
       )}
     >

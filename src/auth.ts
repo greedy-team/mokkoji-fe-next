@@ -86,7 +86,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             manageClubInfo = await manageClubInfoRes.json();
           }
           return {
-            ...token,
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
             expiresAt: expiredTime,
@@ -97,7 +96,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         } catch (error) {
           console.error('[role fetch error]', error);
           return {
-            ...token,
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
             expiresAt: expiredTime,
@@ -116,11 +114,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const data: LoginSuccessResponse = await response.json();
           return {
-            ...token,
             accessToken: data.data.accessToken,
             expiresAt: getTokenExpiration(data.data.accessToken),
           };
         } catch (error) {
+          signOut();
           console.error('[refresh error]', error);
           return null;
         }
@@ -130,11 +128,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     // TODO: 추후 타입 수정
     session: async ({ session, token }) => {
       return {
-        ...session,
         expiresAt: token.expiresAt,
         user: token.user,
         role: token.role,
         manageClubInfo: token.manageClubInfo,
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
       } as Session;
     },
     redirect: async ({ url, baseUrl }) => {

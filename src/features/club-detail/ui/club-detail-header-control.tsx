@@ -14,8 +14,8 @@ function ClubDetailHeaderControl({
   clubId,
 }: ClubDetailHeaderControlProps) {
   return (
-    <div className="mt-5 mb-10 flex w-full flex-row items-center gap-3.5">
-      <div className="rounded-full border-1 border-black p-1">
+    <div className="mt-5 mb-10 flex w-full flex-row items-center gap-2 lg:gap-3.5">
+      <div className="scale-90 rounded-full border-1 border-black p-1 lg:scale-100">
         <FavoriteButton
           clubId={clubId.toString()}
           isFavorite={isFavorite}
@@ -24,7 +24,7 @@ function ClubDetailHeaderControl({
       </div>
 
       <button
-        className="cursor-pointer rounded-full border-1 border-black p-1"
+        className="scale-90 cursor-pointer rounded-full border-1 border-black p-1 lg:scale-100"
         onClick={() => window.open(instagram, '_blank')}
       >
         <Image

@@ -26,16 +26,16 @@ function RecruitItem({
   clubId,
 }: RecruitItemProps) {
   return (
-    <div className="relative min-h-[180px] w-auto rounded-sm bg-[#F8F8F8] p-5">
-      <div className="mb-8 flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Avatar className="size-12">
+    <div className="relative flex min-h-[90px] w-[100%] flex-col gap-2 rounded-sm bg-[#F8F8F8] p-3 text-[#474747] lg:min-h-[180px] lg:w-auto lg:p-5">
+      <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
+        <div className="flex flex-row items-center gap-4">
+          <Avatar className="size-10 lg:size-12">
             <AvatarImage src={logo} />
             <AvatarFallback>{title}</AvatarFallback>
           </Avatar>
           <div>
             <PeriodSection startDate={startDate} endDate={endDate} />
-            <h1 className="text-xl font-bold">{title}</h1>
+            <h1 className="text-[16px] font-bold lg:text-xl">{title}</h1>
           </div>
         </div>
         <RadiusTag
@@ -44,11 +44,15 @@ function RecruitItem({
         />
       </div>
       <div className="flex flex-row justify-between">
-        <div className="pr-7 text-xs break-words whitespace-normal">
+        <div className="pr-7 text-[12px] break-words whitespace-normal lg:text-xs">
           {description}
         </div>
       </div>
-      <FavoriteButton isFavorite={isFavorite || false} clubId={clubId} />
+      <FavoriteButton
+        isFavorite={isFavorite || false}
+        clubId={clubId}
+        customClass="absolute bottom-4 right-4 scale-80 lg:scale-100"
+      />
     </div>
   );
 }

@@ -51,7 +51,7 @@ function StarRating({
           >
             <Star
               className={cn(
-                'transition-colors duration-300',
+                'scale-90 transition-colors duration-300 lg:scale-100',
                 size === 'large' ? 'h-6 w-6' : 'h-4 w-4',
                 isFilled ? 'fill-[#00E457] text-[#00E457]' : 'text-gray-300',
               )}

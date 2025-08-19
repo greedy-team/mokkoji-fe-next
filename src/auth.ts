@@ -13,21 +13,10 @@ import { ManageClub, UserRole } from './shared/model/type';
 
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  secret: '1004',
+  secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',
-  },
-  cookies: {
-    sessionToken: {
-      name: '__Secure-authjs.session-token',
-      options: {
-        httpOnly: true,
-        sameSite: 'none',
-        path: '/',
-        secure: true,
-      },
-    },
   },
   providers: [
     KakaoProvider({

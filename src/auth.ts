@@ -12,21 +12,11 @@ import UserInfoType from './entities/my/model/type';
 import { UserRole } from './shared/model/type';
 
 // TODO: 추후 루시아로 변경
-export const { auth, handlers, signIn } = NextAuth({
-  secret: process.env.NEXT_AUTH_SECRET as string,
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',
-  },
-  cookies: {
-    sessionToken: {
-      name: '__Secure-authjs.session-token',
-      options: {
-        httpOnly: true,
-        sameSite: 'none',
-        path: '/',
-        secure: true,
-      },
-    },
   },
   providers: [
     KakaoProvider({

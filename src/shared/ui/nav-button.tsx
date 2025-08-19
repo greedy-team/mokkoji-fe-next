@@ -16,7 +16,10 @@ function NavButton({ label, navProps, href, onItemClick }: NavButtonProps) {
   const pathname = usePathname();
   const hrefPath = href.split('?')[0];
 
-  const active = pathname.startsWith(hrefPath);
+  const pathnameFirstSegment = pathname.split('/')[1] || '';
+  const hrefFirstSegment = hrefPath.split('/')[1] || '';
+
+  const active = pathnameFirstSegment === hrefFirstSegment;
 
   return (
     <Link

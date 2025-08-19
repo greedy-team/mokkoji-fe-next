@@ -9,7 +9,6 @@ type Props = {
 };
 
 function SentryProvider({ children }: Props) {
-  console.log('sentry...');
   return (
     <Sentry.ErrorBoundary fallback={SentryFallback}>
       {children}

@@ -9,12 +9,11 @@ import {
   RoleResponse,
 } from './features/login/model/type';
 import UserInfoType from './entities/my/model/type';
-import { ManageClub, UserRole } from './shared/model/type';
+import { UserRole } from './shared/model/type';
 
 // TODO: 추후 루시아로 변경
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { auth, handlers, signIn } = NextAuth({
   secret: process.env.NEXT_AUTH_SECRET as string,
-  trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',
   },
@@ -122,7 +121,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           console.error('[refresh error]', error);
-          signOut();
           return null;
         }
       }

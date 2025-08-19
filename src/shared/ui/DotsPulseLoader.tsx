@@ -11,6 +11,8 @@ type Props = {
   className?: string;
   /** 추가 wrapper className */
   wrapperClassName?: string;
+  /** 추가 텍스트 */
+  text?: string;
 };
 
 export default function DotsPulseLoader({
@@ -20,6 +22,7 @@ export default function DotsPulseLoader({
   speed = 0.9,
   className,
   wrapperClassName,
+  text,
 }: Props) {
   const style = {
     ['--dot-size' as any]: `${size}px`,
@@ -70,7 +73,7 @@ export default function DotsPulseLoader({
       `}</style>
       </div>
       <span className="mt-2 text-sm text-[#595959]">
-        폼을 제출하고 있어요...
+        {text || '폼을 제출하고 있어요...'}
       </span>
     </div>
   );

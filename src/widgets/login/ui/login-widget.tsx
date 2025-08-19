@@ -1,11 +1,11 @@
 import LoginHeader from '@/entities/login/ui/login-header';
-import LoginButton from '@/features/login/ui/login-button';
+import LoginForm from '@/features/login/ui/login-form';
 
 function LoginWidget() {
   return (
     <>
       <LoginHeader />
-      <LoginButton />
+      <LoginForm />
     </>
   );
 }

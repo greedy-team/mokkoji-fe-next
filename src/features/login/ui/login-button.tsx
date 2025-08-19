@@ -113,7 +113,9 @@ function LoginForm() {
         </button>
       </div>
       {isSubmitting ? (
-        <DotsPulseLoader className="gap-3" />
+        <div className="flex h-10 w-full items-center justify-center">
+          <DotsPulseLoader className="mr-3" />
+        </div>
       ) : (
         <Button
           type="submit"

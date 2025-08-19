@@ -1,5 +1,4 @@
 import getClubDetail from '@/views/club/api/getClubDetail';
-import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import ClubDetailCommentWidget from '@/widgets/club-detail/ui/club-detail-comment-widget';
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
@@ -20,10 +19,9 @@ async function ClubDetailPage({ params }: DetailParams) {
         clubId={Number(id)}
         isFavorite={data.isFavorite}
       />
-      <p
-        dangerouslySetInnerHTML={{ __html: convertLinkText(data.recruitPost) }}
-        className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black"
-      />
+      <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black">
+        {data.description}
+      </p>
       <ClubDetailCommentWidget clubId={Number(id)} />
     </div>
   );

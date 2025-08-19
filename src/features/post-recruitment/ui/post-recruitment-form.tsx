@@ -5,11 +5,10 @@ import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
-import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SafeForm from '@/shared/ui/safe-form';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
@@ -70,38 +69,39 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    try {
-      const res = await postRecruitmentForm(formData, clubId!);
+    const res = await postRecruitmentForm(formData, clubId!);
 
-      if (!res) throw new Error('업로드 실패');
-
-      if (Array.isArray(res.data.imageUrls)) {
-        await Promise.all(
-          res.data.imageUrls.map((url: string, i: number) =>
-            ky.put(url, {
-              body: imageFiles[i],
-              headers: { 'Content-Type': imageFiles[i].type },
-            }),
-          ),
-        );
-      }
-      toast.success('모집 공고가 성공적으로 업로드되었습니다!', {
-        toastId: 'unique-toast',
-      });
-      router.replace('/recruit');
-    } catch (err: any) {
-      console.log(err);
-      toast.error('업로드 중 오류가 발생했습니다.', {
-        toastId: 'unique-toast',
-      });
-    } finally {
-      setIsSubmitting(false);
+    if (!res.ok) {
+      toast.error(res.message);
+      return;
     }
+
+    if (Array.isArray(res.data?.imageUrls)) {
+      await Promise.all(
+        res.data.imageUrls.map((url: string, i: number) =>
+          ky.put(url, {
+            body: imageFiles[i],
+            headers: { 'Content-Type': imageFiles[i].type },
+          }),
+        ),
+      );
+    }
+    toast.success('모집 공고가 성공적으로 업로드되었습니다!', {
+      toastId: 'unique-toast',
+    });
+    router.push('/recruit');
+    setIsSubmitting(false);
   };
+
   const isValid = isFormValid({ formData, errors }, fields);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 py-8">
+    <SafeForm
+      onSubmit={handleSubmit}
+      title="등록하기"
+      disabled={!isValid}
+      formClassName="flex flex-col gap-2 py-8"
+    >
       <label htmlFor="name" className="mt-4 font-bold">
         동아리 이름
       </label>
@@ -215,19 +215,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
           </ul>
         )}
       </div>
-      {isSubmitting ? (
-        <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center" />
-      ) : (
-        <Button
-          type="submit"
-          variant={isValid ? 'submit' : 'disabled'}
-          size="lg"
-          disabled={!isValid || isSubmitting}
-        >
-          등록하기
-        </Button>
-      )}
-    </form>
+    </SafeForm>
   );
 }
 

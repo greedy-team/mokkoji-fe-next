@@ -48,11 +48,8 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: '모꼬지 | 세종대학교의 모든 동아리',
-  description: '세종대학교 동아리 통합 플랫폼',
-  icons: {
-    icon: '/favicon.ico',
-  },
+  title: '모꼬지 | 세종대 동아리',
+  description: '세종대 동아리 통합 플랫폼',
 };
 
 export default function RootLayout({

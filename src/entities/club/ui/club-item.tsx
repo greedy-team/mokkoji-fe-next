@@ -21,24 +21,24 @@ function ClubItem({
   clubId,
 }: ClubItemProps) {
   return (
-    <div className="relative min-h-[90px] w-[100%] rounded-sm bg-[#F8F8F8] p-2 lg:min-h-[180px] lg:w-auto lg:p-5">
+    <div className="relative flex min-h-[90px] w-[100%] flex-col gap-2 rounded-sm bg-[#F8F8F8] p-3 text-[#474747] lg:min-h-[180px] lg:w-auto lg:p-5">
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
-        <div className="flex flex-row items-center gap-2">
-          <Avatar className="size-8 lg:size-12">
+        <div className="flex flex-row items-center gap-4">
+          <Avatar className="size-10 lg:size-12">
             <AvatarImage src={logo} />
             <AvatarFallback>{title}</AvatarFallback>
           </Avatar>
           <div>
-            <span className="text-[8px] font-bold lg:text-xs">
+            <span className="text-[12px] font-bold lg:text-xs">
               {category} 동아리
             </span>
-            <h1 className="text-[10px] font-bold lg:text-xl">{title}</h1>
+            <h1 className="text-[16px] font-bold lg:text-xl">{title}</h1>
           </div>
         </div>
       </div>
 
       <div className="flex flex-row justify-between">
-        <div className="pr-7 text-[9px] break-words whitespace-normal lg:text-xs">
+        <div className="pr-7 text-[12px] break-words whitespace-normal lg:text-xs">
           {description}
         </div>
       </div>
@@ -46,7 +46,7 @@ function ClubItem({
       <FavoriteButton
         isFavorite={isFavorite || false}
         clubId={clubId}
-        customClass="absolute bottom-4 right-4"
+        customClass="absolute bottom-4 right-4 scale-80 lg:scale-100"
       />
     </div>
   );

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: '모꼬지 | 모집 공고 작성',
-  description: '세종대학교 동아리 모집 공고 작성 페이지',
+  title: '모꼬지 | 세종대 동아리 모집 공고 작성',
+  description: '세종대 동아리 모집 공고 작성 페이지',
 };
 
 export default function Layout({

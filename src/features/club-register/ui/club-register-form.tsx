@@ -1,11 +1,9 @@
 'use client';
 
-import { useCallback, useReducer } from 'react';
+import { useReducer } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/shared/ui/button';
-import useDebouncedSubmit from '@/shared/model/useDebounceSubmit';
-import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
@@ -24,39 +22,28 @@ function ClubRegisterForm() {
   const router = useRouter();
   const { formData, errors } = state;
 
-  const onSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-      const data = {
-        name: formData.name,
-        category: formData.category,
-        affiliation: formData.affiliation,
-        clubMasterStudentId: formData.clubMasterStudentId,
-      };
+    const data = {
+      name: formData.name,
+      category: formData.category,
+      affiliation: formData.affiliation,
+      clubMasterStudentId: formData.clubMasterStudentId,
+    };
 
-      const res = await postClubRegister(data);
-      if (!res.ok) {
-        toast.error(res.message, {
-          toastId: 'unique-toast',
-        });
-        return;
-      }
-      toast.success('등록 성공!', {
+    const res = await postClubRegister(data);
+    if (!res.ok) {
+      toast.error(res.message, {
         toastId: 'unique-toast',
       });
-      router.replace('/club');
-    },
-    [
-      formData.affiliation,
-      formData.category,
-      formData.clubMasterStudentId,
-      formData.name,
-      router,
-    ],
-  );
-
-  const { handleSubmit, isSubmitting } = useDebouncedSubmit(onSubmit);
+      return;
+    }
+    toast.success('등록 성공!', {
+      toastId: 'unique-toast',
+    });
+    router.push('/club');
+  };
 
   const handleChange = (name: keyof ClubFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -69,7 +56,12 @@ function ClubRegisterForm() {
   const isValid = isFormValid({ formData, errors }, fields);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <SafeForm
+      onSubmit={onSubmit}
+      title="등록하기"
+      disabled={!isValid}
+      formClassName="flex flex-col gap-4"
+    >
       {fields.map((field) => {
         const value = formData[field.name];
         if (typeof value !== 'string') return null;
@@ -89,14 +81,7 @@ function ClubRegisterForm() {
           />
         );
       })}
-      {isSubmitting ? (
-        <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center" />
-      ) : (
-        <Button type="submit" disabled={isSubmitting || !isValid} size="lg">
-          등록하기
-        </Button>
-      )}
-    </form>
+    </SafeForm>
   );
 }
 

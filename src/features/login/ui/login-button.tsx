@@ -7,12 +7,14 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
+import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
 function LoginForm() {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [errors, setErrors] = useState<{
     studentId?: string;
@@ -21,13 +23,13 @@ function LoginForm() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-
+    setIsSubmitting(true);
     const result: any = await signIn('credentials', {
       redirect: false,
       studentId,
       password,
     });
-
+    setIsSubmitting(false);
     if (result?.error) {
       toast.error('학번 또는 비밀번호를 확인해주세요.', {
         toastId: 'unique-toast',
@@ -110,14 +112,17 @@ function LoginForm() {
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </div>
-
-      <Button
-        type="submit"
-        disabled={studentId === '' || password === ''}
-        className="mt-5 h-10 w-full bg-black font-medium text-white"
-      >
-        확인
-      </Button>
+      {isSubmitting ? (
+        <DotsPulseLoader className="gap-3" />
+      ) : (
+        <Button
+          type="submit"
+          disabled={studentId === '' || password === ''}
+          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
+        >
+          확인
+        </Button>
+      )}
     </form>
   );
 }

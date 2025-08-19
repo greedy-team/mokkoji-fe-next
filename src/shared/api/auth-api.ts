@@ -2,35 +2,24 @@
 
 import 'server-only';
 import ky from 'ky';
-import { headers } from 'next/headers';
-import { getToken } from 'next-auth/jwt';
+import { auth } from '@/auth';
 
 async function authAPi() {
-  const reqLike = {
-    headers: { cookie: (await headers()).get('cookie') ?? '' },
-  };
+  const session = await auth();
 
-  const jwt = await getToken({
-    req: reqLike,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  if (!jwt) {
+  if (!session?.accessToken) {
     return ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      credentials: 'include',
     });
   }
-
-  const access = jwt.accessToken;
 
   return ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
     hooks: {
       beforeRequest: [
         async (req) => {
-          if (access && !req.headers.get('Authorization')) {
-            req.headers.set('Authorization', `Bearer ${access}`);
+          if (session.accessToken && !req.headers.get('Authorization')) {
+            req.headers.set('Authorization', `Bearer ${session.accessToken}`);
           }
         },
       ],

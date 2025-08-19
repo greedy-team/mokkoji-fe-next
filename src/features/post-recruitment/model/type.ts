@@ -39,7 +39,9 @@ export type Action =
   | { type: 'RESET_FORM' };
 
 export interface RecruitmentResponse {
-  data: {
+  ok: boolean;
+  message: string;
+  data?: {
     id: number;
     imageUrls: string[];
   };

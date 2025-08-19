@@ -23,7 +23,7 @@ export type RecruitmentStatus = 'BEFORE' | 'CLOSED' | 'OPEN'; // OPEN은 예시
 export interface Recruitment {
   club: Club;
   id: number;
-  title: string | null;
+  title: string;
   recruitStart: string; // ISO 날짜 문자열
   recruitEnd: string; // ISO 날짜 문자열
   status: RecruitmentStatus;

@@ -12,7 +12,7 @@ async function authAPi() {
 
   const jwt = await getToken({
     req: reqLike,
-    secret: '1004',
+    secret: process.env.NEXTAUTH_SECRET,
   });
 
   if (!jwt) {

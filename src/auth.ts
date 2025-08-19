@@ -17,6 +17,17 @@ export const { auth, handlers, signIn } = NextAuth({
   pages: {
     error: '/login?callbackUrl=/',
   },
+  cookies: {
+    sessionToken: {
+      name: '__Secure-authjs.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+      },
+    },
+  },
   providers: [
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID as string,

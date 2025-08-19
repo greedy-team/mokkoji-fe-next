@@ -141,7 +141,7 @@ function ClubDetailRecruitmentEdit({
           maxLength={5000}
         />
         <label htmlFor="recruitForm" className="indent-1 text-sm font-bold">
-          제목
+          모집폼 URL
         </label>
         <Input
           id="recruitForm"

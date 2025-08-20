@@ -14,7 +14,6 @@ interface GetRecruitListParams {
   size: number;
   keyword?: string;
   category?: ClubCategory;
-  affiliation?: ClubAffiliation;
   recruitStatus?: string;
 }
 
@@ -25,7 +24,6 @@ async function getClubList(params: GetRecruitListParams) {
     size: params.size,
     keyword: params.keyword,
     category: params.category,
-    affiliation: params.affiliation,
     recruitStatus: params.recruitStatus,
   };
 

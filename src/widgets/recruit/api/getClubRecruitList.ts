@@ -1,21 +1,29 @@
-import { ApiResponse, ClubAffiliation } from '@/shared/model/type';
+import {
+  ApiResponse,
+  ClubAffiliation,
+  ClubCategory,
+} from '@/shared/model/type';
 import authApi from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
+import { auth } from '@/auth';
+import serverApi from '@/shared/api/server-api';
 import { RecruitmentResponse } from '../model/type';
 
 async function getClubRecruitList({
   page,
   size,
-  affiliation,
+  category,
 }: {
   page: number;
   size: number;
-  affiliation?: ClubAffiliation;
+  category?: ClubCategory;
 }) {
+  const session = await auth();
+
   const rawParams = {
     page,
     size,
-    affiliation,
+    category,
   };
 
   const searchParams = new URLSearchParams();
@@ -25,16 +33,26 @@ async function getClubRecruitList({
       searchParams.set(key, String(value));
     }
   });
+
   try {
-    const response: ApiResponse<RecruitmentResponse> = await (
-      await authApi()
-    )
-      .get('recruitments', {
-        searchParams,
-        cache: 'force-cache',
-        next: { revalidate: 3600, tags: ['recruitments'] },
-      })
-      .json();
+    let response: ApiResponse<RecruitmentResponse>;
+    if (session?.accessToken) {
+      response = await (
+        await authApi()
+      )
+        .get('recruitments', {
+          searchParams,
+        })
+        .json();
+    } else {
+      response = await serverApi
+        .get('recruitments', {
+          searchParams,
+          cache: 'force-cache',
+          next: { revalidate: 240, tags: ['recruitments'] },
+        })
+        .json();
+    }
     return { ok: true, message: '성공', data: response.data };
   } catch (e) {
     return ErrorHandler(e as Error);

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Pagination from '@/shared/ui/pagination';
 import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import DevTodo from '@/shared/ui/dev-to-do';
+import cn from '@/shared/lib/utils';
 import getFavoriteList from '../api/getFavoriteList';
 
 interface FavoriteItemSectionProps {
@@ -33,7 +33,12 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       <h1 className="mb-5 w-full text-base font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.pagination?.totalElements}개
       </h1>
-      <ul className="grid w-auto grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+      <ul
+        className={cn(
+          'grid h-[380px] w-auto grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4',
+          data.clubs.length === 0 && 'h-auto',
+        )}
+      >
         {data.clubs.map((item) => (
           <Link href={`/club/${item.id}`} key={item.id}>
             <ClubItem
@@ -48,13 +53,12 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
           </Link>
         ))}
       </ul>
-      {data.clubs.length > 0 && (
-        <Pagination
-          page={page}
-          size={size}
-          total={data.pagination?.totalElements || 1}
-        />
-      )}
+
+      <Pagination
+        page={page}
+        size={size}
+        total={data.pagination?.totalElements || 1}
+      />
     </>
   ) : (
     <h1 className="mb-5 text-base font-bold text-[#00E457]">

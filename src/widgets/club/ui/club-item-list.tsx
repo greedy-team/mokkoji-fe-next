@@ -11,9 +11,6 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
     size: Number((await searchParams).size || 100),
     keyword: (await searchParams).keyword?.toUpperCase() || '',
     category: (await searchParams).category?.toUpperCase() as ClubCategory,
-    affiliation: (
-      await searchParams
-    ).affiliation?.toUpperCase() as ClubAffiliation,
     recruitStatus: (await searchParams).recruitStatus,
   });
   if (!res.ok) {

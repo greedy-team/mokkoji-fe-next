@@ -5,13 +5,13 @@ function Search() {
     <div className="mt-10 flex w-full flex-col items-center">
       <header className="mb-10 flex items-center gap-2">
         <Image
-          src="/support/ghost.svg"
+          src="/support/ghost.gif"
           alt="고객센터"
-          width={40}
-          height={40}
+          width={49}
+          height={49}
           className="cursor-pointer"
         />
-        <h1 className="text-2xl font-bold">무엇을 도와드릴까요?</h1>
+        <h1 className="text-[36px] font-bold">무엇을 도와드릴까요?</h1>
       </header>
       {/* <div className="group relative w-[80%] lg:w-[38%]">
         <input

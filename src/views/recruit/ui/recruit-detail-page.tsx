@@ -16,7 +16,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
   );
 
   return (
-    <div className="mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
+    <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
       <RecruitDetailHeader
         title={data.clubName}
         category={data.category}

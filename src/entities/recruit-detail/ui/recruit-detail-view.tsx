@@ -16,18 +16,18 @@ function RecruitDetailView({
 }: RecruitDetailViewProps) {
   return (
     <div className="flex flex-col gap-4">
-      <div className="mb-5 text-sm font-bold">
+      <div className="mt-5 mb-5 text-sm font-bold lg:text-lg">
         동아리 지원하러 가기: <br />
         <a
           href={recruitForm}
-          className="text-sm text-blue-600 hover:underline"
+          className="text-sm text-blue-600 hover:underline lg:text-lg"
           target="_blank"
           rel="noopener noreferrer"
         >
           {recruitForm}
         </a>
       </div>
-      <h4 className="text-md mb-5 font-bold">[{title}]</h4>
+      <h4 className="text-md mb-5 font-bold lg:text-lg">[{title}]</h4>
       <div className="flex gap-2">
         {imageUrls.map((imgsrc) => (
           <div
@@ -45,7 +45,7 @@ function RecruitDetailView({
       </div>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
-        className="mb-3 max-w-4xl text-sm leading-[1.4] whitespace-pre-wrap text-black"
+        className="mb-3 max-w-4xl text-sm leading-[1.4] whitespace-pre-wrap text-black lg:text-lg"
       />
     </div>
   );

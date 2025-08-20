@@ -13,7 +13,7 @@ export enum ClubCategory {
   SOCIAL = 'SOCIAL',
   SPORTS = 'SPORTS',
   RELIGIOUS = 'RELIGIOUS',
-  ETC = 'ETC',
+  OTHER = 'OTHER',
 }
 
 export enum ClubAffiliation {
@@ -58,7 +58,7 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
   [ClubCategory.SPORTS]: '체육',
   [ClubCategory.RELIGIOUS]: '종교',
   [ClubCategory.SOCIAL]: '친목',
-  [ClubCategory.ETC]: '기타',
+  [ClubCategory.OTHER]: '기타',
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {

@@ -26,7 +26,7 @@ function CategorySelect() {
     ClubCategory.SPORTS,
     ClubCategory.RELIGIOUS,
     ClubCategory.SOCIAL,
-    ClubCategory.ETC,
+    ClubCategory.OTHER,
   ];
 
   const handleChange = (value: string) => {

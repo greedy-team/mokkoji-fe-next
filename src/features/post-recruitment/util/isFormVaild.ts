@@ -5,7 +5,7 @@ export default function isFormValid(
   fields: FormField[],
 ) {
   const allFilled = fields
-    .filter((field) => field.name !== 'imageUrls')
+    .filter((field) => field.name !== 'images')
     .every((field) => {
       const val = formData[field.name as keyof typeof formData];
 

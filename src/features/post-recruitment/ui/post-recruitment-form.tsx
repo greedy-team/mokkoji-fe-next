@@ -49,9 +49,12 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     if (!files) return;
 
     const newFiles = Array.from(files);
-    setImageFiles((prev) => [...prev, ...Array.from(files)]);
+    setImageFiles((prev) => [...prev, ...newFiles]);
 
-    const newFileNames = newFiles.map((file) => file.name);
+    const newFileNames = newFiles.map(
+      (file) =>
+        `/club${clubId}/recruitment${crypto.randomUUID()}.${file.name.split('.').pop()}`,
+    );
 
     dispatch({
       type: 'UPDATE_FIELD',
@@ -85,9 +88,9 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
       return;
     }
 
-    if (Array.isArray(res.data?.imageUrls)) {
+    if (Array.isArray(res.data?.uploadImageUrls)) {
       await Promise.all(
-        res.data.imageUrls.map((url: string, i: number) =>
+        res.data.uploadImageUrls.map((url: string, i: number) =>
           ky.put(url, {
             body: imageFiles[i],
             headers: { 'Content-Type': imageFiles[i].type },

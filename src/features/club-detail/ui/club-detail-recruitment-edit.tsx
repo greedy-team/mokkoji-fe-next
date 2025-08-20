@@ -40,7 +40,7 @@ function ClubDetailRecruitmentEdit({
   const initialState: StateProp = {
     formData: {
       title,
-      images,
+      images: [],
       content,
       recruitStart,
       recruitEnd,

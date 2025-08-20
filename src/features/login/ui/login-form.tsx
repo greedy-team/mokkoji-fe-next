@@ -113,7 +113,7 @@ function LoginForm() {
         </button>
       </div>
       {isSubmitting ? (
-        <DotsPulseLoader className="gap-3" />
+        <DotsPulseLoader wrapperClassName="space-x-2" text="로그인 중..." />
       ) : (
         <Button
           type="submit"

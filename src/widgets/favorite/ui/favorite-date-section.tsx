@@ -25,7 +25,6 @@ function FavoriteDateSection() {
       });
 
       if (!response.ok) {
-        toast.error(response.message, { toastId: 'unique-toast' });
         return;
       }
 

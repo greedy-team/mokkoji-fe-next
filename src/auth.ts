@@ -114,6 +114,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const data: LoginSuccessResponse = await response.json();
           return {
+            ...token,
             accessToken: data.data.accessToken,
             expiresAt: getTokenExpiration(data.data.accessToken),
           };

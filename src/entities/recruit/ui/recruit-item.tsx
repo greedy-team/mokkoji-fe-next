@@ -35,7 +35,7 @@ function RecruitItem({
             <AvatarImage src={logo} />
             <AvatarFallback />
           </Avatar>
-          <div className="flex flex-col gap-0.5">
+          <div>
             <PeriodSection startDate={startDate} endDate={endDate} />
             <h1 className="text-[16px] font-bold lg:text-xl">{name}</h1>
           </div>

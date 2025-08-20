@@ -7,8 +7,8 @@ function formatNavigation({ date }: { date: Date }) {
 
   return (
     <div className="flex flex-row items-center gap-2 pl-2">
-      <span className="text-sm font-bold text-gray-900">{`${year} ${month}월 ${day}일, `}</span>
-      <span className="text-sm font-normal text-gray-600">
+      <span className="text-xl font-bold text-gray-900">{`${year} ${month}월 ${day}일, `}</span>
+      <span className="text-xl font-normal text-gray-600">
         {getWeekdays(date)}
       </span>
     </div>

@@ -16,8 +16,8 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
         <h1 className="mb-2.5 text-[20px] font-bold">로그인</h1>
 
         <button
-          onMouseEnter={() => setOpen(true)}
-          className="w-fit rounded px-1 text-sm font-medium hover:bg-gray-300"
+          onClick={() => setOpen(true)}
+          className="w-fit cursor-pointer rounded px-1 text-sm font-medium hover:text-[#00E457]"
         >
           안내 보기
         </button>
@@ -35,7 +35,7 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                   href="https://portal.sejong.ac.kr/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline"
+                  className="text-[#00E457] underline"
                 >
                   세종대학교포털
                 </a>{' '}
@@ -47,7 +47,7 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                   href="http://classic.sejong.ac.kr/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline"
+                  className="text-[#00E457] underline"
                 >
                   대양휴머니티칼리지
                 </a>{' '}
@@ -77,7 +77,7 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
 
             <button
               onClick={() => setOpen(false)}
-              className="mt-3 w-full rounded bg-blue-500 px-3 py-1 text-xs font-medium text-white hover:bg-blue-600"
+              className="mt-3 w-full rounded bg-[#00E457] px-3 py-1 text-xs font-medium text-white hover:bg-blue-600"
             >
               닫기
             </button>

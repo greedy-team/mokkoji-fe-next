@@ -1,7 +1,7 @@
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
 import Link from 'next/link';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { ClubAffiliation } from '@/shared/model/type';
+import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import { RecruitItemListProps } from '../model/type';
 import getClubRecruitList from '../api/getClubRecruitList';
 
@@ -9,9 +9,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
   const res = await getClubRecruitList({
     page: Number((await searchParams).page || 1),
     size: Number((await searchParams).size || 100),
-    affiliation: (
-      await searchParams
-    ).affiliation?.toUpperCase() as ClubAffiliation,
+    category: (await searchParams).category?.toUpperCase() as ClubCategory,
   });
 
   if (!res.ok) {

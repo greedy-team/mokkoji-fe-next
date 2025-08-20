@@ -1,9 +1,4 @@
-import {
-  ApiResponse,
-  ClubCategory,
-  ClubList,
-  ClubAffiliation,
-} from '@/shared/model/type';
+import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
 import authApi from '@/shared/api/auth-api';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';

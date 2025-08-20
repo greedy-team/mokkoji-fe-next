@@ -9,7 +9,7 @@ async function ClubDetailPage({ params }: DetailParams) {
   const data = await getClubDetail(id);
 
   return (
-    <div className="max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
+    <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
       <ClubDetailHeader
         title={data.name}
         category={data.category}
@@ -19,7 +19,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         clubId={Number(id)}
         isFavorite={data.isFavorite}
       />
-      <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black">
+      <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
         {data.description}
       </p>
       <ClubDetailCommentWidget clubId={Number(id)} />

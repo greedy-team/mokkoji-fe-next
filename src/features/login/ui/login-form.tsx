@@ -113,7 +113,9 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
         </button>
       </div>
       {isSubmitting ? (
-        <DotsPulseLoader wrapperClassName="space-x-2" text="로그인 중..." />
+        <div className="flex h-10 w-full items-center justify-center">
+          <DotsPulseLoader className="mr-3" />
+        </div>
       ) : (
         <>
           <Button

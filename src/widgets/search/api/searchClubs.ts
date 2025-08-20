@@ -1,5 +1,6 @@
 import { ApiResponse, ClubList } from '@/shared/model/type';
 import serverApi from '@/shared/api/server-api';
+import ErrorHandler from '@/shared/lib/error-message';
 
 interface SearchClubsParams {
   keyword: string;
@@ -14,13 +15,17 @@ async function searchClubs(params: SearchClubsParams) {
   searchParams.set('page', String(params.page || 1));
   searchParams.set('size', String(params.size || 10));
 
-  const response: ApiResponse<ClubList> = await serverApi
-    .get('clubs', {
-      searchParams,
-    })
-    .json();
+  try {
+    const response: ApiResponse<ClubList> = await serverApi
+      .get('clubs', {
+        searchParams,
+      })
+      .json();
 
-  return response.data.clubs;
+    return response.data.clubs;
+  } catch (e) {
+    return ErrorHandler(e as Error);
+  }
 }
 
 export default searchClubs;

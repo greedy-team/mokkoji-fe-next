@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/shared/ui/button';
 import { useState } from 'react';
 
 interface LoginHeaderProps {
@@ -17,9 +18,9 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
 
         <button
           onClick={() => setOpen(true)}
-          className="w-fit cursor-pointer rounded px-1 text-sm font-medium hover:text-[#00E457]"
+          className="w-fit cursor-pointer rounded px-1 text-sm font-medium underline hover:text-[#00E457]"
         >
-          안내 보기
+          안내사항
         </button>
 
         {open && (
@@ -71,16 +72,17 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                 onChange={(e) => onConfirm(e.target.checked)}
               />
               <label htmlFor="confirm" className="text-xs">
-                안내사항을 확인했습니다.
+                안내사항 확인 후에 로그인이 가능합니다.
               </label>
             </div>
 
-            <button
+            <Button
               onClick={() => setOpen(false)}
-              className="mt-3 w-full rounded bg-[#00E457] px-3 py-1 text-xs font-medium text-white hover:bg-blue-600"
+              variant="submit"
+              className="mt-3 w-full rounded bg-[#00E457] px-3 py-1 text-xs font-medium text-white"
             >
               닫기
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -88,6 +90,7 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
       <p className="text-[18px] font-medium">
         우리 학교 모든 동아리를 한 곳에서!
       </p>
+      <p className="text-xs text-[#00E457]">안내사항을 꼭 확인해주세요!</p>
     </header>
   );
 }

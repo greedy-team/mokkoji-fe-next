@@ -35,7 +35,7 @@ function HeaderLogin() {
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center gap-2">
-            <span className="cursor-pointer font-bold text-gray-400">
+            <span className="cursor-pointer font-bold">
               {session.user.name}님!
             </span>
             안녕하세요

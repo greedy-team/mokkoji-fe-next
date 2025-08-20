@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
@@ -9,7 +9,7 @@ import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
-function LoginForm() {
+function LoginForm({ confirmed }: { confirmed: boolean }) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -54,7 +54,7 @@ function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-10 flex w-full flex-col space-y-2"
+      className="mt-10 flex h-[430px] w-full flex-col space-y-2"
     >
       <label
         htmlFor="studentId"
@@ -115,13 +115,20 @@ function LoginForm() {
       {isSubmitting ? (
         <DotsPulseLoader wrapperClassName="space-x-2" text="로그인 중..." />
       ) : (
-        <Button
-          type="submit"
-          disabled={studentId === '' || password === ''}
-          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
-        >
-          확인
-        </Button>
+        <>
+          <Button
+            type="submit"
+            disabled={studentId === '' || password === '' || !confirmed}
+            className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
+          >
+            확인
+          </Button>
+          {!confirmed && (
+            <p className="text-xs text-[#FF383C]">
+              *로그인 안내를 확인해주세요.
+            </p>
+          )}
+        </>
       )}
     </form>
   );

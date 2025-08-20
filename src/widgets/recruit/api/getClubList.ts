@@ -51,7 +51,7 @@ async function getClubList(params: GetRecruitListParams) {
         .get('clubs', {
           searchParams,
           cache: 'force-cache',
-          next: { revalidate: 3600, tags: ['clubs'] },
+          next: { revalidate: 240, tags: ['clubs'] },
         })
         .json<ApiResponse<ClubList>>();
     }

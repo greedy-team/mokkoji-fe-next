@@ -45,7 +45,7 @@ async function getClubRecruitList({
         .get('recruitments', {
           searchParams,
           cache: 'force-cache',
-          next: { revalidate: 3600, tags: ['recruitments'] },
+          next: { revalidate: 240, tags: ['recruitments'] },
         })
         .json();
     }

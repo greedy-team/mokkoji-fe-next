@@ -24,8 +24,8 @@ export interface Recruitment {
   club: Club;
   id: number;
   title: string;
-  recruitStart: string; // ISO 날짜 문자열
-  recruitEnd: string; // ISO 날짜 문자열
+  recruitStart: string;
+  recruitEnd: string;
   status: RecruitmentStatus;
   isFavorite: boolean;
 }

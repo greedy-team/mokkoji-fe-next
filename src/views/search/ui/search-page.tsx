@@ -3,7 +3,7 @@ import SearchResults from '@/widgets/search/ui/search-results';
 import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 
 interface SearchPageProps {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; category?: string }>;
 }
 
 async function SearchPage({ searchParams }: SearchPageProps) {
@@ -12,7 +12,10 @@ async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <div className="flex w-full flex-col items-center">
       <SearchInput />
-      <SearchResults keyword={params.q} />
+      <SearchResults
+        keyword={params.q}
+        category={params.category?.toUpperCase()}
+      />
       <ScrollTopButton />
     </div>
   );

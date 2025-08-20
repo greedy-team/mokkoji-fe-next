@@ -10,14 +10,14 @@ function SectionHeader({
   children?: ReactNode;
 }) {
   return (
-    <header className="mb-8 w-full" id="top">
-      <nav className="mb-3 flex flex-row justify-between">
-        <h1 className="text-md mr-2 font-extrabold text-[#00E457] lg:text-xl">
+    <header className="mt-[79px] mb-18 w-full" id="top">
+      <nav className="mb-8 flex flex-row justify-between">
+        <h1 className="text-md mr-2 font-extrabold text-[#00E457] lg:text-2xl">
           {title}
         </h1>
         {children}
       </nav>
-      <h2 className="mt-2 mb-2 text-lg font-bold whitespace-pre-wrap text-[#474747] lg:text-2xl">
+      <h2 className="text-lg font-bold whitespace-pre-wrap text-[#474747] lg:text-4xl lg:leading-[48px]">
         {description}
       </h2>
     </header>

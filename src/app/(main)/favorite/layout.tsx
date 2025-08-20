@@ -11,7 +11,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex flex-col items-center justify-center pt-10">
+    <main className="flex flex-col items-center justify-center">
       {children}
     </main>
   );

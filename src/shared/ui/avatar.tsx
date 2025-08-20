@@ -47,7 +47,7 @@ function AvatarFallback({
       )}
       {...props}
     >
-      <Image src="/altClubIcon.png" alt="기본 로고" width={40} height={40} />
+      <Image src="/altClubIcon.svg" alt="기본 로고" width={60} height={60} />
     </AvatarPrimitive.Fallback>
   );
 }

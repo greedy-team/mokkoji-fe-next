@@ -38,7 +38,7 @@ function ClubItem({
       </div>
 
       <div className="flex flex-row justify-between">
-        <div className="pr-7 text-[12px] break-words whitespace-normal lg:text-xs">
+        <div className="line-clamp-2 overflow-hidden pr-7 text-[12px] break-words lg:text-xs">
           {description}
         </div>
       </div>

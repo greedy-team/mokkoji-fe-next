@@ -43,7 +43,7 @@ export interface RecruitmentResponse {
   message: string;
   data?: {
     id: number;
-    imageUrls: string[];
+    uploadImageUrls: string[];
   };
 }
 

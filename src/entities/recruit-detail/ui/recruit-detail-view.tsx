@@ -14,6 +14,7 @@ function RecruitDetailView({
   recruitForm,
   imageUrls,
 }: RecruitDetailViewProps) {
+  console.log(imageUrls);
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-5 text-sm font-bold">
@@ -28,15 +29,19 @@ function RecruitDetailView({
         </a>
       </div>
       <h4 className="text-md mb-5 font-bold">[{title}]</h4>
-      <div className="flex">
+      <div className="flex gap-2">
         {imageUrls.map((imgsrc) => (
-          <Image
+          <div
             key={imgsrc}
-            src={imgsrc}
-            alt="동아리 이미지"
-            width={300}
-            height={300}
-          />
+            className="relative aspect-square w-[30%] overflow-hidden"
+          >
+            <Image
+              src={imgsrc}
+              alt="동아리 이미지"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+            />
+          </div>
         ))}
       </div>
       <p

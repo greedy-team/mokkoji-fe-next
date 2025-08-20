@@ -155,7 +155,9 @@ html {
 }
 
 @layer utilities {
-  p, h1, h4 {
+  p,
+  h1,
+  h4 {
     @apply cursor-default;
   }
 }

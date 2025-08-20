@@ -14,7 +14,6 @@ function RecruitDetailView({
   recruitForm,
   imageUrls,
 }: RecruitDetailViewProps) {
-  console.log(imageUrls);
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-5 text-sm font-bold">

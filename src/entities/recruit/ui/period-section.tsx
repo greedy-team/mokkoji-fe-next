@@ -18,11 +18,10 @@ function PeriodSection({
   return isEndOfYear ? (
     <span className="text-xs font-semibold">상시모집</span>
   ) : (
-    <span className="text-xs font-semibold">
-      <span className="mb-0.5 text-gray-400">
+    <span className="text-xs leading-1 font-semibold">
+      <p className="text-gray-400">
         {decoration ? '모집기한 ' : '모집기한 | '}
-      </span>
-      <br />
+      </p>
       {formatToMonthDay(startDate)} ~ {formatToMonthDay(endDate)}
     </span>
   );

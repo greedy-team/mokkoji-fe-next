@@ -1,5 +1,4 @@
 import { ClubCategory } from '@/shared/model/type';
-import { toast } from 'react-toastify';
 import ClubSearchItem from '@/entities/search/club-search-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
@@ -17,7 +16,6 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
     category: category as ClubCategory,
   });
   if (!data.ok || !data.data) {
-    toast.error(data.message);
     return <ErrorBoundaryUi />;
   }
 

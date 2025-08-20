@@ -35,7 +35,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[310px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] p-3! text-gray-800 lg:h-[350px] lg:w-[700px]!"
+        className="h-[400px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
         nextLabel=">"
         prevLabel="<"
         navigationLabel={formatNavigation}
@@ -50,25 +50,25 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
           const isSelected = value.toDateString() === dateKey;
           const isDeadline = deadlineMap.has(dateKey);
 
-          let borderClass = 'border-transparent!';
-          let textClass = '';
-          let fontClass = 'font-bold!';
+          let borderClass = '!border-transparent';
+          let textClass = '!text-xl';
+          let fontClass = '!font-bold !text-xl';
 
           if (isSelected) {
-            borderClass = 'border-[#00E457]!';
-            textClass = 'text-[#00E457]!';
-            fontClass = 'font-semibold!';
+            borderClass = '!border-[#00E457]';
+            textClass = '!text-[#00E457] !text-xl';
+            fontClass = '!font-semibold !text-xl';
           } else if (isDeadline) {
-            textClass = 'text-[#00E457]!';
+            textClass = '!text-[#00E457] !text-xl';
           }
 
           return `
-            border-b-2!
+            !border-b-2
             ${borderClass}
             ${textClass}
-            bg-transparent!
-            hover:bg-blue-100!
-            transition!
+            !bg-transparent
+            hover:!bg-blue-100
+            transition
             ${fontClass}
           `;
         }}

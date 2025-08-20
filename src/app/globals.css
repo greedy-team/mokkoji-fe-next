@@ -297,6 +297,28 @@ html {
   content: none !important;
 }
 
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+  margin-right: 50%;
+}
+
+@media (min-width: 640px) {
+  .react-calendar__navigation {
+    width: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    margin-right: 0 !important;
+  }
+}
+
+.react-calendar__navigation {
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE 및 Edge */
   scrollbar-width: none; /* Firefox */

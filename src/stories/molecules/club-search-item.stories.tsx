@@ -18,7 +18,7 @@ export const Default: Story = {
     club: {
       id: 184,
       name: '모꼬지',
-      category: ClubCategory.ETC,
+      category: ClubCategory.OTHER,
       description: '우리 동아리에서 함께할 신입 멤버를 모집합니다!',
       affiliation: ClubAffiliation.CENTRAL_CLUB,
       recruitStartDate: '',
@@ -66,7 +66,7 @@ export const LongDescription: Story = {
     club: {
       id: 203,
       name: '창업 동아리 SPARK',
-      category: ClubCategory.ETC,
+      category: ClubCategory.OTHER,
       description:
         '아이디어 발굴 → 프로토타입 제작 → 사용자 인터뷰 → 피봇을 반복하며 실제 서비스 출시를 목표로 활동합니다. ' +
         '외부 네트워킹과 멘토링, 스터디도 함께 진행해요.',

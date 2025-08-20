@@ -17,7 +17,7 @@ function HomeKeywordList() {
       {KEYWORDS.map((keyword) => (
         <Link
           key={keyword}
-          href={`/search?q=${keyword}`}
+          href={`/search?category=${keyword}`}
           className="text-md w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-3 py-1 font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
         >
           {keyword}

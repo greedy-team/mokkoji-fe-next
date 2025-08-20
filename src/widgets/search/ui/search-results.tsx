@@ -1,35 +1,38 @@
-import { ClubType } from '@/shared/model/type';
+import { ClubCategory } from '@/shared/model/type';
 import { toast } from 'react-toastify';
 import ClubSearchItem from '@/entities/search/club-search-item';
-import searchClubs from '../api/searchClubs';
+import getClubList from '@/widgets/recruit/api/getClubList';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 interface SearchResultsProps {
   keyword?: string;
+  category?: string;
 }
 
-async function SearchResults({ keyword }: SearchResultsProps) {
-  let clubs: ClubType[] = [];
-
-  if (keyword) {
-    try {
-      clubs = await searchClubs({ keyword });
-    } catch {
-      toast.error('검색 중 오류가 발생했습니다.');
-    }
+async function SearchResults({ keyword, category }: SearchResultsProps) {
+  const data = await getClubList({
+    page: 1,
+    size: 100,
+    keyword,
+    category: category as ClubCategory,
+  });
+  if (!data.ok || !data.data) {
+    toast.error(data.message);
+    return <ErrorBoundaryUi />;
   }
-
-  if (!keyword) return null;
 
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-8 mb-4">
-        <span className="font-bold text-[#00E457]">{clubs.length}건</span>
+        <span className="font-bold text-[#00E457]">
+          {data.data?.clubs.length}건
+        </span>
         <span className="text-black">의 검색결과</span>
       </section>
 
-      {clubs.length > 0 ? (
+      {data.data?.clubs.length > 0 ? (
         <section className="space-y-3">
-          {clubs.map((club) => (
+          {data.data?.clubs.map((club) => (
             <ClubSearchItem key={club.id} club={club} />
           ))}
         </section>

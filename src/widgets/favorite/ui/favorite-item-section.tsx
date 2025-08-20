@@ -53,13 +53,12 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
           </Link>
         ))}
       </ul>
-      {data.clubs.length > 0 && (
-        <Pagination
-          page={page}
-          size={size}
-          total={data.pagination?.totalElements || 1}
-        />
-      )}
+
+      <Pagination
+        page={page}
+        size={size}
+        total={data.pagination?.totalElements || 1}
+      />
     </>
   ) : (
     <h1 className="mb-5 text-base font-bold text-[#00E457]">

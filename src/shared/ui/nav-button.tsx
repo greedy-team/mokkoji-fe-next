@@ -26,7 +26,7 @@ function NavButton({ label, navProps, href, onItemClick }: NavButtonProps) {
       href={href}
       onClick={onItemClick}
       className={clsx(
-        'flex items-center px-3 no-underline transition-colors duration-500 hover:border-b-2 hover:border-[#585858] lg:h-full lg:px-3.25 lg:py-2 lg:hover:border-b-2',
+        'flex items-center border-b-2 border-transparent px-3 no-underline transition-colors duration-500 hover:border-[#585858] lg:h-full lg:px-3.25 lg:py-2 lg:hover:border-b-2',
         navProps,
         active &&
           'ml-2 w-fit border-b-2 font-extrabold lg:border-b-3 lg:border-black',

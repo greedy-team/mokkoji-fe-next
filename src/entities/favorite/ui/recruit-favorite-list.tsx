@@ -12,8 +12,8 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
     : [];
 
   return (
-    <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#F8F8F8] p-6 text-xs font-semibold">
-      <h2 className="text-sm font-bold">모집 일정📒</h2>
+    <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#F8F8F8] p-6 text-xl font-semibold">
+      <h2 className="text-2xl font-bold">모집 일정📒</h2>
       {sortedData.length > 0 ? (
         <ul className="space-y-1">
           {sortedData.map((club) => (

@@ -145,6 +145,13 @@
   animation-delay: 0.3s;
 }
 
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -288,6 +295,28 @@ html {
 
 .react-calendar__month-view__days__day abbr::after {
   content: none !important;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+  margin-right: 50%;
+}
+
+@media (min-width: 640px) {
+  .react-calendar__navigation {
+    width: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    margin-right: 0 !important;
+  }
+}
+
+.react-calendar__navigation {
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
 }
 
 .scrollbar-hide {

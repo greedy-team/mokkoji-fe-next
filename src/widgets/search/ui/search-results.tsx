@@ -1,5 +1,4 @@
 import { ClubCategory } from '@/shared/model/type';
-import { toast } from 'react-toastify';
 import ClubSearchItem from '@/entities/search/club-search-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
@@ -12,18 +11,17 @@ interface SearchResultsProps {
 async function SearchResults({ keyword, category }: SearchResultsProps) {
   const data = await getClubList({
     page: 1,
-    size: 100,
+    size: 200,
     keyword,
     category: category as ClubCategory,
   });
   if (!data.ok || !data.data) {
-    toast.error(data.message);
     return <ErrorBoundaryUi />;
   }
 
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">
-      <section className="mt-8 mb-4">
+      <section className="mt-13 mb-4">
         <span className="font-bold text-[#00E457]">
           {data.data?.clubs.length}건
         </span>

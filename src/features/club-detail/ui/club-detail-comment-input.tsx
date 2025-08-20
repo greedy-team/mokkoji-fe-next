@@ -67,7 +67,11 @@ function ClubDetailCommentInput({
         value={value}
         onChange={handleChange}
         variant="comment"
-        placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
+        placeholder={
+          session
+            ? '허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요.'
+            : '로그인을 먼저 해주세요!'
+        }
         disabled={!session}
       />
       {!session && (

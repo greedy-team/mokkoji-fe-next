@@ -26,7 +26,7 @@ const fields: FormField[] = [
   { label: '모집 시작일', name: 'recruitStart', type: 'date' },
   { label: '모집 마감일', name: 'recruitEnd', type: 'date' },
   { label: '모집 폼 링크', name: 'recruitForm', type: 'input' },
-  { label: '이미지', name: 'imageUrls', type: 'image' },
+  { label: '이미지', name: 'images', type: 'image' },
 ];
 
 function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
@@ -55,8 +55,8 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
 
     dispatch({
       type: 'UPDATE_FIELD',
-      name: 'imageUrls',
-      value: [...formData.imageUrls, ...newFileNames],
+      name: 'images',
+      value: [...formData.images, ...newFileNames],
     });
   };
 
@@ -69,7 +69,16 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const res = await postRecruitmentForm(formData, clubId!);
+    const data = {
+      title: formData.title,
+      content: formData.content,
+      recruitStart: formData.recruitStart,
+      recruitEnd: formData.recruitEnd,
+      recruitForm: formData.recruitForm,
+      images: formData.images,
+    };
+
+    const res = await postRecruitmentForm(data, clubId!);
 
     if (!res.ok) {
       toast.error(res.message);
@@ -136,20 +145,20 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
           </p>
         )}
       </label>
-      <p className="text-xs text-[#00D451]">2000자 이내로 작성해주세요!</p>
+      <p className="text-xs text-[#00D451]">5000자 이내로 작성해주세요!</p>
       <Textarea
         id="content"
         name="content"
         value={formData.content}
         onChange={(e) => handleChange('content', e.target.value)}
         variant={errors.content ? 'error' : 'default'}
-        maxLength={600}
+        maxLength={5000}
         className="transition-colors duration-300"
         onBlur={() => handleBlur('content')}
       />
       <p className="text-end text-xs text-[#474747]">
         {formData.content.length}{' '}
-        <span className="text-[#CCCCCC]">/ 2000자</span>
+        <span className="text-[#CCCCCC]">/ 5000자</span>
       </p>
       <label htmlFor="recruitForm" className="mt-4 flex gap-2 font-bold">
         모집 폼 링크

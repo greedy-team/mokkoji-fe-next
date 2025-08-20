@@ -4,7 +4,7 @@ import { Action, StateProp } from '../type';
 export const initialState: StateProp = {
   formData: {
     title: '',
-    imageUrls: [],
+    images: [],
     content: '',
     recruitStart: '',
     recruitEnd: '',

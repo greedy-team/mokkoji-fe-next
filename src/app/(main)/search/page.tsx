@@ -1,7 +1,7 @@
 import SearchPage from '@/views/search/ui/search-page';
 
 interface PageProps {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; category?: string }>;
 }
 
 function Page({ searchParams }: PageProps) {

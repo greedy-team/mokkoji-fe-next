@@ -1,9 +1,4 @@
-import {
-  ApiResponse,
-  ClubCategory,
-  ClubList,
-  ClubAffiliation,
-} from '@/shared/model/type';
+import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
 import authApi from '@/shared/api/auth-api';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
@@ -14,7 +9,6 @@ interface GetRecruitListParams {
   size: number;
   keyword?: string;
   category?: ClubCategory;
-  affiliation?: ClubAffiliation;
   recruitStatus?: string;
 }
 
@@ -25,7 +19,6 @@ async function getClubList(params: GetRecruitListParams) {
     size: params.size,
     keyword: params.keyword,
     category: params.category,
-    affiliation: params.affiliation,
     recruitStatus: params.recruitStatus,
   };
 
@@ -51,7 +44,7 @@ async function getClubList(params: GetRecruitListParams) {
         .get('clubs', {
           searchParams,
           cache: 'force-cache',
-          next: { revalidate: 3600, tags: ['clubs'] },
+          next: { revalidate: 240, tags: ['clubs'] },
         })
         .json<ApiResponse<ClubList>>();
     }

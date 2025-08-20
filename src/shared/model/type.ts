@@ -6,13 +6,14 @@ export interface ApiResponse<T> {
 }
 
 export enum ClubCategory {
+  ALL = 'ALL',
   CULTURAL_ART = 'CULTURAL_ART',
   ACADEMIC_CULTURAL = 'ACADEMIC_CULTURAL',
   VOLUNTEER_SOCIAL = 'VOLUNTEER_SOCIAL',
   SOCIAL = 'SOCIAL',
   SPORTS = 'SPORTS',
   RELIGIOUS = 'RELIGIOUS',
-  ETC = 'ETC',
+  OTHER = 'OTHER',
 }
 
 export enum ClubAffiliation {
@@ -50,13 +51,14 @@ export interface FavoriteList {
 }
 
 export const ClubCategoryLabel: Record<ClubCategory, string> = {
+  [ClubCategory.ALL]: '전체',
   [ClubCategory.CULTURAL_ART]: '문화/예술',
   [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양',
   [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
   [ClubCategory.SPORTS]: '체육',
   [ClubCategory.RELIGIOUS]: '종교',
   [ClubCategory.SOCIAL]: '친목',
-  [ClubCategory.ETC]: '기타',
+  [ClubCategory.OTHER]: '기타',
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {

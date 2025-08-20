@@ -11,6 +11,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     size: Number((await searchParams).size || 100),
     category: (await searchParams).category?.toUpperCase() as ClubCategory,
   });
+
   if (!res.ok) {
     return <ErrorBoundaryUi />;
   }
@@ -28,7 +29,8 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
         <li key={item.id}>
           <Link href={`/recruit/${item.id}`}>
             <RecruitItem
-              title={item.club.name || ''}
+              title={item.title}
+              name={item.club.name || ''}
               startDate={item.recruitStart}
               endDate={item.recruitEnd}
               description={item.club.description}

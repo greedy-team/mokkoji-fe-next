@@ -3,6 +3,7 @@ export interface RecruitmentDetail {
   id: number;
   title: string;
   content: string;
+  clubId: number;
   recruitStart: string; // ISO 날짜 문자열
   recruitEnd: string; // ISO 날짜 문자열
   status: RecruitmentStatus;

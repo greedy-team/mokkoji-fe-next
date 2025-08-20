@@ -3,6 +3,7 @@
 import * as React from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import cn from '@/shared/lib/utils';
+import Image from 'next/image';
 
 function Avatar({
   className,
@@ -45,7 +46,9 @@ function AvatarFallback({
         className,
       )}
       {...props}
-    />
+    >
+      <Image src="/altClubIcon.png" alt="기본 로고" width={40} height={40} />
+    </AvatarPrimitive.Fallback>
   );
 }
 

@@ -10,7 +10,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
   const data = await getRecruitDetail(id);
 
   return (
-    <div className="max-w-[85%] min-w-[75%]">
+    <div className="mx-auto sm:w-4xl lg:w-6xl">
       <RecruitDetailHeader
         title={data.clubName}
         category={data.category}

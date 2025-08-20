@@ -62,6 +62,7 @@ function ClubDetailCommentInput({
         />
       </div>
       <p className="cursor-default text-base font-semibold">댓글 {count}</p>
+
       <Textarea
         value={value}
         onChange={handleChange}
@@ -69,6 +70,11 @@ function ClubDetailCommentInput({
         placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
         disabled={!session}
       />
+      {!session && (
+        <p className="mb-5 text-sm font-bold text-[#00E457]">
+          로그인 후 이용하실 수 있습니다.
+        </p>
+      )}
       <div className="flex justify-end">
         <Button
           variant="submit"

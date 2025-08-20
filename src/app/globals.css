@@ -145,6 +145,13 @@
   animation-delay: 0.3s;
 }
 
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 body {
   margin: 0;
   padding: 0;

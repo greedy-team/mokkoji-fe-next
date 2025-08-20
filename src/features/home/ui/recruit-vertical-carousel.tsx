@@ -64,7 +64,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[50%] w-full overflow-hidden perspective-[1200px] lg:h-[300px] lg:w-[50%]"
+      className="relative h-[50%] w-full overflow-hidden perspective-[10000px] lg:h-[300px] lg:w-[50%]"
     >
       <FadeEgde variant="top" />
       <FadeEgde variant="bottom" />

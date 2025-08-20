@@ -1,7 +1,7 @@
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
 import Link from 'next/link';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
+import { ClubCategory } from '@/shared/model/type';
 import { RecruitItemListProps } from '../model/type';
 import getClubRecruitList from '../api/getClubRecruitList';
 

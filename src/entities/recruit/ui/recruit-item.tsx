@@ -2,9 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
-import getStatus from '@/shared/lib/getStatus';
+import { RecruitStatus } from '@/shared/model/type';
+import FavoriteButton from '@/shared/ui/favorite-button';
 import PeriodSection from './period-section';
-import FavoriteButton from '../../../shared/ui/favorite-button';
 
 interface RecruitItemProps {
   title: string;
@@ -15,6 +15,7 @@ interface RecruitItemProps {
   isFavorite?: boolean;
   logo?: string;
   clubId: string;
+  status: RecruitStatus;
 }
 
 function RecruitItem({
@@ -26,6 +27,7 @@ function RecruitItem({
   isFavorite,
   logo,
   clubId,
+  status,
 }: RecruitItemProps) {
   return (
     <div className="relative flex min-h-[90px] w-[100%] flex-col gap-2 rounded-lg bg-[#F8F8F8] p-3 text-[#474747] transition-shadow duration-300 hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2)] lg:min-h-[180px] lg:w-auto lg:p-5">
@@ -40,10 +42,7 @@ function RecruitItem({
             <h1 className="text-[16px] font-bold lg:text-xl">{name}</h1>
           </div>
         </div>
-        <RadiusTag
-          label={getStatus(endDate).text}
-          className={`${getStatus(endDate).backColor} ${getStatus(endDate).fontColor}`}
-        />
+        <RadiusTag status={status} className="lg:text-[16px]" />
       </div>
       <div className="flex flex-col justify-between gap-2">
         <h4 className="overflow-hidden pr-7 text-[12px] font-bold break-words text-ellipsis whitespace-nowrap lg:text-xs">

@@ -6,7 +6,6 @@ export interface ApiResponse<T> {
 }
 
 export enum ClubCategory {
-  ALL = 'ALL',
   CULTURAL_ART = 'CULTURAL_ART',
   ACADEMIC_CULTURAL = 'ACADEMIC_CULTURAL',
   VOLUNTEER_SOCIAL = 'VOLUNTEER_SOCIAL',
@@ -50,7 +49,6 @@ export interface FavoriteList {
 }
 
 export const ClubCategoryLabel: Record<ClubCategory, string> = {
-  [ClubCategory.ALL]: '전체',
   [ClubCategory.CULTURAL_ART]: '문화/예술',
   [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양',
   [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
@@ -111,3 +109,12 @@ export interface ClubInfoType {
 export interface ClubInfoResponse {
   data: ClubInfoType;
 }
+
+export type RecruitStatus = 'OPEN' | 'CLOSED' | 'BEFORE' | 'IMMINENT';
+
+export const RecruitStatusLabel: Record<RecruitStatus, string> = {
+  OPEN: '모집 중',
+  CLOSED: '모집 마감',
+  BEFORE: '모집 전',
+  IMMINENT: '마감 임박',
+};

@@ -29,7 +29,7 @@ function RecruitDetailView({
         동아리 지원하러 가기: <br />
         <a
           href={recruitForm}
-          className="text-sm text-blue-600 hover:underline lg:text-lg"
+          className="text-sm text-[#00E457] hover:underline lg:text-lg"
           target="_blank"
           rel="noopener noreferrer"
         >

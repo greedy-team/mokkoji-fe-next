@@ -24,7 +24,7 @@ function ClubItem({
     <div className="relative flex min-h-[90px] w-[100%] flex-col gap-2 rounded-lg bg-[#F8F8F8] p-3 text-[#474747] transition-shadow duration-300 hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2)] lg:min-h-[180px] lg:w-auto lg:p-5">
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
         <div className="flex flex-row items-center gap-4">
-          <Avatar className="size-10 lg:size-12">
+          <Avatar className="size-12 lg:size-14">
             <AvatarImage src={logo} />
             <AvatarFallback />
           </Avatar>

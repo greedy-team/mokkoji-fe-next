@@ -18,6 +18,7 @@ type YMD = {
   day: string;
   hour: string;
   minute: string;
+  second: string;
 };
 
 export default function SelectDate({
@@ -32,13 +33,15 @@ export default function SelectDate({
     day: '',
     hour: '',
     minute: '',
+    second: '',
   });
   const [end, setEnd] = useState<YMD>({
     year: '',
     month: '',
     day: '',
-    hour: '',
-    minute: '',
+    hour: '23',
+    minute: '59',
+    second: '59',
   });
 
   // 내부 유효성(시작>마감) 오류
@@ -51,11 +54,13 @@ export default function SelectDate({
     const timePart = dateStr.split('T')[1];
     let hour = '';
     let minute = '';
+    let second = '';
 
     if (timePart) {
       const cleanTime = timePart.replaceAll(':', '');
       if (cleanTime.length >= 2) hour = cleanTime.slice(0, 2);
       if (cleanTime.length >= 4) minute = cleanTime.slice(2, 4);
+      if (cleanTime.length >= 6) second = cleanTime.slice(4, 6);
     }
 
     if (compact.length === 8) {
@@ -65,9 +70,10 @@ export default function SelectDate({
         day: compact.slice(6, 8),
         hour,
         minute,
+        second,
       };
     }
-    return { year: '', month: '', day: '', hour: '', minute: '' };
+    return { year: '', month: '', day: '', hour: '', minute: '', second: '' };
   };
 
   const pad2 = (s: string) => s.padStart(2, '0');
@@ -76,7 +82,8 @@ export default function SelectDate({
     if (!d.year || !d.month || !d.day) return '';
     const hour = d.hour ? pad2(d.hour) : '00';
     const minute = d.minute ? pad2(d.minute) : '00';
-    return `${d.year}-${pad2(d.month)}-${pad2(d.day)}T${hour}:${minute}`;
+    const second = d.second ? pad2(d.second) : '00';
+    return `${d.year}-${pad2(d.month)}-${pad2(d.day)}T${hour}:${minute}:${second}`;
   };
 
   const isComplete = (d: YMD) =>
@@ -145,18 +152,6 @@ export default function SelectDate({
 
   const clampYear = (raw: string) => raw.replace(/[^0-9]/g, '').slice(0, 4);
 
-  const clampHour = (raw: string) => {
-    const clean = raw.replace(/[^0-9]/g, '').slice(0, 2);
-    const num = Math.min(Number(clean || '0'), 23);
-    return clean.length === 0 ? '' : String(num);
-  };
-
-  const clampMinute = (raw: string) => {
-    const clean = raw.replace(/[^0-9]/g, '').slice(0, 2);
-    const num = Math.min(Number(clean || '0'), 59);
-    return clean.length === 0 ? '' : String(num);
-  };
-
   const handleDateChange = (
     type: 'start' | 'end',
     field: 'year' | 'month' | 'day' | 'hour' | 'minute',
@@ -168,8 +163,6 @@ export default function SelectDate({
     if (field === 'year') nextPiece = clampYear(value);
     if (field === 'month') nextPiece = clampMonth(value);
     if (field === 'day') nextPiece = clampDay(value, curr.year, curr.month);
-    if (field === 'hour') nextPiece = clampHour(value);
-    if (field === 'minute') nextPiece = clampMinute(value);
 
     const updated: YMD = { ...curr, [field]: nextPiece };
 
@@ -233,28 +226,6 @@ export default function SelectDate({
             inputMode="numeric"
           />
           <span>일</span>
-          <input
-            type="text"
-            placeholder="HH"
-            value={start.hour}
-            onChange={(e) => handleDateChange('start', 'hour', e.target.value)}
-            className="w-[18px] text-right focus:outline-none lg:w-[18px]"
-            aria-invalid={startInvalid}
-            inputMode="numeric"
-          />
-          <span>시</span>
-          <input
-            type="text"
-            placeholder="MM"
-            value={start.minute}
-            onChange={(e) =>
-              handleDateChange('start', 'minute', e.target.value)
-            }
-            className="w-[18px] text-right focus:outline-none lg:w-[20px]"
-            aria-invalid={startInvalid}
-            inputMode="numeric"
-          />
-          <span>분</span>
         </div>
         {(errors?.recruitStart || orderError) && (
           <p className="text-[11px] text-red-500">
@@ -298,26 +269,6 @@ export default function SelectDate({
             inputMode="numeric"
           />
           <span>일</span>
-          <input
-            type="text"
-            placeholder="HH"
-            value={end.hour}
-            onChange={(e) => handleDateChange('end', 'hour', e.target.value)}
-            className="w-[18px] text-right focus:outline-none lg:w-[18px]"
-            aria-invalid={endInvalid}
-            inputMode="numeric"
-          />
-          <span>시</span>
-          <input
-            type="text"
-            placeholder="MM"
-            value={end.minute}
-            onChange={(e) => handleDateChange('end', 'minute', e.target.value)}
-            className="w-[18px] text-right focus:outline-none lg:w-[20px]"
-            aria-invalid={endInvalid}
-            inputMode="numeric"
-          />
-          <span>분</span>
         </div>
       </div>
     </div>

@@ -6,23 +6,19 @@ const KEYWORDS = [
     category: 'all',
   },
   {
-    name: '예술',
+    name: '문화/예술',
     category: 'cultural_art',
   },
   {
-    name: '학술',
+    name: '학술/교양',
     category: 'academic_cultural',
   },
   {
-    name: '봉사',
+    name: '봉사/사회',
     category: 'volunteer_social',
   },
   {
-    name: '사회',
-    category: 'social',
-  },
-  {
-    name: '스포츠',
+    name: '체육',
     category: 'sports',
   },
   {
@@ -41,7 +37,7 @@ function HomeKeywordList() {
       {KEYWORDS.map((keyword) => (
         <Link
           key={keyword.name}
-          href={`/search?category=${keyword.category}`}
+          href={`/search?category=${keyword.category === 'all' ? '' : keyword.category}`}
           className="text-md w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-3 py-1 font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
         >
           {keyword.name}

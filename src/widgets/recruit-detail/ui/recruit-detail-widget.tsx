@@ -63,13 +63,13 @@ function RecruitDetailWidget({
         <div className="mb-6 flex cursor-pointer justify-end gap-4 text-base text-[#9C9C9C] lg:mb-0">
           <button
             onClick={() => setIsEditing(true)}
-            className="cursor-pointer text-[#20E86C] underline"
+            className="cursor-pointer text-[#00E457] hover:underline"
           >
             수정하기
           </button>
           <button
             onClick={handleDelete}
-            className="cursor-pointer text-red-300 underline"
+            className="cursor-pointer text-red-400 hover:underline"
           >
             삭제하기
           </button>

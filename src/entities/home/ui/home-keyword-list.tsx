@@ -2,10 +2,6 @@ import Link from 'next/link';
 
 const KEYWORDS = [
   {
-    name: '전체',
-    category: 'all',
-  },
-  {
     name: '문화/예술',
     category: 'cultural_art',
   },

@@ -1,8 +1,8 @@
 import PeriodSection from '@/entities/recruit/ui/period-section';
 import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
-import getStatus from '@/shared/lib/getStatus';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { RecruitStatus } from '@/shared/model/type';
 
 interface RecruitDetailHeaderProps {
   title: string;
@@ -14,6 +14,7 @@ interface RecruitDetailHeaderProps {
   isFavorite?: boolean;
   createdAt: string;
   logo: string;
+  status: RecruitStatus;
 }
 
 function RecruitDetailHeader({
@@ -26,6 +27,7 @@ function RecruitDetailHeader({
   isFavorite,
   logo,
   createdAt,
+  status,
 }: RecruitDetailHeaderProps) {
   const [date, time] = (createdAt || '').split('T');
   return (
@@ -42,10 +44,7 @@ function RecruitDetailHeader({
           </p>
         </div>
         <div className="mb-4 flex flex-row items-center gap-4 lg:text-xl">
-          <RadiusTag
-            label={getStatus(endDate).text}
-            className={`${getStatus(endDate).backColor} ${getStatus(endDate).fontColor} lg:text-[16px]`}
-          />
+          <RadiusTag status={status} className="lg:text-[16px]" />
           <PeriodSection
             startDate={startDate}
             endDate={endDate}

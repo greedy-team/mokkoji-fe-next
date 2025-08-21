@@ -27,7 +27,6 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
           <div
             onMouseLeave={() => setOpen(false)}
             className="absolute z-50 w-full rounded-lg border bg-white px-5 py-7 text-xs shadow-xl"
-
           >
             <h3 className="mb-2 font-semibold">로그인 안내</h3>
             <ul className="list-disc space-y-2 pl-5 text-xs leading-relaxed">

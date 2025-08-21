@@ -43,19 +43,19 @@ function ClubInput({
 
       {type === 'textarea' && (
         <>
-          <p className="text-xs text-[#00D451]">600자 이내로 작성해주세요!</p>
+          <p className="text-xs text-[#00D451]">2000자 이내로 작성해주세요!</p>
           <Textarea
             id={name}
             name={name}
             value={value}
             onChange={(e) => onChange(name, e.target.value)}
             variant={error ? 'error' : 'default'}
-            maxLength={600}
+            maxLength={2000}
             className="transition-colors duration-300"
             onBlur={() => onBlur(name)}
           />
           <p className="text-end text-xs text-[#474747]">
-            {value.length} <span className="text-[#CCCCCC]">/ 600자</span>
+            {value.length} <span className="text-[#CCCCCC]">/ 2000자</span>
           </p>
         </>
       )}

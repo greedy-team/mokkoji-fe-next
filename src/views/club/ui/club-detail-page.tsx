@@ -3,6 +3,7 @@ import ClubDetailCommentWidget from '@/widgets/club-detail/ui/club-detail-commen
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
+import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
@@ -22,7 +23,11 @@ async function ClubDetailPage({ params }: DetailParams) {
         status={data.status}
       />
       <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
-        {data.description}
+        <span
+          dangerouslySetInnerHTML={{
+            __html: convertLinkText(data.description),
+          }}
+        />
       </p>
       <ClubDetailCommentWidget clubId={Number(id)} />
     </div>

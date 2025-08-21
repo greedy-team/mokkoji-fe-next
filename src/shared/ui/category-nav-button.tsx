@@ -19,7 +19,6 @@ function CategorySelect() {
   const active = searchParams.get('category')?.toUpperCase() ?? '';
 
   const categories: ClubCategory[] = [
-    ClubCategory.ALL,
     ClubCategory.CULTURAL_ART,
     ClubCategory.ACADEMIC_CULTURAL,
     ClubCategory.VOLUNTEER_SOCIAL,
@@ -36,7 +35,7 @@ function CategorySelect() {
     } else {
       newParams.delete('category');
     }
-    if (value === ClubCategory.ALL) {
+    if (value === 'all') {
       newParams.delete('category');
     }
 
@@ -51,6 +50,7 @@ function CategorySelect() {
       <SelectContent position="popper">
         <SelectGroup>
           <SelectLabel>카테고리</SelectLabel>
+          <SelectItem value="all">전체</SelectItem>
           {categories.map((c) => (
             <SelectItem key={c} value={c}>
               {ClubCategoryLabel[c]}

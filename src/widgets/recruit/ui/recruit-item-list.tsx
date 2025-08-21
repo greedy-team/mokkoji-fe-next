@@ -37,6 +37,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
               isFavorite={item.isFavorite}
               logo={item.club.logo}
               clubId={String(item.club.id)}
+              status={item.status}
             />
           </Link>
         </li>

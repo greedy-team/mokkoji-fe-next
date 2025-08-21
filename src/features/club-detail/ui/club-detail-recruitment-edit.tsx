@@ -18,9 +18,10 @@ import patchRecruitmentForm from '../api/patchRecruitment';
 
 interface RecruitDetailEditProps {
   title: string;
+  clubName: string;
+  category: string;
   content: string;
   recruitForm: string;
-  images: string[];
   recruitStart: string;
   recruitEnd: string;
   clubId: number;
@@ -29,9 +30,10 @@ interface RecruitDetailEditProps {
 
 function ClubDetailRecruitmentEdit({
   title,
+  clubName,
+  category,
   content,
   recruitForm,
-  images,
   recruitStart,
   recruitEnd,
   clubId,
@@ -65,7 +67,7 @@ function ClubDetailRecruitmentEdit({
 
     const newFileNames = newFiles.map(
       (file) =>
-        `/club${clubId}/recruitment${crypto.randomUUID()}.${file.name.split('.').pop()}`,
+        `recruitment-image/${clubId}/${crypto.randomUUID()}.${file.name.split('.').pop()}`,
     );
 
     dispatch({

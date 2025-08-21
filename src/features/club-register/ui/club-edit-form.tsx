@@ -118,7 +118,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
 
-    const fileName = file.name;
+    const fileName = `club-image/${clubInfo?.id}/${crypto.randomUUID()}.${file.name.split('.').pop()}`;
     setLogoFile(file);
 
     dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: fileName });

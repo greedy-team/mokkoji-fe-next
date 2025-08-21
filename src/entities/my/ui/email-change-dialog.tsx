@@ -62,7 +62,7 @@ export default function EmailChangeDialog({
             id="email-change-desc"
             className="text-xs text-[#00E457]"
           >
-            메일 주소를 입력하세요!
+            이메일은 즐겨찾기한 동아리의 신규 모집글 알림용으로 활용됩니다.
           </DialogDescription>
         </DialogHeader>
 

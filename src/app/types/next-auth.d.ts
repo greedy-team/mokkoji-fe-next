@@ -1,5 +1,4 @@
 // types/next-auth.d.ts
-import NextAuth from 'next-auth';
 import { UserInfoType } from '@/entities/my/model/type';
 import { UserRole } from '@/shared/model/type';
 

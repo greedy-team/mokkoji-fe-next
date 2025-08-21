@@ -21,6 +21,8 @@ export default function CommentItem({
     commentId: number,
   ) => {
     e.preventDefault();
+    const confirmDelete = window.confirm('댓글을 삭제하시겠습니까?');
+    if (!confirmDelete) return;
 
     const response = await deleteComment(clubId, commentId);
     if (!response.ok) {

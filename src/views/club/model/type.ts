@@ -1,3 +1,5 @@
+import { RecruitStatus } from '@/shared/model/type';
+
 export interface ClubDetailType {
   id: number;
   name: string;
@@ -10,6 +12,7 @@ export interface ClubDetailType {
   isFavorite: boolean;
   instagram: string;
   recruitPost: string;
+  status: RecruitStatus;
 }
 
 export interface ClubDetailData {

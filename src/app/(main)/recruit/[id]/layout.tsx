@@ -7,12 +7,15 @@ export const metadata: Metadata = {
 
 export default function Layout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <main className="flex w-[95vw] flex-col items-center justify-center">
       {children}
+      {modal}
     </main>
   );
 }

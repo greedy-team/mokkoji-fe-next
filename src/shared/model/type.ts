@@ -10,7 +10,6 @@ export enum ClubCategory {
   CULTURAL_ART = 'CULTURAL_ART',
   ACADEMIC_CULTURAL = 'ACADEMIC_CULTURAL',
   VOLUNTEER_SOCIAL = 'VOLUNTEER_SOCIAL',
-  SOCIAL = 'SOCIAL',
   SPORTS = 'SPORTS',
   RELIGIOUS = 'RELIGIOUS',
   OTHER = 'OTHER',
@@ -57,7 +56,6 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
   [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
   [ClubCategory.SPORTS]: '체육',
   [ClubCategory.RELIGIOUS]: '종교',
-  [ClubCategory.SOCIAL]: '친목',
   [ClubCategory.OTHER]: '기타',
 };
 

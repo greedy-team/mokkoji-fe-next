@@ -26,6 +26,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         clubId={Number(id)}
         isFavorite={data.isFavorite}
         createdAt={data.createdAt}
+        logo={data.logo}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

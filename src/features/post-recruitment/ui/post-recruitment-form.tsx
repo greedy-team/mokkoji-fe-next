@@ -53,7 +53,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
 
     const newFileNames = newFiles.map(
       (file) =>
-        `/club${clubId}/recruitment${crypto.randomUUID()}.${file.name.split('.').pop()}`,
+        `recruitment-image/${clubId}/${crypto.randomUUID()}.${file.name.split('.').pop()}`,
     );
 
     dispatch({

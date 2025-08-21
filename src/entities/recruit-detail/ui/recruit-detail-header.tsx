@@ -53,9 +53,11 @@ function RecruitDetailHeader({
           />
         </div>
         <div className="flex justify-between">
-          <p className="lg:text-md mb-2 text-sm text-[#9C9C9C]">
-            작성일: {date} {time}
-          </p>
+          {date && (
+            <p className="lg:text-md mb-2 text-sm text-[#9C9C9C]">
+              작성일: {date} {time}
+            </p>
+          )}
         </div>
       </header>
       <RecruitDetailHeaderControl

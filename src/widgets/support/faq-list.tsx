@@ -5,24 +5,57 @@ import { useState } from 'react';
 
 interface FAQItem {
   question: string;
-  answer: string;
+  answerTitle: string;
+  answerBody: string;
 }
 
 const faqData: FAQItem[] = [
   {
-    question: '즐겨찾기 한 동아리의 모집 일정은 어디서 확인하나요?',
-    answer:
-      '즐겨찾기한 동아리의 모집 일정은 해당 동아리 상세 페이지에서 확인하실 수 있습니다. 모집 기간이 정해져 있는 경우, 공지사항이나 알림을 통해 안내해드립니다.',
+    question: '동아리를 등록하고 싶어요.',
+    answerTitle:
+      '아래의 구글폼을 통해 요청해주시면 됩니다. 빠른 시일 내에 동아리를 등록을 도와드리겠습니다.',
+    answerBody:
+      '[필수 입력 정보]\n1. 동아리명\n2. 소개\n3. 동아리장 학번\n4. 카테고리 (중앙동아리 / 정인준 · 가인준 동아리 / 기타동아리\n5. 동아리 소속 (문화/예술, 학술/교양, 봉사/사회, 체육, 종교, 기타)\n\n[선택 입력 정보]\n1. 동아리 로고\n2. 인스타그램 주소',
   },
   {
-    question: '동아리 모집이 마감됐는데, 다시 지원할 수 있나요?',
-    answer:
-      '대부분의 동아리는 정해진 기간 동안만 신입 회원을 모집하지만, 간혹 추가 모집이나 수시 모집을 진행하는 동아리도 있습니다. 관심 있는 동아리의 상세 페이지에서 공지사항을 확인하거나, 담당자에게 직접 문의해 보시는 것을 추천드립니다. 또한, 다음 학기 모집 일정에 맞춰 지원하실 수 있도록 웹사이트에서 사전 알림을 신청하실 수도 있습니다!',
+    question: '동아리 모집글을 올리고 싶어요.',
+    answerTitle:
+      '동아리 모집글은 동아리장으로 등록된 사용자가 직접 업로드 가능합니다.',
+    answerBody:
+      '1. 아래의 구글폼으로 동아리장 권한을 요청합니다.\n   → 이미 권한이 있다면 이 단계는 건너뛰어도 됩니다.\n2. 권한이 승인되면, 로그인 후 배너의 [모집공고 작성] 버튼을 클릭합니다.\n3. 모집글을 올릴 동아리를 선택한 후 모집글을 작성하고 완료 버튼을 누릅니다.\n\n만약 업로드 과정에서 오류가 발생한다면, 아래 구글폼을 통해 요청해주세요 : )',
   },
   {
-    question: '동아리 정보를 잘못 등록했거나 수정하고 싶어요.',
-    answer:
-      '동아리 정보 수정이 필요한 경우, 관리자 페이지 또는 고객센터를 통해 요청하실 수 있습니다. 등록자 본인이 직접 수정이 불가능한 경우 운영팀에 문의해 주세요.',
+    question: '동아리 정보를 수정하고 싶어요.',
+    answerTitle:
+      '동아리 정보는 동아리장으로 등록된 사용자가 직접 수정할 수 있습니다.',
+    answerBody:
+      '[동아리 정보 수정 방법]\n1. 아래의 구글폼으로 동아리장 권한을 요청합니다.\n→ 이미 권한이 있다면 이 단계는 건너뛰어도 됩니다.\n2. 권한이 승인되면, 로그인 후 배너의 [동아리 정보 수정] 또는 [모집공고 작성] 버튼을 클릭합니다.\n3. 수정할 동아리를 선택한 후 필요한 내용을 수정하고, 완료 버튼을 누릅니다.\n\n만약 수정하는 과정에서 오류가 발생한다면, 아래 구글폼을 통해 요청해주세요 : )',
+  },
+  {
+    question: '동아리 모집글을 수정 및 삭제하고 싶어요.',
+    answerTitle:
+      '동아리 모집글은 동아리장으로 등록된 사용자가 직접 수정할 수 있습니다.',
+    answerBody:
+      '[동아리 모집글 수정 및 삭제 방법]\n1. 아래의 구글폼으로 동아리장 권한을 요청합니다.\n→ 이미 권한이 있다면 이 단계는 건너뛰어도 됩니다.\n2. 권한이 승인되면, 수정할 동아리 모집글을 클릭합니다.\n3. 상단의 [수정하기] 또는 [삭제하기] 버튼을 눌러 변경합니다.\n\n만약 수정/삭제하는 과정에서 오류가 발생한다면, 아래 구글폼을 통해 요청해주세요 : )',
+  },
+  {
+    question: '동아리 모집 기간을 상시로 설정하고 싶어요.',
+    answerTitle: '상시 모집 기능은 추후 업데이트될 예정입니다.',
+    answerBody:
+      '상시 모집을 원하시는 경우, 잠시 모집 기간을 넉넉하게 설정해주시면 감사하겠습니다 : )',
+  },
+  {
+    question: '동아리장을 여러명으로 설정하고 싶어요.',
+    answerTitle: '현재 시스템에서는 동아리장을 한 명만 설정할 수 있습니다.',
+    answerBody:
+      '이는 동아리 대표성을 명확히 하고, 운영 책임을 일관되게 하기 위함입니다.',
+  },
+  {
+    question: '동아리장을 설정/변경하고 싶어요.',
+    answerTitle:
+      '아래의 구글폼을 통해 요청해주시면 됩니다. 빠른 시일 내에 권한을 승인해드리겠습니다.',
+    answerBody:
+      '[필수 입력 항목]\n1. 동아리명\n2. 변경할 동아리장 학번\n3. 기존 동아리장 학번(동아리장 변경 시에만 작성)',
   },
 ];
 
@@ -33,6 +66,18 @@ function FAQList() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  function formatTextWithLinks(text: string) {
+    const textWithBreaks = text.replace(/\n/g, '<br />');
+
+    const formattedText = textWithBreaks.replace(
+      /(https?:\/\/[^\s]+)/g,
+      (url) =>
+        `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: blue; text-decoration: underline;">${url}</a>`,
+    );
+
+    return { __html: formattedText };
+  }
+
   return (
     <div className="mt-10 w-full space-y-6">
       <h2 className="text-2xl font-bold text-[#20E86C]">FAQ</h2>
@@ -40,21 +85,37 @@ function FAQList() {
         <div key={item.question} className="border-b pb-4">
           <button
             className={cn(
-              'w-full text-left text-sm font-semibold transition hover:text-[#20E86C]',
+              'w-full text-left text-lg font-semibold transition hover:text-[#20E86C]',
               openIndex === idx ? 'text-[#20E86C]' : 'text-black',
             )}
             onClick={() => toggle(idx)}
           >
             <span>Q. {item.question}</span>
           </button>
-          {openIndex === idx && item.answer && (
-            <p className="mt-5 max-w-[500px] text-xs leading-relaxed font-semibold whitespace-pre-line text-[000000]">
-              <span className="font-bold">A. </span>
-              {item.answer}
-            </p>
+          {openIndex === idx && item.answerTitle && item.answerBody && (
+            <div className="px-3">
+              <p className="text-md mt-5 leading-relaxed font-semibold whitespace-pre-line text-[000000]">
+                <span className="font-bold">A. </span>
+                {item.answerTitle}
+              </p>
+              <p
+                className="mt-5 text-sm leading-relaxed font-semibold whitespace-pre-line text-[000000]"
+                dangerouslySetInnerHTML={formatTextWithLinks(item.answerBody)}
+              />
+            </div>
           )}
         </div>
       ))}
+
+      <span className="text-xl font-bold text-[#20E86C] underline">
+        <a
+          href="https://docs.google.com/forms/d/1U3tnUQxdu8CtT9W1b8KQoQkhFs851BiwSO3l355L57w/viewform?edit_requested=true"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          구글폼 링크
+        </a>
+      </span>
     </div>
   );
 }

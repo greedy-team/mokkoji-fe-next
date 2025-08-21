@@ -3,6 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
   description: '세종대 동아리 전체 목록',
+  openGraph: {
+    title: '모꼬지 | 세종대 동아리',
+    description: '세종대 동아리 전체 목록',
+  },
 };
 
 export default function Layout({

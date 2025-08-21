@@ -18,6 +18,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         instagram={data.instagram}
         clubId={Number(id)}
         isFavorite={data.isFavorite}
+        logo={data.logo}
       />
       <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
         {data.description}

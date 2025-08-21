@@ -58,10 +58,6 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                 3. 사용자의 세종대학교 포털 비밀번호는{' '}
                 <strong>절대 저장되지 않습니다.</strong>
               </li>
-              <li>
-                4. 이메일은 즐겨찾기한 동아리의 신규 모집글 알림용으로
-                활용됩니다.
-              </li>
             </ul>
 
             <div className="mt-3 flex items-center gap-2">

@@ -32,6 +32,8 @@ async function RecruitDetailPage({ params }: DetailParams) {
       <RecruitDetailWidget
         isManageClub={isManageClub}
         title={data.title}
+        clubName={data.clubName}
+        category={data.category}
         content={data.content}
         recruitForm={data.recruitForm}
         imageUrls={data.imageUrls}

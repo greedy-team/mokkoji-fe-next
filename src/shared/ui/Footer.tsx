@@ -5,7 +5,7 @@ function Footer() {
         COPYRIGHT @ 2025 모꼬지. ALL RIGHT RESERVERD.
       </p>
       <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSdygIgS8J90t8Y1kYnHMWuq9FIXuwr4jVRmCjGnP9q_RIduzQ/viewform"
+        href="https://docs.google.com/forms/d/1U3tnUQxdu8CtT9W1b8KQoQkhFs851BiwSO3l355L57w/edit"
         target="_blank"
         rel="noopener noreferrer"
         className="underline"

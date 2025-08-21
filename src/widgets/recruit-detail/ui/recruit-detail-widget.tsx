@@ -11,6 +11,8 @@ import deleteRecruitmentForm from '../api/deleteRecruitment';
 interface RecruitDetailWidgetProps {
   isManageClub?: boolean;
   title: string;
+  clubName: string;
+  category: string;
   content: string;
   recruitForm: string;
   imageUrls: string[];
@@ -22,6 +24,8 @@ interface RecruitDetailWidgetProps {
 function RecruitDetailWidget({
   isManageClub,
   title,
+  clubName,
+  category,
   content,
   recruitForm,
   imageUrls,
@@ -85,9 +89,10 @@ function RecruitDetailWidget({
       ) : (
         <ClubDetailRecruitmentEdit
           title={title}
+          clubName={clubName}
+          category={category}
           content={content}
           recruitForm={recruitForm}
-          images={imageUrls}
           recruitStart={recruitStart}
           recruitEnd={recruitEnd}
           clubId={clubId}

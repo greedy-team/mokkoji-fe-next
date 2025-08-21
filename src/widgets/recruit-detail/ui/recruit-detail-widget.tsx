@@ -59,19 +59,19 @@ function RecruitDetailWidget({
 
   return (
     <>
-      {!isEditing && isManageClub && (
+      {isManageClub && (
         <div className="mb-6 flex cursor-pointer justify-end gap-4 text-base text-[#9C9C9C] lg:mb-0">
           <button
             onClick={() => setIsEditing(true)}
             className="cursor-pointer text-[#20E86C] underline"
           >
-            수정
+            수정하기
           </button>
           <button
             onClick={handleDelete}
             className="cursor-pointer text-red-300 underline"
           >
-            삭제
+            삭제하기
           </button>
         </div>
       )}

@@ -50,17 +50,13 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                   rel="noopener noreferrer"
                   className="text-[#00E457] underline"
                 >
-                  대양휴머니티칼리지
+                  대양휴머니티칼리지를 통해
                 </a>{' '}
-                사이트에서 학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
+                학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
               </li>
               <li>
-                3. 사용자의 세종대학교 포털 사이트의 비밀번호는{' '}
-                <strong>저장되지 않습니다.</strong>
-              </li>
-              <li>
-                4. 즐겨찾기한 동아리의 모집공고 알림을 위해 이메일을 수집할 수
-                있습니다.
+                3. 사용자의 세종대학교 포털 비밀번호는{' '}
+                <strong>절대 저장되지 않습니다.</strong>
               </li>
             </ul>
 

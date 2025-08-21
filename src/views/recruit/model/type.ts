@@ -14,6 +14,7 @@ export interface RecruitmentDetail {
   instagram: string;
   category: string;
   clubName: string;
+  logo: string;
 }
 
 export interface RecruitmentDetailResponse {

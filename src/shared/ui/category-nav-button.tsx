@@ -25,7 +25,6 @@ function CategorySelect() {
     ClubCategory.VOLUNTEER_SOCIAL,
     ClubCategory.SPORTS,
     ClubCategory.RELIGIOUS,
-    ClubCategory.SOCIAL,
     ClubCategory.OTHER,
   ];
 

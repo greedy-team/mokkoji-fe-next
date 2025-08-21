@@ -29,7 +29,7 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
             className="absolute z-50 w-full rounded-lg border bg-white px-5 py-7 text-xs shadow-xl"
           >
             <h3 className="mb-2 font-semibold">로그인 안내</h3>
-            <ul className="list-disc space-y-2 pl-5 text-xs leading-relaxed">
+            <ul className="space-y-2 pl-2 text-xs leading-relaxed">
               <li>
                 1. 로그인을 위해선{' '}
                 <a
@@ -50,17 +50,17 @@ function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
                   rel="noopener noreferrer"
                   className="text-[#00E457] underline"
                 >
-                  대양휴머니티칼리지
+                  대양휴머니티칼리지를 통해
                 </a>{' '}
-                사이트에서 학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
+                학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
               </li>
               <li>
-                3. 사용자의 세종대학교 포털 사이트의 비밀번호는{' '}
-                <strong>저장되지 않습니다.</strong>
+                3. 사용자의 세종대학교 포털 비밀번호는{' '}
+                <strong>절대 저장되지 않습니다.</strong>
               </li>
               <li>
-                4. 즐겨찾기한 동아리의 모집공고 알림을 위해 이메일을 수집할 수
-                있습니다.
+                4. 이메일은 즐겨찾기한 동아리의 신규 모집글 알림용으로
+                활용됩니다.
               </li>
             </ul>
 

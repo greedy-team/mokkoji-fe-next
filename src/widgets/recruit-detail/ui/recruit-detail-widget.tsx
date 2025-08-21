@@ -34,6 +34,8 @@ function RecruitDetailWidget({
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const confirmDelete = window.confirm('모집 공고를 삭제하시겠습니까?');
+    if (!confirmDelete) return;
 
     const res = await deleteRecruitmentForm(clubId);
 
@@ -57,10 +59,20 @@ function RecruitDetailWidget({
 
   return (
     <>
-      {!isEditing && isManageClub && (
-        <div className="mb-6 flex cursor-pointer justify-end gap-4 text-sm text-[#9C9C9C] lg:mb-0">
-          <button onClick={() => setIsEditing(true)}>수정</button>
-          <button onClick={handleDelete}>삭제</button>
+      {isManageClub && (
+        <div className="mb-6 flex cursor-pointer justify-end gap-4 text-base text-[#9C9C9C] lg:mb-0">
+          <button
+            onClick={() => setIsEditing(true)}
+            className="cursor-pointer text-[#20E86C] underline"
+          >
+            수정하기
+          </button>
+          <button
+            onClick={handleDelete}
+            className="cursor-pointer text-red-300 underline"
+          >
+            삭제하기
+          </button>
         </div>
       )}
       {!isEditing ? (

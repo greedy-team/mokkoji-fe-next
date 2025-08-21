@@ -115,94 +115,87 @@ function ClubDetailRecruitmentEdit({
   };
 
   return (
-    <div>
-      <SafeForm
-        onSubmit={handleSubmit}
-        title="수정하기"
-        formClassName="flex flex-col gap-2 my-1"
+    <SafeForm
+      onSubmit={handleSubmit}
+      buttonClassName="mt-2"
+      title="수정하기"
+      formClassName="flex flex-col gap-2 my-1 max-w-[600px]"
+    >
+      <label htmlFor="title" className="indent-1 text-xl font-bold">
+        제목
+      </label>
+      <Input
+        id="title"
+        name="title"
+        value={formData.title}
+        onChange={(e) => handleChange('title', e.target.value)}
+      />
+      <label htmlFor="content" className="indent-1 text-xl font-bold">
+        모집 공고
+      </label>
+      <Textarea
+        id="content"
+        name="content"
+        value={formData.content}
+        onChange={(e) => handleChange('content', e.target.value)}
+        maxLength={5000}
+      />
+      <label htmlFor="recruitForm" className="indent-1 text-xl font-bold">
+        모집폼 URL
+      </label>
+      <Input
+        id="recruitForm"
+        name="recruitForm"
+        value={formData.recruitForm}
+        onChange={(e) => handleChange('recruitForm', e.target.value)}
+      />
+      <label
+        htmlFor="recruitPeriod"
+        className="mt-4 flex gap-2 text-xl font-bold"
       >
-        <label htmlFor="title" className="indent-1 text-sm font-bold">
-          제목
-        </label>
-        <Input
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={(e) => handleChange('title', e.target.value)}
+        모집 기간
+      </label>
+      <SelectDate
+        startDate={formData.recruitStart}
+        endDate={formData.recruitEnd}
+        onChange={handleChange}
+      />
+      <label htmlFor="image" className="mt-4 text-xl font-bold">
+        이미지 파일 업로드
+      </label>
+      <div
+        className={cn(
+          'mt-2 rounded-md border-2 px-4 py-3',
+          imageFiles.length > 0 && 'border-[#00D451]',
+        )}
+      >
+        <input
+          name="image"
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+          className="flex cursor-pointer items-center justify-center text-sm"
         />
-        <label htmlFor="content" className="indent-1 text-sm font-bold">
-          모집 공고
-        </label>
-        <Textarea
-          id="content"
-          name="content"
-          value={formData.content}
-          onChange={(e) => handleChange('content', e.target.value)}
-          maxLength={5000}
-        />
-        <label htmlFor="recruitForm" className="indent-1 text-sm font-bold">
-          모집폼 URL
-        </label>
-        <Input
-          id="recruitForm"
-          name="recruitForm"
-          value={formData.recruitForm}
-          onChange={(e) => handleChange('recruitForm', e.target.value)}
-        />
-        <label htmlFor="recruitPeriod" className="mt-4 flex gap-2 font-bold">
-          모집 기간
-        </label>
-        <SelectDate
-          startDate={formData.recruitStart}
-          endDate={formData.recruitEnd}
-          onChange={handleChange}
-        />
-        <label htmlFor="image" className="mt-4 font-bold">
-          이미지 파일 업로드
-        </label>
-        <div
-          className={cn(
-            'mt-2 rounded-md border-2 px-4 py-3',
-            imageFiles.length > 0 && 'border-[#00D451]',
-          )}
-        >
-          <input
-            name="image"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="flex cursor-pointer items-center justify-center text-sm"
-          />
 
-          {imageFiles.length > 0 && (
-            <ul className="mt-2 list-inside list-disc text-sm text-gray-700">
-              {imageFiles.map((file, index) => (
-                <li
-                  key={file.name}
-                  className="flex items-center justify-between"
+        {imageFiles.length > 0 && (
+          <ul className="mt-2 list-inside list-disc text-sm text-gray-700">
+            {imageFiles.map((file, index) => (
+              <li key={file.name} className="flex items-center justify-between">
+                <span>{file.name}</span>
+                <button
+                  type="button"
+                  onClick={() => handleImageRemove(index)}
+                  className="ml-4 cursor-pointer text-red-500 hover:underline"
                 >
-                  <span>{file.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleImageRemove(index)}
-                    className="ml-4 cursor-pointer text-red-500 hover:underline"
-                  >
-                    삭제
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </SafeForm>
-      <Button
-        className="w-full cursor-pointer border-2 bg-white text-center text-black hover:bg-[#bdbdbd]"
-        onClick={() => setIsEditing(false)}
-      >
-        취소
-      </Button>
-    </div>
+                  삭제
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </SafeForm>
   );
 }
 

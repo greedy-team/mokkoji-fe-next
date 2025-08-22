@@ -47,7 +47,7 @@ if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
     org: 'sejong',
 
     // Sentry 프로젝트 이름 – 오류가 기록될 프로젝트
-    project: 'javascript-nextjs',
+    project: 'mokkoji-next-js',
 
     // CI 환경이 아닐 때는 소스맵 업로드 관련 로그를 출력하지 않음 (로컬 빌드 시 출력 줄이기)
     silent: !process.env.CI,

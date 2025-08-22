@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '모꼬지 | 세종대 동아리 즐겨찾기',
     description: '세종대 동아리 즐겨찾기',
+    images: ['/mokkojiBanner.png'],
   },
 };
 

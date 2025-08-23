@@ -22,7 +22,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         category={data.category}
         startDate={data.recruitStart}
         endDate={data.recruitEnd}
-        instagram={data.instagram}
+        instagram={data.instagramUrl}
         clubId={Number(id)}
         isFavorite={data.isFavorite}
         createdAt={data.createdAt}

@@ -32,7 +32,7 @@ function RecruitDetailHeader({
   const [date, time] = (createdAt || '').split('T');
   return (
     <>
-      <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">
+      <header className="w-full cursor-default">
         <div className="mb-4 flex flex-row items-center gap-5">
           <Avatar className="size-12 lg:size-14">
             <AvatarImage src={logo} />

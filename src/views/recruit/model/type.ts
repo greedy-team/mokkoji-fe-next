@@ -11,7 +11,7 @@ export interface RecruitmentDetail {
   imageUrls: string[];
   recruitForm: string;
   isFavorite: boolean;
-  instagram: string;
+  instagramUrl: string;
   category: string;
   clubName: string;
   logo: string;

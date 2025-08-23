@@ -1,12 +1,11 @@
 {
-  "id": "500ac5bd-8357-490c-92b5-9588f99f7cce",
-  "relativePath": "club",
+  "id": "24dd0b8c-a98a-439d-a5f0-bfb82cff4ab8",
+  "relativePath": "recruit/132",
   "name": "sins051301",
-  "description": "이거다",
+  "description": "나중에 고쳐야댐",
   "todos": [
-    "test1",
-    "test2"
+    "test1"
   ],
-  "x": 1001,
-  "y": 228
+  "x": 748,
+  "y": 194
 }

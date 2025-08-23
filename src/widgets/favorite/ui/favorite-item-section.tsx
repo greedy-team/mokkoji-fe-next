@@ -61,7 +61,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       />
     </>
   ) : (
-    <h1 className="mb-5 text-base font-bold text-[#00E457]">
+    <h1 className="mb-5 text-2xl font-bold text-[#00E457]">
       로그인 후 이용하실 수 있습니다.
     </h1>
   );

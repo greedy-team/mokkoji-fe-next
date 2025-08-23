@@ -2,23 +2,23 @@ import Link from 'next/link';
 
 const KEYWORDS = [
   {
-    name: '문화/예술',
+    name: '문화/예술🎨',
     category: 'cultural_art',
   },
   {
-    name: '학술/교양',
+    name: '학술/교양📚',
     category: 'academic_cultural',
   },
   {
-    name: '봉사/사회',
+    name: '봉사/사회🫶',
     category: 'volunteer_social',
   },
   {
-    name: '체육',
+    name: '체육🎾',
     category: 'sports',
   },
   {
-    name: '종교',
+    name: '종교🙏',
     category: 'religious',
   },
   {

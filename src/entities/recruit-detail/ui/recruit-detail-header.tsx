@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import PeriodSection from '@/entities/recruit/ui/period-section';
 import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { RecruitStatus } from '@/shared/model/type';
+import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 
 interface RecruitDetailHeaderProps {
   title: string;
@@ -40,7 +41,9 @@ function RecruitDetailHeader({
           </Avatar>
           <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
           <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
-            {category} 동아리
+            <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
+              {category} 동아리
+            </Link>
           </p>
         </div>
         <div className="mb-4 flex flex-row items-center gap-4 lg:text-xl">

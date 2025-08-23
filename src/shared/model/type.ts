@@ -57,6 +57,15 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
   [ClubCategory.OTHER]: '기타',
 };
 
+export const ClubCategoryToLabel: Record<string, ClubCategory> = {
+  '문화/예술': ClubCategory.CULTURAL_ART,
+  '학술/교양': ClubCategory.ACADEMIC_CULTURAL,
+  '봉사/사회': ClubCategory.VOLUNTEER_SOCIAL,
+  체육: ClubCategory.SPORTS,
+  종교: ClubCategory.RELIGIOUS,
+  기타: ClubCategory.OTHER,
+};
+
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
   [ClubAffiliation.CENTRAL_CLUB]: '중앙',
   [ClubAffiliation.DEPARTMENT_CLUB]: '정인준/가인준',

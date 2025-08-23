@@ -78,20 +78,23 @@ export default function SelectDate({
 
   const pad2 = (s: string) => s.padStart(2, '0');
 
-  const toIsoString = (d: YMD) => {
+  const toIsoString = (d: YMD, type: 'start' | 'end') => {
     if (!d.year || !d.month || !d.day) return '';
-    const hour = d.hour ? pad2(d.hour) : '00';
-    const minute = d.minute ? pad2(d.minute) : '00';
-    const second = d.second ? pad2(d.second) : '00';
+    let hour = d.hour ? pad2(d.hour) : '00';
+    let minute = d.minute ? pad2(d.minute) : '00';
+    let second = d.second ? pad2(d.second) : '00';
+
+    if (type === 'end' && !d.hour && !d.minute) {
+      hour = '23';
+      minute = '59';
+      second = '59';
+    }
+
     return `${d.year}-${pad2(d.month)}-${pad2(d.day)}T${hour}:${minute}:${second}`;
   };
 
   const isComplete = (d: YMD) =>
-    d.year.length === 4 &&
-    d.month.length >= 1 &&
-    d.day.length >= 1 &&
-    d.hour.length >= 1 &&
-    d.minute.length >= 1;
+    d.year.length === 4 && d.month.length >= 1 && d.day.length >= 1;
 
   const isLeap = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
 
@@ -104,9 +107,9 @@ export default function SelectDate({
     return 31;
   };
 
-  const ymdToDate = (d: YMD) => {
+  const ymdToDate = (d: YMD, type: 'start' | 'end') => {
     if (!isComplete(d)) return null;
-    const iso = toIsoString(d);
+    const iso = toIsoString(d, type);
     const dt = new Date(iso);
     return Number.isNaN(dt.getTime()) ? null : dt;
   };
@@ -121,8 +124,8 @@ export default function SelectDate({
   }, [endDate]);
 
   // ---------- Compare dates ----------
-  const startObj = useMemo(() => ymdToDate(start), [start]);
-  const endObj = useMemo(() => ymdToDate(end), [end]);
+  const startObj = useMemo(() => ymdToDate(start, 'start'), [start]);
+  const endObj = useMemo(() => ymdToDate(end, 'end'), [end]);
 
   useEffect(() => {
     if (startObj && endObj) {
@@ -176,7 +179,7 @@ export default function SelectDate({
 
     // 부모로 값을 전달(완성된 경우만)
     if (isComplete(updated)) {
-      const iso = toIsoString(updated);
+      const iso = toIsoString(updated, type);
       onChange(type === 'start' ? 'recruitStart' : 'recruitEnd', iso);
     }
   };

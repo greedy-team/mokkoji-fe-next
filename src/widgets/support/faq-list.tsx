@@ -99,7 +99,7 @@ function FAQList() {
                 {item.answerTitle}
               </p>
               <p
-                className="mt-5 text-sm leading-relaxed font-semibold whitespace-pre-line text-[000000]"
+                className="mt-5 text-sm leading-relaxed font-medium whitespace-pre-line text-[000000]"
                 dangerouslySetInnerHTML={formatTextWithLinks(item.answerBody)}
               />
             </div>

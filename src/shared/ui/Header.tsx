@@ -16,7 +16,7 @@ async function Header() {
   return (
     <>
       <div className="h-[65px]" />
-      <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center border-b border-gray-100 bg-white px-4 text-base font-semibold shadow-sm sm:px-8 lg:px-[150px]">
+      <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center bg-white px-4 text-base font-semibold sm:px-8 lg:px-[150px]">
         <Link
           href="/"
           className="mr-2 flex flex-shrink-0 items-center gap-1 text-lg font-bold sm:mr-4 sm:gap-1.5 sm:text-xl lg:mr-6 lg:text-2xl"
@@ -60,6 +60,7 @@ async function Header() {
             manageClubInfo={session?.manageClubInfo || []}
           />
         </div>
+        <span className="absolute bottom-0 left-0 h-0.5 w-screen bg-gray-200 transition-colors duration-500" />
       </header>
     </>
   );

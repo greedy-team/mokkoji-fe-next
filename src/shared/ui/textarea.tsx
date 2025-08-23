@@ -17,7 +17,7 @@ function Textarea({
   const variantClass = {
     default: 'focus-visible:border-[#00E457] text-sm',
     error: 'border-[#FF383C] bg-[#FFF4F4] text-sm',
-    comment: 'bg-[#F4F4F4] min-h-[71px] border-none p-4 text-base',
+    comment: 'bg-[#F4F4F4] min-h-[71px] border-none p-4 text-sm lg:text-base',
   };
 
   return (

@@ -3,10 +3,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/shared/ui/Header';
 import { SessionProvider } from 'next-auth/react';
 import Footer from '@/shared/ui/Footer';
-import DevCursorGlobal from '@/shared/ui/dev-cursor-inspector';
 import { DevTodoProvider } from '@/shared/model/dev-todo-provider';
 import DevTodoTracker from '@/shared/ui/dev-to-do-tracker';
 import ClarityProvider from '@/_providers/clarity-provider';
+import DevTodoGlobalClient from '@/shared/ui/dev-client-global';
 
 export default function MainLayout({
   children,
@@ -20,10 +20,7 @@ export default function MainLayout({
         <div className="flex min-h-screen flex-col">
           <Header />
           {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
-            <>
-              <DevCursorGlobal />
-              <DevTodoTracker />
-            </>
+            <DevTodoTracker />
           )}
           <ToastContainer
             position="top-right"
@@ -40,6 +37,7 @@ export default function MainLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
         </div>
+        <DevTodoGlobalClient />
       </DevTodoProvider>
     </SessionProvider>
   );

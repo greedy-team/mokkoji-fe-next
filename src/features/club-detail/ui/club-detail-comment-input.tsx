@@ -75,7 +75,7 @@ function ClubDetailCommentInput({
         disabled={!session}
       />
       {!session && (
-        <p className="mb-5 text-sm font-bold text-[#00E457]">
+        <p className="mb-5 text-xs font-medium text-[#00E457]">
           로그인 후 이용하실 수 있습니다.
         </p>
       )}

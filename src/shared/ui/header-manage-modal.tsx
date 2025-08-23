@@ -41,9 +41,9 @@ function HeaderManageModal({
               }
             }}
             className={cn(
-              'flex cursor-pointer items-center px-3 no-underline transition-colors duration-500 hover:border-b-2 hover:border-[#585858] lg:h-full lg:px-3.25 lg:py-2 lg:hover:border-b-2',
+              'relative z-[70] mx-1 flex h-full cursor-pointer items-center px-2 no-underline transition-colors duration-500 hover:border-b-2 hover:border-[#585858] lg:mx-1 lg:px-2 lg:py-2 lg:hover:border-b-2',
               {
-                'ml-2 w-fit border-b-2 font-extrabold lg:border-b-3 lg:border-black':
+                'ml-2 w-fit font-extrabold lg:border-b-3 lg:border-black':
                   isActive,
               },
             )}

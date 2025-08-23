@@ -8,7 +8,7 @@ import getClubRecruitList from '../api/getClubRecruitList';
 async function RecruitItemList({ searchParams }: RecruitItemListProps) {
   const res = await getClubRecruitList({
     page: Number((await searchParams).page || 1),
-    size: Number((await searchParams).size || 100),
+    size: Number((await searchParams).size || 200),
     category: (await searchParams).category?.toUpperCase() as ClubCategory,
   });
 
@@ -27,7 +27,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {res.data?.recruitments?.map((item) => (
         <li key={item.id}>
-          <Link href={`/recruit/${item.id}`}>
+          <Link href={`/club/${item.club.id}`}>
             <RecruitItem
               title={item.title}
               name={item.club.name || ''}

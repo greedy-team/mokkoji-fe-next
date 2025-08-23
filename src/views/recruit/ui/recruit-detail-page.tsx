@@ -1,45 +1,43 @@
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
-
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
 import { auth } from '@/auth';
-import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
+import ClubDetailMergeWidget from '@/widgets/club/ui/club-detail-merge-widget';
+import getClubDetail from '@/views/club/api/getClubDetail';
+import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 
 async function RecruitDetailPage({ params }: DetailParams) {
   const session = await auth();
   const { id } = await getParams({ params });
   const data = await getRecruitDetail(id);
+  const clubData = await getClubDetail(id);
+  const commentData = await getClubDetailComments(Number(id));
 
   const isManageClub = session?.manageClubInfo?.some(
     (club) => club.clubId === data.clubId,
   );
 
   return (
-    <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
+    <div className="mt-10 mb-10 max-w-[95%] min-w-[95%] lg:mt-20 lg:max-w-[85%] lg:min-w-[75%]">
       <RecruitDetailHeader
-        title={data.clubName}
-        category={data.category}
-        startDate={data.recruitStart}
-        endDate={data.recruitEnd}
-        instagram={data.instagram}
+        title={clubData.name}
+        category={clubData.category}
+        startDate={clubData.recruitStartDate}
+        endDate={clubData.recruitEndDate}
+        instagram={clubData.instagram}
         clubId={Number(id)}
-        isFavorite={data.isFavorite}
+        isFavorite={clubData.isFavorite}
         createdAt={data.createdAt}
-        logo={data.logo}
-        status={data.status}
+        logo={clubData.logo}
+        status={clubData.status}
       />
-      <RecruitDetailWidget
+      <ClubDetailMergeWidget
         isManageClub={isManageClub}
-        title={data.title}
-        clubName={data.clubName}
-        category={data.category}
-        content={data.content}
-        recruitForm={data.recruitForm}
-        imageUrls={data.imageUrls}
-        recruitStart={data.recruitStart}
-        recruitEnd={data.recruitEnd}
+        data={data}
         clubId={Number(id)}
+        clubData={clubData}
+        commentData={commentData}
       />
     </div>
   );

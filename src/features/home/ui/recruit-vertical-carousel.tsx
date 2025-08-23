@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEgde from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import Link from 'next/link';
 import isRecruiting from '../util/isRecruiting';
 
 interface CardSliderProps {
@@ -86,7 +87,8 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
           );
 
           return (
-            <div
+            <Link
+              href={`/recruit/${item.id}`}
               key={item.id}
               className={cn(
                 isVisible ? 'opacity-100' : 'opacity-0',
@@ -97,7 +99,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
               }}
             >
               <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
-                <div className="mb-4 flex items-center justify-between gap-4">
+                <div className="mb-2 flex items-center justify-between gap-2">
                   <Avatar className="size-8 lg:size-10">
                     <AvatarImage src={item.logo} />
                     <AvatarFallback>{item.name}</AvatarFallback>
@@ -121,11 +123,11 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                     {status}
                   </div>
                 </div>
-                <p className="line-clamp-1 overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
+                <p className="line-clamp-2 p-1 text-[10px] text-gray-600 lg:text-xs">
                   {item.description}
                 </p>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

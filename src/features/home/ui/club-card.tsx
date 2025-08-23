@@ -59,7 +59,7 @@ function CardSilder({ data }: CardSliderProps) {
 
           return (
             <NavLink
-              href={`/recruit/${item.id}`}
+              href={`/club/${item.id}`}
               key={item.id}
               isActive={isActive}
               translateX={currentTranslateX}

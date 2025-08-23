@@ -1,8 +1,8 @@
-import ClubDetailPage from '@/views/club/ui/club-detail-page';
 import { DetailParams } from '@/shared/model/type';
+import RecruitDetailPage from '@/views/recruit/ui/recruit-detail-page';
 
 function Page({ params }: DetailParams) {
-  return <ClubDetailPage params={params} />;
+  return <RecruitDetailPage params={params} />;
 }
 
 export default Page;

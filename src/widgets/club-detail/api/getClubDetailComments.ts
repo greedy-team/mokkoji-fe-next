@@ -1,7 +1,7 @@
 import authApi from '@/shared/api/auth-api';
 import { CommentType } from '../../recruit-detail/model/type';
 
-interface CommentsResponse {
+export interface CommentsResponse {
   data: {
     comments: CommentType[];
   };

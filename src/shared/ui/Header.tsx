@@ -45,12 +45,14 @@ async function Header() {
                 menu="register"
               />
             ))}
-          {role && role !== UserRole.NORMAL && (
-            <HeaderManageModal
-              manageClubInfo={session?.manageClubInfo || []}
-              menu="recruitment"
-            />
-          )}
+          {role &&
+            (role === UserRole.CLUB_ADMIN ||
+              role === UserRole.GREEDY_ADMIN) && (
+              <HeaderManageModal
+                manageClubInfo={session?.manageClubInfo || []}
+                menu="recruitment"
+              />
+            )}
         </nav>
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
           <HeaderLogin />

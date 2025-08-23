@@ -7,7 +7,7 @@ import useLocalStorage from '../model/useLocalStorage';
 function DevTodoTracker() {
   const { todos } = useDevTodo();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [pos, setPos] = useState({ x: 5, y: 5 });
   const [checked, setChecked] = useLocalStorage<Record<string, boolean>>(
     'dev-todo',

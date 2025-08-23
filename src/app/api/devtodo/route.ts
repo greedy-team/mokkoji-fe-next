@@ -6,6 +6,10 @@ import { exec } from 'child_process';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function POST(req: Request) {
+  if (process.env.NEXT_PUBLIC_NODE_ENV === 'production') {
+    console.log('production 환경 금지!');
+    return Response.json({ success: false, message: 'production 환경 금지!' });
+  }
   const body = await req.json();
   const id = randomUUID();
 

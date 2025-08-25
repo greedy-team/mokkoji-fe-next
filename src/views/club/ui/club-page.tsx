@@ -9,8 +9,15 @@ function ClubPage({ searchParams }: RecruitItemListProps) {
   return (
     <>
       <div className="mx-auto sm:w-4xl lg:w-6xl">
-        <ClubHeader />
-        <Suspense fallback={<ItemListSkeletonLoading />}>
+        <Suspense
+          fallback={
+            <ItemListSkeletonLoading
+              title="전체 동아리"
+              description="우리 학교엔 이런 동아리들이 있어요."
+            />
+          }
+        >
+          <ClubHeader />
           <ClubItemList searchParams={searchParams} />
         </Suspense>
       </div>

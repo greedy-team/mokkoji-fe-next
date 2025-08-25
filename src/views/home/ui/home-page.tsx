@@ -6,6 +6,8 @@ import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
 import FeatureIntroduceWidget from '@/widgets/home/ui/feature-intoduce-widget';
 import HelpCardWidget from '@/widgets/home/ui/help-card-widget';
 import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
+import { Suspense } from 'react';
+import SharedLoading from '@/shared/ui/loading';
 
 async function HomePage() {
   return (
@@ -18,7 +20,9 @@ async function HomePage() {
         <HomeDownButton />
       </div>
       <div className="px-[10%]">
-        <ClubCardWidget />
+        <Suspense fallback={<SharedLoading />}>
+          <ClubCardWidget />
+        </Suspense>
       </div>
       <div className="bg-[linear-gradient(to_bottom,_#FFFFFF_0%,_#F8FAFB_5%,_#F8FAFB_95%,_#FFFFFF_100%)] px-[10%]">
         <FeatureIntroduceWidget />

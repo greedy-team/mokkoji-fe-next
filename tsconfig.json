@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "typeRoots": ["./node_modules/@types"],
     "plugins": [
       {
         "name": "next"
@@ -29,7 +30,8 @@
     "*.config.js",
     ".next/types/**/*.ts",
     "types/**/*.d.ts",
-    "tailwind.config.js"
-, "src/entities/recruit-detail/ui/review-star.tsx"  ],
+    "tailwind.config.js",
+    "src/entities/recruit-detail/ui/review-star.tsx"
+  ],
   "exclude": ["node_modules"]
 }

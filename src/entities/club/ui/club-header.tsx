@@ -1,7 +1,7 @@
 import CategoryNavButton from '@/shared/ui/category-nav-button';
 import SectionHeader from '@/shared/ui/section-header';
 
-function RecruitHeader() {
+function ClubHeader() {
   return (
     <SectionHeader
       title="전체 동아리"
@@ -12,4 +12,4 @@ function RecruitHeader() {
   );
 }
 
-export default RecruitHeader;
+export default ClubHeader;

@@ -1,4 +1,6 @@
-import ItemListSkeletonLoading from './item-list-skeleton-loading';
+import ClubItemSkeleton from './club-item-skeleton';
+
+const SkeletonList = [1, 2, 3];
 
 function FavoriteListSkeletonLoading() {
   return (
@@ -7,7 +9,13 @@ function FavoriteListSkeletonLoading() {
         즐겨찾기 한 동아리 개
       </h1>
       <div className="mx-auto sm:w-4xl lg:w-6xl">
-        <ItemListSkeletonLoading size={3} />
+        <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {SkeletonList.map((item) => (
+            <li key={item}>
+              <ClubItemSkeleton />
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );

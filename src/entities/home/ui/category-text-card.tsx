@@ -1,11 +1,14 @@
 import AnimateOnView from '@/features/home/util/animate-viewport';
+import Link from 'next/link';
 
 function CategoryTextCard() {
   return (
     <div className="z-20 flex h-[50%] w-full flex-col justify-center lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
         <h4 className="text-lg font-bold text-[#00E457] lg:text-2xl">
-          카테고리 별 동아리 검색
+          <Link href="/search?category=academic_cultural">
+            카테고리 별 동아리 검색
+          </Link>
         </h4>
       </AnimateOnView>
       <AnimateOnView animation="reveal">

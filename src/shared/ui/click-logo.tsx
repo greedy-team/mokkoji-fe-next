@@ -29,7 +29,7 @@ export default function ClickLogo({ logo, title }: ClickLogoProps) {
       <DialogOverlay />
       <DialogTitle className="sr-only">{title}</DialogTitle>
       <DialogContent
-        className="flex max-h-[85vh] max-w-[90vw] items-center justify-center border-none bg-transparent p-0 shadow-none"
+        className="flex max-h-[85vh] max-w-[90vw] items-center justify-center border-none bg-white p-0 shadow-none"
         showCloseButton
       >
         <Image

@@ -1,9 +1,9 @@
 import PeriodSection from '@/entities/recruit/ui/period-section';
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import Link from 'next/link';
+import ClickLogo from '@/shared/ui/click-logo';
 
 interface ClubDetailHeaderProps {
   title: string;
@@ -32,13 +32,12 @@ function ClubDetailHeader({
     <>
       <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">
         <div className="mb-4 flex flex-row items-center gap-5">
-          <Avatar className="size-12 lg:size-14">
-            <AvatarImage src={logo} />
-            <AvatarFallback />
-          </Avatar>
+          <ClickLogo logo={logo} title={title} />
           <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
           <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
-            <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+            <Link
+              href={`/club?category=${ClubCategoryToLabel[category].toLowerCase()}`}
+            >
               {category} 동아리
             </Link>
           </p>

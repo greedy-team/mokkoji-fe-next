@@ -121,7 +121,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                     {status}
                   </div>
                 </div>
-                <p className="line-clamp-1 overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
+                <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
                   {item.description}
                 </p>
               </div>

@@ -1,4 +1,4 @@
-import ClubItemSkeleton from '@/shared/ui/club-item-skeleton';
+import ClubItemSkeleton from '@/entities/club/ui/club-item-skeleton';
 import SectionHeader from './section-header';
 
 const SkeletonList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -23,7 +23,7 @@ function ItemListSkeletonLoading({
       <SectionHeader title={title} description={description} />
       <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {splicedSkeletonList.map((item) => (
-          <li key={item}>
+          <li key={item} className="w-full">
             <ClubItemSkeleton />
           </li>
         ))}

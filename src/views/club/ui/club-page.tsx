@@ -8,7 +8,7 @@ import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 function ClubPage({ searchParams }: RecruitItemListProps) {
   return (
     <>
-      <div className="mx-auto sm:w-4xl lg:w-6xl">
+      <div className="w-full sm:w-4xl lg:w-6xl">
         <Suspense
           fallback={
             <ItemListSkeletonLoading

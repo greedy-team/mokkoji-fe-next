@@ -1,4 +1,4 @@
-import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
+import { ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
 import getClubList from '@/widgets/recruit/api/getClubList';

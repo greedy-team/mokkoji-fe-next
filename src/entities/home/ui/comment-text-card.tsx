@@ -1,5 +1,6 @@
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
+import Link from 'next/link';
 
 function CommentTextCard() {
   return (
@@ -12,7 +13,7 @@ function CommentTextCard() {
             width={26}
             height={24}
           />
-          상세 페이지 댓글
+          <Link href="/club/1">상세 페이지 댓글</Link>
         </h4>
       </AnimateOnView>
       <AnimateOnView animation="reveal flex justify-center">

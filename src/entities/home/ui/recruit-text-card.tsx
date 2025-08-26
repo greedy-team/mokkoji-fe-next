@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 
 function RecruitTextCard() {
@@ -5,7 +6,7 @@ function RecruitTextCard() {
     <div className="flex h-[50%] w-full flex-col justify-center lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
         <h4 className="text-lg font-bold text-[#00E457] lg:text-2xl">
-          모집 공고
+          <Link href="/recruit">모집 공고</Link>
         </h4>
       </AnimateOnView>
       <AnimateOnView animation="reveal">

@@ -1,4 +1,4 @@
-import ClubItemSkeleton from './club-item-skeleton';
+import ClubItemSkeleton from '../../club/ui/club-item-skeleton';
 
 const SkeletonList = [1, 2, 3];
 

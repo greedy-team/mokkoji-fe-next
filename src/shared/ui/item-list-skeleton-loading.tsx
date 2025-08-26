@@ -1,4 +1,4 @@
-import ClubItemSkeleton from '@/shared/ui/club-item-skeleton';
+import ClubItemSkeleton from '@/entities/club/ui/club-item-skeleton';
 import SectionHeader from './section-header';
 
 const SkeletonList = [1, 2, 3, 4, 5, 6, 7, 8, 9];

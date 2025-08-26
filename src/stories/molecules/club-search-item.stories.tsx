@@ -1,4 +1,4 @@
-import ClubSearchItem from '@/entities/search/club-search-item';
+import ClubSearchItem from '@/entities/search/ui/club-search-item';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 

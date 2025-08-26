@@ -3,7 +3,7 @@ import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 import { SearchParams } from '@/views/favorite/model/type';
 import { Suspense } from 'react';
-import FavoriteListSkeletonLoading from '@/shared/ui/favorite-list-skeleton-loading';
+import FavoriteListSkeletonLoading from '@/entities/favorite/ui/favorite-list-skeleton-loading';
 
 async function FavoritePage({
   searchParams,

@@ -8,7 +8,6 @@ function ClubSearchItemSkeleton() {
           <div className="h-4 w-16 rounded bg-gray-200" />
         </div>
       </header>
-
       <div className="space-y-2">
         <div className="h-4 w-full rounded bg-gray-200" />
         <div className="h-4 w-5/6 rounded bg-gray-200" />

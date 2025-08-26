@@ -5,18 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEgde from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import { Recruitment } from '@/widgets/recruit/model/type';
 
 const movePx = 250;
 const moblieMovePx = 100;
 
 interface CardSliderProps {
-  data: {
-    id: number;
-    category: string;
-    name: string;
-    logo: string;
-    description: string;
-  }[];
+  data: Recruitment[];
 }
 
 function CardSilder({ data }: CardSliderProps) {
@@ -70,12 +65,12 @@ function CardSilder({ data }: CardSliderProps) {
                   <Avatar
                     className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
-                    <AvatarImage src={item.logo} />
-                    <AvatarFallback>{item.name}</AvatarFallback>
+                    <AvatarImage src={item.club.logo} />
+                    <AvatarFallback>{item.club.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-[#474747] lg:text-xs">
-                      {item.category}
+                      {item.club.clubCategory}
                     </span>
                     <h1
                       className={cn(
@@ -83,7 +78,7 @@ function CardSilder({ data }: CardSliderProps) {
                         'font-bold transition-all duration-500',
                       )}
                     >
-                      {item.name}
+                      {item.club.name}
                     </h1>
                   </div>
                 </div>
@@ -93,7 +88,7 @@ function CardSilder({ data }: CardSliderProps) {
                     'line-clamp-2 overflow-hidden text-ellipsis text-gray-600 transition-all duration-500',
                   )}
                 >
-                  {item.description}
+                  {item.club.description}
                 </div>
               </div>
             </NavLink>

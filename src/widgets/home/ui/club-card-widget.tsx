@@ -1,19 +1,19 @@
 import CardSilder from '@/features/home/ui/club-card';
 import ClubTextCard from '@/entities/home/ui/club-text-card';
-import getRecruitList from '@/widgets/recruit/api/getClubList';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carousel';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import getClubRecruitList from '@/widgets/recruit/api/getClubRecruitList';
 
 async function ClubCardWidget() {
-  const data = await getRecruitList({
+  const data = await getClubRecruitList({
     page: 1,
     size: 100,
   });
   if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
-  const shuffled = [...(data.data?.clubs || [])].sort(
+  const shuffled = [...(data.data?.recruitments || [])].sort(
     () => Math.random() - 0.5,
   );
 

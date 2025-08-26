@@ -1,20 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEgde from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import { Recruitment } from '@/widgets/recruit/model/type';
 import isRecruiting from '../util/isRecruiting';
 
 interface CardSliderProps {
-  data: {
-    id: number;
-    name: string;
-    logo: string;
-    description: string;
-    recruitStartDate: string;
-    recruitEndDate: string;
-  }[];
+  data: Recruitment[];
 }
 
 const radius = 260;
@@ -64,7 +59,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[50%] w-full overflow-hidden perspective-[10000px] lg:h-[300px] lg:w-[50%]"
+      className="relative h-[50%] w-full cursor-pointer overflow-hidden perspective-[10000px] lg:h-[300px] lg:w-[50%]"
     >
       <FadeEgde variant="top" />
       <FadeEgde variant="bottom" />
@@ -80,10 +75,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          const status = isRecruiting(
-            item.recruitStartDate,
-            item.recruitEndDate,
-          );
+          const status = isRecruiting(item.recruitStart, item.recruitEnd);
 
           return (
             <div
@@ -96,35 +88,37 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
-                <div className="mb-4 flex items-center justify-between gap-4">
-                  <Avatar className="size-8 lg:size-10">
-                    <AvatarImage src={item.logo} />
-                    <AvatarFallback>{item.name}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-1 flex-col">
-                    <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
-                      모집 기간 • {item.recruitStartDate}~{item.recruitEndDate}
-                    </span>
-                    <h1 className="text-xs font-bold lg:text-sm">
-                      {item.name}
-                    </h1>
+              <Link href={`/recruit/${item.id}`}>
+                <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <Avatar className="size-8 lg:size-10">
+                      <AvatarImage src={item.club.logo} />
+                      <AvatarFallback>{item.club.name}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-1 flex-col">
+                      <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
+                        모집 기간 • {item.recruitStart}~{item.recruitEnd}
+                      </span>
+                      <h1 className="text-xs font-bold lg:text-sm">
+                        {item.club.name}
+                      </h1>
+                    </div>
+                    <div
+                      className={cn(
+                        status === '모집 중'
+                          ? 'bg-[#00E457] text-white'
+                          : 'bg-[#E9E7E7] text-[#9C9C9C]',
+                        'rounded-full px-2 py-1 text-[6px] lg:text-[10px]',
+                      )}
+                    >
+                      {status}
+                    </div>
                   </div>
-                  <div
-                    className={cn(
-                      status === '모집 중'
-                        ? 'bg-[#00E457] text-white'
-                        : 'bg-[#E9E7E7] text-[#9C9C9C]',
-                      'rounded-full px-2 py-1 text-[6px] lg:text-[10px]',
-                    )}
-                  >
-                    {status}
-                  </div>
+                  <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
+                    {item.club.description}
+                  </p>
                 </div>
-                <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
-                  {item.description}
-                </p>
-              </div>
+              </Link>
             </div>
           );
         })}

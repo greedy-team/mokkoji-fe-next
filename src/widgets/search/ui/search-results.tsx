@@ -1,5 +1,5 @@
 import { ClubCategory } from '@/shared/model/type';
-import ClubSearchItem from '@/entities/search/club-search-item';
+import ClubSearchItem from '@/entities/search/ui/club-search-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 

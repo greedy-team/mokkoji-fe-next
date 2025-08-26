@@ -69,4 +69,9 @@ if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
   });
 }
 
-export default nextConfig;
+// eslint-disable-next-line import/no-extraneous-dependencies
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.NEXT_PUBLIC_ANALYZE === 'true',
+});
+
+export default withBundleAnalyzer(nextConfig);

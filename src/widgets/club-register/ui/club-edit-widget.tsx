@@ -1,27 +1,18 @@
 import ClubEditForm from '@/features/club-register/ui/club-edit-form';
 import { getClubInfo } from '@/shared/api/manage-api';
-import { ClubInfoType, DetailParams } from '@/shared/model/type';
+import { DetailParams } from '@/shared/model/type';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import getParams from '@/shared/util/getParams';
-import { toast } from 'react-toastify';
 
 async function ClubEditWidget({ params }: DetailParams) {
   const { id } = await getParams({ params });
-  let clubInfo: ClubInfoType | undefined;
+  const res = await getClubInfo(Number(id));
 
-  try {
-    const response = await getClubInfo(Number(id));
-    clubInfo = response.data;
-  } catch (err) {
-    console.error(err);
-    toast.warn('동아리 정보를 불러오는데 실패했습니다.');
+  if (!res.ok) {
+    return <ErrorBoundaryUi />;
   }
 
-  return (
-    <div className="w-[90%] lg:w-[30%]">
-      <h1 className="my-6 text-2xl font-bold">동아리 정보 수정</h1>
-      <ClubEditForm clubInfo={clubInfo} clubId={Number(id)} />
-    </div>
-  );
+  return <ClubEditForm clubInfo={res.data} clubId={Number(id)} />;
 }
 
 export default ClubEditWidget;

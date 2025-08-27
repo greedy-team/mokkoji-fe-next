@@ -37,7 +37,7 @@ async function Header() {
           <NavButton label="고객센터" href="/support" />
           {role &&
             role !== UserRole.NORMAL &&
-            (role === UserRole.CLUB_ADMIN || role === UserRole.GREEDY_ADMIN ? (
+            (role === UserRole.GREEDY_ADMIN || role === UserRole.CLUB_ADMIN ? (
               <NavButton label="동아리 등록" href="/club-register" />
             ) : (
               <HeaderManageModal
@@ -46,7 +46,7 @@ async function Header() {
               />
             ))}
           {role &&
-            (role === UserRole.CLUB_ADMIN ||
+            (role === UserRole.CLUB_MASTER ||
               role === UserRole.GREEDY_ADMIN) && (
               <HeaderManageModal
                 manageClubInfo={session?.manageClubInfo || []}

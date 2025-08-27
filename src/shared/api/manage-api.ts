@@ -1,20 +1,33 @@
 'use server';
 
 import authApi from '@/shared/api/auth-api';
-import { ClubInfoResponse, GetClubManageInfoResponse } from '../model/type';
+import {
+  ApiResponse,
+  ClubInfoResponse,
+  GetClubManageInfoResponse,
+} from '../model/type';
+import ErrorHandler from '../lib/error-message';
 
-export default async function getClubManageInfo(): Promise<GetClubManageInfoResponse> {
-  const response = await (await authApi())
-    .get('users/manage/clubs')
-    .json<GetClubManageInfoResponse>();
+export default async function getClubManageInfo() {
+  try {
+    const response = await (await authApi())
+      .get('users/manage/clubs')
+      .json<ApiResponse<GetClubManageInfoResponse>>();
 
-  return response;
+    return { ok: true, message: '성공', data: response.data };
+  } catch (err) {
+    return ErrorHandler(err as Error);
+  }
 }
 
-export async function getClubInfo(clubId: number): Promise<ClubInfoResponse> {
-  const response = await (await authApi())
-    .get(`clubs/${clubId}`)
-    .json<ClubInfoResponse>();
+export async function getClubInfo(clubId: number) {
+  try {
+    const response = await (await authApi())
+      .get(`clubs/${clubId}`)
+      .json<ClubInfoResponse>();
 
-  return response;
+    return { ok: true, message: '성공', data: response.data };
+  } catch (err) {
+    return ErrorHandler(err as Error);
+  }
 }

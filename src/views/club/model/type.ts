@@ -5,7 +5,7 @@ export interface ClubDetailType {
   name: string;
   category: string;
   affiliation: string;
-  description: string;
+  description?: string;
   recruitStartDate: string;
   recruitEndDate: string;
   logo: string;

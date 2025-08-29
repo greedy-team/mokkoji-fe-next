@@ -22,13 +22,19 @@ async function ClubDetailPage({ params }: DetailParams) {
         logo={data.logo}
         status={data.status}
       />
-      <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
-        <span
-          dangerouslySetInnerHTML={{
-            __html: convertLinkText(data.description),
-          }}
-        />
-      </p>
+      {data.description ? (
+        <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
+          <span
+            dangerouslySetInnerHTML={{
+              __html: convertLinkText(data.description),
+            }}
+          />
+        </p>
+      ) : (
+        <p className="py-30 text-center text-gray-500">
+          동아리 소개 정보가 없습니다.
+        </p>
+      )}
       <ClubDetailCommentWidget clubId={Number(id)} />
     </div>
   );

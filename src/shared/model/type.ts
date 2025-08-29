@@ -29,7 +29,7 @@ export interface ClubType {
   name: string;
   category: ClubCategory;
   affiliation: ClubAffiliation;
-  description: string;
+  description?: string;
   recruitStartDate: string;
   recruitEndDate: string;
   logo: string;

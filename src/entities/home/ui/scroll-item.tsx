@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 interface ScrollItemProps {
   title: string;
-  description: string;
+  description?: string;
   logo?: string;
   id: number;
 }

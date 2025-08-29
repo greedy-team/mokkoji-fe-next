@@ -5,7 +5,7 @@ import FavoriteButton from '@/shared/ui/favorite-button';
 
 interface ClubItemProps {
   title: string;
-  description: string;
+  description?: string;
   isFavorite?: boolean;
   logo?: string;
   category?: string;
@@ -39,7 +39,7 @@ function ClubItem({
 
       <div className="flex flex-row justify-between">
         <div className="line-clamp-2 overflow-hidden pr-7 text-[12px] break-words lg:text-xs">
-          {description}
+          {description || '동아리 소개 정보가 없습니다.'}
         </div>
       </div>
 

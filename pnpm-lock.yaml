@@ -135,6 +135,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.11
+      '@types/eslint':
+        specifier: ^9.6.1
+        version: 9.6.1
       '@types/lodash':
         specifier: ^4.17.20
         version: 4.17.20

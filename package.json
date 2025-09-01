@@ -60,6 +60,7 @@
     "@storybook/test": "8.6.14",
     "@storybook/testing-library": "^0.2.2",
     "@tailwindcss/postcss": "^4",
+    "@types/eslint": "^9.6.1",
     "@types/lodash": "^4.17.20",
     "@types/node": "^20.19.9",
     "@types/react": "^19",

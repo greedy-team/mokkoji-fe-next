@@ -1,11 +1,11 @@
 {
-  "id": "24dd0b8c-a98a-439d-a5f0-bfb82cff4ab8",
-  "relativePath": "recruit/132",
-  "name": "sins051301",
-  "description": "나중에 고쳐야댐",
+  "id": "542f37d0-9925-4cd7-8e46-d74b53ee42b8",
+  "relativePath": "recruit",
+  "name": "정창우",
+  "description": "헤더 관리자 페이지로 수정",
   "todos": [
-    "test1"
+    "헤더 수정"
   ],
-  "x": 748,
-  "y": 194
+  "x": 1014,
+  "y": 30
 }

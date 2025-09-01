@@ -8,41 +8,39 @@ const TARGET_FILENAMES = new Set(['layout.tsx']);
 
 function collectTargetFiles(dir: string, acc: string[] = []) {
   const ignore = new Set(['node_modules', '.next', '.git', 'dist', 'build']);
-
-  const entries = fs.readdirSync(dir);
-  entries
+  fs.readdirSync(dir)
     .filter((name) => !ignore.has(name))
     .forEach((name) => {
       const p = path.join(dir, name);
       const stat = fs.statSync(p);
-      if (stat.isDirectory()) {
-        collectTargetFiles(p, acc);
-      } else if (stat.isFile() && TARGET_FILENAMES.has(path.basename(p))) {
+      if (stat.isDirectory()) collectTargetFiles(p, acc);
+      else if (stat.isFile() && TARGET_FILENAMES.has(path.basename(p)))
         acc.push(p);
-      }
     });
-
   return acc;
 }
 
-function removeDevTodo(content: string) {
+function removeDevTodoTags(content: string) {
   const reSelfClosing = /^[\t ]*<DevTodo\b[^>]*?\/>\s*\r?\n?/gm;
   const reOpenClose = /^[\t ]*<DevTodo\b[^>]*?>[\s\S]*?<\/DevTodo>\s*\r?\n?/gm;
+  return content.replace(reSelfClosing, '').replace(reOpenClose, '');
+}
+
+function removeDevTodoImportsIfUnused(content: string) {
+  if (/<DevTodo\b/.test(content)) return content; // 아직 쓰이면 건드리지 않음
+
+  // 정확 경로 import
   const reImportExact =
     /import\s+DevTodo\s+from\s+['"]@\/shared\/ui\/dev-to-do['"];?\s*\r?\n?/g;
+  // 경로 무관 default import DevTodo (혹시 다른 경로로도 불러온 경우 대비)
+  const reImportAnyDefault =
+    /import\s+DevTodo(?:\s*,\s*\{[^}]*\})?\s+from\s+['"][^'"]+['"];?\s*\r?\n?/g;
 
-  let next = content
-    .replace(reSelfClosing, '')
-    .replace(reOpenClose, '')
-    .replace(reImportExact, '');
-
-  if (!/<DevTodo\b/.test(next)) {
-    const reImportAnyDefault =
-      /import\s+DevTodo(?:\s*,\s*\{[^}]*\})?\s+from\s+['"][^'"]+['"];?\s*\r?\n?/g;
-    next = next.replace(reImportAnyDefault, '');
-  }
-
-  return next.replace(/\r?\n{3,}/g, '\n\n').replace(/[ \t]+\r?\n/g, '\n');
+  return content
+    .replace(reImportExact, '')
+    .replace(reImportAnyDefault, '')
+    .replace(/\r?\n{3,}/g, '\n\n')
+    .replace(/[ \t]+\r?\n/g, '\n');
 }
 
 async function main() {
@@ -60,11 +58,14 @@ async function main() {
   const results = await Promise.all(
     files.map(async (file) => {
       const before = fs.readFileSync(file, 'utf-8');
-      const after = removeDevTodo(before);
-      const isChanged = after !== before;
 
+      let next = removeDevTodoTags(before);
+
+      next = removeDevTodoImportsIfUnused(next);
+
+      const isChanged = next !== before;
       if (isChanged) {
-        const formatted = await formatWithPrettierAndEslint(file, after);
+        const formatted = await formatWithPrettierAndEslint(file, next);
         fs.writeFileSync(file, formatted, 'utf-8');
         console.log('🧹 cleaned:', path.relative(ROOT, file));
       }
@@ -72,7 +73,7 @@ async function main() {
     }),
   );
 
-  const changed = results.reduce((cur, acc) => cur + acc, 0);
+  const changed = results.reduce<number>((sum, v) => sum + v, 0);
   console.log(
     changed > 0
       ? `✅ DevTodo 정리 완료 (${changed} 파일 수정)`

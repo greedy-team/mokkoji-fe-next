@@ -20,6 +20,7 @@ type TodoItem = {
 type DevTodoContextType = {
   todos: TodoItem[];
   register: (item: TodoItem) => void;
+  remove: (id: string) => void;
 };
 
 const DevTodoContext = createContext<DevTodoContextType | undefined>(undefined);
@@ -37,7 +38,14 @@ export function DevTodoProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const value = useMemo(() => ({ todos, register }), [todos, register]);
+  const remove = useCallback((id: string) => {
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const value = useMemo(
+    () => ({ todos, register, remove }),
+    [todos, register, remove],
+  );
 
   return (
     <DevTodoContext.Provider value={value}>{children}</DevTodoContext.Provider>

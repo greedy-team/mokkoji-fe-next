@@ -1,4 +1,3 @@
-// app/api/devtodo/route.ts
 import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
@@ -8,7 +7,10 @@ import { exec } from 'child_process';
 export async function POST(req: Request) {
   if (process.env.NEXT_PUBLIC_NODE_ENV === 'production') {
     console.log('production 환경 금지!');
-    return Response.json({ success: false, message: 'production 환경 금지!' });
+    return Response.json(
+      { success: false, message: 'production 환경 금지!' },
+      { status: 403 },
+    );
   }
   const body = await req.json();
   const id = randomUUID();

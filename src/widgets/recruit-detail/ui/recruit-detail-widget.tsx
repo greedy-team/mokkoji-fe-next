@@ -97,6 +97,7 @@ function RecruitDetailWidget({
           recruitEnd={recruitEnd}
           clubId={clubId}
           setIsEditing={setIsEditing}
+          imageUrls={imageUrls}
         />
       )}
     </>

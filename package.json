@@ -16,7 +16,6 @@
     "deploy-storybook": "gh-pages -d storybook-static"
   },
   "dependencies": {
-    "@amplitude/analytics-browser": "^2.18.1",
     "@microsoft/clarity": "^1.0.0",
     "@next/bundle-analyzer": "^15.5.0",
     "@radix-ui/react-avatar": "^1.1.10",

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import useLocalStorage from '../model/useLocalStorage';
 import { useDevTodo } from '../model/dev-todo-provider';
 
@@ -13,6 +14,7 @@ interface DevTodoProps {
   x?: number;
   y?: number;
   todos: string[];
+  root?: boolean;
 }
 
 function DevTodo({
@@ -23,11 +25,13 @@ function DevTodo({
   x = 20,
   y = 20,
   todos,
+  root = false,
 }: DevTodoProps) {
   const [todoOpen, setTodoOpen] = useState(false);
   const [removed, setRemoved] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const { register } = useDevTodo();
+  const pathname = usePathname();
+  const { register, remove } = useDevTodo();
 
   const [checked, setChecked] = useLocalStorage<Record<string, boolean>>(
     `dev-todo-${id}`,
@@ -46,10 +50,10 @@ function DevTodo({
       id,
       x,
       y,
-      url: window.location.pathname,
+      url: pathname,
       todos,
     });
-  }, [id, x, y, todos, register]);
+  }, [pathname]);
 
   const handleDelete = async () => {
     if (deleting) return;
@@ -68,8 +72,8 @@ function DevTodo({
       });
       const data = await res.json();
       console.log('🗑️ DevTodo 삭제 요청:', data);
-      // 성공 시 화면에서 숨기기
       setRemoved(true);
+      remove(id);
     } catch (err) {
       console.error('❌ 삭제 실패', err);
     } finally {
@@ -78,6 +82,7 @@ function DevTodo({
   };
 
   if (removed) return null;
+  if (root && pathname !== '/') return null;
 
   return (
     <div

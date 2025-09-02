@@ -1,11 +1,11 @@
 {
-  "id": "542f37d0-9925-4cd7-8e46-d74b53ee42b8",
-  "relativePath": "recruit",
-  "name": "정창우",
-  "description": "헤더 관리자 페이지로 수정",
+  "id": "ea902b3d-c7ce-4300-bcc1-599570fae520",
+  "relativePath": "page",
+  "name": "신혁수",
+  "description": "루트",
   "todos": [
-    "헤더 수정"
+    "해야함"
   ],
-  "x": 1014,
-  "y": 30
+  "x": 534,
+  "y": 287
 }

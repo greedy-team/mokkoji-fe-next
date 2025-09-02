@@ -2,13 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import formatWithPrettierAndEslint from './format';
-
-function toTargetPath(relativePath: string) {
-  const parts = relativePath
-    .split('/')
-    .map((p) => (/^\d+$/.test(p) ? '[id]' : p));
-  return path.join('src', 'app', '(main)', ...parts, 'layout.tsx');
-}
+import toTargetPath from './util/to-target-path';
 
 async function main() {
   const inputPath = path.join(process.cwd(), 'scripts', 'devtodo-input.json');
@@ -46,8 +40,21 @@ async function main() {
     }
   }
 
-  // JSX 생성
-  const componentJSX = `
+  let componentJSX;
+  if (relativePath === 'page') {
+    componentJSX = `
+    <DevTodo
+      id="${id}"
+      name="${name}"
+      ${description ? `description="${description}"` : ''}
+      todos={[${(todos as string[]).map((t) => `'${t}'`).join(', ')}]}
+      x={${x || 30}}
+      y={${y || 60}}
+      root
+    />
+`;
+  } else {
+    componentJSX = `
       <DevTodo
         id="${id}"
         name="${name}"
@@ -57,6 +64,7 @@ async function main() {
         y={${y || 60}}
       />
 `;
+  }
 
   if (content.includes('</main>')) {
     content = content.replace('</main>', `${componentJSX}    </main>`);

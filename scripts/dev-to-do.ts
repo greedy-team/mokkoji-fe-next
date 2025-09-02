@@ -1,15 +1,8 @@
+// scripts/insert-devtodo.ts
 import fs from 'fs';
 import path from 'path';
-
-function toTargetPath(relativePath: string) {
-  // 숫자는 [id]로 치환
-  const parts = relativePath.split('/').map((p) => {
-    if (/^\d+$/.test(p)) return '[id]';
-    return p;
-  });
-
-  return path.join('src', 'app', '(main)', ...parts, 'layout.tsx');
-}
+import formatWithPrettierAndEslint from './format';
+import toTargetPath from './util/to-target-path';
 
 async function main() {
   const inputPath = path.join(process.cwd(), 'scripts', 'devtodo-input.json');
@@ -32,39 +25,61 @@ async function main() {
 
   let content = fs.readFileSync(absPath, 'utf-8');
 
-  // import 추가
-  if (!content.includes('DevTodo')) {
-    const importRegex = /(import .*;)/;
-    if (importRegex.test(content)) {
+  // import 추가 (이미 import돼 있지 않은 경우에만)
+  const hasImport =
+    /import\s+DevTodo\s+from\s+['"]@\/shared\/ui\/dev-to-do['"]/.test(content);
+  if (!hasImport) {
+    const importBlockRegex = /(^\s*import[\s\S]*?;\s*\n)/m; // 첫 import 블록 뒤에 삽입
+    if (importBlockRegex.test(content)) {
       content = content.replace(
-        importRegex,
-        "$1\nimport DevTodo from '@/shared/ui/dev-to-do';",
+        importBlockRegex,
+        "$1import DevTodo from '@/shared/ui/dev-to-do';\n",
       );
     } else {
-      content = `import DevTodo from '@/shared/ui/dev-to-do';\n${content}`;
+      content = `import DevTodo from '@/shared/ui/dev-to-do';\n\n${content}`;
     }
   }
 
-  // JSX 생성
-  const componentJSX = `
+  let componentJSX;
+  if (relativePath === 'page') {
+    componentJSX = `
+    <DevTodo
+      id="${id}"
+      name="${name}"
+      ${description ? `description="${description}"` : ''}
+      todos={[${(todos as string[]).map((t) => `'${t}'`).join(', ')}]}
+      x={${x || 30}}
+      y={${y || 60}}
+      root
+    />
+`;
+  } else {
+    componentJSX = `
       <DevTodo
         id="${id}"
         name="${name}"
         ${description ? `description="${description}"` : ''}
-        todos={[${todos.map((t: string) => `'${t}'`).join(', ')}]}
+        todos={[${(todos as string[]).map((t) => `'${t}'`).join(', ')}]}
         x={${x || 30}}
         y={${y || 60}}
       />
 `;
+  }
 
   if (content.includes('</main>')) {
-    content = content.replace('</main>', `${componentJSX}\n    </main>`);
+    content = content.replace('</main>', `${componentJSX}    </main>`);
   } else {
     content += componentJSX;
   }
 
-  fs.writeFileSync(absPath, content, 'utf-8');
-  console.log('✅ DevTodo 삽입 완료:', absPath);
+  // ✅ Prettier → ESLint --fix → (실패 시) fallback
+  const final = await formatWithPrettierAndEslint(absPath, content);
+  fs.writeFileSync(absPath, final, 'utf-8');
+
+  console.log('✅ DevTodo 삽입 + Prettier + ESLint --fix 완료:', absPath);
 }
 
-main();
+main().catch((e) => {
+  console.error('❌ 에러:', e);
+  process.exit(1);
+});

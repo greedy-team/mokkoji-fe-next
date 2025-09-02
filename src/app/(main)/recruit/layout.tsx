@@ -22,15 +22,6 @@ export default function Layout({
       {children}
 
       <DevTodo
-        id="123d3a87-c36f-4ff9-92fe-fb0096b2b4f3"
-        name="신혁수"
-        description="ㄹㄴㄹ"
-        todos={['ㄹㄴㄹㄴㄹ']}
-        x={884}
-        y={304}
-      />
-
-      <DevTodo
         id="542f37d0-9925-4cd7-8e46-d74b53ee42b8"
         name="정창우"
         description="헤더 관리자 페이지로 수정"

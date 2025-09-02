@@ -27,7 +27,7 @@ function removeDevTodoTags(content: string) {
 }
 
 function removeDevTodoImportsIfUnused(content: string) {
-  if (/<DevTodo\b/.test(content)) return content; // 아직 쓰이면 건드리지 않음
+  if (/<DevTodo\b/.test(content)) return content;
 
   // 정확 경로 import
   const reImportExact =

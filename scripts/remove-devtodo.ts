@@ -2,13 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import formatWithPrettierAndEslint from './format';
-
-function toTargetPath(relativePath: string) {
-  const parts = relativePath
-    .split('/')
-    .map((p) => (/^\d+$/.test(p) ? '[id]' : p));
-  return path.join('src', 'app', '(main)', ...parts, 'layout.tsx');
-}
+import toTargetPath from './util/to-target-path';
 
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

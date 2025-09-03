@@ -2,6 +2,7 @@ import RecruitItem from '@/entities/recruit/ui/recruit-item';
 import Link from 'next/link';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { ClubCategory } from '@/shared/model/type';
+import { auth } from '@/auth';
 import { RecruitItemListProps } from '../model/type';
 import getClubRecruitList from '../api/getClubRecruitList';
 
@@ -11,6 +12,8 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
     size: Number((await searchParams).size || 100),
     category: (await searchParams).category?.toUpperCase() as ClubCategory,
   });
+
+  const session = await auth();
 
   if (!res.ok) {
     return <ErrorBoundaryUi />;
@@ -38,6 +41,7 @@ async function RecruitItemList({ searchParams }: RecruitItemListProps) {
               logo={item.club.logo}
               clubId={String(item.club.id)}
               status={item.status}
+              session={session || undefined}
             />
           </Link>
         </li>

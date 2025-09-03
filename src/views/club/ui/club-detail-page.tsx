@@ -4,10 +4,12 @@ import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
+import { auth } from '@/auth';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getClubDetail(id);
+  const session = await auth();
 
   return (
     <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
@@ -21,6 +23,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         isFavorite={data.isFavorite}
         logo={data.logo}
         status={data.status}
+        session={session || undefined}
       />
       <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
         <span

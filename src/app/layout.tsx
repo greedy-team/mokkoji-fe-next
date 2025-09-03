@@ -49,6 +49,7 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
   description: '세종대 동아리 통합 플랫폼',
+  metadataBase: new URL('https://mokkoji.site'),
   openGraph: {
     title: '모꼬지 | 세종대 동아리',
     description: '세종대 동아리 통합 플랫폼',

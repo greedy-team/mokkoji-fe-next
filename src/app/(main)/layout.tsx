@@ -4,6 +4,7 @@ import Footer from '@/shared/ui/Footer';
 import { DevTodoProvider } from '@/shared/model/dev-todo-provider';
 import DevTodoTracker from '@/shared/ui/dev-to-do-tracker';
 import DevTodoGlobalClient from '@/shared/ui/dev-client-global';
+import { SessionProvider } from 'next-auth/react';
 
 export default function MainLayout({
   children,
@@ -13,11 +14,13 @@ export default function MainLayout({
   return (
     <DevTodoProvider>
       <div className="flex min-h-screen flex-col">
-        <Header />
-        {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
-          <DevTodoTracker />
-        )}
-        <main className="flex-grow">{children}</main>
+        <SessionProvider>
+          <Header />
+          {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
+            <DevTodoTracker />
+          )}
+          <main className="flex-grow">{children}</main>
+        </SessionProvider>
         <Footer />
       </div>
       <DevTodoGlobalClient />

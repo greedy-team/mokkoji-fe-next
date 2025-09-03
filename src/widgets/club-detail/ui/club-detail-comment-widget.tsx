@@ -1,7 +1,6 @@
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
-import { SessionProvider } from 'next-auth/react';
 import getClubDetailComments from '../api/getClubDetailComments';
 
 interface CommentWidgetProps {
@@ -16,10 +15,8 @@ async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
 
   return (
     <section className="mt-13 w-full">
-      <SessionProvider>
-        <ClubDetailCommentInput clubId={clubId} count={commentList.length} />
-        <ClubDetailComment comments={commentList} clubId={clubId} />
-      </SessionProvider>
+      <ClubDetailCommentInput clubId={clubId} count={commentList.length} />
+      <ClubDetailComment comments={commentList} clubId={clubId} />
     </section>
   );
 }

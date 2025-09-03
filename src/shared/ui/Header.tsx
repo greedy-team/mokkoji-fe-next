@@ -4,7 +4,6 @@ import Image from 'next/image';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
-import { SessionProvider } from 'next-auth/react';
 import getClubManageInfo from '@/shared/api/manage-api';
 import NavButton from './nav-button';
 import { UserRole } from '../model/type';
@@ -33,42 +32,40 @@ async function Header() {
           />
           <span>Mokkoji</span>
         </Link>
-        <SessionProvider>
-          <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
-            <NavButton label="전체 동아리" href="/club" />
-            <NavButton label="모집 공고" href="/recruit" />
-            <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
-            <NavButton label="고객센터" href="/support" />
-            {role &&
-              role !== UserRole.NORMAL &&
-              (role === UserRole.GREEDY_ADMIN ||
-              role === UserRole.CLUB_ADMIN ? (
-                <NavButton label="동아리 등록" href="/club-register" />
-              ) : (
-                <HeaderManageModal
-                  manageClubInfo={getClubManageInfoRes.data?.clubs || []}
-                  menu="register"
-                />
-              ))}
-            {role &&
-              (role === UserRole.CLUB_MASTER ||
-                role === UserRole.GREEDY_ADMIN) && (
-                <HeaderManageModal
-                  manageClubInfo={getClubManageInfoRes.data?.clubs || []}
-                  menu="recruitment"
-                />
-              )}
-          </nav>
-          <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
-            <HeaderLogin />
-            <HeaderSearch />
-            <MoblieHeader
-              sessionRole={role}
-              manageClubInfo={session?.manageClubInfo || []}
-            />
-          </div>
-          <span className="absolute bottom-0 left-0 h-0.5 w-screen bg-gray-200 transition-colors duration-500" />
-        </SessionProvider>
+
+        <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
+          <NavButton label="전체 동아리" href="/club" />
+          <NavButton label="모집 공고" href="/recruit" />
+          <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
+          <NavButton label="고객센터" href="/support" />
+          {role &&
+            role !== UserRole.NORMAL &&
+            (role === UserRole.GREEDY_ADMIN || role === UserRole.CLUB_ADMIN ? (
+              <NavButton label="동아리 등록" href="/club-register" />
+            ) : (
+              <HeaderManageModal
+                manageClubInfo={getClubManageInfoRes.data?.clubs || []}
+                menu="register"
+              />
+            ))}
+          {role &&
+            (role === UserRole.CLUB_MASTER ||
+              role === UserRole.GREEDY_ADMIN) && (
+              <HeaderManageModal
+                manageClubInfo={getClubManageInfoRes.data?.clubs || []}
+                menu="recruitment"
+              />
+            )}
+        </nav>
+        <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
+          <HeaderLogin />
+          <HeaderSearch />
+          <MoblieHeader
+            sessionRole={role}
+            manageClubInfo={session?.manageClubInfo || []}
+          />
+        </div>
+        <span className="absolute bottom-0 left-0 h-0.5 w-screen bg-gray-200 transition-colors duration-500" />
       </header>
     </>
   );

@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FavoriteButton from '@/shared/ui/favorite-button';
+import { Session } from 'next-auth';
 
 interface ClubItemProps {
   title: string;
@@ -10,6 +11,7 @@ interface ClubItemProps {
   logo?: string;
   category?: string;
   clubId: string;
+  session?: Session;
 }
 
 function ClubItem({
@@ -19,6 +21,7 @@ function ClubItem({
   logo,
   category,
   clubId,
+  session,
 }: ClubItemProps) {
   return (
     <div className="relative flex min-h-[90px] w-[100%] flex-col gap-2 rounded-lg bg-[#F8F8F8] p-3 text-[#474747] transition-shadow duration-300 hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2)] lg:min-h-[180px] lg:w-auto lg:p-5">
@@ -42,11 +45,11 @@ function ClubItem({
           {description}
         </div>
       </div>
-
       <FavoriteButton
         isFavorite={isFavorite || false}
         clubId={clubId}
         customClass="absolute bottom-4 right-4 scale-80 lg:scale-100"
+        session={session}
       />
     </div>
   );

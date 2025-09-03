@@ -104,7 +104,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
       }
 
-      if (Date.now() > (token.expiresAt as number)) {
+      if (Date.now() > (token.expiresAt as number) - 10 * 60 * 1000) {
         try {
           const response = await serverApi.post('users/auth/refresh', {
             headers: {

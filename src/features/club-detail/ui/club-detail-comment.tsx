@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
-import { SessionProvider } from 'next-auth/react';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';
 
@@ -37,15 +36,13 @@ export default function ClubDetailComment({
               />
             </div>
             {isEditing ? (
-              <SessionProvider>
-                <ClubDetailCommentEdit
-                  clubId={clubId}
-                  commentId={comment.id}
-                  content={comment.content}
-                  rate={comment.rate}
-                  onCancel={() => setEdit(null)}
-                />
-              </SessionProvider>
+              <ClubDetailCommentEdit
+                clubId={clubId}
+                commentId={comment.id}
+                content={comment.content}
+                rate={comment.rate}
+                onCancel={() => setEdit(null)}
+              />
             ) : (
               <CommentItem clubId={clubId} comment={comment} onEdit={setEdit} />
             )}

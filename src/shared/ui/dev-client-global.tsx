@@ -16,7 +16,6 @@ export default function DevTodoGlobalClient() {
   const pathname = usePathname();
 
   const [relativePath, setRelativePath] = useState('');
-  console.log('relativePath', relativePath);
 
   const handleClose = useCallback(() => {
     setOpen(false);

@@ -1,11 +1,11 @@
 {
-  "id": "ea902b3d-c7ce-4300-bcc1-599570fae520",
-  "relativePath": "page",
+  "id": "7ab75b9a-d0f7-4585-8c4f-2333d8ba321a",
+  "relativePath": "club",
   "name": "신혁수",
-  "description": "루트",
+  "description": "이거해",
   "todos": [
-    "해야함"
+    "test1"
   ],
-  "x": 534,
-  "y": 287
+  "x": 863,
+  "y": 117
 }

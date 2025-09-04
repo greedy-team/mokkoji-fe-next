@@ -2,7 +2,6 @@
 
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import { useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import RecruitFavoriteList from '@/entities/favorite/ui/recruit-favorite-list';
 import RecruitDeadlineSoonList from '@/entities/favorite/ui/recruit-dead-line-list';

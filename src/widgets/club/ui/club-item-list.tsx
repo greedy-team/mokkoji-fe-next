@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { auth } from '@/auth';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
 async function ClubItemList({ searchParams }: RecruitItemListProps) {
@@ -13,6 +14,9 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
     category: (await searchParams).category?.toUpperCase() as ClubCategory,
     recruitStatus: (await searchParams).recruitStatus,
   });
+
+  const session = await auth();
+
   if (!res.ok) {
     return <ClubCustomErrorBoundary />;
   }
@@ -36,6 +40,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
               isFavorite={item.isFavorite}
               logo={item.logo}
               clubId={String(item.id)}
+              session={session || undefined}
             />
           </Link>
         </li>

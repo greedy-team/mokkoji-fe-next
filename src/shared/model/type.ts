@@ -96,9 +96,7 @@ export interface ManageClub {
 }
 
 export interface GetClubManageInfoResponse {
-  data: {
-    clubs: ManageClub[];
-  };
+  clubs: ManageClub[];
 }
 
 export interface ClubInfoType {

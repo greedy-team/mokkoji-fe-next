@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 
-import DevTodo from '@/shared/ui/dev-to-do';
-
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리 모집 공고',
   description: '세종대 동아리 모집 공고',
@@ -20,15 +18,6 @@ export default function Layout({
   return (
     <main className="flex flex-col items-center justify-center px-4 pt-4 lg:w-[95vw]">
       {children}
-
-      <DevTodo
-        id="542f37d0-9925-4cd7-8e46-d74b53ee42b8"
-        name="정창우"
-        description="헤더 관리자 페이지로 수정"
-        todos={['헤더 수정']}
-        x={1014}
-        y={30}
-      />
     </main>
   );
 }

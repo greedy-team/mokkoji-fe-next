@@ -4,6 +4,7 @@ import Image from 'next/image';
 import HeaderSearch from '@/features/header/ui/header-search';
 import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
+import getClubManageInfo from '@/shared/api/manage-api';
 import NavButton from './nav-button';
 import { UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
@@ -12,6 +13,7 @@ import MoblieHeader from './moblie-header';
 async function Header() {
   const session = await auth();
   const role = session?.role;
+  const getClubManageInfoRes = await getClubManageInfo();
 
   return (
     <>
@@ -30,6 +32,7 @@ async function Header() {
           />
           <span>Mokkoji</span>
         </Link>
+
         <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
           <NavButton label="전체 동아리" href="/club" />
           <NavButton label="모집 공고" href="/recruit" />
@@ -41,7 +44,7 @@ async function Header() {
               <NavButton label="동아리 등록" href="/club-register" />
             ) : (
               <HeaderManageModal
-                manageClubInfo={session?.manageClubInfo || []}
+                manageClubInfo={getClubManageInfoRes.data?.clubs || []}
                 menu="register"
               />
             ))}
@@ -49,7 +52,7 @@ async function Header() {
             (role === UserRole.CLUB_MASTER ||
               role === UserRole.GREEDY_ADMIN) && (
               <HeaderManageModal
-                manageClubInfo={session?.manageClubInfo || []}
+                manageClubInfo={getClubManageInfoRes.data?.clubs || []}
                 menu="recruitment"
               />
             )}

@@ -3,6 +3,7 @@ import formatDate from '@/entities/favorite/util/format-date';
 import Link from 'next/link';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
+  console.log('data!', data);
   const sortedData = data?.length
     ? [...data].sort((a, b) => {
         return (
@@ -17,10 +18,7 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
       {sortedData.length > 0 ? (
         <ul className="space-y-1">
           {sortedData.map((club) => (
-            <li
-              key={`${club.clubName}-${club.recruitStart}-${club.recruitEnd}`}
-              className="flex flex-row space-x-2"
-            >
+            <li key={`${club.clubId}`} className="flex flex-row space-x-2">
               <span>
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}
               </span>

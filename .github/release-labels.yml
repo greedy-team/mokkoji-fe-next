@@ -1,0 +1,8 @@
+types:
+  chore: '🌀 chore'
+  feat: '✨ feature'
+  fix: '🛠️ fix'
+  bug: '🐞 bug'
+  refactor: '♻️ refactor'
+  enhancement: '☀️ enhancement'
+  question: '⁉️ question'

@@ -1,0 +1,44 @@
+'✨ feature':
+  - title: '(?i)feature'
+  - title: '✨'
+  - body: '기능'
+  - body: '구현'
+
+'🌀 chore':
+  - title: '(?i)chore'
+  - title: '🌀'
+  - body: '기타'
+  - body: '환경설정'
+  - body: '설정'
+
+'🛠️ fix':
+  - title: '(?i)fix'
+  - title: '🛠️'
+  - body: '수정'
+  - body: '핫픽스'
+
+'🐞 bug':
+  - title: '(?i)bug'
+  - title: '🐞'
+  - body: '버그'
+  - body: '오류'
+  - body: '에러'
+
+'♻️ refactor':
+  - title: '(?i)refactor'
+  - title: '♻️'
+  - body: '리팩토링'
+  - body: '구조 개선'
+
+'☀️ enhancement':
+  - title: '(?i)enhancement'
+  - title: '☀️'
+  - body: '개선'
+  - body: '성능 향상'
+
+'⁉️ question':
+  - title: '(?i)question'
+  - title: '⁉️'
+  - body: '문의'
+  - body: '질문'
+  - body: 'how to'

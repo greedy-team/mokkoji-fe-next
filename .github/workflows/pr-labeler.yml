@@ -1,0 +1,58 @@
+name: 'Auto PR Labeling'
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply labels to issues
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/issue-labeler.yml
+
+      # 1. 경로 기반
+      - uses: actions/labeler@v5
+
+      # 2. PR 제목 기반
+      - name: Label by PR title
+        uses: bcoe/conventional-release-labels@v1
+        with:
+          type_labels: |
+            {
+              "feat": "✨ feature",
+              "fix": "🛠️ fix",
+              "docs": "📚 documentation",
+              "style": "💄 style",
+              "refactor": "♻️ refactor",
+              "test": "🧪 test",
+              "chore": "🌀 chore",
+              "perf": "⚡ performance",
+              "ci": "👷 ci",
+              "build": "📦 build",
+              "revert": "⏪ revert"
+            }
+          ignored_types: '[]'
+
+      # 3. Diff 크기 기반
+      - name: Label by PR size
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          xs_label: '📦 size/xs'
+          s_label: '📦 size/s'
+          m_label: '📦 size/m'
+          l_label: '📦 size/l'
+          xl_label: '📦 size/xl'
+          fail_if_xl: false
+          message_if_xl: |
+            This PR is very large. Consider breaking it down into smaller PRs for easier review.
+          xs_max_size: 10
+          s_max_size: 100
+          m_max_size: 500
+          l_max_size: 1000

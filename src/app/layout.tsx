@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
-import SentryProvider from '@/_providers/sentry-provider';
-import AmplitudeProvider from '@/_providers/amplitude-provider';
-import ClarityProvider from '@/_providers/clarity-provider';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import BuildInsightProvider from '@/_providers/build-insight-provider';
 
 const pretendard = localFont({
   src: [
@@ -52,6 +49,7 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
   description: '세종대 동아리 통합 플랫폼',
+  metadataBase: new URL('https://mokkoji.site'),
   openGraph: {
     title: '모꼬지 | 세종대 동아리',
     description: '세종대 동아리 통합 플랫폼',
@@ -69,11 +67,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.className}`}>
-        <ClarityProvider />
-        <SpeedInsights />
-        <AmplitudeProvider>
-          <SentryProvider>{children}</SentryProvider>
-        </AmplitudeProvider>
+        <BuildInsightProvider />
+        {children}
       </body>
     </html>
   );

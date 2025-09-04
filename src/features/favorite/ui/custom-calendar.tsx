@@ -1,13 +1,18 @@
 'use client';
 
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
+import dynamic from 'next/dynamic';
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
 import formatNavigation from '@/entities/favorite/ui/format-navigation';
+import SharedLoading from '@/shared/ui/loading';
 import getWeekdays from '../util/get-week-days';
 import useCalendarDeadline from '../model/useCalendarDeadline';
+
+const Calendar = dynamic(() => import('react-calendar'), {
+  ssr: false,
+  loading: () => <SharedLoading />,
+});
 
 interface CustomCalendarProps {
   value: Date;
@@ -35,7 +40,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[400px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
+        className="h-[450px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
         nextLabel=">"
         prevLabel="<"
         navigationLabel={formatNavigation}

@@ -1,5 +1,4 @@
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
-
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
@@ -28,6 +27,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         createdAt={data.createdAt}
         logo={data.logo}
         status={data.status}
+        session={session || undefined}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

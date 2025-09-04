@@ -25,6 +25,7 @@ interface RecruitDetailEditProps {
   recruitStart: string;
   recruitEnd: string;
   clubId: number;
+  imageUrls: string[];
   setIsEditing: (isEditing: boolean) => void;
 }
 
@@ -37,6 +38,7 @@ function ClubDetailRecruitmentEdit({
   recruitStart,
   recruitEnd,
   clubId,
+  imageUrls,
   setIsEditing,
 }: RecruitDetailEditProps) {
   const initialState: StateProp = {

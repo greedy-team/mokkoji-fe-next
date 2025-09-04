@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: To do request
 about: 할 작업 내용
 title: ''
 labels: ''

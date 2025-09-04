@@ -21,50 +21,50 @@ jobs:
             const body = (issue.body || '').toLowerCase();
             const labels = [];
 
-            // Feature 라벨
-            if (title.match(/feat|feature|기능|구현/) || 
+            // Feature 라벨 (prefix feat: 전용)
+            if (/^feat[:\s]/.test(title) || 
                 body.match(/기능|구현/) || 
                 title.includes('✨')) {
               labels.push('✨ feature');
             }
 
-            // Chore 라벨  
-            if (title.match(/chore|기타|환경설정|설정/) || 
+            // Chore 라벨 (prefix chore:)
+            if (/^chore[:\s]/.test(title) || 
                 body.match(/기타|환경설정|설정/) || 
                 title.includes('🌀')) {
               labels.push('🌀 chore');
             }
 
-            // Fix 라벨
-            if (title.match(/fix|수정|핫픽스/) || 
+            // Fix 라벨 (prefix fix:)
+            if (/^fix[:\s]/.test(title) || 
                 body.match(/수정|핫픽스/) || 
                 title.includes('🛠️')) {
               labels.push('🛠️ fix');
             }
 
-            // Bug 라벨
-            if (title.match(/bug|버그|오류|에러/) || 
+            // Bug 라벨 (prefix bug:)
+            if (/^bug[:\s]/.test(title) || 
                 body.match(/버그|오류|에러/) || 
                 title.includes('🐞')) {
               labels.push('🐞 bug');
             }
 
-            // Refactor 라벨
-            if (title.match(/refactor|리팩토링|구조\s*개선/) || 
+            // Refactor 라벨 (prefix refactor:)
+            if (/^refactor[:\s]/.test(title) || 
                 body.match(/리팩토링|구조\s*개선/) || 
                 title.includes('♻️')) {
               labels.push('♻️ refactor');
             }
 
             // Enhancement 라벨
-            if (title.match(/enhancement|개선|성능\s*향상/) || 
+            if (/^enhancement[:\s]/.test(title) || 
                 body.match(/개선|성능\s*향상/) || 
                 title.includes('☀️')) {
               labels.push('☀️ enhancement');
             }
 
             // Question 라벨
-            if (title.match(/question|문의|질문|how\s*to/) || 
+            if (/^question[:\s]/.test(title) || 
                 body.match(/문의|질문|how\s*to/) || 
                 title.includes('⁉️')) {
               labels.push('⁉️ question');

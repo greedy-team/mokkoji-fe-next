@@ -1,8 +1,8 @@
 types:
-  feat: 'feature'
-  fix: 'bug'
-  docs: 'documentation'
-  style: 'style'
-  refactor: 'refactor'
-  test: 'test'
-  chore: 'chore'
+  chore: "🌀chore"
+  feat: "✨ feature"
+  fix: "🛠️ fix"
+  bug: "🐞 bug"
+  refactor: "♻️ refactor"
+  enhancement: "☀️ enhancement"
+  question: "⁉️ question"

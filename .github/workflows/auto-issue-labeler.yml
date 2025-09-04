@@ -1,4 +1,4 @@
-name: 'Auto Issue Labeling'
+name: 'Auto Issue Labeling (Alternative)'
 
 on:
   issues:
@@ -12,9 +12,18 @@ jobs:
   auto-label-issue:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Apply labels to issues
-        uses: actions/labeler@v5
+      - name: Apply labels based on content
+        uses: Renato66/auto-label@v3
         with:
-          configuration-path: .github/issue-labeler.yml
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          labels-synonyms: |
+            {
+              "✨ feature": ["feat", "feature", "기능", "구현", "✨"],
+              "🌀 chore": ["chore", "기타", "환경설정", "설정", "🌀"],
+              "🛠️ fix": ["fix", "수정", "핫픽스", "🛠️"],
+              "🐞 bug": ["bug", "버그", "오류", "에러", "🐞"],
+              "♻️ refactor": ["refactor", "리팩토링", "구조 개선", "♻️"],
+              "☀️ enhancement": ["enhancement", "개선", "성능 향상", "☀️"],
+              "⁉️ question": ["question", "문의", "질문", "how to", "⁉️"]
+            }
+          labels-not-allowed: '["wontfix"]'

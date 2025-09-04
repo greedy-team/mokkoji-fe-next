@@ -1,0 +1,17 @@
+# 특정 폴더나 파일 유형에 따라 라벨 자동 적용
+frontend:
+  - 'apps/frontend/**'
+  - 'packages/ui/**'
+
+backend:
+  - 'apps/backend/**'
+  - 'packages/api/**'
+
+docs:
+  - '**/*.md'
+  - 'docs/**'
+
+config:
+  - '.github/**'
+  - '**/package.json'
+  - '**/tsconfig.json'

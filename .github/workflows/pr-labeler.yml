@@ -1,0 +1,20 @@
+name: 'Auto PR Labeling'
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 경로 기반
+      - uses: actions/labeler@v5
+
+      # 2. PR 제목 기반
+      - name: Label by PR title
+        uses: bcoe/conventional-release-labels@v1
+
+      # 3. Diff 크기 기반
+      - name: Label by PR size
+        uses: codelytv/pr-size-labeler@v1

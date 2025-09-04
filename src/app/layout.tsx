@@ -6,39 +6,39 @@ import BuildInsightProvider from '@/_providers/build-insight-provider';
 const pretendard = localFont({
   src: [
     {
-      path: '../shared/fonts/Pretendard-Thin.woff2',
+      path: '../shared/fonts/Pretendard-Thin.ttf',
       weight: '100',
     },
     {
-      path: '../shared/fonts/Pretendard-ExtraLight.woff2',
+      path: '../shared/fonts/Pretendard-ExtraLight.ttf',
       weight: '200',
     },
     {
-      path: '../shared/fonts/Pretendard-Light.woff2',
+      path: '../shared/fonts/Pretendard-Light.ttf',
       weight: '300',
     },
     {
-      path: '../shared/fonts/Pretendard-Regular.woff2',
+      path: '../shared/fonts/Pretendard-Regular.ttf',
       weight: '400',
     },
     {
-      path: '../shared/fonts/Pretendard-Medium.woff2',
+      path: '../shared/fonts/Pretendard-Medium.ttf',
       weight: '500',
     },
     {
-      path: '../shared/fonts/Pretendard-SemiBold.woff2',
+      path: '../shared/fonts/Pretendard-SemiBold.ttf',
       weight: '600',
     },
     {
-      path: '../shared/fonts/Pretendard-Bold.woff2',
+      path: '../shared/fonts/Pretendard-Bold.ttf',
       weight: '700',
     },
     {
-      path: '../shared/fonts/Pretendard-ExtraBold.woff2',
+      path: '../shared/fonts/Pretendard-ExtraBold.ttf',
       weight: '800',
     },
     {
-      path: '../shared/fonts/Pretendard-Black.woff2',
+      path: '../shared/fonts/Pretendard-Black.ttf',
       weight: '900',
     },
   ],

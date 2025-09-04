@@ -12,14 +12,116 @@ jobs:
   auto-label:
     runs-on: ubuntu-latest
     steps:
-      # 1. 경로 기반
-      - uses: actions/labeler@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Title-based labels
+      # 1. Path-based labeling
+      - name: Label by changed files
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+      # 2. PR title-based labeling (Conventional Commits)
+      - name: Label by PR title
         uses: bcoe/conventional-release-labels@v1
         with:
-          config-path: .github/release-labels.yml
+          type_labels: |
+            {
+              "feat": "✨ feature",
+              "fix": "🛠️ fix",
+              "docs": "📚 documentation",
+              "style": "💄 style",
+              "refactor": "♻️ refactor",
+              "test": "🧪 test",
+              "chore": "🌀 chore",
+              "perf": "⚡ performance",
+              "ci": "👷 ci",
+              "build": "📦 build",
+              "revert": "⏪ revert"
+            }
 
-      # 3. Diff 크기 기반
+      # 3. PR size-based labeling
       - name: Label by PR size
         uses: codelytv/pr-size-labeler@v1
+        with:
+          xs_label: '📦 size/xs'
+          s_label: '📦 size/s'
+          m_label: '📦 size/m'
+          l_label: '📦 size/l'
+          xl_label: '📦 size/xl'
+          fail_if_xl: false
+          message_if_xl: |
+            This PR is very large. Consider breaking it down into smaller PRs for easier review.
+          xs_max_size: 10
+          s_max_size: 100
+          m_max_size: 500
+          l_max_size: 1000
+
+      # 4. Draft PR labeling
+      - name: Label draft PRs
+        if: github.event.pull_request.draft
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['🚧 draft']
+            });
+
+      # 5. Author-based labeling (external contributors)
+      - name: Label external contributions
+        if: github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR' || github.event.pull_request.author_association == 'CONTRIBUTOR'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [];
+            if (context.payload.pull_request.author_association === 'FIRST_TIME_CONTRIBUTOR') {
+              labels.push('👋 first-contribution');
+            } else {
+              labels.push('🤝 external-contribution');
+            }
+
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
+
+      # 6. Dependency update labeling
+      - name: Label dependency updates
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const dependencyFiles = [
+              'package.json', 'package-lock.json', 'yarn.lock',
+              'requirements.txt', 'Pipfile', 'Pipfile.lock',
+              'Gemfile', 'Gemfile.lock',
+              'pom.xml', 'build.gradle', 'build.gradle.kts',
+              'go.mod', 'go.sum',
+              'Cargo.toml', 'Cargo.lock'
+            ];
+
+            const isDependencyUpdate = files.some(file => 
+              dependencyFiles.some(depFile => file.filename.includes(depFile))
+            );
+
+            if (isDependencyUpdate) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['📦 dependencies']
+              });
+            }

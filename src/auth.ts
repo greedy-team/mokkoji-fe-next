@@ -106,7 +106,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             expiresAt: getTokenExpiration(data.data.accessToken),
           };
         } catch (error) {
-          signOut();
           console.error('[refresh error]', error);
           return null;
         }

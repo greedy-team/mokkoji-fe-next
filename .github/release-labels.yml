@@ -1,0 +1,8 @@
+types:
+  feat: 'feature'
+  fix: 'bug'
+  docs: 'documentation'
+  style: 'style'
+  refactor: 'refactor'
+  test: 'test'
+  chore: 'chore'

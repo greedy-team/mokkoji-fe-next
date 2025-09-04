@@ -1,16 +1,18 @@
 import { FavoriteDateItem } from '@/views/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
-  console.log('data!', data);
-  const sortedData = data?.length
-    ? [...data].sort((a, b) => {
-        return (
-          new Date(a.recruitEnd).getTime() - new Date(b.recruitEnd).getTime()
-        );
-      })
-    : [];
+  const sortedData = useMemo(() => {
+    return data?.length
+      ? [...data].sort((a, b) => {
+          return (
+            new Date(a.recruitEnd).getTime() - new Date(b.recruitEnd).getTime()
+          );
+        })
+      : [];
+  }, [data]);
 
   return (
     <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#F8F8F8] p-6 text-xl font-semibold">

@@ -12,6 +12,11 @@ jobs:
   auto-label:
     runs-on: ubuntu-latest
     steps:
+      - name: Apply labels to issues
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/issue-labeler.yml
+
       # 1. 경로 기반
       - uses: actions/labeler@v5
 

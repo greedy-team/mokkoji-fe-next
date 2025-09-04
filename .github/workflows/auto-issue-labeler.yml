@@ -1,0 +1,20 @@
+name: 'Auto Issue Labeling'
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  auto-label-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply labels to issues
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/issue-labeler.yml

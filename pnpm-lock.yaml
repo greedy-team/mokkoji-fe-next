@@ -47,6 +47,9 @@ importers:
       eslint:
         specifier: 8.57.1
         version: 8.57.1
+      import-in-the-middle:
+        specifier: ^1.14.2
+        version: 1.14.2
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -89,6 +92,9 @@ importers:
       react-toastify:
         specifier: ^11.0.5
         version: 11.0.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      require-in-the-middle:
+        specifier: ^7.5.2
+        version: 7.5.2
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -9710,7 +9716,7 @@ snapshots:
     dependencies:
       debug: 4.4.1
       module-details-from-path: 1.0.4
-      resolve: 1.22.8
+      resolve: 1.22.10
     transitivePeerDependencies:
       - supports-color
 

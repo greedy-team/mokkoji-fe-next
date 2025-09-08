@@ -11,22 +11,22 @@ function escapeRegExp(s: string) {
 function removeDevTodoBlocksById(content: string, todoId: string) {
   const idEsc = escapeRegExp(todoId);
 
-  // 1) self-closing: <DevTodo ... id="..." ... />
-  const selfClosing = new RegExp(
-    String.raw`^[\t ]*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?\/>\s*\r?\n?`,
+  // 1) 조건부 + self-closing
+  const reConditionalSelfClosing = new RegExp(
+    String.raw`{process\.env\.NEXT_PUBLIC_NODE_ENV\s*===\s*['"]development['"]\s*&&\s*\(\s*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?\/>\s*\)}\s*`,
     'gm',
   );
 
-  // 2) paired: <DevTodo ... id="..."> ... </DevTodo>
-  const paired = new RegExp(
-    String.raw`^[\t ]*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?<\/DevTodo>\s*\r?\n?`,
+  // 2) 조건부 + paired
+  const reConditionalPaired = new RegExp(
+    String.raw`{process\.env\.NEXT_PUBLIC_NODE_ENV\s*===\s*['"]development['"]\s*&&\s*\(\s*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?<\/DevTodo>\s*\)}\s*`,
     'gm',
   );
 
-  let next = content.replace(selfClosing, '');
-  next = next.replace(paired, '');
+  const next = content
+    .replace(reConditionalSelfClosing, '')
+    .replace(reConditionalPaired, '');
 
-  // 여분 공백 정리
   return next.replace(/\r?\n{3,}/g, '\n\n').replace(/[ \t]+\r?\n/g, '\n');
 }
 

@@ -38,6 +38,9 @@ let nextConfig: NextConfig = {
     }
     return newConfig;
   },
+  compiler: {
+    removeConsole: true,
+  },
 };
 
 // Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용

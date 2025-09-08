@@ -17,13 +17,15 @@ export default function MainLayout({
         <SessionProvider>
           <Header />
           {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
-            <DevTodoTracker />
+            <>
+              <DevTodoTracker />
+              <DevTodoGlobalClient />
+            </>
           )}
           <main className="flex-grow">{children}</main>
         </SessionProvider>
         <Footer />
       </div>
-      <DevTodoGlobalClient />
     </DevTodoProvider>
   );
 }

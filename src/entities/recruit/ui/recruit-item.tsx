@@ -2,9 +2,8 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { RecruitStatus } from '@/shared/model/type';
+import { RecruitStatus, GetClubManageInfoResponse } from '@/shared/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
-import { Session } from 'next-auth';
 import PeriodSection from './period-section';
 
 interface RecruitItemProps {
@@ -17,7 +16,7 @@ interface RecruitItemProps {
   logo?: string;
   clubId: string;
   status: RecruitStatus;
-  session?: Session;
+  session?: GetClubManageInfoResponse;
 }
 
 function RecruitItem({

@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FavoriteButton from '@/shared/ui/favorite-button';
-import { Session } from 'next-auth';
+import { GetClubManageInfoResponse } from '@/shared/model/type';
 
 interface ClubItemProps {
   title: string;
@@ -11,7 +11,7 @@ interface ClubItemProps {
   logo?: string;
   category?: string;
   clubId: string;
-  session?: Session;
+  session?: GetClubManageInfoResponse;
 }
 
 function ClubItem({

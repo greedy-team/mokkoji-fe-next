@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 
 // POST → DevTodo 추가
 export async function POST(req: Request) {
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'production') {
+  if (process.env.NEXT_PUBLIC_DEV_PIN_ENV === 'production') {
     console.log('production 환경 금지!');
     return Response.json(
       { success: false, message: 'production 환경 금지!' },
@@ -17,17 +17,20 @@ export async function POST(req: Request) {
   const body = await req.json();
   const id = randomUUID();
 
-  const filePath = path.join(process.cwd(), 'scripts', 'dev-to-do-input.json');
-  fs.writeFileSync(filePath, JSON.stringify({ id, ...body }, null, 2), 'utf-8');
+  fs.writeFileSync(
+    path.join(process.cwd(), 'scripts', 'dev-pin-input.json'),
+    JSON.stringify({ id, ...body }, null, 2),
+    'utf-8',
+  );
 
   if (!body.relativePath) {
     console.error('❌ relativePath 없음');
   } else {
     exec(
-      `npx tsx ${path.join(process.cwd(), 'scripts/dev-to-do.ts')}`,
+      `npx tsx ${path.join(process.cwd(), 'scripts', 'dev-pin.ts')}`,
       (err, stdout, stderr) => {
         if (err) {
-          console.error('❌ insert-dev-to-do 실행 실패:', err);
+          console.error('❌ dev-pin 실행 실패:', err);
         }
         if (stdout) console.log(stdout);
         if (stderr) console.error(stderr);
@@ -40,7 +43,7 @@ export async function POST(req: Request) {
 
 // DELETE → DevTodo 삭제
 export async function DELETE(req: Request) {
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'production') {
+  if (process.env.NEXT_PUBLIC_DEV_PIN_ENV === 'production') {
     console.log('production 환경 금지!');
     return Response.json(
       { success: false, message: 'production 환경 금지!' },
@@ -64,10 +67,10 @@ export async function DELETE(req: Request) {
   fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), 'utf-8');
 
   exec(
-    `npx tsx ${path.join(process.cwd(), 'scripts/remove-dev-to-do.ts')}`,
+    `npx tsx ${path.join(process.cwd(), 'scripts', 'remove-dev-pin.ts')}`,
     (err, stdout, stderr) => {
       if (err) {
-        console.error('❌ remove-dev-to-do 실행 실패:', err);
+        console.error('❌ remove-dev-pin 실행 실패:', err);
         return;
       }
       if (stdout) console.log(stdout.trim());

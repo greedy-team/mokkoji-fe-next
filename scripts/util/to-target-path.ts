@@ -5,9 +5,30 @@ const APP_DIR = path.join(process.cwd(), 'src', 'app');
 
 export default function toTargetPath(relativePath: string): string {
   if (relativePath === 'page') {
-    return path.join(APP_DIR, '(main)', 'page.tsx'); // 기본값을 (main) 포함
+    // 1) 루트 page.tsx 있는지 확인
+    const rootPage = path.join(APP_DIR, 'page.tsx');
+    if (fs.existsSync(rootPage)) {
+      return rootPage;
+    }
+
+    // 2) 그룹 폴더((xxx)) 안에서 page.tsx 탐색
+    const groupDirs = fs
+      .readdirSync(APP_DIR, { withFileTypes: true })
+      .filter((d) => d.isDirectory() && /^\(.+\)$/.test(d.name));
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const gd of groupDirs) {
+      const candidate = path.join(APP_DIR, gd.name, 'page.tsx');
+      if (fs.existsSync(candidate)) {
+        return candidate; // 첫 번째 발견된 그룹의 page.tsx 반환
+      }
+    }
+
+    // 3) 못 찾으면 기본 fallback
+    return rootPage;
   }
 
+  // --- 원래 있던 나머지 로직 ---
   const parts = relativePath.split('/').filter(Boolean);
   let currentDir = APP_DIR;
   const resolvedParts: string[] = [];
@@ -16,7 +37,7 @@ export default function toTargetPath(relativePath: string): string {
   for (const p of parts) {
     const targetPath = path.join(currentDir, p);
 
-    // ✅ 먼저 그대로 있는지 확인
+    // ✅ 그대로 있는 디렉토리
     if (fs.existsSync(targetPath) && fs.statSync(targetPath).isDirectory()) {
       resolvedParts.push(p);
       currentDir = targetPath;
@@ -24,10 +45,11 @@ export default function toTargetPath(relativePath: string): string {
       continue;
     }
 
-    // ✅ 그룹 폴더((xxx)) 안에 있는지 확인
+    // ✅ 그룹 폴더((xxx)) 확인
     const groupDirs = fs
       .readdirSync(currentDir, { withFileTypes: true })
-      .filter((d) => d.isDirectory() && /^\(.+\)$/.test(d.name)); // (main), (auth) 등
+      .filter((d) => d.isDirectory() && /^\(.+\)$/.test(d.name));
+
     // eslint-disable-next-line @typescript-eslint/no-loop-func
     const foundInGroup = groupDirs.find((gd) =>
       fs.existsSync(path.join(currentDir, gd.name, p)),

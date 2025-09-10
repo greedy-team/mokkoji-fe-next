@@ -11,39 +11,53 @@ function escapeRegExp(s: string) {
 function removeDevTodoBlocksById(content: string, todoId: string) {
   const idEsc = escapeRegExp(todoId);
 
-  // 1) 조건부 + self-closing
+  // ✅ 조건부 + self-closing
   const reConditionalSelfClosing = new RegExp(
-    String.raw`{process\.env\.NEXT_PUBLIC_NODE_ENV\s*===\s*['"]development['"]\s*&&\s*\(\s*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?\/>\s*\)}\s*`,
+    String.raw`{process\.env\.NEXT_PUBLIC_NODE_ENV\s*===\s*['"]development['"]\s*&&\s*\(\s*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][^>]*?\/>\s*\)}\s*`,
     'gm',
   );
 
-  // 2) 조건부 + paired
+  // ✅ 조건부 + paired
   const reConditionalPaired = new RegExp(
     String.raw`{process\.env\.NEXT_PUBLIC_NODE_ENV\s*===\s*['"]development['"]\s*&&\s*\(\s*<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?<\/DevTodo>\s*\)}\s*`,
     'gm',
   );
 
+  // ✅ 혹시 조건부 wrapper 없이 바로 <DevTodo .../> 가 삽입된 경우도 방어
+  const reSelfClosing = new RegExp(
+    String.raw`<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][^>]*?\/>\s*`,
+    'gm',
+  );
+  const rePaired = new RegExp(
+    String.raw`<DevTodo\b[^>]*\bid\s*=\s*["'\`]${idEsc}["'\`][\s\S]*?<\/DevTodo>\s*`,
+    'gm',
+  );
+
   const next = content
     .replace(reConditionalSelfClosing, '')
-    .replace(reConditionalPaired, '');
+    .replace(reConditionalPaired, '')
+    .replace(reSelfClosing, '')
+    .replace(rePaired, '');
 
+  // 여분 공백 정리
   return next.replace(/\r?\n{3,}/g, '\n\n').replace(/[ \t]+\r?\n/g, '\n');
 }
 
 function removeImportIfUnused(content: string) {
-  // 남은 사용이 있으면 그대로 둠
+  // 남아 있는 <DevTodo> 사용이 있으면 import 유지
   if (/<DevTodo\b/.test(content)) return content;
 
-  // 정확 경로
+  // 정확 경로 import
   const reImportExact =
     /import\s+DevTodo\s+from\s+['"]@\/shared\/ui\/dev-to-do['"];?\s*\r?\n?/g;
-  // 경로 무관 default import DevTodo (선택 제거)
+  // 다른 경로로 불러왔을 경우도 제거
   const reImportAnyDefault =
     /import\s+DevTodo(?:\s*,\s*\{[^}]*\})?\s+from\s+['"][^'"]+['"];?\s*\r?\n?/g;
 
   const next = content
     .replace(reImportExact, '')
     .replace(reImportAnyDefault, '');
+
   return next.replace(/\r?\n{3,}/g, '\n\n');
 }
 
@@ -67,30 +81,29 @@ async function main() {
   }
 
   const targetFile = toTargetPath(relativePath);
-  const absPath = path.join(process.cwd(), targetFile);
 
-  if (!fs.existsSync(absPath)) {
-    console.error('❌ 대상 파일 없음:', absPath);
+  if (!fs.existsSync(targetFile)) {
+    console.error('❌ 대상 파일 없음:', targetFile);
     process.exit(1);
   }
 
-  let content = fs.readFileSync(absPath, 'utf-8');
+  let content = fs.readFileSync(targetFile, 'utf-8');
 
-  // 1) 해당 id의 DevTodo 블록들 제거
+  // 1) 해당 id의 DevTodo 블록 제거
   const afterRemoval = removeDevTodoBlocksById(content, id);
   if (afterRemoval === content) {
     console.warn('⚠️ 삭제 대상 <DevTodo id="%s" /> 를 찾지 못했습니다.', id);
   }
   content = afterRemoval;
 
-  // 2) 남은 사용 없으면 import 제거
+  // 2) import 정리
   content = removeImportIfUnused(content);
 
-  // 3) Prettier → ESLint --fix (fallback 포함)
-  const final = await formatWithPrettierAndEslint(absPath, content);
-  fs.writeFileSync(absPath, final, 'utf-8');
+  // 3) Prettier → ESLint --fix
+  const final = await formatWithPrettierAndEslint(targetFile, content);
+  fs.writeFileSync(targetFile, final, 'utf-8');
 
-  console.log('✅ DevTodo 제거 + Prettier + ESLint --fix 완료:', absPath);
+  console.log('✅ DevTodo 제거 + Prettier + ESLint --fix 완료:', targetFile);
 }
 
 main().catch((e) => {

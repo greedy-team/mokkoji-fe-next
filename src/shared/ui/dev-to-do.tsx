@@ -65,8 +65,8 @@ function DevTodo({
     const relativePath = normalized || 'page';
 
     try {
-      const res = await fetch('/api/devtodo/delete', {
-        method: 'POST',
+      const res = await fetch('/api/dev-to-do', {
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, relativePath, run: true }),
       });

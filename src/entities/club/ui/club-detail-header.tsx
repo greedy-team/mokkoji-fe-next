@@ -59,7 +59,7 @@ function ClubDetailHeader({
         instagram={instagram}
         clubId={clubId}
         isFavorite={isFavorite || false}
-        session={session}
+        session={session || undefined}
       />
     </>
   );

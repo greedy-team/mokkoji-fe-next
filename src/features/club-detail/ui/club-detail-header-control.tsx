@@ -2,13 +2,13 @@
 
 import Image from 'next/image';
 import FavoriteButton from '@/shared/ui/favorite-button';
-import { GetClubManageInfoResponse } from '@/shared/model/type';
+import { Session } from 'next-auth';
 
 interface ClubDetailHeaderControlProps {
   instagram: string;
   clubId: number;
   isFavorite: boolean;
-  session?: GetClubManageInfoResponse;
+  session?: Session;
 }
 function ClubDetailHeaderControl({
   instagram,

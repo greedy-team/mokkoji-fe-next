@@ -1,13 +1,10 @@
 import PeriodSection from '@/entities/recruit/ui/period-section';
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
-import {
-  ClubCategoryToLabel,
-  RecruitStatus,
-  GetClubManageInfoResponse,
-} from '@/shared/model/type';
+import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import Link from 'next/link';
 import ClickLogo from '@/shared/ui/click-logo';
+import { Session } from 'next-auth';
 
 interface ClubDetailHeaderProps {
   title: string;
@@ -19,7 +16,7 @@ interface ClubDetailHeaderProps {
   isFavorite?: boolean;
   logo: string;
   status: RecruitStatus;
-  session?: GetClubManageInfoResponse;
+  session?: Session;
 }
 
 function ClubDetailHeader({

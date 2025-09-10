@@ -67,12 +67,13 @@ export default function DevTodoGlobalClient() {
     };
 
     try {
-      const res = await fetch('/api/devtodo', {
+      const res = await fetch('/api/dev-to-do', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(props),
       });
       const data = await res.json();
+
       console.log('✅ DevTodo 저장 완료:', data);
       setOpen(false);
       setName('');

@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
-import { GetClubManageInfoResponse } from '@/shared/model/type';
+import { Session } from 'next-auth';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -12,7 +12,7 @@ interface FavoriteButtonProps {
   isFavorite: boolean;
   clubId: string;
   customClass?: string;
-  session?: GetClubManageInfoResponse;
+  session?: Session;
 }
 
 function FavoriteButton({

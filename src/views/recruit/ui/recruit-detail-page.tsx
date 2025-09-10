@@ -4,11 +4,18 @@ import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
 import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
+import { auth } from '@/auth';
 
 async function RecruitDetailPage({ params }: DetailParams) {
-  const getClubManageInfoRes = await getClubManageInfo();
+  // id만 먼저 동기적으로 추출 (다른 비동기 요청에 필요)
   const { id } = await getParams({ params });
-  const data = await getRecruitDetail(id);
+
+  // 서로 독립적인 요청은 Promise.all로 병렬 실행
+  const [getClubManageInfoRes, data, session] = await Promise.all([
+    getClubManageInfo(),
+    getRecruitDetail(id),
+    auth(),
+  ]);
 
   const isManageClub = getClubManageInfoRes?.data?.clubs.some(
     (club) => club.clubId === data.clubId,
@@ -27,7 +34,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         createdAt={data.createdAt}
         logo={data.logo}
         status={data.status}
-        session={getClubManageInfoRes?.data || undefined}
+        session={session || undefined}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

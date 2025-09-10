@@ -2,15 +2,15 @@ import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
-import { auth } from '@/auth';
 import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
+import getClubManageInfo from '@/shared/api/manage-api';
 
 async function RecruitDetailPage({ params }: DetailParams) {
-  const session = await auth();
+  const getClubManageInfoRes = await getClubManageInfo();
   const { id } = await getParams({ params });
   const data = await getRecruitDetail(id);
 
-  const isManageClub = session?.manageClubInfo?.some(
+  const isManageClub = getClubManageInfoRes?.data?.clubs.some(
     (club) => club.clubId === data.clubId,
   );
 
@@ -27,7 +27,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         createdAt={data.createdAt}
         logo={data.logo}
         status={data.status}
-        session={session || undefined}
+        session={getClubManageInfoRes?.data || undefined}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

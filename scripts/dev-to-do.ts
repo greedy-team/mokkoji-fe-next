@@ -40,9 +40,9 @@ async function main() {
     }
   }
 
-  let componentJSX;
+  let devTodoBlock;
   if (relativePath === 'page') {
-    componentJSX = `
+    devTodoBlock = `
     <DevTodo
       id="${id}"
       name="${name}"
@@ -54,7 +54,7 @@ async function main() {
     />
 `;
   } else {
-    componentJSX = `
+    devTodoBlock = `
       <DevTodo
         id="${id}"
         name="${name}"
@@ -65,6 +65,11 @@ async function main() {
       />
 `;
   }
+  const componentJSX = `
+    {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
+      ${devTodoBlock.trim()}
+    )}
+  `;
 
   if (content.includes('</main>')) {
     content = content.replace('</main>', `${componentJSX}    </main>`);

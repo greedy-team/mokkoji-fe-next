@@ -4,9 +4,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Sentry payload에서 필요한 정보 추출
-    const issue = body.data?.issue;
-    const error = body.data?.event;
+    // 안전하게 값 추출 (옵셔널 체이닝)
+    const issue = body?.data?.issue;
+    const error = body?.data?.event;
 
     let title = '🚨 Sentry Alert';
     let description = '알 수 없는 이벤트';
@@ -26,41 +26,22 @@ export async function POST(req: Request) {
       url = error.url ?? '';
       project = error.project ?? 'Unknown';
       level = error.level ?? 'error';
+    } else {
+      // 테스트 요청 처리
+      title = '✅ Webhook 테스트';
+      description = JSON.stringify(body, null, 2);
     }
 
-    // 색상 매핑 (Discord embed color는 10진수 RGB)
-    const levelColors: Record<string, number> = {
-      fatal: 0xff0000,
-      error: 0xe74c3c,
-      warning: 0xf39c12,
-      info: 0x3498db,
-      debug: 0x95a5a6,
-    };
-
+    // Discord embed 생성 (같음)
     const embed = {
       title,
       url,
       description,
-      color: levelColors[level] ?? 0xe74c3c,
-      fields: [
-        {
-          name: '프로젝트',
-          value: project,
-          inline: true,
-        },
-        {
-          name: '레벨',
-          value: level,
-          inline: true,
-        },
-      ],
+      color: 0x3498db,
       timestamp: new Date().toISOString(),
-      footer: {
-        text: 'Sentry → Discord',
-      },
+      footer: { text: 'Sentry → Discord' },
     };
 
-    // Discord Webhook 전송
     await fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL!, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

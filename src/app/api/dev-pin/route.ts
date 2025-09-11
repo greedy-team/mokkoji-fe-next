@@ -1,11 +1,29 @@
-// app/api/dev-pin/route.ts
-import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
-import { exec } from 'child_process';
-import os from 'os';
+import { spawn } from 'child_process';
 
-// POST → DevPin 추가
+function runDevPin(command: string, payload: object) {
+  return new Promise<string>((resolve, reject) => {
+    const proc = spawn('node', [command], { stdio: ['pipe', 'pipe', 'pipe'] });
+
+    proc.stdin.write(JSON.stringify(payload));
+    proc.stdin.end();
+
+    let stdout = '';
+    let stderr = '';
+
+    // eslint-disable-next-line no-return-assign
+    proc.stdout.on('data', (data) => (stdout += data));
+    // eslint-disable-next-line no-return-assign
+    proc.stderr.on('data', (data) => (stderr += data));
+
+    proc.on('close', (code) => {
+      if (code !== 0) reject(new Error(stderr || `exit code ${code}`));
+      else resolve(stdout.trim());
+    });
+  });
+}
+
 export async function POST(req: Request) {
   if (process.env.NEXT_PUBLIC_DEV_PIN_ENV === 'production') {
     return Response.json(
@@ -17,27 +35,22 @@ export async function POST(req: Request) {
   const body = await req.json();
   const id = randomUUID();
 
-  // ✅ OS 임시 디렉토리 사용
-  const tmpDir = path.join(os.tmpdir(), 'next-dev-pin');
-  fs.mkdirSync(tmpDir, { recursive: true });
-
-  const inputPath = path.join(tmpDir, `dev-pin-input-${id}.json`);
-  fs.writeFileSync(
-    inputPath,
-    JSON.stringify({ id, ...body }, null, 2),
-    'utf-8',
+  const cliPath = path.join(
+    process.cwd(),
+    'node_modules/next-dev-pin/dist/cli/dev-pin.js',
   );
 
-  exec(
-    `node ${path.join(process.cwd(), 'node_modules/next-dev-pin/dist/cli/dev-pin.js')} ${inputPath}`,
-    (err, stdout, stderr) => {
-      if (err) console.error('❌ dev-pin 실행 실패:', err);
-      if (stdout) console.log(stdout);
-      if (stderr) console.error(stderr);
-    },
-  );
-
-  return Response.json({ success: true, id });
+  try {
+    const output = await runDevPin(cliPath, { id, ...body });
+    console.log(output);
+    return Response.json({ success: true, id, output });
+  } catch (err) {
+    console.error('❌ dev-pin 실행 실패:', err);
+    return Response.json(
+      { success: false, message: (err as Error).message },
+      { status: 500 },
+    );
+  }
 }
 
 // DELETE → DevPin 삭제
@@ -59,25 +72,20 @@ export async function DELETE(req: Request) {
     );
   }
 
-  // ✅ 임시 디렉토리 활용
-  const tmpDir = path.join(os.tmpdir(), 'next-dev-pin');
-  fs.mkdirSync(tmpDir, { recursive: true });
-
-  const deletePath = path.join(tmpDir, `dev-delete-${id}.json`);
-  fs.writeFileSync(
-    deletePath,
-    JSON.stringify({ id, relativePath }, null, 2),
-    'utf-8',
+  const cliPath = path.join(
+    process.cwd(),
+    'node_modules/next-dev-pin/dist/cli/remove-dev-pin.js',
   );
 
-  exec(
-    `node ${path.join(process.cwd(), 'node_modules/next-dev-pin/dist/cli/remove-dev-pin.js')} ${deletePath}`,
-    (err, stdout, stderr) => {
-      if (err) console.error('❌ remove-dev-pin 실행 실패:', err);
-      if (stdout) console.log(stdout.trim());
-      if (stderr) console.error(stderr.trim());
-    },
-  );
-
-  return Response.json({ success: true, file: deletePath });
+  try {
+    const output = await runDevPin(cliPath, { id, relativePath });
+    console.log(output);
+    return Response.json({ success: true, id, output });
+  } catch (err) {
+    console.error('❌ remove-dev-pin 실행 실패:', err);
+    return Response.json(
+      { success: false, message: (err as Error).message },
+      { status: 500 },
+    );
+  }
 }

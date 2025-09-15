@@ -2,9 +2,9 @@ name: GitHub → Discord Notify
 
 on:
   issues:
-    types: [opened, closed, reopened]
+    types: [opened, reopened]
   pull_request:
-    types: [opened, closed, reopened, review_requested]
+    types: [opened, reopened, review_requested]
   push:
 
 jobs:

@@ -1,9 +1,9 @@
 import 'react-toastify/dist/ReactToastify.css';
-import 'next-dev-pin/dist/index.css';
 import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
-import { DevPinProvider } from 'next-dev-pin';
 import { SessionProvider } from 'next-auth/react';
+import { ToDoPinProvider } from 'to-do-pin';
+import 'to-do-pin/index.css';
 
 export default function MainLayout({
   children,
@@ -11,14 +11,14 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <DevPinProvider>
-      <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
+      <ToDoPinProvider>
         <SessionProvider>
           <Header />
           <main className="flex-grow">{children}</main>
         </SessionProvider>
-        <Footer />
-      </div>
-    </DevPinProvider>
+      </ToDoPinProvider>
+      <Footer />
+    </div>
   );
 }

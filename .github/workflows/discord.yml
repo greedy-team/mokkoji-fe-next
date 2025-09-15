@@ -1,91 +1,160 @@
-name: GitHub → Discord (Embed Style)
+name: GitHub → Discord (Enhanced Embed Style)
 
 on:
   issues:
     types: [opened, reopened]
   pull_request:
-    types: [opened, reopened]
-  push:
+    types: [opened, merged, reopened]
 
 jobs:
-  notify:
+  discord-notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Discord Notification
+      - name: Send Enhanced Discord Notification
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          EVENT_NAME: ${{ github.event_name }}
-
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_URL: ${{ github.event.issue.html_url }}
-
-          PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_BODY: ${{ github.event.pull_request.body }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-
-          PUSH_MESSAGE: ${{ github.event.head_commit.message }}
-          PUSH_URL: ${{ github.event.compare }}
-          REF_NAME: ${{ github.ref_name }}
         run: |
-          set -euo pipefail
-
-          if ! command -v jq >/dev/null; then
-            sudo apt-get update && sudo apt-get install -y jq
-          fi
-
+          EVENT_NAME=${{ github.event_name }}
+          REPO_NAME="${{ github.repository }}"
+          AUTHOR_NAME="${{ github.actor }}"
+          AUTHOR_AVATAR="${{ github.event.sender.avatar_url }}"
+          
+          # 기본값 설정
           COLOR=9807270
           TITLE=""
-          DESC=""
+          DESCRIPTION=""
           URL=""
+          EMOJI=""
+          
+          # 설명 길이 제한 (200자)
+          truncate_description() {
+            if [ ${#1} -gt 200 ]; then
+              echo "${1:0:197}..."
+            else
+              echo "$1"
+            fi
+          }
 
-          case "$EVENT_NAME" in
-            issues)
-              COLOR=15844367
-              TITLE="🟧 Issue: ${ISSUE_TITLE:-"(no title)"}"
-              DESC="${ISSUE_BODY:-""}"
-              URL="${ISSUE_URL:-""}"
-              ;;
-            pull_request)
-              COLOR=3066993
-              TITLE="🟩 Pull Request: ${PR_TITLE:-"(no title)"}"
-              DESC="${PR_BODY:-""}"
-              URL="${PR_URL:-""}"
-              ;;
-            push)
-              COLOR=3447003
-              TITLE="🟦 Push to ${REF_NAME}"
-              DESC="${PUSH_MESSAGE:-""}"
-              URL="${PUSH_URL:-""}"
-              ;;
-          esac
+          if [ "$EVENT_NAME" = "issues" ]; then
+            ISSUE_ACTION="${{ github.event.action }}"
+            ISSUE_TITLE="${{ github.event.issue.title }}"
+            ISSUE_BODY=$(truncate_description "${{ github.event.issue.body }}")
+            ISSUE_NUMBER="${{ github.event.issue.number }}"
+            URL="${{ github.event.issue.html_url }}"
+            
+            case "$ISSUE_ACTION" in
+              "opened")
+                COLOR=15844367  # 주황 (#F39C12)
+                EMOJI="🆕"
+                TITLE="새로운 이슈가 생성되었습니다!"
+                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**\n\n${ISSUE_BODY}"
+                ;;
+              "closed")
+                COLOR=10181046  # 보라 (#9B59B6)
+                EMOJI="✅"
+                TITLE="이슈가 닫혔습니다"
+                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**"
+                ;;
+              "reopened")
+                COLOR=15844367  # 주황 (#F39C12)
+                EMOJI="🔄"
+                TITLE="이슈가 다시 열렸습니다"
+                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**\n\n${ISSUE_BODY}"
+                ;;
+            esac
 
-          # Discord embed description(최대 4096자) 보호용 간단 트림
-          if [ "${#DESC}" -gt 4000 ]; then
-            DESC="${DESC:0:4000}…"
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            PR_ACTION="${{ github.event.action }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            PR_BODY=$(truncate_description "${{ github.event.pull_request.body }}")
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            SOURCE_BRANCH="${{ github.event.pull_request.head.ref }}"
+            TARGET_BRANCH="${{ github.event.pull_request.base.ref }}"
+            URL="${{ github.event.pull_request.html_url }}"
+            
+            case "$PR_ACTION" in
+              "opened")
+                COLOR=3066993   # 초록 (#2ECC71)
+                EMOJI="🔀"
+                TITLE="새로운 Pull Request가 생성되었습니다!"
+                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`\n\n${PR_BODY}"
+                ;;
+              "closed")
+                if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+                  COLOR=8663711   # 진한 초록 (#8E44AD)
+                  EMOJI="🎉"
+                  TITLE="Pull Request가 병합되었습니다!"
+                else
+                  COLOR=15158332  # 빨강 (#E74C3C)
+                  EMOJI="❌"
+                  TITLE="Pull Request가 닫혔습니다"
+                fi
+                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`"
+                ;;
+              "reopened")
+                COLOR=3066993   # 초록 (#2ECC71)
+                EMOJI="🔄"
+                TITLE="Pull Request가 다시 열렸습니다"
+                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`"
+                ;;
+            esac
+
+          elif [ "$EVENT_NAME" = "push" ]; then
+            BRANCH_NAME="${{ github.ref_name }}"
+            COMMIT_MESSAGE=$(truncate_description "${{ github.event.head_commit.message }}")
+            COMMIT_AUTHOR="${{ github.event.head_commit.author.name }}"
+            COMMITS_COUNT="${{ github.event.commits }}"
+            URL="${{ github.event.compare }}"
+            
+            COLOR=3447003    # 파랑 (#3498DB)
+            EMOJI="📝"
+            TITLE="새로운 커밋이 푸시되었습니다!"
+            DESCRIPTION="**브랜치:** \`${BRANCH_NAME}\`\n**커밋:** ${COMMIT_MESSAGE}\n**작성자:** ${COMMIT_AUTHOR}"
+
+          elif [ "$EVENT_NAME" = "release" ]; then
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+            RELEASE_NAME="${{ github.event.release.name }}"
+            RELEASE_BODY=$(truncate_description "${{ github.event.release.body }}")
+            URL="${{ github.event.release.html_url }}"
+            
+            COLOR=16776960   # 금색 (#FFD700)
+            EMOJI="🚀"
+            TITLE="새로운 릴리즈가 발행되었습니다!"
+            DESCRIPTION="**${RELEASE_TAG} - ${RELEASE_NAME}**\n\n${RELEASE_BODY}"
           fi
 
-          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          # Discord Webhook 발송 (향상된 임베드)
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                     \"embeds\": [{
+                       \"title\": \"${EMOJI} ${TITLE}\",
+                       \"description\": \"${DESCRIPTION}\",
+                       \"url\": \"${URL}\",
+                       \"color\": ${COLOR},
+                       \"author\": {
+                         \"name\": \"${AUTHOR_NAME}\",
+                         \"icon_url\": \"${AUTHOR_AVATAR}\"
+                       },
+                       \"fields\": [
+                         {
+                           \"name\": \"Repository\",
+                           \"value\": \"[\`${REPO_NAME}\`](https://github.com/${REPO_NAME})\",
+                           \"inline\": true
+                         },
+                         {
+                           \"name\": \"Event\",
+                           \"value\": \"\`${EVENT_NAME}\`\",
+                           \"inline\": true
+                         }
+                       ],
+                       \"footer\": {
+                         \"text\": \"GitHub → Discord\",
+                         \"icon_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"
+                       },
+                       \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+                     }]
+                   }" \
+               "$DISCORD_WEBHOOK_URL"
 
-          PAYLOAD="$(jq -n \
-            --arg title "$TITLE" \
-            --arg desc "$DESC" \
-            --arg url "$URL" \
-            --arg ts "$TS" \
-            --argjson color "$COLOR" \
-            '{embeds: [{title: $title, description: $desc, url: $url, color: $color, footer: {text: "GitHub → Discord"}, timestamp: $ts}]}' \
-          )"
-
-          # 전송 + 상태코드 검증
-          http_code="$(curl -sS -o /tmp/resp.txt -w "%{http_code}" \
-            -H "Content-Type: application/json" \
-            -X POST \
-            --data "$PAYLOAD" \
-            "$DISCORD_WEBHOOK_URL")"
-
-          echo "Discord HTTP $http_code"
-          if [ "$http_code" != "204" ]; then
-            echo "Response body:"
-            cat /tmp/resp.txt
-            exit 1
-          fi
+          echo "✅ Discord notification sent successfully for $EVENT_NAME event"

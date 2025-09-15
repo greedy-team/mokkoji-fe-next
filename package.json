@@ -35,7 +35,6 @@
     "lucide-react": "^0.525.0",
     "next": "15.3.4",
     "next-auth": "5.0.0-beta.28",
-    "next-dev-pin": "^0.1.60",
     "pnpm": "^10.9.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
@@ -45,7 +44,8 @@
     "react-intersection-observer": "^9.16.0",
     "react-toastify": "^11.0.5",
     "require-in-the-middle": "^7.5.2",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "to-do-pin": "0.0.17"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.6",

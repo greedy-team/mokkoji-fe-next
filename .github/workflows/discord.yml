@@ -1,0 +1,47 @@
+name: GitHub → Discord Notify
+
+on:
+  issues:
+    types: [opened, closed, reopened]
+  pull_request:
+    types: [opened, closed, reopened, review_requested]
+  push:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Webhook
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          EVENT_NAME=${{ github.event_name }}
+          REPO=${{ github.repository }}
+          ACTOR=${{ github.actor }}
+          ACTION=${{ github.event.action }}
+          URL=${{ github.event.pull_request.html_url || github.event.issue.html_url || github.event.repository.html_url }}
+
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # JSON payload with embed
+          PAYLOAD=$(jq -n \
+            --arg title "📢 GitHub $EVENT_NAME" \
+            --arg desc "Repository: **$REPO**\nActor: **$ACTOR**\nAction: **$ACTION**" \
+            --arg url "$URL" \
+            --arg time "$TIMESTAMP" \
+            '{
+              "embeds": [
+                {
+                  "title": $title,
+                  "description": $desc,
+                  "url": $url,
+                  "color": 5814783,
+                  "timestamp": $time,
+                  "footer": { "text": "GitHub → Discord" }
+                }
+              ]
+            }')
+
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               $DISCORD_WEBHOOK_URL

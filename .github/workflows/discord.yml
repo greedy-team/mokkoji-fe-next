@@ -2,159 +2,159 @@ name: GitHub → Discord (Enhanced Embed Style)
 
 on:
   issues:
-    types: [opened, reopened]
+    types: [opened, reopened, closed]
   pull_request:
-    types: [opened, merged, reopened]
+    types: [opened, reopened, closed]
+  push:
+    branches: ['**']
+  release:
+    types: [published]
 
 jobs:
   discord-notification:
     runs-on: ubuntu-latest
     steps:
       - name: Send Enhanced Discord Notification
+        shell: bash
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          EVENT_NAME=${{ github.event_name }}
-          REPO_NAME="${{ github.repository }}"
-          AUTHOR_NAME="${{ github.actor }}"
-          AUTHOR_AVATAR="${{ github.event.sender.avatar_url }}"
-          
-          # 기본값 설정
-          COLOR=9807270
-          TITLE=""
-          DESCRIPTION=""
-          URL=""
-          EMOJI=""
-          
-          # 설명 길이 제한 (200자)
-          truncate_description() {
-            if [ ${#1} -gt 200 ]; then
-              echo "${1:0:197}..."
-            else
-              echo "$1"
-            fi
-          }
+          set -euo pipefail
 
-          if [ "$EVENT_NAME" = "issues" ]; then
-            ISSUE_ACTION="${{ github.event.action }}"
-            ISSUE_TITLE="${{ github.event.issue.title }}"
-            ISSUE_BODY=$(truncate_description "${{ github.event.issue.body }}")
-            ISSUE_NUMBER="${{ github.event.issue.number }}"
-            URL="${{ github.event.issue.html_url }}"
-            
-            case "$ISSUE_ACTION" in
-              "opened")
-                COLOR=15844367  # 주황 (#F39C12)
-                EMOJI="🆕"
-                TITLE="새로운 이슈가 생성되었습니다!"
-                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**\n\n${ISSUE_BODY}"
-                ;;
-              "closed")
-                COLOR=10181046  # 보라 (#9B59B6)
-                EMOJI="✅"
-                TITLE="이슈가 닫혔습니다"
-                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**"
-                ;;
-              "reopened")
-                COLOR=15844367  # 주황 (#F39C12)
-                EMOJI="🔄"
-                TITLE="이슈가 다시 열렸습니다"
-                DESCRIPTION="**#${ISSUE_NUMBER} ${ISSUE_TITLE}**\n\n${ISSUE_BODY}"
-                ;;
-            esac
-
-          elif [ "$EVENT_NAME" = "pull_request" ]; then
-            PR_ACTION="${{ github.event.action }}"
-            PR_TITLE="${{ github.event.pull_request.title }}"
-            PR_BODY=$(truncate_description "${{ github.event.pull_request.body }}")
-            PR_NUMBER="${{ github.event.pull_request.number }}"
-            SOURCE_BRANCH="${{ github.event.pull_request.head.ref }}"
-            TARGET_BRANCH="${{ github.event.pull_request.base.ref }}"
-            URL="${{ github.event.pull_request.html_url }}"
-            
-            case "$PR_ACTION" in
-              "opened")
-                COLOR=3066993   # 초록 (#2ECC71)
-                EMOJI="🔀"
-                TITLE="새로운 Pull Request가 생성되었습니다!"
-                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`\n\n${PR_BODY}"
-                ;;
-              "closed")
-                if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
-                  COLOR=8663711   # 진한 초록 (#8E44AD)
-                  EMOJI="🎉"
-                  TITLE="Pull Request가 병합되었습니다!"
-                else
-                  COLOR=15158332  # 빨강 (#E74C3C)
-                  EMOJI="❌"
-                  TITLE="Pull Request가 닫혔습니다"
-                fi
-                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`"
-                ;;
-              "reopened")
-                COLOR=3066993   # 초록 (#2ECC71)
-                EMOJI="🔄"
-                TITLE="Pull Request가 다시 열렸습니다"
-                DESCRIPTION="**#${PR_NUMBER} ${PR_TITLE}**\n\n\`${SOURCE_BRANCH}\` → \`${TARGET_BRANCH}\`"
-                ;;
-            esac
-
-          elif [ "$EVENT_NAME" = "push" ]; then
-            BRANCH_NAME="${{ github.ref_name }}"
-            COMMIT_MESSAGE=$(truncate_description "${{ github.event.head_commit.message }}")
-            COMMIT_AUTHOR="${{ github.event.head_commit.author.name }}"
-            COMMITS_COUNT="${{ github.event.commits }}"
-            URL="${{ github.event.compare }}"
-            
-            COLOR=3447003    # 파랑 (#3498DB)
-            EMOJI="📝"
-            TITLE="새로운 커밋이 푸시되었습니다!"
-            DESCRIPTION="**브랜치:** \`${BRANCH_NAME}\`\n**커밋:** ${COMMIT_MESSAGE}\n**작성자:** ${COMMIT_AUTHOR}"
-
-          elif [ "$EVENT_NAME" = "release" ]; then
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
-            RELEASE_NAME="${{ github.event.release.name }}"
-            RELEASE_BODY=$(truncate_description "${{ github.event.release.body }}")
-            URL="${{ github.event.release.html_url }}"
-            
-            COLOR=16776960   # 금색 (#FFD700)
-            EMOJI="🚀"
-            TITLE="새로운 릴리즈가 발행되었습니다!"
-            DESCRIPTION="**${RELEASE_TAG} - ${RELEASE_NAME}**\n\n${RELEASE_BODY}"
+          # jq 설치
+          if ! command -v jq >/dev/null; then
+            sudo apt-get update -y && sudo apt-get install -y jq
           fi
 
-          # Discord Webhook 발송 (향상된 임베드)
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d "{
-                     \"embeds\": [{
-                       \"title\": \"${EMOJI} ${TITLE}\",
-                       \"description\": \"${DESCRIPTION}\",
-                       \"url\": \"${URL}\",
-                       \"color\": ${COLOR},
-                       \"author\": {
-                         \"name\": \"${AUTHOR_NAME}\",
-                         \"icon_url\": \"${AUTHOR_AVATAR}\"
-                       },
-                       \"fields\": [
-                         {
-                           \"name\": \"Repository\",
-                           \"value\": \"[\`${REPO_NAME}\`](https://github.com/${REPO_NAME})\",
-                           \"inline\": true
-                         },
-                         {
-                           \"name\": \"Event\",
-                           \"value\": \"\`${EVENT_NAME}\`\",
-                           \"inline\": true
-                         }
-                       ],
-                       \"footer\": {
-                         \"text\": \"GitHub → Discord\",
-                         \"icon_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"
-                       },
-                       \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
-                     }]
-                   }" \
-               "$DISCORD_WEBHOOK_URL"
+          # 포크 PR 등 시크릿 미노출 시 스킵
+          if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
+            echo "::warning:: DISCORD_WEBHOOK_URL is empty. Skipping."
+            exit 0
+          fi
 
-          echo "✅ Discord notification sent successfully for $EVENT_NAME event"
+          EVENT_NAME="$GITHUB_EVENT_NAME"
+          REPO_NAME="$GITHUB_REPOSITORY"
+          AUTHOR_NAME="$GITHUB_ACTOR"
+          AUTHOR_AVATAR="$(jq -r '.sender.avatar_url' "$GITHUB_EVENT_PATH")"
+
+          COLOR=9807270
+          EMOJI=""
+          TITLE=""
+          URL=""
+          DESCRIPTION=""
+
+          # 멀티라인 200자 트림(개행 유지)
+          trim_body () { awk -v max=200 '{out=out $0 ORS} END{ if (length(out)>max){ print substr(out,1,max-3) "..."} else { printf "%s", out }}'; }
+
+          case "$EVENT_NAME" in
+            issues)
+              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
+              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
+              number=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+              ititle=$(jq -r '.issue.title // "(no title)"' "$GITHUB_EVENT_PATH")
+              ibody=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
+              URL=$(jq -r '.issue.html_url' "$GITHUB_EVENT_PATH")
+
+              COLOR=15965202
+              if [ "$action" = "opened" ]; then
+                EMOJI="🆕"; TITLE="새로운 이슈가 생성되었습니다!"
+              else
+                EMOJI="🔄"; TITLE="이슈가 다시 열렸습니다"
+              fi
+
+              DESCRIPTION="$(printf '**#%s %s**\n\n%s' "$number" "$ititle" "$ibody")"
+              ;;
+
+            pull_request)
+              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
+              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
+              number=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+              ptitle=$(jq -r '.pull_request.title // "(no title)"' "$GITHUB_EVENT_PATH")
+              pbody=$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
+              head=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")
+              base=$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")
+              URL=$(jq -r '.pull_request.html_url' "$GITHUB_EVENT_PATH")
+
+              COLOR=3066993
+              if [ "$action" = "opened" ]; then
+                EMOJI="🔀"; TITLE="새로운 Pull Request가 생성되었습니다!"
+              else
+                EMOJI="🔄"; TITLE="Pull Request가 다시 열렸습니다"
+              fi
+
+              DESCRIPTION="$(printf '**#%s %s**\n\n`%s` → `%s`\n\n%s' "$number" "$ptitle" "$head" "$base" "$pbody")"
+              ;;
+
+            push)
+              branch="$GITHUB_REF_NAME"
+              commit_message="$(jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" | trim_body)"
+              commit_author="$(jq -r '.head_commit.author.name // ""' "$GITHUB_EVENT_PATH")"
+              [ -n "$commit_author" ] || commit_author="$AUTHOR_NAME"
+              URL="$(jq -r '.compare' "$GITHUB_EVENT_PATH")"
+
+              COLOR=3447003
+              EMOJI="📝"
+              TITLE="새로운 커밋이 푸시되었습니다!"
+              # ✅ 실제 줄바꿈(printf) 사용
+              DESCRIPTION="$(printf '브랜치: %s\n커밋: %s\n작성자: %s' "$branch" "$commit_message" "$commit_author")"
+              ;;
+
+            release)
+              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
+              [ "$action" = "published" ] || exit 0
+              tag=$(jq -r '.release.tag_name' "$GITHUB_EVENT_PATH")
+              rname=$(jq -r '.release.name // ""' "$GITHUB_EVENT_PATH")
+              rbody=$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
+              URL=$(jq -r '.release.html_url' "$GITHUB_EVENT_PATH")
+
+              COLOR=16766720
+              EMOJI="🚀"
+              TITLE="새로운 릴리즈가 발행되었습니다!"
+              DESCRIPTION="$(printf '**%s - %s**\n\n%s' "$tag" "$rname" "$rbody")"
+              ;;
+
+            *) exit 0;;
+          esac
+
+          ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          payload=$(jq -n \
+            --arg t "${EMOJI} ${TITLE}" \
+            --arg d "$DESCRIPTION" \
+            --arg url "$URL" \
+            --arg name "$AUTHOR_NAME" \
+            --arg icon "$AUTHOR_AVATAR" \
+            --arg repo "$REPO_NAME" \
+            --arg ev "$EVENT_NAME" \
+            --arg ts "$ts" \
+            --arg footer "GitHub → Discord" \
+            --arg footer_icon "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
+            --arg repo_url "https://github.com/$REPO_NAME" \
+            --argjson color "$COLOR" \
+            '{
+              embeds: [{
+                title: $t,
+                description: $d,
+                url: $url,
+                color: $color,
+                author: { name: $name, icon_url: $icon },
+                fields: [
+                  { name: "Repository", value: ("[`" + $repo + "`](" + $repo_url + ")"), inline: true },
+                  { name: "Event",      value: ("`" + $ev + "`"), inline: true }
+                ],
+                footer: { text: $footer, icon_url: $footer_icon },
+                timestamp: $ts
+              }]
+            }')
+
+          code=$(curl -sS -o /tmp/resp.txt -w "%{http_code}" \
+            -H "Content-Type: application/json" \
+            --data "$payload" \
+            "$DISCORD_WEBHOOK_URL")
+
+          echo "Discord HTTP $code"
+          if [ "$code" != "204" ]; then
+            echo "::error:: Discord webhook failed"
+            cat /tmp/resp.txt || true
+            exit 1
+          fi

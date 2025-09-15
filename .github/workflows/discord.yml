@@ -1,47 +1,53 @@
-name: GitHub → Discord Notify
+name: GitHub → Discord (Embed Style)
 
 on:
   issues:
-    types: [opened, closed, reopened]
+    types: [opened, reopened]
   pull_request:
-    types: [opened, closed, reopened, review_requested]
+    types: [opened, reopened]
   push:
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Discord Webhook
+      - name: Send Discord Notification
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           EVENT_NAME=${{ github.event_name }}
-          REPO=${{ github.repository }}
-          ACTOR=${{ github.actor }}
-          ACTION=${{ github.event.action }}
-          URL=${{ github.event.pull_request.html_url || github.event.issue.html_url || github.event.repository.html_url }}
 
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          # 색상 기본값 (회색)
+          COLOR=9807270
 
-          # JSON payload with embed
-          PAYLOAD=$(jq -n \
-            --arg title "📢 GitHub $EVENT_NAME" \
-            --arg desc "Repository: **$REPO**\nActor: **$ACTOR**\nAction: **$ACTION**" \
-            --arg url "$URL" \
-            --arg time "$TIMESTAMP" \
-            '{
-              "embeds": [
-                {
-                  "title": $title,
-                  "description": $desc,
-                  "url": $url,
-                  "color": 5814783,
-                  "timestamp": $time,
-                  "footer": { "text": "GitHub → Discord" }
-                }
-              ]
-            }')
+          if [ "$EVENT_NAME" = "issues" ]; then
+            COLOR=15844367   # 노랑 (0xf39c12)
+            TITLE="🟧 Issue: ${{ github.event.issue.title }}"
+            DESCRIPTION="${{ github.event.issue.body }}"
+            URL="${{ github.event.issue.html_url }}"
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            COLOR=3066993    # 초록 (0x2ecc71)
+            TITLE="🟩 Pull Request: ${{ github.event.pull_request.title }}"
+            DESCRIPTION="${{ github.event.pull_request.body }}"
+            URL="${{ github.event.pull_request.html_url }}"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            COLOR=3447003    # 파랑 (0x3498db)
+            TITLE="🟦 Push to ${{ github.ref_name }}"
+            DESCRIPTION="${{ github.event.head_commit.message }}"
+            URL="${{ github.event.compare }}"
+          fi
 
+          # Discord Webhook 발송
           curl -H "Content-Type: application/json" \
-               -d "$PAYLOAD" \
+               -X POST \
+               -d "{
+                     \"embeds\": [{
+                       \"title\": \"$TITLE\",
+                       \"description\": \"$DESCRIPTION\",
+                       \"url\": \"$URL\",
+                       \"color\": $COLOR,
+                       \"footer\": { \"text\": \"GitHub → Discord\" },
+                       \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+                     }]
+                   }" \
                $DISCORD_WEBHOOK_URL

@@ -14,40 +14,78 @@ jobs:
       - name: Send Discord Notification
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          EVENT_NAME: ${{ github.event_name }}
+
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+          PUSH_MESSAGE: ${{ github.event.head_commit.message }}
+          PUSH_URL: ${{ github.event.compare }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
-          EVENT_NAME=${{ github.event_name }}
+          set -euo pipefail
 
-          # 색상 기본값 (회색)
-          COLOR=9807270
-
-          if [ "$EVENT_NAME" = "issues" ]; then
-            COLOR=15844367   # 노랑 (0xf39c12)
-            TITLE="🟧 Issue: ${{ github.event.issue.title }}"
-            DESCRIPTION="${{ github.event.issue.body }}"
-            URL="${{ github.event.issue.html_url }}"
-          elif [ "$EVENT_NAME" = "pull_request" ]; then
-            COLOR=3066993    # 초록 (0x2ecc71)
-            TITLE="🟩 Pull Request: ${{ github.event.pull_request.title }}"
-            DESCRIPTION="${{ github.event.pull_request.body }}"
-            URL="${{ github.event.pull_request.html_url }}"
-          elif [ "$EVENT_NAME" = "push" ]; then
-            COLOR=3447003    # 파랑 (0x3498db)
-            TITLE="🟦 Push to ${{ github.ref_name }}"
-            DESCRIPTION="${{ github.event.head_commit.message }}"
-            URL="${{ github.event.compare }}"
+          if ! command -v jq >/dev/null; then
+            sudo apt-get update && sudo apt-get install -y jq
           fi
 
-          # Discord Webhook 발송
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d "{
-                     \"embeds\": [{
-                       \"title\": \"$TITLE\",
-                       \"description\": \"$DESCRIPTION\",
-                       \"url\": \"$URL\",
-                       \"color\": $COLOR,
-                       \"footer\": { \"text\": \"GitHub → Discord\" },
-                       \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
-                     }]
-                   }" \
-               $DISCORD_WEBHOOK_URL
+          COLOR=9807270
+          TITLE=""
+          DESC=""
+          URL=""
+
+          case "$EVENT_NAME" in
+            issues)
+              COLOR=15844367
+              TITLE="🟧 Issue: ${ISSUE_TITLE:-"(no title)"}"
+              DESC="${ISSUE_BODY:-""}"
+              URL="${ISSUE_URL:-""}"
+              ;;
+            pull_request)
+              COLOR=3066993
+              TITLE="🟩 Pull Request: ${PR_TITLE:-"(no title)"}"
+              DESC="${PR_BODY:-""}"
+              URL="${PR_URL:-""}"
+              ;;
+            push)
+              COLOR=3447003
+              TITLE="🟦 Push to ${REF_NAME}"
+              DESC="${PUSH_MESSAGE:-""}"
+              URL="${PUSH_URL:-""}"
+              ;;
+          esac
+
+          # Discord embed description(최대 4096자) 보호용 간단 트림
+          if [ "${#DESC}" -gt 4000 ]; then
+            DESC="${DESC:0:4000}…"
+          fi
+
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          PAYLOAD="$(jq -n \
+            --arg title "$TITLE" \
+            --arg desc "$DESC" \
+            --arg url "$URL" \
+            --arg ts "$TS" \
+            --argjson color "$COLOR" \
+            '{embeds: [{title: $title, description: $desc, url: $url, color: $color, footer: {text: "GitHub → Discord"}, timestamp: $ts}]}' \
+          )"
+
+          # 전송 + 상태코드 검증
+          http_code="$(curl -sS -o /tmp/resp.txt -w "%{http_code}" \
+            -H "Content-Type: application/json" \
+            -X POST \
+            --data "$PAYLOAD" \
+            "$DISCORD_WEBHOOK_URL")"
+
+          echo "Discord HTTP $http_code"
+          if [ "$http_code" != "204" ]; then
+            echo "Response body:"
+            cat /tmp/resp.txt
+            exit 1
+          fi

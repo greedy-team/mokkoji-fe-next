@@ -4,7 +4,7 @@ on:
   issues:
     types: [opened, reopened, closed]
   pull_request:
-    types: [opened, reopened, closed]   # merged 없음. closed + merged 플래그로 판단
+    types: [opened, reopened, closed]
   push:
     branches: ['**']
   release:
@@ -43,29 +43,31 @@ jobs:
           URL=""
           DESCRIPTION=""
 
-          # 멀티라인 본문 200자 트림
+          # 멀티라인 200자 트림(개행 유지)
           trim_body () { awk -v max=200 '{out=out $0 ORS} END{ if (length(out)>max){ print substr(out,1,max-3) "..."} else { printf "%s", out }}'; }
 
           case "$EVENT_NAME" in
             issues)
               action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
+              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
               number=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
               ititle=$(jq -r '.issue.title // "(no title)"' "$GITHUB_EVENT_PATH")
               ibody=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
               URL=$(jq -r '.issue.html_url' "$GITHUB_EVENT_PATH")
 
-              case "$action" in
-                opened)   COLOR=15965202; EMOJI="🆕"; TITLE="새로운 이슈가 생성되었습니다!";;
-                reopened) COLOR=15965202; EMOJI="🔄"; TITLE="이슈가 다시 열렸습니다";;
-                closed)   COLOR=10181046; EMOJI="✅"; TITLE="이슈가 닫혔습니다";;
-                *) exit 0;;
-              esac
-              DESCRIPTION="**#${number} ${ititle}**\n\n${ibody}"
+              COLOR=15965202
+              if [ "$action" = "opened" ]; then
+                EMOJI="🆕"; TITLE="새로운 이슈가 생성되었습니다!"
+              else
+                EMOJI="🔄"; TITLE="이슈가 다시 열렸습니다"
+              fi
+
+              DESCRIPTION="$(printf '**#%s %s**\n\n%s' "$number" "$ititle" "$ibody")"
               ;;
 
             pull_request)
               action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
-              merged=$(jq -r '.pull_request.merged' "$GITHUB_EVENT_PATH")
+              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
               number=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
               ptitle=$(jq -r '.pull_request.title // "(no title)"' "$GITHUB_EVENT_PATH")
               pbody=$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
@@ -73,27 +75,28 @@ jobs:
               base=$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")
               URL=$(jq -r '.pull_request.html_url' "$GITHUB_EVENT_PATH")
 
-              if [ "$action" = "closed" ] && [ "$merged" = "true" ]; then
-                COLOR=9323693; EMOJI="🎉"; TITLE="Pull Request가 병합되었습니다!"
+              COLOR=3066993
+              if [ "$action" = "opened" ]; then
+                EMOJI="🔀"; TITLE="새로운 Pull Request가 생성되었습니다!"
               else
-                case "$action" in
-                  opened)   COLOR=3066993; EMOJI="🔀"; TITLE="새로운 Pull Request가 생성되었습니다!";;
-                  reopened) COLOR=3066993; EMOJI="🔄"; TITLE="Pull Request가 다시 열렸습니다";;
-                  closed)   COLOR=15158332; EMOJI="❌"; TITLE="Pull Request가 닫혔습니다";;
-                  *) exit 0;;
-                esac
+                EMOJI="🔄"; TITLE="Pull Request가 다시 열렸습니다"
               fi
-              DESCRIPTION="**#${number} ${ptitle}**\n\n\`${head}\` → \`${base}\`\n\n${pbody}"
+
+              DESCRIPTION="$(printf '**#%s %s**\n\n`%s` → `%s`\n\n%s' "$number" "$ptitle" "$head" "$base" "$pbody")"
               ;;
 
             push)
               branch="$GITHUB_REF_NAME"
-              commit_message=$(jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" | trim_body)
-              commit_author=$(jq -r '.head_commit.author.name // ""' "$GITHUB_EVENT_PATH")
-              URL=$(jq -r '.compare' "$GITHUB_EVENT_PATH")
+              commit_message="$(jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" | trim_body)"
+              commit_author="$(jq -r '.head_commit.author.name // ""' "$GITHUB_EVENT_PATH")"
+              [ -n "$commit_author" ] || commit_author="$AUTHOR_NAME"
+              URL="$(jq -r '.compare' "$GITHUB_EVENT_PATH")"
 
-              COLOR=3447003; EMOJI="📝"; TITLE="새로운 커밋이 푸시되었습니다!"
-              DESCRIPTION="**브랜치:** \`${branch}\`\n**커밋:** ${commit_message}\n**작성자:** ${commit_author}"
+              COLOR=3447003
+              EMOJI="📝"
+              TITLE="새로운 커밋이 푸시되었습니다!"
+              # ✅ 실제 줄바꿈(printf) 사용
+              DESCRIPTION="$(printf '브랜치: %s\n커밋: %s\n작성자: %s' "$branch" "$commit_message" "$commit_author")"
               ;;
 
             release)
@@ -104,8 +107,10 @@ jobs:
               rbody=$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
               URL=$(jq -r '.release.html_url' "$GITHUB_EVENT_PATH")
 
-              COLOR=16766720; EMOJI="🚀"; TITLE="새로운 릴리즈가 발행되었습니다!"
-              DESCRIPTION="**${tag} - ${rname}**\n\n${rbody}"
+              COLOR=16766720
+              EMOJI="🚀"
+              TITLE="새로운 릴리즈가 발행되었습니다!"
+              DESCRIPTION="$(printf '**%s - %s**\n\n%s' "$tag" "$rname" "$rbody")"
               ;;
 
             *) exit 0;;

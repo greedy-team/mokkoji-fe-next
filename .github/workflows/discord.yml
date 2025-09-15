@@ -4,7 +4,7 @@ on:
   issues:
     types: [opened, reopened, closed]
   pull_request:
-    types: [opened, reopened, closed]   # merged 없음! closed + merged 플래그로 판별
+    types: [opened, reopened, closed]   # merged 없음. closed + merged 플래그로 판단
   push:
     branches: ['**']
   release:
@@ -15,17 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Enhanced Discord Notification
+        shell: bash
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           set -euo pipefail
 
-          # jq 준비
+          # jq 설치
           if ! command -v jq >/dev/null; then
             sudo apt-get update -y && sudo apt-get install -y jq
           fi
 
-          # 시크릿 없으면 스킵(포크 PR 등)
+          # 포크 PR 등 시크릿 미노출 시 스킵
           if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
             echo "::warning:: DISCORD_WEBHOOK_URL is empty. Skipping."
             exit 0
@@ -42,7 +43,7 @@ jobs:
           URL=""
           DESCRIPTION=""
 
-          # 본문 200자 제한(디스코드 임베드 제한 대비)
+          # 멀티라인 본문 200자 트림
           trim_body () { awk -v max=200 '{out=out $0 ORS} END{ if (length(out)>max){ print substr(out,1,max-3) "..."} else { printf "%s", out }}'; }
 
           case "$EVENT_NAME" in
@@ -58,7 +59,7 @@ jobs:
                 reopened) COLOR=15965202; EMOJI="🔄"; TITLE="이슈가 다시 열렸습니다";;
                 closed)   COLOR=10181046; EMOJI="✅"; TITLE="이슈가 닫혔습니다";;
                 *) exit 0;;
-              end
+              esac
               DESCRIPTION="**#${number} ${ititle}**\n\n${ibody}"
               ;;
 

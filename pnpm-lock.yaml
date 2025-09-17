@@ -99,8 +99,11 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       to-do-pin:
-        specifier: 0.0.17
-        version: 0.0.17(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: 0.0.30
+        version: 0.0.30(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+      web-vitals:
+        specifier: ^5.1.0
+        version: 5.1.0
     devDependencies:
       '@chromatic-com/storybook':
         specifier: 3.2.6
@@ -4949,8 +4952,8 @@ packages:
     resolution: {integrity: sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==}
     engines: {node: '>=14.0.0'}
 
-  to-do-pin@0.0.17:
-    resolution: {integrity: sha512-fX0/7+7RgDK0V+PxKveynriZKtTDnSJKUWq4FGk8lAVa4SiImlyTwbK9O0mUWhE21aSP8n7AdYj6NK3STW18FA==}
+  to-do-pin@0.0.30:
+    resolution: {integrity: sha512-nJ1XGjI1Gon/7IsOl//XLm99qmBA9zUd947kRQuRJM2SycwDGnhc4FMf+eRb31Az4YxeviPmN2+K26hGwDbqiw==}
     peerDependencies:
       lucide-react: '>=0.544.0'
       react: '>=18'
@@ -5156,6 +5159,9 @@ packages:
   watchpack@2.4.4:
     resolution: {integrity: sha512-c5EGNOiyxxV5qmTtAB7rbiXxi1ooX1pQKMLX/MIabJjRA0SJBQOjKF+KSVfHkr9U1cADPon0mRiVe/riyaiDUA==}
     engines: {node: '>=10.13.0'}
+
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -10225,7 +10231,7 @@ snapshots:
 
   tinyspy@3.0.2: {}
 
-  to-do-pin@0.0.17(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
+  to-do-pin@0.0.30(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:
       lucide-react: 0.525.0(react@19.1.1)
       react: 19.1.1
@@ -10444,6 +10450,8 @@ snapshots:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
+
+  web-vitals@5.1.0: {}
 
   webidl-conversions@3.0.1: {}
 

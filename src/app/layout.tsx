@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import BuildInsightProvider from '@/_providers/build-insight-provider';
+import WebVitalProvider from '@/_providers/webvital-provider';
+import Script from 'next/script';
 
 const pretendard = localFont({
   src: [
@@ -66,7 +68,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-85PSBEJKQ2"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-85PSBEJKQ2');
+  `}
+        </Script>
+      </head>
       <body className={`${pretendard.className}`}>
+        <WebVitalProvider />
         <BuildInsightProvider />
         {children}
       </body>

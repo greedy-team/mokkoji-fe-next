@@ -20,17 +20,16 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build on EC2
-        uses: appleboy/ssh-action@v0.1.7
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd ${{ secrets.APP_PATH }}
-            git pull origin develop
-            pnpm install --frozen-lockfile
-            pnpm build
+          version: 10 # EC2와 동일하게 맞춤
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm build
 
   deploy:
     if: github.ref == 'refs/heads/main'
@@ -52,6 +51,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            export PNPM_HOME="/home/ubuntu/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
             cd ${{ secrets.APP_PATH }}
             git pull origin main
             pnpm install --frozen-lockfile

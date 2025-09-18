@@ -35,8 +35,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
             cd ${{ secrets.APP_PATH }}
             git pull origin main
-            pnpm install
+            pnpm install --frozen-lockfile
             pnpm build
             pm2 restart mokkoji-fe || pm2 start "pnpm start" --name mokkoji-fe --env production

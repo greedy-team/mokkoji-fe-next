@@ -3,6 +3,11 @@
 import Script from 'next/script';
 
 function ClarityProvider() {
+  if (
+    process.env.NODE_ENV !== 'production' ||
+    !process.env.NEXT_PUBLIC_CLARITY_ID
+  )
+    return null;
   return (
     <Script
       id="microsoft-clarity-init"

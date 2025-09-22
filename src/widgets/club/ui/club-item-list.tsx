@@ -16,7 +16,6 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
   });
 
   const session = await auth();
-
   if (!res.ok) {
     return <ClubCustomErrorBoundary />;
   }

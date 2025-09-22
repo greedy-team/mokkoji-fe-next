@@ -145,6 +145,8 @@ function extract(body: any) {
 }
 
 export async function POST(req: Request) {
+  if (process.env.NEXT_PUBLIC_NODE_ENV === 'development')
+    return Response.json({ ok: true, message: 'development!' });
   try {
     const body = await req.json();
     const {

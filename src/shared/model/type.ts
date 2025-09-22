@@ -1,8 +1,9 @@
 export interface ApiResponse<T> {
   ok: boolean;
   message: string | undefined;
-  data: T;
+  data: T | undefined;
   error: string | undefined;
+  status: number;
 }
 
 export enum ClubCategory {

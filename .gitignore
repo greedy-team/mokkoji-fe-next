@@ -47,3 +47,4 @@ next-env.d.ts
 
 .eslintcache
 /storybook-static
+/test-results

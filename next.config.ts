@@ -11,16 +11,12 @@ let nextConfig: NextConfig = {
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
-    domains: ['mokkoji-app-data.s3.ap-northeast-2.amazonaws.com'],
+    domains: [process.env.NEXT_PUBLIC_S3_DOMAIN || ''],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'way-s3.s3.ap-northeast-2.amazonaws.com',
         pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'api.dicebear.com',
       },
     ],
   },

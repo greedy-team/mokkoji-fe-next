@@ -30,7 +30,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
 
   return login ? (
     <>
-      <h1 className="mb-5 w-full text-2xl font-bold text-[#00E457]">
+      <h1 className="mt-10 mb-5 w-full text-2xl font-bold text-[#00E457]">
         즐겨찾기 한 동아리 {data.pagination?.totalElements}개
       </h1>
       <ul
@@ -62,7 +62,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       />
     </>
   ) : (
-    <h1 className="mb-5 text-2xl font-bold text-[#00E457]">
+    <h1 className="mt-10 mb-5 text-2xl font-bold text-[#00E457]">
       로그인 후 이용하실 수 있습니다.
     </h1>
   );

@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
@@ -6,7 +7,6 @@ import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widg
 import getClubManageInfo from '@/shared/api/manage-api';
 import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import NotFound from '@/app/not-found';
 
 async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
@@ -17,11 +17,11 @@ async function RecruitDetailPage({ params }: DetailParams) {
     auth(),
   ]);
 
-  if (data.status === 404) {
-    return <NotFound />;
+  if (data?.status === 404 || !data.data) {
+    notFound();
   }
 
-  if (!data.ok || !data.data) {
+  if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
 

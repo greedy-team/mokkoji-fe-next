@@ -80,6 +80,7 @@ function pickTopFrame(event: any) {
 
 async function postToDiscord(payload: any) {
   if (!DISCORD_WEBHOOK_URL) throw new Error('DISCORD_WEBHOOK_URL not set');
+  if (process.env.NEXT_PUBLIC_NODE_ENV === 'development') return;
   const res = await fetch(DISCORD_WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

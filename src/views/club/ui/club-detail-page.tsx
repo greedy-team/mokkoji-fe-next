@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import getClubDetail from '@/views/club/api/getClubDetail';
 import ClubDetailCommentWidget from '@/widgets/club-detail/ui/club-detail-comment-widget';
 import { DetailParams } from '@/shared/model/type';
@@ -5,18 +6,17 @@ import getParams from '@/shared/util/getParams';
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import { auth } from '@/auth';
-import NotFound from '@/app/not-found';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getClubDetail(id);
   const session = await auth();
-  if (data?.status === 404) {
-    return <NotFound />;
+  if (data?.status === 404 || !data.data) {
+    notFound();
   }
 
-  if (!data.ok || !data.data) {
+  if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
 

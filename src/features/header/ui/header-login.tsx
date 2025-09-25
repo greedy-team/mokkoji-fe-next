@@ -6,6 +6,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
+import router from 'next/router';
 
 function HeaderLogin() {
   const { data: session, status } = useSession();
@@ -50,7 +51,10 @@ function HeaderLogin() {
                 <span className="ml-2">마이페이지</span>
               </Link>
               <Button
-                onClick={() => signOut()}
+                onClick={() => {
+                  signOut();
+                  router.push('/');
+                }}
                 variant="submit"
                 className="absolute top-16 left-0 z-50 mt-4 w-full min-w-[120px] rounded-lg bg-white p-1 text-xs text-[#9C9C9C] shadow-md hover:text-black"
               >

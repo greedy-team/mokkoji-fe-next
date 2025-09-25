@@ -14,7 +14,7 @@ interface CardSliderProps {
   data: Recruitment[];
 }
 
-function CardSilder({ data }: CardSliderProps) {
+function CardSlider({ data }: CardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -99,4 +99,4 @@ function CardSilder({ data }: CardSliderProps) {
   );
 }
 
-export default CardSilder;
+export default CardSlider;

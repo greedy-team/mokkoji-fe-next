@@ -1,11 +1,11 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 
 async function postFavorite(clubId: number) {
   try {
-    await (await authApi()).post(`favorites/${clubId}`);
+    await api.post(`favorites/${clubId}`);
     return { ok: true, message: '즐겨찾기가 등록되었습니다.' };
   } catch (e) {
     return ErrorHandler(e as Error, [

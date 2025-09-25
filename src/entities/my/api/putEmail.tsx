@@ -1,17 +1,13 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 
 async function putEmail(email: string) {
   try {
-    const response = await (
-      await authApi()
-    )
-      .put('users', {
-        json: { email },
-      })
-      .json();
+    const response = await api.put('users', {
+      json: { email },
+    });
 
     return { ok: true, message: '이메일이 변경되었습니다.' };
   } catch (e) {

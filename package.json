@@ -42,6 +42,8 @@
     "lucide-react": "^0.525.0",
     "next": "15.3.4",
     "next-auth": "5.0.0-beta.28",
+    "pino": "^9.11.0",
+    "pino-pretty": "^13.1.1",
     "pnpm": "^10.9.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
@@ -53,7 +55,8 @@
     "require-in-the-middle": "^7.5.2",
     "tailwind-merge": "^3.3.1",
     "to-do-pin": "0.0.30",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.6",

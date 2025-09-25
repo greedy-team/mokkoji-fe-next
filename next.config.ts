@@ -7,6 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 let nextConfig: NextConfig = {
   reactStrictMode: false,
   transpilePackages: ['msw', 'next-auth'],
+  instrumentationHook: true,
   pageExtensions: isProd
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
@@ -20,6 +21,7 @@ let nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ['pino', 'pino-pretty'],
   webpack: (config) => {
     const newConfig = { ...config };
 

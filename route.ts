@@ -16,4 +16,5 @@ export const publicRoutes = [
   '/support',
   '/test/:path*',
   '/favorite/:path*',
+  '/logs',
 ];

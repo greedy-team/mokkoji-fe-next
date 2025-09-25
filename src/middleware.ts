@@ -5,7 +5,6 @@ import { publicRoutes } from '../route';
 
 export default middleware(async (req) => {
   const { nextUrl, auth } = req;
-
   const isLoggedIn = !!auth?.user;
 
   const isPublicRoute = publicRoutes.some((route) => {

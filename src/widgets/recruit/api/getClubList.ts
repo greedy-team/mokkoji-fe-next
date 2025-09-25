@@ -1,5 +1,5 @@
 import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
 import ErrorHandler from '@/shared/lib/error-message';
@@ -32,9 +32,7 @@ async function getClubList(params: GetRecruitListParams) {
   try {
     let response: ApiResponse<ClubList>;
     if (session?.accessToken) {
-      response = await (
-        await authApi()
-      )
+      response = await api
         .get('clubs', {
           searchParams,
         })

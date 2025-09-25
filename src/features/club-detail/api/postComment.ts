@@ -1,6 +1,6 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 import { revalidatePath } from 'next/cache';
 
@@ -9,8 +9,6 @@ export async function postComment(
   content: string,
   rate: number,
 ) {
-  const api = await authApi();
-
   try {
     await api
       .post(`comments/${clubId}`, {
@@ -33,9 +31,7 @@ export async function patchComment(
   rate: number,
 ) {
   try {
-    await (
-      await authApi()
-    )
+    await api
       .patch(`comments/${commentId}`, {
         json: {
           content,
@@ -52,7 +48,7 @@ export async function patchComment(
 
 export async function deleteComment(clubId: number, commentId: number) {
   try {
-    await (await authApi()).delete(`comments/${commentId}`);
+    await api.delete(`comments/${commentId}`);
     revalidatePath(`/recruit/${clubId}`);
     return { ok: true, message: '댓글이 삭제되었습니다.' };
   } catch (e) {

@@ -11,6 +11,7 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getClubDetail(id);
+
   const session = await auth();
   if (data?.status === 404 || !data.data) {
     notFound();

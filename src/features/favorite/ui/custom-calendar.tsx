@@ -28,7 +28,6 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
     handleDateClick,
     deadlineMap,
   } = useCalendarDeadline(data, setValue);
-
   return (
     <>
       <Calendar

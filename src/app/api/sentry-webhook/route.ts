@@ -80,7 +80,8 @@ function pickTopFrame(event: any) {
 
 async function postToDiscord(payload: any) {
   if (!DISCORD_WEBHOOK_URL) throw new Error('DISCORD_WEBHOOK_URL not set');
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'development') return;
+  // 개발 환경에서는 전송 안 함
+  if (process.env.NODE_ENV === 'development') return;
   const res = await fetch(DISCORD_WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -146,8 +147,11 @@ function extract(body: any) {
 }
 
 export async function POST(req: Request) {
-  if (process.env.NEXT_PUBLIC_NODE_ENV === 'development')
-    return Response.json({ ok: true, message: 'development!' });
+  // 개발환경에서 테스트할 때는 Discord 안 보냄
+  if (process.env.NODE_ENV === 'development') {
+    return Response.json({ ok: true, message: 'development mode — no send' });
+  }
+
   try {
     const body = await req.json();
     const {
@@ -247,6 +251,6 @@ export async function POST(req: Request) {
     return Response.json({ ok: true });
   } catch (err) {
     console.error('❌ Sentry Webhook 처리 실패:', err);
-    return new Response('fail', { status: 200 });
+    return new Response('fail', { status: 500 });
   }
 }

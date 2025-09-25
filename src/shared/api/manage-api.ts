@@ -14,7 +14,7 @@ export default async function getClubManageInfo() {
       .get('users/manage/clubs')
       .json<ApiResponse<GetClubManageInfoResponse>>();
 
-    return { ok: true, message: '성공', data: response.data };
+    return { ok: true, message: '성공', data: response.data, status: 200 };
   } catch (err) {
     return ErrorHandler(err as Error);
   }

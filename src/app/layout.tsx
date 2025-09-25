@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
-import BuildInsightProvider from '@/_providers/build-insight-provider';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import Script from 'next/script';
 
@@ -84,7 +83,6 @@ export default function RootLayout({
       </head>
       <body className={`${pretendard.className}`}>
         <WebVitalProvider />
-        <BuildInsightProvider />
         {children}
       </body>
     </html>

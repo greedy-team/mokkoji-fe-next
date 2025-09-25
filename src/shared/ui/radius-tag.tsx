@@ -9,7 +9,7 @@ export const RecruitStatusLabel: Record<RecruitStatus, string> = {
 };
 
 export const RecruitStatusColor: Record<RecruitStatus, string> = {
-  OPEN: 'bg-[#00E457] text-[#FFFFFF]',
+  OPEN: 'bg-[#00E457] text-white',
   CLOSED: 'bg-[#E9E7E7] text-[#9C9C9C]',
   BEFORE: 'bg-[#D9D9D9] text-[#9C9C9C]',
   IMMINENT: 'bg-[#F9796F] text-[#FCD7D4]',
@@ -24,7 +24,7 @@ function RadiusTag({ className, status }: RadiusTagProps) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center justify-center rounded-full px-[9px] py-[6px] text-center font-semibold lg:py-[6px] lg:text-xs',
+        'inline-block h-[27px] rounded-[13px] px-[12px] text-center text-xs leading-[27px] font-semibold',
         RecruitStatusColor[status],
         className,
       )}

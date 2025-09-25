@@ -32,7 +32,7 @@ export async function postClubRegister(data: ClubRegisterRequest) {
       .json();
     revalidatePath('/club');
 
-    return { ok: true, message: '등록이 완료되었습니다.' };
+    return { ok: true, message: '등록이 완료되었습니다.', status: 200 };
   } catch (e) {
     return ErrorHandler(e as Error);
   }

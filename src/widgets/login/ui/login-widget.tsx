@@ -21,7 +21,6 @@ function LoginWidget() {
       localStorage.setItem('loginNoticeConfirmed', 'false');
     }
   }, [confirmed]);
-
   return (
     <>
       <LoginHeader confirmed={confirmed} onConfirm={setConfirmed} />

@@ -1,4 +1,5 @@
 import logger from '@/shared/lib/logger';
+import util from 'util';
 
 const originalFetch = global.fetch;
 
@@ -42,7 +43,6 @@ export default function nextLogger() {
           body = JSON.parse(
             JSON.stringify({
               preview: `${bodyStr.slice(0, MAX_LEN)}…`,
-              truncated: true,
             }),
           );
         }
@@ -56,7 +56,13 @@ export default function nextLogger() {
         status: response.status,
         duration: `${duration}ms`,
       });
-      logger.debug(body);
+      logger.debug(
+        util.inspect(body, {
+          depth: Infinity,
+          colors: true,
+          maxArrayLength: 5,
+        }),
+      );
 
       return response;
     } catch (err) {

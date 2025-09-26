@@ -47,7 +47,12 @@ export async function patchClubInfo(
 
     revalidatePath('/club');
 
-    return { ok: true, message: '수정이 완료되었습니다.', data: payload };
+    return {
+      ok: true,
+      message: '수정이 완료되었습니다.',
+      data: payload,
+      status: 200,
+    };
   } catch (e) {
     return ErrorHandler(e as Error);
   }

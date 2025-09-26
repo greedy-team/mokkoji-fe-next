@@ -1,4 +1,3 @@
-// shared/lib/logger.node.ts
 import winston from 'winston';
 
 const { combine, colorize, timestamp, printf } = winston.format;

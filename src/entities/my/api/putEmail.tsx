@@ -9,7 +9,13 @@ async function putEmail(email: string) {
       json: { email },
     });
 
-    return { ok: true, message: '이메일이 변경되었습니다.', data: response };
+    const data = await response.json();
+
+    return {
+      ok: true,
+      message: '이메일이 변경되었습니다.',
+      data,
+    };
   } catch (e) {
     return ErrorHandler(e as Error);
   }

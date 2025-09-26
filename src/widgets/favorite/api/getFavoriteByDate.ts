@@ -1,6 +1,6 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import { ApiResponse } from '@/shared/model/type';
 import ErrorHandler from '@/shared/lib/error-message';
 import { FavoriteDateItem } from '@/views/favorite/model/type';
@@ -11,8 +11,8 @@ interface GetFavoriteByDateParams {
 
 async function getFavoriteByDate({ yearMonth }: GetFavoriteByDateParams) {
   try {
-    const response: ApiResponse<FavoriteDateItem[]> = await (await authApi())
-      .get(`favorites/recruit?yearMonth=${yearMonth}`, {})
+    const response: ApiResponse<FavoriteDateItem[]> = await api
+      .get(`favorites/recruit?yearMonth=${yearMonth}`)
       .json();
     return {
       ok: true,

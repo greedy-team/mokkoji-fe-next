@@ -1,6 +1,6 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import {
   ApiResponse,
   ClubInfoResponse,
@@ -10,7 +10,7 @@ import ErrorHandler from '../lib/error-message';
 
 export default async function getClubManageInfo() {
   try {
-    const response = await (await authApi())
+    const response = await api
       .get('users/manage/clubs')
       .json<ApiResponse<GetClubManageInfoResponse>>();
 
@@ -22,9 +22,7 @@ export default async function getClubManageInfo() {
 
 export async function getClubInfo(clubId: number) {
   try {
-    const response = await (await authApi())
-      .get(`clubs/${clubId}`)
-      .json<ClubInfoResponse>();
+    const response = await api.get(`clubs/${clubId}`).json<ClubInfoResponse>();
 
     return { ok: true, message: '성공', data: response.data };
   } catch (err) {

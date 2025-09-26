@@ -13,7 +13,7 @@ export default function MainLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <ToDoPinProvider>
-        <SessionProvider>
+        <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
           <Header />
           <main className="flex-grow">{children}</main>
         </SessionProvider>

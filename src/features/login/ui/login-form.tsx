@@ -39,8 +39,6 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
 
     router.refresh();
   };
-  console.log('studentId', studentId);
-  console.log('password', password);
 
   const handleBlur = (field: 'studentId' | 'password', value: string) => {
     if (value.trim() === '') {

@@ -1,6 +1,6 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import { revalidateTag } from 'next/cache';
 import ErrorHandler from '@/shared/lib/error-message';
 import { RecruitmentDeleteResponse } from '@/features/post-recruitment/model/type';
@@ -9,7 +9,7 @@ async function deleteRecruitmentForm(
   clubId: number,
 ): Promise<RecruitmentDeleteResponse> {
   try {
-    const response = await (await authApi())
+    const response = await api
       .delete(`recruitments/${clubId}`)
       .json<RecruitmentDeleteResponse>();
     revalidateTag('recruitments');

@@ -34,6 +34,13 @@ let nextConfig: NextConfig = {
     }
     return newConfig;
   },
+  logging: {
+    incomingRequests: {
+      ignore: [
+        /\/api\/auth\/session/, // NextAuth 세션 체크 무시
+      ],
+    },
+  },
 };
 
 // Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용

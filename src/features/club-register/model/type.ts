@@ -45,4 +45,5 @@ export interface EditResponse {
   ok: boolean;
   message: string;
   data?: EditResponseField;
+  status: number;
 }

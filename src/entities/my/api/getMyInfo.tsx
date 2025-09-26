@@ -14,6 +14,7 @@ async function getMyInfo() {
     return {
       ok: true,
       data: response.data,
+      status: 200,
     };
   } catch (error) {
     return ErrorHandler(error as Error);

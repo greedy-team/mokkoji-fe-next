@@ -20,7 +20,6 @@ let nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['pino', 'pino-pretty'],
   webpack: (config) => {
     const newConfig = { ...config };
 
@@ -34,6 +33,13 @@ let nextConfig: NextConfig = {
       };
     }
     return newConfig;
+  },
+  logging: {
+    incomingRequests: {
+      ignore: [
+        /\/api\/auth\/session/, // NextAuth 세션 체크 무시
+      ],
+    },
   },
 };
 

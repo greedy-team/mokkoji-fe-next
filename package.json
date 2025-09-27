@@ -30,6 +30,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
+    "@tanstack/react-virtual": "^3.13.12",
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -52,7 +53,7 @@
     "react-toastify": "^11.0.5",
     "require-in-the-middle": "^7.5.2",
     "tailwind-merge": "^3.3.1",
-    "to-do-pin": "0.0.30",
+    "to-do-pin": "0.0.33",
     "web-vitals": "^5.1.0",
     "winston": "^3.17.0"
   },

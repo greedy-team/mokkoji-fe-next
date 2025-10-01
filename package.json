@@ -18,7 +18,8 @@
     "test:chrome": "playwright test --project=Chromium",
     "test:firefox": "playwright test --project=Firefox",
     "test:safari": "playwright test --project=WebKit",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:codegen": "playwright codegen http://localhost:3000"
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.0",
@@ -52,7 +53,7 @@
     "react-toastify": "^11.0.5",
     "require-in-the-middle": "^7.5.2",
     "tailwind-merge": "^3.3.1",
-    "to-do-pin": "0.0.30",
+    "to-do-pin": "0.0.37",
     "web-vitals": "^5.1.0",
     "winston": "^3.17.0"
   },

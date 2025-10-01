@@ -12,6 +12,7 @@ function RecruitPage({ searchParams }: RecruitItemListProps) {
         <Suspense
           fallback={
             <ItemListSkeletonLoading
+              data-testid="skeleton"
               title="모집 공고"
               description={
                 '관심 있는 동아리의 최신 모집 공고를\n한눈에 확인할 수 있어요.'

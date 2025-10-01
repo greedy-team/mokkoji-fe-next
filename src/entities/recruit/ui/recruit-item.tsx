@@ -48,9 +48,9 @@ function RecruitItem({
         <RadiusTag status={status} className="lg:text-[16px]" />
       </div>
       <div className="flex flex-col justify-between gap-2">
-        <h4 className="overflow-hidden pr-7 text-[12px] font-bold break-words text-ellipsis whitespace-nowrap lg:text-xs">
+        <h2 className="overflow-hidden pr-7 text-[12px] font-bold break-words text-ellipsis whitespace-nowrap lg:text-xs">
           [{title}]
-        </h4>
+        </h2>
         <p className="overflow-hidden pr-7 text-[12px] break-words text-ellipsis whitespace-nowrap lg:text-xs">
           {description}
         </p>

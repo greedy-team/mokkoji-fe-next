@@ -105,13 +105,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       to-do-pin:
-<<<<<<< HEAD
-        specifier: 0.0.33
-        version: 0.0.33(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
-=======
         specifier: 0.0.37
         version: 0.0.37(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
->>>>>>> develop
       web-vitals:
         specifier: ^5.1.0
         version: 5.1.0
@@ -6277,13 +6272,8 @@ packages:
     resolution: {integrity: sha512-tB82LpAIWjhLYbqjx3X4zEeHN6M8CiuOEy2JY8SEQVdYRe3CCHOFaqrBW1doLDrfpWhplcW7BL+bO3/6S3pcDQ==}
     engines: {node: '>= 0.4'}
 
-<<<<<<< HEAD
-  to-do-pin@0.0.33:
-    resolution: {integrity: sha512-d2VwSYuVP9I4yEkFXG7MV2SEEYo5gR6h59dUIgllcroDKoqz7qwf1gdiSe0wLoPVkd5npLyvOLb8usLOjMoFMw==}
-=======
   to-do-pin@0.0.37:
     resolution: {integrity: sha512-y4TUmkI7RF9X7pxJmYnzp99V8/duG9kQbh0yUwqXt/r8dtOHrtpUsong9LEN0EO3gTV4jgz4Gob91m0cme2+ng==}
->>>>>>> develop
     peerDependencies:
       lucide-react: '>=0.544.0'
       react: '>=18'
@@ -13326,11 +13316,7 @@ snapshots:
       safe-buffer: 5.2.1
       typed-array-buffer: 1.0.3
 
-<<<<<<< HEAD
-  to-do-pin@0.0.33(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
-=======
   to-do-pin@0.0.37(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
->>>>>>> develop
     dependencies:
       lucide-react: 0.525.0(react@19.1.1)
       react: 19.1.1

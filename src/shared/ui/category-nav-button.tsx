@@ -44,7 +44,7 @@ function CategorySelect() {
 
   return (
     <Select value={active} onValueChange={handleChange}>
-      <SelectTrigger>
+      <SelectTrigger aria-label="카테고리 선택" className="mb-0">
         <SelectValue placeholder="전체" />
       </SelectTrigger>
       <SelectContent position="popper">

@@ -58,7 +58,7 @@ async function Header() {
             )}
         </nav>
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
-          <HeaderLogin />
+          <HeaderLogin userName={session?.user?.name || ''} />
           <HeaderSearch />
           <MoblieHeader
             sessionRole={role}

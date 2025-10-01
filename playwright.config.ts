@@ -9,6 +9,9 @@ export default defineConfig({
   },
   use: {
     headless: false,
+    launchOptions: {
+      args: ['--disable-cache'],
+    },
   },
 
   projects: [

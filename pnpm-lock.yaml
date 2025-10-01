@@ -102,8 +102,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       to-do-pin:
-        specifier: 0.0.30
-        version: 0.0.30(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: 0.0.37
+        version: 0.0.37(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       web-vitals:
         specifier: ^5.1.0
         version: 5.1.0
@@ -6260,8 +6260,8 @@ packages:
     resolution: {integrity: sha512-tB82LpAIWjhLYbqjx3X4zEeHN6M8CiuOEy2JY8SEQVdYRe3CCHOFaqrBW1doLDrfpWhplcW7BL+bO3/6S3pcDQ==}
     engines: {node: '>= 0.4'}
 
-  to-do-pin@0.0.30:
-    resolution: {integrity: sha512-nJ1XGjI1Gon/7IsOl//XLm99qmBA9zUd947kRQuRJM2SycwDGnhc4FMf+eRb31Az4YxeviPmN2+K26hGwDbqiw==}
+  to-do-pin@0.0.37:
+    resolution: {integrity: sha512-y4TUmkI7RF9X7pxJmYnzp99V8/duG9kQbh0yUwqXt/r8dtOHrtpUsong9LEN0EO3gTV4jgz4Gob91m0cme2+ng==}
     peerDependencies:
       lucide-react: '>=0.544.0'
       react: '>=18'
@@ -13296,7 +13296,7 @@ snapshots:
       safe-buffer: 5.2.1
       typed-array-buffer: 1.0.3
 
-  to-do-pin@0.0.30(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
+  to-do-pin@0.0.37(lucide-react@0.525.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react-router-dom@7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:
       lucide-react: 0.525.0(react@19.1.1)
       react: 19.1.1

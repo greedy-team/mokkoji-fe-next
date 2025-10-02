@@ -48,7 +48,7 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
               category={item.category}
               isFavorite={item.isFavorite}
               logo={item.logo}
-              session={session || undefined}
+              session={session}
             />
           </Link>
         ))}

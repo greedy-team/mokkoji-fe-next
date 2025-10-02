@@ -43,7 +43,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         createdAt={data.data.createdAt}
         logo={data.data.logo}
         status={data.data.status}
-        session={session || undefined}
+        session={session}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

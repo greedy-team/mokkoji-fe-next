@@ -9,7 +9,7 @@ import { Recruitment } from '../model/type';
 
 interface RecruitItemClientListProps {
   recruitments: Recruitment[];
-  session?: Session | nu;
+  session: Session | null;
 }
 
 export default function RecruitItemClientList({

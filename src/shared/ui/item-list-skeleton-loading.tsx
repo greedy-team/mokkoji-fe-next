@@ -7,25 +7,30 @@ interface ItemListSkeletonLoadingProps {
   title: string;
   description: string;
   size?: number;
+  header?: boolean;
 }
 
 function ItemListSkeletonLoading({
   title,
   description,
   size = 9,
+  header = false,
 }: ItemListSkeletonLoadingProps) {
   const splicedSkeletonList = SkeletonList.slice(
     0,
     Math.min(size, SkeletonList.length),
   );
   return (
-    <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {splicedSkeletonList.map((item) => (
-        <li key={item} className="w-full">
-          <ClubItemSkeleton />
-        </li>
-      ))}
-    </ul>
+    <>
+      {header && <SectionHeader title={title} description={description} />}
+      <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {splicedSkeletonList.map((item) => (
+          <li key={item} className="w-full">
+            <ClubItemSkeleton />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 

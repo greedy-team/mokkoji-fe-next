@@ -17,7 +17,7 @@ interface RecruitDetailHeaderProps {
   createdAt: string;
   logo: string;
   status: RecruitStatus;
-  session?: Session;
+  session: Session | null;
 }
 
 function RecruitDetailHeader({

@@ -16,7 +16,7 @@ interface ClubDetailHeaderProps {
   isFavorite?: boolean;
   logo: string;
   status: RecruitStatus;
-  session?: Session;
+  session: Session | null;
 }
 
 function ClubDetailHeader({
@@ -59,7 +59,7 @@ function ClubDetailHeader({
         instagram={instagram}
         clubId={clubId}
         isFavorite={isFavorite || false}
-        session={session || undefined}
+        session={session}
       />
     </>
   );

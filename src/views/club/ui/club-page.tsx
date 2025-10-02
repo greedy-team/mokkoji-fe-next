@@ -14,6 +14,7 @@ function ClubPage({ searchParams }: RecruitItemListProps) {
             <ItemListSkeletonLoading
               title="전체 동아리"
               description="우리 학교엔 이런 동아리들이 있어요."
+              header
             />
           }
         >

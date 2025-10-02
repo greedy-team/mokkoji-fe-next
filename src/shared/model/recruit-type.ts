@@ -1,7 +1,3 @@
 export interface RecruitmentSearchParams {
-  searchParams: {
-    page?: string;
-    size?: string;
-    category?: string;
-  };
+  searchParams: Promise<{ page: string; size: string; category: string }>;
 }

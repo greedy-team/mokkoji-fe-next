@@ -33,7 +33,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         isFavorite={data.data.isFavorite}
         logo={data.data.logo}
         status={data.data.status}
-        session={session || undefined}
+        session={session}
       />
       {data.data.description ? (
         <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">

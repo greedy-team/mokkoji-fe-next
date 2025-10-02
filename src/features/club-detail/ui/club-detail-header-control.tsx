@@ -8,7 +8,7 @@ interface ClubDetailHeaderControlProps {
   instagram: string;
   clubId: number;
   isFavorite: boolean;
-  session?: Session;
+  session: Session | null;
 }
 function ClubDetailHeaderControl({
   instagram,

@@ -1,28 +1,21 @@
-'use client';
-
 import { ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { Suspense } from 'react';
-import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
-import { useSearchParams } from 'next/navigation';
-import { Session } from 'next-auth';
-import RecruitItemClientList from './recruit-item-client-list';
-import useClubRecruitList from '../model/useClubRecruitList';
 
-function RecruitItemList({ session }: { session: Session | null }) {
-  const params = useSearchParams();
-  const { data } = useClubRecruitList({
-    page: Number(params.get('page') || 1),
-    size: Number(params.get('size') || 1000),
-    category: params.get('category')?.toUpperCase() as ClubCategory,
-    session,
+import RecruitItemClientList from './recruit-item-client-list';
+import getClubRecruitList from '../api/getClubRecruitList';
+
+async function RecruitItemList({ searchParams }: { searchParams: any }) {
+  const res = await getClubRecruitList({
+    page: Number((await searchParams).page || 1),
+    size: Number((await searchParams).size || 1000),
+    category: (await searchParams).category?.toUpperCase() as ClubCategory,
   });
 
-  if (!data) {
+  if (!res.ok) {
     return <ErrorBoundaryUi />;
   }
 
-  if (data?.recruitments.length === 0) {
+  if (res.data?.recruitments.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
         모집 공고가 없습니다.
@@ -30,18 +23,7 @@ function RecruitItemList({ session }: { session: Session | null }) {
     );
   }
 
-  return (
-    <Suspense
-      fallback={
-        <ItemListSkeletonLoading
-          title="모집 공고"
-          description="모집 공고를 불러오는 중입니다."
-        />
-      }
-    >
-      <RecruitItemClientList recruitments={data?.recruitments} />
-    </Suspense>
-  );
+  return <RecruitItemClientList recruitments={res.data?.recruitments} />;
 }
 
 export default RecruitItemList;

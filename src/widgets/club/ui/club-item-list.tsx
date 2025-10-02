@@ -40,7 +40,7 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
               isFavorite={item.isFavorite}
               logo={item.logo}
               clubId={String(item.id)}
-              session={session || undefined}
+              session={session}
             />
           </Link>
         </li>

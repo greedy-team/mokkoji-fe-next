@@ -17,7 +17,7 @@ interface RecruitItemProps {
   logo?: string;
   clubId: string;
   status: RecruitStatus;
-  session?: Session;
+  session: Session | null;
 }
 
 function RecruitItem({

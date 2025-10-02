@@ -1,14 +1,14 @@
 import RecruitHeader from '@/entities/recruit/ui/recruit-header';
 import RecruitItemList from '@/widgets/recruit/ui/recruit-item-list';
 import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 
 async function RecruitPage({
   searchParams,
 }: {
-  searchParams: RecruitItemListProps;
+  searchParams: Promise<RecruitmentSearchParams>;
 }) {
   return (
     <>

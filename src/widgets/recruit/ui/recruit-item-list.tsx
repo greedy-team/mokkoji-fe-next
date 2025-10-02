@@ -1,27 +1,28 @@
-// app/recruit/RecruitItemList.tsx (Server Component)
-import { ClubCategory } from '@/shared/model/type';
-import { auth } from '@/auth';
-import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getClubRecruitList from '../api/getClubRecruitList';
-import { RecruitItemListProps } from '../model/type';
-import RecruitItemClientList from './recruit-item-client-list';
+'use client';
 
-export default async function RecruitItemList({
-  searchParams,
-}: RecruitItemListProps) {
-  const res = await getClubRecruitList({
-    page: Number((await searchParams).page || 1),
-    size: Number((await searchParams).size || 1000), // 전체 불러오기
-    category: (await searchParams).category?.toUpperCase() as ClubCategory,
+import { ClubCategory } from '@/shared/model/type';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import { Suspense } from 'react';
+import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
+import { useSearchParams } from 'next/navigation';
+import { Session } from 'next-auth';
+import RecruitItemClientList from './recruit-item-client-list';
+import useClubRecruitList from '../model/useClubRecruitList';
+
+function RecruitItemList({ session }: { session: Session | null }) {
+  const params = useSearchParams();
+  const { data } = useClubRecruitList({
+    page: Number(params.get('page') || 1),
+    size: Number(params.get('size') || 1000),
+    category: params.get('category')?.toUpperCase() as ClubCategory,
+    session,
   });
 
-  const session = await auth();
-
-  if (!res.ok || !res.data) {
+  if (!data) {
     return <ErrorBoundaryUi />;
   }
 
-  if (res.data?.recruitments.length === 0) {
+  if (data?.recruitments.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
         모집 공고가 없습니다.
@@ -30,9 +31,17 @@ export default async function RecruitItemList({
   }
 
   return (
-    <RecruitItemClientList
-      recruitments={res.data.recruitments}
-      session={session || undefined}
-    />
+    <Suspense
+      fallback={
+        <ItemListSkeletonLoading
+          title="모집 공고"
+          description="모집 공고를 불러오는 중입니다."
+        />
+      }
+    >
+      <RecruitItemClientList recruitments={data?.recruitments} />
+    </Suspense>
   );
 }
+
+export default RecruitItemList;

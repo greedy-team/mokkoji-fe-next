@@ -1,35 +1,51 @@
 'use client';
 
-import { useId, useMemo, useRef } from 'react';
+import { useId, useMemo, useRef, useState, useEffect } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
-import { Session } from 'next-auth';
+import { Recruitment } from '../model/type';
 
 interface RecruitItemClientListProps {
-  recruitments: any[];
-  session?: Session;
+  recruitments: Recruitment[];
 }
 
 export default function RecruitItemClientList({
   recruitments,
-  session,
 }: RecruitItemClientListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const id = useId();
 
-  // ===== 레이아웃 상수 =====
-  const COLUMNS = 3 as const;
-  const CARD_HEIGHT = 150; // 카드 고정 높이(px) - 필요시 조정
-  const GAP_X = 16; // 열(가로) 간격
-  const GAP_Y = 30; // 행(세로) 간격
-  const ROW_PAD_Y = 8; // 행 상/하 패딩
-  // rowHeight = 카드높이 + 상/하 패딩 + (행 간격)
-  const ROW_HEIGHT = CARD_HEIGHT + ROW_PAD_Y * 2 + GAP_Y;
+  // ===== 반응형 컬럼 계산 =====
+  const [columns, setColumns] = useState(3);
+  const [cardHeight, setCardHeight] = useState(160);
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 640) {
+        setColumns(1); // 모바일 (sm 미만)
+        setCardHeight(120);
+      } else if (window.innerWidth < 1024) {
+        setColumns(2); // 태블릿 (md~lg)
+        setCardHeight(120);
+      } else {
+        setColumns(3); // 데스크탑
+        setCardHeight(160);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const GAP_X = 16;
+  const GAP_Y = 30;
+  const ROW_PAD_Y = 8;
+  const ROW_HEIGHT = cardHeight + ROW_PAD_Y * 2 + GAP_Y;
 
   const rowCount = useMemo(
-    () => Math.ceil(recruitments.length / COLUMNS),
-    [recruitments.length],
+    () => Math.ceil((recruitments?.length ?? 0) / columns),
+    [recruitments, columns],
   );
 
   const rowVirtualizer = useWindowVirtualizer({
@@ -40,13 +56,7 @@ export default function RecruitItemClientList({
   });
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'relative',
-        width: '100%',
-      }}
-    >
+    <div ref={containerRef} className="relative w-full">
       <div
         style={{
           height: rowVirtualizer.getTotalSize(),
@@ -55,8 +65,8 @@ export default function RecruitItemClientList({
         }}
       >
         {rowVirtualizer.getVirtualItems().map((vr) => {
-          const startIndex = vr.index * COLUMNS;
-          const rowItems = recruitments.slice(startIndex, startIndex + COLUMNS);
+          const startIndex = vr.index * columns;
+          const rowItems = recruitments.slice(startIndex, startIndex + columns);
 
           return (
             <div
@@ -69,7 +79,7 @@ export default function RecruitItemClientList({
                 width: '100%',
                 transform: `translateY(${vr.start}px)`,
                 display: 'grid',
-                gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))`,
+                gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
                 columnGap: GAP_X,
                 rowGap: GAP_Y,
                 padding: `${ROW_PAD_Y}px 8px`,
@@ -80,7 +90,7 @@ export default function RecruitItemClientList({
                 <Link
                   key={item.id}
                   href={`/recruit/${item.id}`}
-                  style={{ display: 'block', height: CARD_HEIGHT }}
+                  style={{ display: 'block', height: cardHeight }}
                 >
                   <div style={{ height: '100%' }}>
                     <RecruitItem
@@ -93,19 +103,13 @@ export default function RecruitItemClientList({
                       logo={item.club.logo}
                       clubId={String(item.club.id)}
                       status={item.status}
-                      session={session}
                     />
                   </div>
                 </Link>
               ))}
-
-              {/* 마지막 행 채우기(3개 미만일 때 높이 유지) */}
-              {rowItems.length < COLUMNS &&
-                Array.from({ length: COLUMNS - rowItems.length }).map(() => (
-                  <div
-                    key={`${id}-${vr.index}`}
-                    style={{ height: CARD_HEIGHT }}
-                  />
+              {rowItems.length < columns &&
+                Array.from({ length: columns - rowItems.length }).map(() => (
+                  <div key={id} style={{ height: cardHeight }} />
                 ))}
             </div>
           );

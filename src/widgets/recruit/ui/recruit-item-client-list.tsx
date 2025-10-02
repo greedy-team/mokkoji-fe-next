@@ -1,6 +1,13 @@
 'use client';
 
-import { useId, useMemo, useRef, useState, useEffect } from 'react';
+import {
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
@@ -20,7 +27,7 @@ export default function RecruitItemClientList({
   const [columns, setColumns] = useState(3);
   const [cardHeight, setCardHeight] = useState(160);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleResize() {
       if (window.innerWidth < 640) {
         setColumns(1); // 모바일 (sm 미만)

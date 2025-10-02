@@ -1,6 +1,11 @@
 import RecruitPage from '@/views/recruit/ui/recruit-page';
+import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 
-function Page({ searchParams }: { searchParams: RecruitItemListProps }) {
+function Page({
+  searchParams,
+}: {
+  searchParams: Promise<RecruitmentSearchParams>;
+}) {
   return <RecruitPage searchParams={searchParams} />;
 }
 

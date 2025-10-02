@@ -11,7 +11,7 @@ interface ClubItemProps {
   logo?: string;
   category?: string;
   clubId: string;
-  session?: Session;
+  session: Session | null;
 }
 
 function ClubItem({

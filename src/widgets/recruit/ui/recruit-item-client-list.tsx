@@ -1,24 +1,20 @@
 'use client';
 
-import {
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-} from 'react';
+import { useId, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
 import RecruitItem from '@/entities/recruit/ui/recruit-item';
+import { Session } from 'next-auth';
 import { Recruitment } from '../model/type';
 
 interface RecruitItemClientListProps {
   recruitments: Recruitment[];
+  session?: Session | nu;
 }
 
 export default function RecruitItemClientList({
   recruitments,
+  session,
 }: RecruitItemClientListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const id = useId();
@@ -110,6 +106,7 @@ export default function RecruitItemClientList({
                       logo={item.club.logo}
                       clubId={String(item.club.id)}
                       status={item.status}
+                      session={session}
                     />
                   </div>
                 </Link>

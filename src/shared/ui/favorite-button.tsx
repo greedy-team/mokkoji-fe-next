@@ -12,7 +12,7 @@ interface FavoriteButtonProps {
   isFavorite: boolean;
   clubId: string;
   customClass?: string;
-  session?: Session;
+  session: Session | null;
 }
 
 function FavoriteButton({
@@ -27,14 +27,17 @@ function FavoriteButton({
     () =>
       throttle(async () => {
         if (!session) {
+          console.log('로그인 후 이용하실 수 있습니다.');
           toast.dismiss();
           toast.error('로그인 후 이용하실 수 있습니다.');
           return;
         }
         try {
           if (!favorite) {
+            console.log('즐겨찾기 추가');
             await postFavorite(Number(clubId));
           } else {
+            console.log('즐겨찾기 삭제');
             await deleteFavorite(Number(clubId));
           }
           setFavorite((prev) => !prev);

@@ -19,16 +19,13 @@ function ItemListSkeletonLoading({
     Math.min(size, SkeletonList.length),
   );
   return (
-    <>
-      <SectionHeader title={title} description={description} />
-      <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {splicedSkeletonList.map((item) => (
-          <li key={item} className="w-full">
-            <ClubItemSkeleton />
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {splicedSkeletonList.map((item) => (
+        <li key={item} className="w-full">
+          <ClubItemSkeleton />
+        </li>
+      ))}
+    </ul>
   );
 }
 

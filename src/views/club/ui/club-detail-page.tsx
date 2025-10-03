@@ -5,14 +5,12 @@ import { DetailParams } from '@/shared/model/type';
 import getParams from '@/shared/util/getParams';
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
-import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
   const data = await getClubDetail(id);
 
-  const session = await auth();
   if (data?.status === 404 || !data.data) {
     notFound();
   }
@@ -33,7 +31,6 @@ async function ClubDetailPage({ params }: DetailParams) {
         isFavorite={data.data.isFavorite}
         logo={data.data.logo}
         status={data.data.status}
-        session={session}
       />
       {data.data.description ? (
         <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">

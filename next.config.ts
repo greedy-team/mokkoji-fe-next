@@ -40,6 +40,9 @@ let nextConfig: NextConfig = {
         /\/api\/auth\/session/, // NextAuth 세션 체크 무시
       ],
     },
+    fetches: {
+      fullUrl: true,
+    },
   },
 };
 

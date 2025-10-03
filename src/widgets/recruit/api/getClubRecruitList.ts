@@ -42,8 +42,6 @@ async function getClubRecruitList({
       response = await serverApi
         .get('recruitments', {
           searchParams,
-          cache: 'force-cache',
-          next: { revalidate: 300, tags: ['recruitments'] },
         })
         .json();
     }

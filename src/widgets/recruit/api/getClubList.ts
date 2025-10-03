@@ -41,8 +41,6 @@ async function getClubList(params: GetRecruitListParams) {
       response = await serverApi
         .get('clubs', {
           searchParams,
-          cache: 'force-cache',
-          next: { revalidate: 300, tags: ['clubs'] },
         })
         .json<ApiResponse<ClubList>>();
     }

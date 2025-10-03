@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface HeaderLoginProps {
   userName: string;
@@ -16,6 +16,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   const handleMouseEnter = () => {
     if (hideTimerRef.current) {

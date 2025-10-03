@@ -5,16 +5,14 @@ import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
 import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
-import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await getParams({ params });
 
-  const [getClubManageInfoRes, data, session] = await Promise.all([
+  const [getClubManageInfoRes, data] = await Promise.all([
     getClubManageInfo(),
     getRecruitDetail(id),
-    auth(),
   ]);
 
   if (data?.status === 404 || !data.data) {
@@ -43,7 +41,6 @@ async function RecruitDetailPage({ params }: DetailParams) {
         createdAt={data.data.createdAt}
         logo={data.data.logo}
         status={data.data.status}
-        session={session}
       />
       <RecruitDetailWidget
         isManageClub={isManageClub}

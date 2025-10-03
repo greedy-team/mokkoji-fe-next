@@ -3,11 +3,12 @@ import RecruitItemList from '@/widgets/recruit/ui/recruit-item-list';
 import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
+import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 
 async function RecruitPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; size?: string; category?: string }>;
+  searchParams: Promise<RecruitmentSearchParams>;
 }) {
   return (
     <>

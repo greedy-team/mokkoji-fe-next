@@ -1,22 +1,36 @@
 import { ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { auth } from '@/auth';
+import { headers } from 'next/headers';
+import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 import RecruitItemClientList from './recruit-item-client-list';
 import getClubRecruitList from '../api/getClubRecruitList';
+
+function getInitialLayout(userAgent: string) {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+  const isTablet =
+    /iPad|Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
+
+  if (isMobile) return { columns: 1, cardHeight: 140 };
+  if (isTablet) return { columns: 2, cardHeight: 140 };
+  return { columns: 3, cardHeight: 198 };
+}
 
 async function RecruitItemList({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; size?: string; category?: string }>;
+  searchParams: Promise<RecruitmentSearchParams>;
 }) {
   const params = await searchParams;
+
+  const headersList = headers();
+  const userAgent = (await headersList).get('user-agent') || '';
+  const { columns, cardHeight } = getInitialLayout(userAgent);
 
   const res = await getClubRecruitList({
     page: Number(params.page || 1),
     size: Number(params.size || 1000),
     category: params.category?.toUpperCase() as ClubCategory,
   });
-  const session = await auth();
 
   if (!res.ok || !res.data) {
     return <ErrorBoundaryUi />;
@@ -33,7 +47,8 @@ async function RecruitItemList({
   return (
     <RecruitItemClientList
       recruitments={res.data?.recruitments}
-      session={session}
+      initialColumns={columns}
+      initialCardHeight={cardHeight}
     />
   );
 }

@@ -31,7 +31,6 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
-    "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-virtual": "^3.13.12",
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",

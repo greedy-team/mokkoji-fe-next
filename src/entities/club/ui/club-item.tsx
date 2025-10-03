@@ -2,7 +2,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FavoriteButton from '@/shared/ui/favorite-button';
-import { Session } from 'next-auth';
 
 interface ClubItemProps {
   title: string;

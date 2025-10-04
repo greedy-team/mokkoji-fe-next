@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ci-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - uses: pnpm/action-setup@v2
+        with: { version: 10 }
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm run lint --if-present
+      - run: pnpm run typecheck --if-present
+      - run: pnpm run test --if-present
+      - run: pnpm run build

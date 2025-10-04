@@ -34,7 +34,7 @@ jobs:
             set -e
 
             APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            BRANCH="dev"
+            BRANCH="develop"
             APP_NAME="mokkoji-dev"
             PORT=3001
 

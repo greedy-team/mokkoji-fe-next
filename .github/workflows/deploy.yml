@@ -6,13 +6,14 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: dev or prod
+        description: 'Choose environment (dev or prod)'
         required: true
-        default: dev
+        default: 'dev'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -21,53 +22,78 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
+          envs: |
+            GITHUB_EVENT_NAME=${{ github.event_name }}
+            GITHUB_INPUT_ENV=${{ github.event.inputs.env }}
+            NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+            NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+            NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
+            NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
           script: |
             set -e
+
             APP_DIR="/var/www/mokkoji"
 
-            # main에 push면 prod, 수동은 입력값
-            if [ "${{ github.event_name }}" = "push" ]; then
+            # Determine target environment
+            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
               TARGET_ENV="prod"
             else
-              TARGET_ENV="${{ github.event.inputs.env }}"
+              TARGET_ENV="$GITHUB_INPUT_ENV"
             fi
 
+            echo "🔧 Deploying environment: $TARGET_ENV"
+
             if [ "$TARGET_ENV" = "prod" ]; then
-              BRANCH="main"; APP_NAME="mokkoji-prod"; PORT=3000
-              API_URL="${{ secrets.NEXT_PUBLIC_API_URL_PROD }}"
-              NODE_ENV="production"; SENTRY="true"
+              BRANCH="main"
+              APP_NAME="mokkoji-prod"
+              PORT=3000
+              API_URL="$NEXT_PUBLIC_API_URL_PROD"
+              NODE_ENV="production"
+              SENTRY="true"
             else
-              BRANCH="dev";  APP_NAME="mokkoji-dev";  PORT=3001
-              API_URL="${{ secrets.NEXT_PUBLIC_API_URL_DEV }}"
-              NODE_ENV="development"; SENTRY="false"
+              BRANCH="dev"
+              APP_NAME="mokkoji-dev"
+              PORT=3001
+              API_URL="$NEXT_PUBLIC_API_URL_DEV"
+              NODE_ENV="development"
+              SENTRY="false"
             fi
 
             export PNPM_HOME="$HOME/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"
 
             cd "$APP_DIR"
+            echo "📦 Fetching latest code from branch: $BRANCH"
             git fetch --all
             git checkout "$BRANCH"
             git pull --ff-only
 
-            cat > .env.local <<EOF
-NEXT_PUBLIC_API_URL=$API_URL
-NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
-NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
-NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
-NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+            echo "📝 Writing .env.local ..."
+            cat > .env.local <<'EOF'
+NEXT_PUBLIC_API_URL='"$API_URL"'
+NEXT_PUBLIC_SENTRY_DSN='"$NEXT_PUBLIC_SENTRY_DSN"'
+NEXT_PUBLIC_SENTRY_REPLAY_DSN='"$NEXT_PUBLIC_SENTRY_REPLAY_DSN"'
+NEXT_PUBLIC_CLARITY_ID='"$NEXT_PUBLIC_CLARITY_ID"'
+NEXTAUTH_SECRET='"$NEXTAUTH_SECRET"'
+DISCORD_WEBHOOK_URL='"$DISCORD_WEBHOOK_URL"'
+NEXT_PUBLIC_S3_DOMAIN='"$NEXT_PUBLIC_S3_DOMAIN"'
 EOF
 
             if command -v pnpm >/dev/null 2>&1; then
-              pnpm i --frozen-lockfile --prefer-offline
+              echo "🚀 Using pnpm"
+              pnpm install --frozen-lockfile --prefer-offline
               pnpm build
               pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
             else
+              echo "🚀 Using npm"
               npm ci
               npm run build
               pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
             fi
 
             pm2 save
+            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"

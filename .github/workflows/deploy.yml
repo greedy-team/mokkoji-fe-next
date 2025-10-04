@@ -18,7 +18,7 @@ jobs:
           NEXT_PUBLIC_CLARITY_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}
 
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -46,7 +46,7 @@ jobs:
 
             echo "🚀 Starting production deployment..."
 
-            APP_DIR="/home/ubuntu/mokkoji-fe"
+            APP_DIR="/home/ubuntu/mokkoji-fe-prod"
             BRANCH="main"
             APP_NAME="mokkoji-prod"
             PORT=3000

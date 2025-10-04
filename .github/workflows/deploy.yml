@@ -89,7 +89,7 @@ jobs:
 
             echo "✅ .env.local written successfully ($(wc -l < "$ENV_FILE") lines)"
 
-            # 빌드 및 실행 (pnpm 고정)
+            # 빌드 및 실행
             echo "📦 Using pnpm..."
             export PNPM_HOME="$HOME/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"

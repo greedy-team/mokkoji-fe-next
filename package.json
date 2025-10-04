@@ -9,7 +9,6 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint ./**/*.{ts,tsx} --cache --fix",
-    "typecheck": "tsc --noEmit",
     "um": "concurrently -k -n \"🟦 NEXT,📘 STORYBOOK\" -c \"cyan.bold,magenta.bold\" \"next dev\" \"storybook dev -p 6006\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

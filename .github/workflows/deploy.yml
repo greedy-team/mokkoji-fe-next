@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: "Choose environment (dev or prod)"
+        description: 'Choose environment (dev or prod)'
         required: true
-        default: "dev"
+        default: 'dev'
 
 jobs:
   deploy:
@@ -22,20 +22,21 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: |
-            GITHUB_EVENT_NAME=${{ github.event_name }}
-            GITHUB_INPUT_ENV=${{ github.event.inputs.env }}
-            NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
-            NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
-            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-            NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
-            NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
-            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-            DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
-            NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+          debug: true
+          envs: GITHUB_EVENT_NAME,GITHUB_INPUT_ENV,NEXT_PUBLIC_API_URL_PROD,NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_INPUT_ENV: ${{ github.event.inputs.env }}
+          NEXT_PUBLIC_API_URL_PROD: ${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+          NEXT_PUBLIC_API_URL_DEV: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_REPLAY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+          NEXT_PUBLIC_CLARITY_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
           script: |
-            set -e
-            set -x
+            set -ex
 
             echo "=== START DEPLOYMENT ==="
             echo "EVENT: $GITHUB_EVENT_NAME"
@@ -74,13 +75,13 @@ jobs:
             export PATH="$PNPM_HOME:$PATH"
 
             cd "$APP_DIR"
-            echo "Fetching latest code..."
-            git fetch --all
-            git checkout "$BRANCH"
-            git pull --ff-only
+            echo "📦 Fetching latest code from branch: $BRANCH"
+            git fetch --all --prune
+            git checkout "$BRANCH" || git checkout -b "$BRANCH" "origin/$BRANCH"
+            git reset --hard "origin/$BRANCH"
 
-            echo "Writing .env.local..."
-            cat <<EOF > .env.local
+            echo "📝 Writing .env.local ..."
+            cat > .env.local << 'EOF'
 NEXT_PUBLIC_API_URL=$API_URL
 NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN
@@ -89,21 +90,45 @@ NEXTAUTH_SECRET=$NEXTAUTH_SECRET
 DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
 NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN
 EOF
-
-            echo ".env.local contents:"
+            
+            # 환경 변수 실제 값으로 치환
+            sed -i "s|\$API_URL|$API_URL|g" .env.local
+            sed -i "s|\$NEXT_PUBLIC_SENTRY_DSN|$NEXT_PUBLIC_SENTRY_DSN|g" .env.local
+            sed -i "s|\$NEXT_PUBLIC_SENTRY_REPLAY_DSN|$NEXT_PUBLIC_SENTRY_REPLAY_DSN|g" .env.local
+            sed -i "s|\$NEXT_PUBLIC_CLARITY_ID|$NEXT_PUBLIC_CLARITY_ID|g" .env.local
+            sed -i "s|\$NEXTAUTH_SECRET|$NEXTAUTH_SECRET|g" .env.local
+            sed -i "s|\$DISCORD_WEBHOOK_URL|$DISCORD_WEBHOOK_URL|g" .env.local
+            sed -i "s|\$NEXT_PUBLIC_S3_DOMAIN|$NEXT_PUBLIC_S3_DOMAIN|g" .env.local
+            
+            echo "Generated .env.local:"
             cat .env.local
 
             if command -v pnpm >/dev/null 2>&1; then
-              echo "Using pnpm"
-              pnpm install --frozen-lockfile --prefer-offline || { echo "pnpm install failed"; exit 1; }
-              pnpm build || { echo "pnpm build failed"; exit 1; }
-              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
+              echo "🚀 Using pnpm"
+              pnpm install --frozen-lockfile --prefer-offline
+              pnpm build
+              
+              # PM2 프로세스 관리 개선
+              if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+                echo "Restarting existing PM2 process: $APP_NAME"
+                pm2 restart "$APP_NAME"
+              else
+                echo "Starting new PM2 process: $APP_NAME"
+                pm2 start npm --name "$APP_NAME" -- start -- -p "$PORT"
+              fi
             else
-              echo "Using npm"
-              npm ci || { echo "npm ci failed"; exit 1; }
-              npm run build || { echo "npm build failed"; exit 1; }
-              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
+              echo "🚀 Using npm"
+              npm ci
+              npm run build
+              
+              if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+                echo "Restarting existing PM2 process: $APP_NAME"
+                pm2 restart "$APP_NAME"
+              else
+                echo "Starting new PM2 process: $APP_NAME"
+                pm2 start npm --name "$APP_NAME" -- start -- -p "$PORT"
+              fi
             fi
 
             pm2 save
-            echo "=== DEPLOYMENT COMPLETE for $APP_NAME ($TARGET_ENV) ==="
+            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"

@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       cmd:
-        description: "start | stop | restart | deploy"
+        description: 'start | stop | restart | deploy'
         required: true
-        default: "start"
+        default: 'start'
 
 jobs:
   dev:
@@ -19,18 +19,19 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
+          envs: |
+            WORK_DIR=${{ secrets.WORK_DIR || '/var/www/mokkoji' }}
+            CMD=${{ github.event.inputs.cmd }}
           script: |
             set -e
 
-            WORK_DIR="${{ secrets.WORK_DIR:-/var/www/mokkoji }}"
             cd "$WORK_DIR"
 
-            if [ "${{ github.event.inputs.cmd }}" = "start" ]; then
+            if [ "$CMD" = "start" ]; then
               git fetch --all
               git checkout dev
               git pull --ff-only
 
-              # 패키지 설치 & 빌드
               if command -v pnpm >/dev/null 2>&1; then
                 pnpm i --frozen-lockfile
                 pnpm build
@@ -42,18 +43,16 @@ jobs:
               fi
 
               pm2 save
-              # (옵션) 일정 시간 뒤 자동 종료하고 싶다면:
-              # nohup sh -c "sleep 14400; pm2 stop mokkoji-dev && pm2 delete mokkoji-dev && pm2 save" >/dev/null 2>&1 &
 
-            elif [ "${{ github.event.inputs.cmd }}" = "stop" ]; then
+            elif [ "$CMD" = "stop" ]; then
               pm2 stop mokkoji-dev || true
               pm2 delete mokkoji-dev || true
               pm2 save || true
 
-            elif [ "${{ github.event.inputs.cmd }}" = "restart" ]; then
+            elif [ "$CMD" = "restart" ]; then
               pm2 restart mokkoji-dev
 
-            elif [ "${{ github.event.inputs.cmd }}" = "deploy" ]; then
+            elif [ "$CMD" = "deploy" ]; then
               git fetch --all
               git checkout dev
               git pull --ff-only
@@ -69,6 +68,8 @@ jobs:
               fi
 
               pm2 save
+
             else
-              echo "Unknown cmd"; exit 1
+              echo "Unknown cmd: $CMD"
+              exit 1
             fi

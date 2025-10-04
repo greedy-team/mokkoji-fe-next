@@ -45,8 +45,8 @@ jobs:
 
             echo ""
             echo "=== Git repo check ==="
-            if [ -d "/home/ubuntu/mokkoji" ]; then
-              cd /home/ubuntu/mokkoji
+            if [ -d "/var/www/mokkoji" ]; then
+              cd /var/www/mokkoji
               echo "Directory exists!"
               pwd
               echo ""
@@ -59,7 +59,7 @@ jobs:
               echo "Current branch:"
               git branch --show-current || echo "Cannot determine current branch"
             else
-              echo "/home/ubuntu/mokkoji does not exist!"
+              echo "/var/www/mokkoji does not exist!"
               echo "Searching for mokkoji directories..."
               find /home -name "*mokkoji*" -type d 2>/dev/null || echo "No mokkoji directories found"
             fi

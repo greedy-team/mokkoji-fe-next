@@ -46,8 +46,8 @@ let nextConfig: NextConfig = {
   },
 };
 
-// Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용
-if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
+// Sentry 설정은 프로덕션일 때만 적용
+if (process.env.NEXT_PUBLIC_NODE_ENV === 'production') {
   nextConfig = withSentryConfig(nextConfig, {
     // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
     org: 'sejong',

@@ -16,34 +16,70 @@ jobs:
 
     steps:
       - name: Deploy via SSH
+        # 러너 환경 변수에 먼저 값을 정의 (Secrets/Context → env)
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_INPUT_ENV: ${{ github.event.inputs.env }}
+          NEXT_PUBLIC_API_URL_PROD: ${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+          NEXT_PUBLIC_API_URL_DEV: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_REPLAY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+          NEXT_PUBLIC_CLARITY_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
+          # 원격으로 전달할 "변수 이름"만 나열
           envs: GITHUB_EVENT_NAME,GITHUB_INPUT_ENV,NEXT_PUBLIC_API_URL_PROD,NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
           script: |
             set -e
-            set -x
+
+            # 필수 변수 비어있으면 즉시 실패
+            require_var() {
+              var="$1"
+              # POSIX 호환: eval로 값 읽기
+              eval val="\${$var}"
+              if [ -z "$val" ]; then
+                echo "ERROR: required env '$var' is empty or unset" >&2
+                exit 1
+              fi
+            }
 
             APP_DIR="/home/ubuntu/mokkoji-fe"
 
+            # 입력 없으면 prod 기본
             TARGET_ENV="${GITHUB_INPUT_ENV:-prod}"
 
             if [ "$TARGET_ENV" = "prod" ]; then
               BRANCH="main"
               APP_NAME="mokkoji-prod"
               PORT=3000
+              require_var NEXT_PUBLIC_API_URL_PROD
               API_URL="$NEXT_PUBLIC_API_URL_PROD"
               NODE_ENV="production"
             else
               BRANCH="dev"
               APP_NAME="mokkoji-dev"
               PORT=3001
+              require_var NEXT_PUBLIC_API_URL_DEV
               API_URL="$NEXT_PUBLIC_API_URL_DEV"
               NODE_ENV="development"
             fi
+
+            # 공통 필수 값 검증
+            require_var NEXT_PUBLIC_SENTRY_DSN
+            require_var NEXT_PUBLIC_SENTRY_REPLAY_DSN
+            require_var NEXT_PUBLIC_CLARITY_ID
+            require_var NEXTAUTH_SECRET
+            require_var DISCORD_WEBHOOK_URL
+            require_var NEXT_PUBLIC_S3_DOMAIN
+            require_var API_URL
 
             cd "$APP_DIR"
             git fetch --all
@@ -51,19 +87,7 @@ jobs:
             git pull --ff-only
 
             ENV_FILE="$APP_DIR/.env.local"
-            rm -f "$ENV_FILE"
-            touch "$ENV_FILE"
-
-            echo "NEXT_PUBLIC_API_URL=$API_URL" >> "$ENV_FILE"
-            echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> "$ENV_FILE"
-            echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN" >> "$ENV_FILE"
-            echo "NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID" >> "$ENV_FILE"
-            echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> "$ENV_FILE"
-            echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
-            echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
-
-            echo "✅ Generated .env.local content:"
-            cat "$ENV_FILE"
+            : > "$ENV_FILE"  # truncate
 
             if command -v pnpm >/dev/null 2>&1; then
               pnpm install --frozen-lockfile --prefer-offline
@@ -76,4 +100,3 @@ jobs:
             fi
 
             pm2 save
-            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"

@@ -1,8 +1,14 @@
-name: Deploy (Prod Only)
+name: Deploy
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Choose environment (dev or prod)'
+        required: true
+        default: 'dev'
 
 jobs:
   deploy:
@@ -16,29 +22,28 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: |
-            NEXT_PUBLIC_API_URL_PROD="${{ secrets.NEXT_PUBLIC_API_URL_PROD }}"
-            NEXT_PUBLIC_SENTRY_DSN="${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}"
-            NEXT_PUBLIC_SENTRY_REPLAY_DSN="${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}"
-            NEXT_PUBLIC_CLARITY_ID="${{ secrets.NEXT_PUBLIC_CLARITY_ID }}"
-            NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}"
-            DISCORD_WEBHOOK_URL="${{ secrets.DISCORD_WEBHOOK_URL }}"
-            NEXT_PUBLIC_S3_DOMAIN="${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}"
+          envs: GITHUB_EVENT_NAME,GITHUB_INPUT_ENV,NEXT_PUBLIC_API_URL_PROD,NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
           script: |
             set -e
             set -x
 
-            echo "=== START PROD DEPLOYMENT ==="
-
             APP_DIR="/home/ubuntu/mokkoji-fe"
-            BRANCH="main"
-            APP_NAME="mokkoji-prod"
-            PORT=3000
-            API_URL="$NEXT_PUBLIC_API_URL_PROD"
-            NODE_ENV="production"
 
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
+            TARGET_ENV="${GITHUB_INPUT_ENV:-prod}"
+
+            if [ "$TARGET_ENV" = "prod" ]; then
+              BRANCH="main"
+              APP_NAME="mokkoji-prod"
+              PORT=3000
+              API_URL="$NEXT_PUBLIC_API_URL_PROD"
+              NODE_ENV="production"
+            else
+              BRANCH="dev"
+              APP_NAME="mokkoji-dev"
+              PORT=3001
+              API_URL="$NEXT_PUBLIC_API_URL_DEV"
+              NODE_ENV="development"
+            fi
 
             cd "$APP_DIR"
             git fetch --all
@@ -57,7 +62,7 @@ jobs:
             echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
             echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
 
-            echo ".env.local created:"
+            echo "✅ Generated .env.local content:"
             cat "$ENV_FILE"
 
             if command -v pnpm >/dev/null 2>&1; then
@@ -71,4 +76,4 @@ jobs:
             fi
 
             pm2 save
-            echo "=== PROD DEPLOYMENT COMPLETE ==="
+            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"

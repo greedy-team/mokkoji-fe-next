@@ -1,97 +1,81 @@
-name: Deploy
+name: Debug Deploy
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
-    inputs:
-      env:
-        description: 'Choose environment (dev or prod)'
-        required: true
-        default: 'dev'
 
 jobs:
-  deploy:
+  debug:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
+      - name: Debug SSH Connection
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          envs: |
-            GITHUB_EVENT_NAME=${{ github.event_name }}
-            GITHUB_INPUT_ENV=${{ github.event.inputs.env }}
-            NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
-            NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
-            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-            NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
-            NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
-            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-            DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
-            NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+          debug: true
           script: |
-            set -e
+            set -ex
 
-            APP_DIR="/home/ubuntu/mokkoji-fe"
+            echo "=== System Info ==="
+            whoami
+            pwd
+            hostname
 
-            # Determine target environment
-            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-              TARGET_ENV="prod"
+            echo ""
+            echo "=== Checking directories ==="
+            ls -la /var/www/ || echo "/var/www/ not found"
+            ls -la /home/ || echo "Cannot list /home/"
+
+            echo ""
+            echo "=== Checking commands ==="
+            which git || echo "git not found"
+            which node || echo "node not found"
+            which npm || echo "npm not found"
+            which pnpm || echo "pnpm not found"
+            which pm2 || echo "pm2 not found"
+
+            echo ""
+            echo "=== Node/NPM versions ==="
+            node --version || echo "node not available"
+            npm --version || echo "npm not available"
+            pnpm --version || echo "pnpm not available"
+            pm2 --version || echo "pm2 not available"
+
+            echo ""
+            echo "=== Git repo check ==="
+            if [ -d "/home/ubuntu/mokkoji" ]; then
+              cd /home/ubuntu/mokkoji
+              echo "Directory exists!"
+              pwd
+              echo ""
+              echo "Git status:"
+              git status || echo "Not a git repository"
+              echo ""
+              echo "Git branches:"
+              git branch -a || echo "Cannot list branches"
+              echo ""
+              echo "Current branch:"
+              git branch --show-current || echo "Cannot determine current branch"
             else
-              TARGET_ENV="$GITHUB_INPUT_ENV"
+              echo "/home/ubuntu/mokkoji does not exist!"
+              echo "Searching for mokkoji directories..."
+              find /home -name "*mokkoji*" -type d 2>/dev/null || echo "No mokkoji directories found"
             fi
 
-            echo "🔧 Deploying environment: $TARGET_ENV"
+            echo ""
+            echo "=== PM2 status ==="
+            pm2 list || echo "PM2 not running or no processes"
 
-            if [ "$TARGET_ENV" = "prod" ]; then
-              BRANCH="main"
-              APP_NAME="mokkoji-prod"
-              PORT=3000
-              API_URL="$NEXT_PUBLIC_API_URL_PROD"
-              NODE_ENV="production"
-            else
-              BRANCH="dev"
-              APP_NAME="mokkoji-dev"
-              PORT=3001
-              API_URL="$NEXT_PUBLIC_API_URL_DEV"
-              NODE_ENV="development"
-            fi
+            echo ""
+            echo "=== Environment variables ==="
+            env | grep -i node || echo "No NODE env vars"
+            env | grep -i path || echo "No PATH env vars"
 
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
+            echo ""
+            echo "=== Disk space ==="
+            df -h
 
-            cd "$APP_DIR"
-            echo "📦 Fetching latest code from branch: $BRANCH"
-            git fetch --all
-            git checkout "$BRANCH"
-            git pull --ff-only
-
-            echo "📝 Writing .env.local ..."
-            cat > .env.local <<EOF
-NEXT_PUBLIC_API_URL=$API_URL
-NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
-NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN
-NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID
-NEXTAUTH_SECRET=$NEXTAUTH_SECRET
-DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
-NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN
-EOF
-
-            if command -v pnpm >/dev/null 2>&1; then
-              echo "🚀 Using pnpm"
-              pnpm install --frozen-lockfile --prefer-offline
-              pnpm build
-              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
-            else
-              echo "🚀 Using npm"
-              npm ci
-              npm run build
-              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
-            fi
-
-            pm2 save
-            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"
+            echo ""
+            echo "=== Debug complete ==="

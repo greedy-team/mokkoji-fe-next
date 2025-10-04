@@ -22,7 +22,7 @@ jobs:
           script: |
             set -e
 
-            WORK_DIR="${{ secrets.WORK_DIR:-/home/ubuntu/mokkoji }}"
+            WORK_DIR="/home/ubuntu/mokkoji-fe"
             cd "$WORK_DIR"
 
             if [ "${{ github.event.inputs.cmd }}" = "start" ]; then
@@ -34,11 +34,11 @@ jobs:
               if command -v pnpm >/dev/null 2>&1; then
                 pnpm i --frozen-lockfile
                 pnpm build
-                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
+                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start npm --name mokkoji-dev -- start -- -p 3001
               else
                 npm ci
                 npm run build
-                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
+                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start npm --name mokkoji-dev -- run start -- -p 3001
               fi
 
               pm2 save
@@ -61,11 +61,11 @@ jobs:
               if command -v pnpm >/dev/null 2>&1; then
                 pnpm i --frozen-lockfile
                 pnpm build
-                pm2 restart mokkoji-dev || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
+                pm2 restart mokkoji-dev || pm2 start npm --name mokkoji-dev -- start -- -p 3001
               else
                 npm ci
                 npm run build
-                pm2 restart mokkoji-dev || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
+                pm2 restart mokkoji-dev || pm2 start npm --name mokkoji-dev -- run start -- -p 3001
               fi
 
               pm2 save

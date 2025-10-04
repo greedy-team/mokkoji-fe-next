@@ -30,7 +30,6 @@ jobs:
           script: |
             set -e
 
-            # 필수 변수 체크 함수
             require_var() {
               var="$1"
               eval val="\${$var}"
@@ -90,18 +89,17 @@ jobs:
 
             echo "✅ .env.local written successfully ($(wc -l < "$ENV_FILE") lines)"
 
-            # 빌드 및 실행
-            if command -v pnpm >/dev/null 2>&1; then
-              echo "📦 Using pnpm..."
-              pnpm install --frozen-lockfile --prefer-offline
-              pnpm build
-              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
-            else
-              echo "📦 Using npm..."
-              npm ci
-              npm run build
-              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
-            fi
+            # 빌드 및 실행 (pnpm 고정)
+            echo "📦 Using pnpm..."
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
+            pnpm install --frozen-lockfile --prefer-offline
+            pnpm build
+
+            # pm2 실행 (동일 명령어)
+            echo "🚀 Restarting app with pm2..."
+            pm2 restart "$APP_NAME" || pm2 start "pnpm exec next start -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
 
             pm2 save
             echo "🎉 Production deployment complete: $APP_NAME (port $PORT)"

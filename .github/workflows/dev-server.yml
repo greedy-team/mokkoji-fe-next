@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN_DEV
+          envs: NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
           script: |
             set -e
 
@@ -38,23 +38,13 @@ jobs:
             APP_NAME="mokkoji-dev"
             PORT=3001
 
-            require_var() {
-              var="$1"
-              eval val="\${$var}"
-              if [ -z "${val+x}" ]; then
-                echo "❌ ERROR: '$var' not set" >&2
-                exit 1
-              fi
-              if [ -z "$val" ]; then
-                echo "❌ ERROR: '$var' empty" >&2
-                exit 1
-              fi
-            }
-
-            echo "🟢 CMD: ${{ github.event.inputs.cmd }}"
+            echo "🟢 Command: ${{ github.event.inputs.cmd }}"
             CMD="${{ github.event.inputs.cmd }}"
 
-            # Start
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
+            # ✅ START
             if [ "$CMD" = "start" ]; then
               echo "🚀 Starting Dev Server..."
               cd "$APP_DIR"
@@ -62,33 +52,30 @@ jobs:
               git checkout "$BRANCH"
               git pull --ff-only
 
+              echo "📝 Writing .env.local..."
               ENV_FILE="$APP_DIR/.env.local"
               rm -f "$ENV_FILE"
               touch "$ENV_FILE"
-              {
-                echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL_DEV"
-                echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN"
-                echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN"
-                echo "NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID"
-                echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET"
-                echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
-                echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN_DEV"
-              } >> "$ENV_FILE"
+              echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL_DEV" >> "$ENV_FILE"
+              echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> "$ENV_FILE"
+              echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN" >> "$ENV_FILE"
+              echo "NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID" >> "$ENV_FILE"
+              echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> "$ENV_FILE"
+              echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
+              echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
 
-              if command -v pnpm >/dev/null 2>&1; then
-                pnpm install --frozen-lockfile --prefer-offline
-                pnpm build
-                pm2 describe "$APP_NAME" >/dev/null 2>&1 || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
-              else
-                npm ci
-                npm run build
-                pm2 describe "$APP_NAME" >/dev/null 2>&1 || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
-              fi
+              pnpm install --frozen-lockfile --prefer-offline
+              pnpm build
+
+              pm2 describe "$APP_NAME" >/dev/null 2>&1 || \
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
 
               pm2 save
               echo "✅ Dev server started (port $PORT)"
 
-            # Stop
+            # ✅ STOP
             elif [ "$CMD" = "stop" ]; then
               echo "🛑 Stopping Dev Server..."
               pm2 stop "$APP_NAME" || true
@@ -96,14 +83,19 @@ jobs:
               pm2 save || true
               echo "✅ Dev server stopped."
 
-            # Restart
+            # ✅ RESTART
             elif [ "$CMD" = "restart" ]; then
               echo "🔁 Restarting Dev Server..."
-              pm2 restart "$APP_NAME" || { echo "⚠️ Not running, starting new process..."; pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"; }
+              pm2 restart "$APP_NAME" || {
+                echo "⚠️ Not running, starting new process..."
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
+              }
               pm2 save
               echo "✅ Dev server restarted."
 
-            # Deploy
+            # ✅ DEPLOY
             elif [ "$CMD" = "deploy" ]; then
               echo "📦 Deploying latest dev build..."
               cd "$APP_DIR"
@@ -111,15 +103,12 @@ jobs:
               git checkout "$BRANCH"
               git pull --ff-only
 
-              if command -v pnpm >/dev/null 2>&1; then
-                pnpm install --frozen-lockfile --prefer-offline
-                pnpm build
-                pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
-              else
-                npm ci
-                npm run build
-                pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
-              fi
+              pnpm install --frozen-lockfile --prefer-offline
+              pnpm build
+              pm2 restart "$APP_NAME" || \
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
 
               pm2 save
               echo "✅ Dev deploy complete (branch=$BRANCH, port=$PORT)"

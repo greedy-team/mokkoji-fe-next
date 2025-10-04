@@ -25,7 +25,7 @@ export default function ErrorPage({
       <h1 className="mb-2 text-3xl font-bold text-gray-700">
         {title || defaultTitle}
       </h1>
-      <p className="mb-4 text-gray-500">{message || defaultMessage}</p>
+      <p className="mb-4 text-gray-800">{message || defaultMessage}</p>
       {showHomeButton && (
         <Link
           href="/"
@@ -34,7 +34,7 @@ export default function ErrorPage({
           홈으로 돌아가기
         </Link>
       )}
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-2xl text-gray-500">
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-2xl text-gray-800">
         {/* SVG 느낌표 아이콘 */}
         <svg
           width="20"

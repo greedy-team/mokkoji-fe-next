@@ -1,7 +1,13 @@
 import RecruitPage from '@/views/recruit/ui/recruit-page';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 
-function Page({ searchParams }: RecruitItemListProps) {
+export const revalidate = 1800;
+
+function Page({
+  searchParams,
+}: {
+  searchParams: Promise<RecruitmentSearchParams>;
+}) {
   return <RecruitPage searchParams={searchParams} />;
 }
 

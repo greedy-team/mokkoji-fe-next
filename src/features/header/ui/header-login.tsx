@@ -1,18 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
-function HeaderLogin() {
-  const { data: session, status } = useSession();
+interface HeaderLoginProps {
+  userName: string;
+}
+
+function HeaderLogin({ userName }: HeaderLoginProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   const handleMouseEnter = () => {
     if (hideTimerRef.current) {
@@ -29,16 +33,14 @@ function HeaderLogin() {
 
   return (
     <span className="absolute right-[22%] rounded-sm bg-[#F4F4F4] p-2 px-4 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
-      {status === 'authenticated' && session?.user ? (
+      {userName ? (
         <div
           className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div className="flex items-center gap-2">
-            <span className="cursor-pointer font-bold">
-              {session.user.name}님!
-            </span>
+            <span className="cursor-pointer font-bold">{userName}님!</span>
             안녕하세요
           </div>
 

@@ -95,12 +95,12 @@ jobs:
               echo "📦 Using pnpm..."
               pnpm install --frozen-lockfile --prefer-offline
               pnpm build
-              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
+              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
             else
               echo "📦 Using npm..."
               npm ci
               npm run build
-              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
+              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
             fi
 
             pm2 save

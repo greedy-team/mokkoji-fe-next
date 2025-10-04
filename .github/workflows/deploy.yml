@@ -22,7 +22,17 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: GITHUB_EVENT_NAME=${{ github.event_name }},GITHUB_INPUT_ENV=${{ github.event.inputs.env }},NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }},NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }},NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }},NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }},NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }},DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }},NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+          envs: |
+            GITHUB_EVENT_NAME=${{ github.event_name }}
+            GITHUB_INPUT_ENV=${{ github.event.inputs.env }}
+            NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+            NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+            NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
+            NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
           script: |
             set -e
 
@@ -61,15 +71,15 @@ jobs:
             git pull --ff-only
 
             echo "📝 Writing .env.local ..."
-            cat <<EOF > .env.local
-            NEXT_PUBLIC_API_URL=$API_URL
-            NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
-            NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN
-            NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID
-            NEXTAUTH_SECRET=$NEXTAUTH_SECRET
-            DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
-            NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN
-            EOF
+            cat > .env.local <<EOF
+NEXT_PUBLIC_API_URL=$API_URL
+NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN
+NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID
+NEXTAUTH_SECRET=$NEXTAUTH_SECRET
+DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
+NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN
+EOF
 
             if command -v pnpm >/dev/null 2>&1; then
               echo "🚀 Using pnpm"

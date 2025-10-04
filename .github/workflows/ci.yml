@@ -27,7 +27,7 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - run: pnpm run lint --if-present
-      - run: pnpm run typecheck --if-present
-      - run: pnpm run test --if-present
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm run test
       - run: pnpm run build

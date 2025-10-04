@@ -1,18 +1,21 @@
-name: Dev Env (Start/Stop/Deploy)
+name: Deploy
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
-      cmd:
-        description: 'start | stop | restart | deploy'
+      env:
+        description: "Choose environment (dev or prod)"
         required: true
-        default: 'start'
+        default: "dev"
 
 jobs:
-  dev:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Run SSH command
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -20,56 +23,76 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           envs: |
-            WORK_DIR=${{ secrets.WORK_DIR || '/var/www/mokkoji' }}
-            CMD=${{ github.event.inputs.cmd }}
+            GITHUB_EVENT_NAME=${{ github.event_name }}
+            GITHUB_INPUT_ENV=${{ github.event.inputs.env }}
+            NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+            NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+            NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
+            NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
           script: |
             set -e
 
-            cd "$WORK_DIR"
+            APP_DIR="/home/ubuntu/mokkoji-fe"
 
-            if [ "$CMD" = "start" ]; then
-              git fetch --all
-              git checkout dev
-              git pull --ff-only
-
-              if command -v pnpm >/dev/null 2>&1; then
-                pnpm i --frozen-lockfile
-                pnpm build
-                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
-              else
-                npm ci
-                npm run build
-                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
-              fi
-
-              pm2 save
-
-            elif [ "$CMD" = "stop" ]; then
-              pm2 stop mokkoji-dev || true
-              pm2 delete mokkoji-dev || true
-              pm2 save || true
-
-            elif [ "$CMD" = "restart" ]; then
-              pm2 restart mokkoji-dev
-
-            elif [ "$CMD" = "deploy" ]; then
-              git fetch --all
-              git checkout dev
-              git pull --ff-only
-
-              if command -v pnpm >/dev/null 2>&1; then
-                pnpm i --frozen-lockfile
-                pnpm build
-                pm2 restart mokkoji-dev || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
-              else
-                npm ci
-                npm run build
-                pm2 restart mokkoji-dev || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
-              fi
-
-              pm2 save
-
+            # Determine target environment
+            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+              TARGET_ENV="prod"
             else
-              echo "Unknown cmd: $CMD"
-              exit 1
+              TARGET_ENV="$GITHUB_INPUT_ENV"
             fi
+
+            echo "🔧 Deploying environment: $TARGET_ENV"
+
+            if [ "$TARGET_ENV" = "prod" ]; then
+              BRANCH="main"
+              APP_NAME="mokkoji-prod"
+              PORT=3000
+              API_URL="$NEXT_PUBLIC_API_URL_PROD"
+              NODE_ENV="production"
+            else
+              BRANCH="dev"
+              APP_NAME="mokkoji-dev"
+              PORT=3001
+              API_URL="$NEXT_PUBLIC_API_URL_DEV"
+              NODE_ENV="development"
+            fi
+
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
+            cd "$APP_DIR"
+            echo "📦 Fetching latest code from branch: $BRANCH"
+            git fetch --all
+            git checkout "$BRANCH"
+            git pull --ff-only
+
+            echo "📝 Writing .env.local ..."
+            # 절대 들여쓰기 하지 말 것 (YAML이 공백도 인식함)
+            cat <<EOF > .env.local
+NEXT_PUBLIC_API_URL=$API_URL
+NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN
+NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID
+NEXTAUTH_SECRET=$NEXTAUTH_SECRET
+DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
+NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN
+EOF
+
+            if command -v pnpm >/dev/null 2>&1; then
+              echo "🚀 Using pnpm"
+              pnpm install --frozen-lockfile --prefer-offline
+              pnpm build
+              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
+            else
+              echo "🚀 Using npm"
+              npm ci
+              npm run build
+              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
+            fi
+
+            pm2 save
+            echo "✅ Deployment complete for $APP_NAME ($TARGET_ENV)"

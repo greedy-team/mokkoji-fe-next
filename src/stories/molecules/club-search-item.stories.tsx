@@ -29,38 +29,6 @@ export const Default: Story = {
   },
 };
 
-export const WithCategory: Story = {
-  args: {
-    club: {
-      id: 201,
-      name: '알고리즘 연구회',
-      category: ClubCategory.ACADEMIC_CULTURAL,
-      description: '주 2회 스터디와 월 1회 알고리즘 대회 준비를 함께합니다.',
-      affiliation: ClubAffiliation.CENTRAL_CLUB,
-      recruitStartDate: '',
-      recruitEndDate: '',
-      logo: '',
-      isFavorite: undefined,
-    },
-  },
-};
-
-export const WithoutCategory: Story = {
-  args: {
-    club: {
-      id: 202,
-      name: '런앤펀',
-      category: ClubCategory.SPORTS,
-      description: '매주 토요일 오전 러닝 모임. 초보 환영!',
-      affiliation: ClubAffiliation.CENTRAL_CLUB,
-      recruitStartDate: '',
-      recruitEndDate: '',
-      logo: '',
-      isFavorite: undefined,
-    },
-  },
-};
-
 export const LongDescription: Story = {
   args: {
     club: {

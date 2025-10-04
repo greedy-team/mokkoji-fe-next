@@ -5,46 +5,44 @@ import ky from 'ky';
 import { auth } from '@/auth';
 import serverApi from './server-api';
 
-async function authAPi() {
-  return ky.create({
-    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-    hooks: {
-      beforeRequest: [
-        async (req) => {
-          if (!req.headers.get('Authorization')) {
-            const session = await auth();
-            if (!session || !session.accessToken) return req;
-            req.headers.set('Authorization', `Bearer ${session.accessToken}`);
-            return req;
-          }
-          return req;
-        },
-      ],
-      afterResponse: [
-        async (request, options, response) => {
-          if (response.status !== 401) return response;
+const api = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+  hooks: {
+    beforeRequest: [
+      async (req) => {
+        if (!req.headers.get('Authorization')) {
           const session = await auth();
-          if (!session || !session.refreshToken) return response;
+          if (session?.accessToken) {
+            req.headers.set('Authorization', `Bearer ${session.accessToken}`);
+          }
+        }
+      },
+    ],
+    afterResponse: [
+      async (request, options, response) => {
+        if (response.status !== 401) return response;
 
-          const refreshResponse = await serverApi.post('users/auth/refresh', {
-            headers: {
-              Authorization: `Bearer ${session.refreshToken}`,
-            },
-          });
-          console.log('refreshResponse!', refreshResponse);
+        const session = await auth();
+        if (!session?.refreshToken) return response;
 
-          const refreshData: { data: { accessToken: string } } =
-            await refreshResponse.json();
+        const refreshResponse = await serverApi.post('users/auth/refresh', {
+          headers: {
+            Authorization: `Bearer ${session.refreshToken}`,
+          },
+        });
 
-          request.headers.set(
-            'Authorization',
-            `Bearer ${refreshData.data.accessToken}`,
-          );
+        const refreshData: { data: { accessToken: string } } =
+          await refreshResponse.json();
 
-          return ky(request);
-        },
-      ],
-    },
-  });
-}
-export default authAPi;
+        request.headers.set(
+          'Authorization',
+          `Bearer ${refreshData.data.accessToken}`,
+        );
+
+        return ky(request, options);
+      },
+    ],
+  },
+});
+
+export default api;

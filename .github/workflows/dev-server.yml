@@ -1,0 +1,74 @@
+name: Dev Env (Start/Stop/Deploy)
+
+on:
+  workflow_dispatch:
+    inputs:
+      cmd:
+        description: "start | stop | restart | deploy"
+        required: true
+        default: "start"
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run SSH command
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+
+            WORK_DIR="${{ secrets.WORK_DIR:-/var/www/mokkoji }}"
+            cd "$WORK_DIR"
+
+            if [ "${{ github.event.inputs.cmd }}" = "start" ]; then
+              git fetch --all
+              git checkout dev
+              git pull --ff-only
+
+              # 패키지 설치 & 빌드
+              if command -v pnpm >/dev/null 2>&1; then
+                pnpm i --frozen-lockfile
+                pnpm build
+                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
+              else
+                npm ci
+                npm run build
+                pm2 describe mokkoji-dev >/dev/null 2>&1 || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
+              fi
+
+              pm2 save
+              # (옵션) 일정 시간 뒤 자동 종료하고 싶다면:
+              # nohup sh -c "sleep 14400; pm2 stop mokkoji-dev && pm2 delete mokkoji-dev && pm2 save" >/dev/null 2>&1 &
+
+            elif [ "${{ github.event.inputs.cmd }}" = "stop" ]; then
+              pm2 stop mokkoji-dev || true
+              pm2 delete mokkoji-dev || true
+              pm2 save || true
+
+            elif [ "${{ github.event.inputs.cmd }}" = "restart" ]; then
+              pm2 restart mokkoji-dev
+
+            elif [ "${{ github.event.inputs.cmd }}" = "deploy" ]; then
+              git fetch --all
+              git checkout dev
+              git pull --ff-only
+
+              if command -v pnpm >/dev/null 2>&1; then
+                pnpm i --frozen-lockfile
+                pnpm build
+                pm2 restart mokkoji-dev || pm2 start "pnpm start -- -p 3001" --name mokkoji-dev
+              else
+                npm ci
+                npm run build
+                pm2 restart mokkoji-dev || pm2 start "npm run start -- -p 3001" --name mokkoji-dev
+              fi
+
+              pm2 save
+            else
+              echo "Unknown cmd"; exit 1
+            fi

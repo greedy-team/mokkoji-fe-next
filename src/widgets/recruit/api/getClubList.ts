@@ -1,5 +1,5 @@
 import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
 import ErrorHandler from '@/shared/lib/error-message';
@@ -32,9 +32,7 @@ async function getClubList(params: GetRecruitListParams) {
   try {
     let response: ApiResponse<ClubList>;
     if (session?.accessToken) {
-      response = await (
-        await authApi()
-      )
+      response = await api
         .get('clubs', {
           searchParams,
         })
@@ -43,12 +41,10 @@ async function getClubList(params: GetRecruitListParams) {
       response = await serverApi
         .get('clubs', {
           searchParams,
-          cache: 'force-cache',
-          next: { revalidate: 300, tags: ['clubs'] },
         })
         .json<ApiResponse<ClubList>>();
     }
-    return { ok: true, message: '성공', data: response.data };
+    return { ok: true, message: '성공', data: response.data, status: 200 };
   } catch (e) {
     return ErrorHandler(e as Error);
   }

@@ -12,17 +12,26 @@
     "um": "concurrently -k -n \"🟦 NEXT,📘 STORYBOOK\" -c \"cyan.bold,magenta.bold\" \"next dev\" \"storybook dev -p 6006\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "deploy-storybook": "gh-pages -d storybook-static"
+    "deploy-storybook": "gh-pages -d storybook-static",
+    "test": "playwright test",
+    "test:storybook": "playwright test --project=Storybook-Chromium",
+    "test:chrome": "playwright test --project=Chromium",
+    "test:firefox": "playwright test --project=Firefox",
+    "test:safari": "playwright test --project=WebKit",
+    "test:ui": "playwright test --ui",
+    "test:codegen": "playwright codegen http://localhost:3000"
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.0",
     "@next/bundle-analyzer": "^15.5.0",
+    "@playwright/test": "^1.55.0",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
+    "@tanstack/react-virtual": "^3.13.12",
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -45,8 +54,9 @@
     "react-toastify": "^11.0.5",
     "require-in-the-middle": "^7.5.2",
     "tailwind-merge": "^3.3.1",
-    "to-do-pin": "0.0.30",
-    "web-vitals": "^5.1.0"
+    "to-do-pin": "0.0.37",
+    "web-vitals": "^5.1.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3.2.6",
@@ -59,6 +69,7 @@
     "@storybook/addon-onboarding": "8.6.14",
     "@storybook/blocks": "8.6.14",
     "@storybook/experimental-nextjs-vite": "8.6.14",
+    "@storybook/nextjs": "^8.6.14",
     "@storybook/react": "^8.6.14",
     "@storybook/test": "8.6.14",
     "@storybook/testing-library": "^0.2.2",

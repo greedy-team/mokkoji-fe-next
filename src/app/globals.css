@@ -325,3 +325,10 @@ html {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/*radix bug 수정 css*/
+[data-scroll-locked][data-scroll-locked] {
+  overflow: visible !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}

@@ -1,4 +1,4 @@
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import { CommentType } from '../../recruit-detail/model/type';
 
 interface CommentsResponse {
@@ -10,9 +10,7 @@ interface CommentsResponse {
 export default async function getClubDetailComments(
   clubId: number,
 ): Promise<CommentsResponse> {
-  const response = await (await authApi())
-    .get(`comments/${clubId}`)
-    .json<CommentsResponse>();
+  const response = await api.get(`comments/${clubId}`).json<CommentsResponse>();
 
   return response;
 }

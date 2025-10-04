@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';

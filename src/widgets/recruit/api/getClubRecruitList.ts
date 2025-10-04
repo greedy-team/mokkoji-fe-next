@@ -1,9 +1,5 @@
-import {
-  ApiResponse,
-  ClubAffiliation,
-  ClubCategory,
-} from '@/shared/model/type';
-import authApi from '@/shared/api/auth-api';
+import { ApiResponse, ClubCategory } from '@/shared/model/type';
+import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
@@ -37,9 +33,7 @@ async function getClubRecruitList({
   try {
     let response: ApiResponse<RecruitmentResponse>;
     if (session?.accessToken) {
-      response = await (
-        await authApi()
-      )
+      response = await api
         .get('recruitments', {
           searchParams,
         })
@@ -48,8 +42,6 @@ async function getClubRecruitList({
       response = await serverApi
         .get('recruitments', {
           searchParams,
-          cache: 'force-cache',
-          next: { revalidate: 300, tags: ['recruitments'] },
         })
         .json();
     }

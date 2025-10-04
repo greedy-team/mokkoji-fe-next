@@ -1,61 +1,73 @@
-name: CI/CD Pipeline
+name: Deploy
 
 on:
   push:
-    branches:
-      - develop
-      - main
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: dev or prod
+        required: true
+        default: dev
 
 jobs:
-  build-check:
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10 # EC2와 동일하게 맞춤
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build project
-        run: pnpm build
-
   deploy:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 20
-
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
           script: |
-            export PNPM_HOME="/home/ubuntu/.local/share/pnpm"
+            set -e
+            APP_DIR="/var/www/mokkoji"
+
+            # main에 push면 prod, 수동은 입력값
+            if [ "${{ github.event_name }}" = "push" ]; then
+              TARGET_ENV="prod"
+            else
+              TARGET_ENV="${{ github.event.inputs.env }}"
+            fi
+
+            if [ "$TARGET_ENV" = "prod" ]; then
+              BRANCH="main"; APP_NAME="mokkoji-prod"; PORT=3000
+              API_URL="${{ secrets.NEXT_PUBLIC_API_URL_PROD }}"
+              NODE_ENV="production"; SENTRY="true"
+            else
+              BRANCH="dev";  APP_NAME="mokkoji-dev";  PORT=3001
+              API_URL="${{ secrets.NEXT_PUBLIC_API_URL_DEV }}"
+              NODE_ENV="development"; SENTRY="false"
+            fi
+
+            export PNPM_HOME="$HOME/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"
 
-            cd ${{ secrets.APP_PATH }}
-            git pull origin main
-            pnpm install --frozen-lockfile
-            pnpm build
-            pm2 restart mokkoji-fe || pm2 start "pnpm start" --name mokkoji-fe --env production
+            cd "$APP_DIR"
+            git fetch --all
+            git checkout "$BRANCH"
+            git pull --ff-only
+
+            cat > .env.local <<EOF
+NEXT_PUBLIC_API_URL=$API_URL
+NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
+NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN }}
+EOF
+
+            if command -v pnpm >/dev/null 2>&1; then
+              pnpm i --frozen-lockfile --prefer-offline
+              pnpm build
+              pm2 restart "$APP_NAME" || pm2 start "pnpm start -- -p $PORT" --name "$APP_NAME"
+            else
+              npm ci
+              npm run build
+              pm2 restart "$APP_NAME" || pm2 start "npm run start -- -p $PORT" --name "$APP_NAME"
+            fi
+
+            pm2 save

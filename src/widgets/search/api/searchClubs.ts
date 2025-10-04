@@ -22,7 +22,11 @@ async function searchClubs(params: SearchClubsParams) {
       })
       .json();
 
-    return response.data.clubs;
+    return {
+      clubs: response.data?.clubs || [],
+      status: response.status,
+      ok: true,
+    };
   } catch (e) {
     return ErrorHandler(e as Error);
   }

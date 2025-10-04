@@ -20,9 +20,8 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
     data = { clubs: [] };
     login = false;
   } else {
-    try {
-      data = await getFavoriteList({ page, size });
-    } catch (error) {
+    data = await getFavoriteList({ page, size });
+    if (!data.ok || !data.data) {
       return <ErrorBoundaryUi />;
     }
     login = true;
@@ -30,16 +29,16 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
 
   return login ? (
     <>
-      <h1 className="mb-5 w-full text-2xl font-bold text-[#00E457]">
-        즐겨찾기 한 동아리 {data.pagination?.totalElements}개
+      <h1 className="mt-10 mb-5 w-full text-2xl font-bold text-[#00E457]">
+        즐겨찾기 한 동아리 {data.data?.pagination.totalElements}개
       </h1>
       <ul
         className={cn(
           'grid h-[380px] w-auto grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4',
-          data.clubs.length === 0 && 'h-auto',
+          data.data?.clubs.length === 0 && 'h-auto',
         )}
       >
-        {data.clubs.map((item) => (
+        {data.data?.clubs.map((item) => (
           <Link href={`/club/${item.id}`} key={item.id}>
             <ClubItem
               key={item.id}
@@ -49,7 +48,6 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
               category={item.category}
               isFavorite={item.isFavorite}
               logo={item.logo}
-              session={session || undefined}
             />
           </Link>
         ))}
@@ -58,11 +56,11 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       <Pagination
         page={page}
         size={size}
-        total={data.pagination?.totalElements || 1}
+        total={data.data?.pagination?.totalElements || 1}
       />
     </>
   ) : (
-    <h1 className="mb-5 text-2xl font-bold text-[#00E457]">
+    <h1 className="mt-10 mb-5 text-2xl font-bold text-[#00E457]">
       로그인 후 이용하실 수 있습니다.
     </h1>
   );

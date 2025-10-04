@@ -4,7 +4,6 @@ import RadiusTag from '@/shared/ui/radius-tag';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import Link from 'next/link';
 import ClickLogo from '@/shared/ui/click-logo';
-import { Session } from 'next-auth';
 
 interface ClubDetailHeaderProps {
   title: string;
@@ -16,7 +15,6 @@ interface ClubDetailHeaderProps {
   isFavorite?: boolean;
   logo: string;
   status: RecruitStatus;
-  session?: Session;
 }
 
 function ClubDetailHeader({
@@ -29,7 +27,6 @@ function ClubDetailHeader({
   logo,
   isFavorite,
   status,
-  session,
 }: ClubDetailHeaderProps) {
   return (
     <>
@@ -59,7 +56,6 @@ function ClubDetailHeader({
         instagram={instagram}
         clubId={clubId}
         isFavorite={isFavorite || false}
-        session={session || undefined}
       />
     </>
   );

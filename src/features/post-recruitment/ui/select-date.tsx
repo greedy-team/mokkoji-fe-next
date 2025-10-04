@@ -114,7 +114,6 @@ export default function SelectDate({
     return Number.isNaN(dt.getTime()) ? null : dt;
   };
 
-  // ---------- Sync from props ----------
   useEffect(() => {
     setStart(toYMD(startDate));
   }, [startDate]);
@@ -123,7 +122,6 @@ export default function SelectDate({
     setEnd(toYMD(endDate));
   }, [endDate]);
 
-  // ---------- Compare dates ----------
   const startObj = useMemo(() => ymdToDate(start, 'start'), [start]);
   const endObj = useMemo(() => ymdToDate(end, 'end'), [end]);
 
@@ -139,7 +137,6 @@ export default function SelectDate({
     }
   }, [startObj, endObj]);
 
-  // ---------- Change handlers ----------
   const clampMonth = (raw: string) => {
     const clean = raw.replace(/[^0-9]/g, '').slice(0, 2);
     const num = Math.min(Number(clean || '0'), 12);

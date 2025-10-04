@@ -1,4 +1,5 @@
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
+import ErrorHandler from '@/shared/lib/error-message';
 import { ApiResponse, FavoriteList } from '@/shared/model/type';
 
 interface GetFavoriteListParams {
@@ -7,10 +8,14 @@ interface GetFavoriteListParams {
 }
 
 async function getFavoriteList({ page, size }: GetFavoriteListParams) {
-  const response: ApiResponse<FavoriteList> = await (await authApi())
-    .get(`favorites?page=${page}&size=${size}`)
-    .json();
-  return response.data;
+  try {
+    const response: ApiResponse<FavoriteList> = await api
+      .get(`favorites?page=${page}&size=${size}`)
+      .json();
+    return { ok: true, data: response.data, status: response.status };
+  } catch (error) {
+    return ErrorHandler(error as Error);
+  }
 }
 
 export default getFavoriteList;

@@ -1,11 +1,11 @@
 'use server';
 
-import authApi from '@/shared/api/auth-api';
+import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 
 async function deleteFavorite(clubId: number) {
   try {
-    await (await authApi()).delete(`favorites/${clubId}`);
+    await api.delete(`favorites/${clubId}`);
     return { ok: true, message: '즐겨찾기가 삭제되었습니다.' };
   } catch (e) {
     return ErrorHandler(e as Error, [

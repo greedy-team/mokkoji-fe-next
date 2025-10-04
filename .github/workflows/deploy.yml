@@ -26,7 +26,7 @@ jobs:
           script: |
             set -e
 
-            APP_DIR="/var/www/mokkoji-fe"
+            APP_DIR="/home/ubuntu/mokkoji-fe"
 
             # Determine target environment
             if [ "$GITHUB_EVENT_NAME" = "push" ]; then

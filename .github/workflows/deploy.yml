@@ -1,4 +1,4 @@
-name: Deploy (Prod Only)
+name: Production Deploy
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
+      - name: Deploy to Production
         env:
           NEXT_PUBLIC_API_URL_PROD: ${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
@@ -29,7 +29,7 @@ jobs:
           envs: NEXT_PUBLIC_API_URL_PROD,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
           script: |
             set -e
-
+            # 환경 변수 누락 검증
             require_var() {
               var="$1"
               eval val="\${$var}"
@@ -52,7 +52,7 @@ jobs:
             NODE_ENV="production"
             API_URL="$NEXT_PUBLIC_API_URL_PROD"
 
-            # 환경 변수 검증
+            # 환경 변수 누락 검증
             require_var NEXT_PUBLIC_API_URL_PROD
             require_var NEXT_PUBLIC_SENTRY_DSN
             require_var NEXT_PUBLIC_SENTRY_REPLAY_DSN
@@ -67,6 +67,7 @@ jobs:
             cd "$APP_DIR"
             git fetch --all
             git checkout "$BRANCH"
+            git reset --hard origin/$BRANCH
             git pull --ff-only
 
             # .env.local 생성
@@ -97,7 +98,7 @@ jobs:
             pnpm install --frozen-lockfile --prefer-offline
             pnpm build
 
-            # pm2 실행 (동일 명령어)
+            # pm2 실행
             echo "🚀 Restarting app with pm2..."
             pm2 restart "$APP_NAME" || pm2 start "pnpm exec next start -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
 

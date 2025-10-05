@@ -1,19 +1,21 @@
-name: Dev Env (Start/Stop/Restart/Deploy)
+name: Develop Deploy (Restart/Stop/Deploy)
 
 on:
+  push:
+    branches: [develop]
   workflow_dispatch:
     inputs:
       cmd:
-        description: 'start | stop | restart | deploy'
+        description: 'restart | stop | deploy'
         required: true
-        default: 'start'
+        default: 'deploy'
 
 jobs:
   dev:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Control Dev Server via SSH
+      - name: Control Develop Server
         env:
           NEXT_PUBLIC_API_URL_DEV: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
@@ -38,18 +40,41 @@ jobs:
             APP_NAME="mokkoji-dev"
             PORT=3001
 
-            echo "🟢 Command: ${{ github.event.inputs.cmd }}"
-            CMD="${{ github.event.inputs.cmd }}"
+            # 👉 develop push 시 자동 실행
+            CMD="${{ github.event.inputs.cmd || 'deploy' }}"
+
+            echo "🟢 Command: $CMD"
 
             export PNPM_HOME="$HOME/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"
 
-            # ✅ START
-            if [ "$CMD" = "start" ]; then
-              echo "🚀 Starting Dev Server..."
+            # ✅ 서버 중단
+            if [ "$CMD" = "stop" ]; then
+              echo "🛑 Stopping Dev Server..."
+              pm2 stop "$APP_NAME" || true
+              pm2 delete "$APP_NAME" || true
+              pm2 save || true
+              echo "✅ Dev server stopped."
+
+            # ✅ 기존 빌드 산출물 바탕으로 서버 재시작
+            elif [ "$CMD" = "restart" ]; then
+              echo "🔁 Restarting Dev Server..."
+              pm2 restart "$APP_NAME" || {
+                echo "⚠️ Not running, starting new process..."
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
+              }
+              pm2 save
+              echo "✅ Dev server restarted."
+
+            # ✅ 코드 최신화 후 빌드 및 서버 재시작
+            elif [ "$CMD" = "deploy" ]; then
+              echo "📦 Deploying latest dev build..."
               cd "$APP_DIR"
               git fetch --all
               git checkout "$BRANCH"
+              git reset --hard origin/$BRANCH
               git pull --ff-only
 
               echo "📝 Writing .env.local..."
@@ -64,47 +89,11 @@ jobs:
               echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
               echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
 
+              echo "📦 Installing & Building..."
               pnpm install --frozen-lockfile --prefer-offline
               pnpm build
 
-              pm2 describe "$APP_NAME" >/dev/null 2>&1 || \
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-
-              pm2 save
-              echo "✅ Dev server started (port $PORT)"
-
-            # ✅ STOP
-            elif [ "$CMD" = "stop" ]; then
-              echo "🛑 Stopping Dev Server..."
-              pm2 stop "$APP_NAME" || true
-              pm2 delete "$APP_NAME" || true
-              pm2 save || true
-              echo "✅ Dev server stopped."
-
-            # ✅ RESTART
-            elif [ "$CMD" = "restart" ]; then
-              echo "🔁 Restarting Dev Server..."
-              pm2 restart "$APP_NAME" || {
-                echo "⚠️ Not running, starting new process..."
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-              }
-              pm2 save
-              echo "✅ Dev server restarted."
-
-            # ✅ DEPLOY
-            elif [ "$CMD" = "deploy" ]; then
-              echo "📦 Deploying latest dev build..."
-              cd "$APP_DIR"
-              git fetch --all
-              git checkout "$BRANCH"
-              git pull --ff-only
-
-              pnpm install --frozen-lockfile --prefer-offline
-              pnpm build
+              echo "🚀 Restarting or starting with PM2..."
               pm2 restart "$APP_NAME" || \
                 pm2 start "pnpm exec next start -p $PORT" \
                   --name "$APP_NAME" \

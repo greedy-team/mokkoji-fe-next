@@ -6,7 +6,6 @@ import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
-import { useRouter } from 'next/navigation';
 
 interface HeaderLoginProps {
   userName: string;
@@ -16,7 +15,6 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const router = useRouter();
 
   const handleMouseEnter = () => {
     if (hideTimerRef.current) {
@@ -54,8 +52,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               </Link>
               <Button
                 onClick={() => {
-                  signOut();
-                  router.push('/');
+                  signOut({ callbackUrl: '/' });
                 }}
                 variant="submit"
                 className="absolute top-16 left-0 z-50 mt-4 w-full min-w-[120px] rounded-lg bg-white p-1 text-xs text-[#9C9C9C] shadow-md hover:text-black"

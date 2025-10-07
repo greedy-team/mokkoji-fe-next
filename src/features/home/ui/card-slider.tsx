@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
-import FadeEgde from '@/shared/ui/fade-edge';
+import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Recruitment } from '@/widgets/recruit/model/type';
 
@@ -38,8 +38,8 @@ function CardSlider({ data }: CardSliderProps) {
 
   return (
     <div className="relative mt-10 flex h-[150px] w-full items-center justify-center overflow-hidden lg:mt-0 lg:h-[300px] lg:w-[50%]">
-      <FadeEgde variant="left" />
-      <FadeEgde variant="right" />
+      <FadeEdge variant="left" />
+      <FadeEdge variant="right" />
       <div className="relative flex items-center justify-center">
         {data.map((item, idx) => {
           const offset = idx - currentIndex + 1;
@@ -65,7 +65,7 @@ function CardSlider({ data }: CardSliderProps) {
                   <Avatar
                     className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
-                    <AvatarImage src={item.club.logo} />
+                    <AvatarImage src={item.club.logo} loading="lazy" />
                     <AvatarFallback>{item.club.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">

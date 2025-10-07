@@ -85,6 +85,7 @@ jobs:
               echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET"
               echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
               echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN"
+              echo "NEXTAUTH_URL=https://www.mokkoji.site"
             } >> "$ENV_FILE"
             set -x
 

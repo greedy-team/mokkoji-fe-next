@@ -88,6 +88,7 @@ jobs:
               echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> "$ENV_FILE"
               echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
               echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
+              echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> "$ENV_FILE"
 
               echo "📦 Installing & Building..."
               pnpm install --frozen-lockfile --prefer-offline

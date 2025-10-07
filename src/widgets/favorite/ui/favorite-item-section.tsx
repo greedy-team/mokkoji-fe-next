@@ -34,22 +34,23 @@ async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
       </h1>
       <ul
         className={cn(
-          'grid h-[380px] w-auto grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4',
+          'grid w-auto grid-cols-2 gap-2 sm:h-[480px] sm:grid-cols-2 lg:h-[390px] lg:grid-cols-3 lg:gap-4',
           data.data?.clubs.length === 0 && 'h-auto',
         )}
       >
         {data.data?.clubs.map((item) => (
-          <Link href={`/club/${item.id}`} key={item.id}>
-            <ClubItem
-              key={item.id}
-              title={item.name}
-              description={item.description}
-              clubId={String(item.id)}
-              category={item.category}
-              isFavorite={item.isFavorite}
-              logo={item.logo}
-            />
-          </Link>
+          <li key={item.id}>
+            <Link href={`/club/${item.id}`}>
+              <ClubItem
+                title={item.name}
+                description={item.description}
+                clubId={String(item.id)}
+                category={item.category}
+                isFavorite={item.isFavorite}
+                logo={item.logo}
+              />
+            </Link>
+          </li>
         ))}
       </ul>
 

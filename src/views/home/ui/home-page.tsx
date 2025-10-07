@@ -5,7 +5,6 @@ import HomeDownButton from '@/features/home/ui/page-down-button';
 import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
 import FeatureIntroduceWidget from '@/widgets/home/ui/feature-intoduce-widget';
 import HelpCardWidget from '@/widgets/home/ui/help-card-widget';
-import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
 import { Suspense } from 'react';
 import SharedLoading from '@/shared/ui/loading';
 
@@ -33,7 +32,6 @@ async function HomePage() {
       <div className="fixed right-2 bottom-14 z-50 lg:right-8 lg:bottom-8">
         <NavigateClubList />
       </div>
-      <ScrollTopButton />
     </>
   );
 }

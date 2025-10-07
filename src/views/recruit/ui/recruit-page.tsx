@@ -1,6 +1,6 @@
 import RecruitHeader from '@/entities/recruit/ui/recruit-header';
 import RecruitItemList from '@/widgets/recruit/ui/recruit-item-list';
-import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
+import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 import { RecruitmentSearchParams } from '@/shared/model/recruit-type';

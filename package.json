@@ -32,7 +32,6 @@
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
     "@tanstack/react-virtual": "^3.13.12",
-    "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

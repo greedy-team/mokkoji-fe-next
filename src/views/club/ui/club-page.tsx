@@ -1,7 +1,7 @@
 import ClubHeader from '@/entities/club/ui/club-header';
 import ClubItemList from '@/widgets/club/ui/club-item-list';
 import { RecruitItemListProps } from '@/widgets/recruit/model/type';
-import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
+import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 

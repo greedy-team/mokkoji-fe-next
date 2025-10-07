@@ -1,6 +1,6 @@
 import FavoriteDateSection from '@/widgets/favorite/ui/favorite-date-section';
 import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
-import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
+import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { SearchParams } from '@/views/favorite/model/type';
 import { Suspense } from 'react';
 import FavoriteListSkeletonLoading from '@/entities/favorite/ui/favorite-list-skeleton-loading';

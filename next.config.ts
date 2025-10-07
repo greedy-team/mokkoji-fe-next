@@ -68,10 +68,6 @@ if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
 
     // 콘솔에 찍히는 Sentry 관련 디버그 로그를 제거하여 번들 크기 절감
     disableLogger: true,
-
-    // Vercel의 Cron Monitor 기능 자동 설정 (App Router route handlers에서는 아직 미지원)
-    // - Sentry를 통한 스케줄 작업 모니터링 자동화
-    automaticVercelMonitors: true,
   });
 }
 

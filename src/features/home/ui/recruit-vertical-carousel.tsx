@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import FadeEgde from '@/shared/ui/fade-edge';
+import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Recruitment } from '@/widgets/recruit/model/type';
 import isRecruiting from '../util/isRecruiting';
@@ -61,8 +61,8 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
       ref={containerRef}
       className="relative h-[50%] w-full cursor-pointer overflow-hidden perspective-[10000px] lg:h-[300px] lg:w-[50%]"
     >
-      <FadeEgde variant="top" />
-      <FadeEgde variant="bottom" />
+      <FadeEdge variant="top" />
+      <FadeEdge variant="bottom" />
       <div
         className="relative h-full w-full"
         style={{
@@ -92,7 +92,7 @@ function RecruitVerticalCarousel({ data }: CardSliderProps) {
                 <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">
-                      <AvatarImage src={item.club.logo} />
+                      <AvatarImage src={item.club.logo} loading="lazy" />
                       <AvatarFallback>{item.club.name}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-1 flex-col">

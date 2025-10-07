@@ -7,7 +7,7 @@ import Script from 'next/script';
 const pretendard = localFont({
   src: [
     {
-      path: '../shared/fonts/pretendardVariable.woff2',
+      path: '../shared/fonts/PretendardVariable.woff2',
     },
   ],
   variable: '--font-pretendard',

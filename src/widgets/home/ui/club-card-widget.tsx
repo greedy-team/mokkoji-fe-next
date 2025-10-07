@@ -1,4 +1,4 @@
-import CardSlider from '@/features/home/ui/club-card';
+import CardSlider from '@/features/home/ui/card-slider';
 import ClubTextCard from '@/entities/home/ui/club-text-card';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carousel';

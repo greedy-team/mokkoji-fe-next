@@ -8,7 +8,7 @@ import cn from '@/shared/lib/utils';
 import { Recruitment } from '@/widgets/recruit/model/type';
 
 const movePx = 250;
-const moblieMovePx = 100;
+const mobileMovePx = 100;
 
 interface CardSliderProps {
   data: Recruitment[];
@@ -44,7 +44,7 @@ function CardSlider({ data }: CardSliderProps) {
         {data.map((item, idx) => {
           const offset = idx - currentIndex + 1;
           const isActive = offset === 1;
-          const cardWidth = isMobile ? moblieMovePx : movePx;
+          const cardWidth = isMobile ? mobileMovePx : movePx;
           const centerOffset = cardWidth / 2;
 
           const translateX = offset * cardWidth;

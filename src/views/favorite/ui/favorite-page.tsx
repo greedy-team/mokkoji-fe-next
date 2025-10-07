@@ -16,7 +16,7 @@ async function FavoritePage({
 
   return (
     <>
-      <div className="w-full sm:w-4xl lg:w-6xl">
+      <div className="mx-auto w-full px-4 sm:w-4xl sm:px-5 lg:w-6xl">
         <Suspense fallback={<FavoriteListSkeletonLoading />}>
           <FavoriteItemSection page={page} size={size} />
         </Suspense>

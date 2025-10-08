@@ -1,6 +1,6 @@
-function getWeekdays(date: Date, format: 'short' | 'long' = 'long') {
+function getWeekdays(date: Date, isMobile?: boolean) {
   const weekdays = {
-    short: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    short: ['일', '월', '화', '수', '목', '금', '토'],
     long: [
       '일요일',
       '월요일',
@@ -11,7 +11,7 @@ function getWeekdays(date: Date, format: 'short' | 'long' = 'long') {
       '토요일',
     ],
   };
-  return weekdays[format][date.getDay()];
+  return weekdays[isMobile ? 'short' : 'long'][date.getDay()];
 }
 
 export default getWeekdays;

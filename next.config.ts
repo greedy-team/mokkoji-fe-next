@@ -20,20 +20,6 @@ let nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    const newConfig = { ...config };
-
-    if (process.env.NEXT_PUBLIC_SENTRY !== 'true') {
-      newConfig.resolve = {
-        ...newConfig.resolve,
-        alias: {
-          ...newConfig.resolve?.alias,
-          '@sentry/nextjs': require.resolve('./src/sentry-dev.tsx'),
-        },
-      };
-    }
-    return newConfig;
-  },
   logging: {
     incomingRequests: {
       ignore: [

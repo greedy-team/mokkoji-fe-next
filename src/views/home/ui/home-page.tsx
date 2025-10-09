@@ -3,7 +3,7 @@ import NavigateClubList from '@/features/home/ui/navigate-clublist';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 import HomeDownButton from '@/features/home/ui/page-down-button';
 import ClubCardWidget from '@/widgets/home/ui/club-card-widget';
-import FeatureIntroduceWidget from '@/widgets/home/ui/feature-intoduce-widget';
+import FeatureIntroduceWidget from '@/widgets/home/ui/feature-introduce-widget';
 import HelpCardWidget from '@/widgets/home/ui/help-card-widget';
 import { Suspense } from 'react';
 import SharedLoading from '@/shared/ui/loading';

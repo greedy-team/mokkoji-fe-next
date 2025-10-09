@@ -1,29 +1,17 @@
-'use client';
-
 import Image from 'next/image';
 
 function HomeSearch() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const form = e.currentTarget;
-    const input = form.querySelector<HTMLInputElement>('input[name="q"]');
-    const value = input?.value.trim();
-    if (!value) {
-      e.preventDefault();
-      input?.focus();
-    }
-  };
-
   return (
     <div className="group relative w-[90%] lg:w-[80%]">
       <form
         action="/search"
         method="GET"
-        onSubmit={handleSubmit}
         className="text:md flex items-center justify-between gap-1 pb-2 lg:text-xl"
       >
         <input
           type="text"
           name="q"
+          required
           placeholder="어떤 동아리를 찾고 계신가요?"
           className="w-[90%] py-5 indent-2 outline-none focus:placeholder-gray-300"
         />

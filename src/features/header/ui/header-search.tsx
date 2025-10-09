@@ -1,6 +1,5 @@
 'use client';
 
-import handleSearch from '@/shared/model/handleSearch';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -35,7 +34,6 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
     <form
       action="/search"
       method="GET"
-      onSubmit={handleSearch}
       ref={wrapperRef}
       className="flex items-center"
     >
@@ -43,6 +41,7 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
         type="text"
         name="q"
         placeholder="검색어를 입력해주세요"
+        required
         className={`border- z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none focus-within:border-[#00E804] lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
         autoComplete="off"
       />

@@ -34,10 +34,10 @@ function useEmailEdit(initialEmail?: string) {
     setSubmitting(true);
     const response = await putEmail(email);
     if (!response.ok) {
-      toast.error(response.message, { toastId: 'unique-toast' });
+      toast.error(response.message);
       return;
     }
-    toast.success(response.message, { toastId: 'unique-toast' });
+    toast.success(response.message);
     setOpen(false);
     router.refresh();
     setSubmitting(false);

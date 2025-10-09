@@ -1,12 +1,16 @@
 'use client';
 
+import handleSearch from '@/shared/model/handleSearch';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-function HeaderSearch() {
-  const [showSearch, setShowSearch] = useState(false);
+interface HeaderSearchProps {
+  showSearch: boolean;
+  setShowSearch: (showSearch: boolean) => void;
+}
+
+function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -31,6 +35,7 @@ function HeaderSearch() {
     <form
       action="/search"
       method="GET"
+      onSubmit={handleSearch}
       ref={wrapperRef}
       className="flex items-center"
     >

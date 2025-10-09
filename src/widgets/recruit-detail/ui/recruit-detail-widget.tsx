@@ -53,11 +53,7 @@ function RecruitDetailWidget({
         res.data.deleteImageUrls.map((url: string) => ky.delete(url)),
       );
     }
-
-    toast.success('모집 공고 삭제가 성공적으로 업로드되었습니다!', {
-      toastId: 'unique-toast',
-    });
-
+    toast.success('모집 공고 삭제가 성공적으로 업로드되었습니다!');
     router.push('/recruit');
   };
 

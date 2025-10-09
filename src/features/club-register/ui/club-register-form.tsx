@@ -34,14 +34,10 @@ function ClubRegisterForm() {
 
     const res = await postClubRegister(data);
     if (!res.ok) {
-      toast.error(res.message, {
-        toastId: 'unique-toast',
-      });
+      toast.error(res.message);
       return;
     }
-    toast.success('등록 성공!', {
-      toastId: 'unique-toast',
-    });
+    toast.success('등록 성공!');
     router.push('/club');
   };
 

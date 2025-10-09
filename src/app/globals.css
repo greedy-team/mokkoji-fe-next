@@ -332,3 +332,14 @@ html {
   padding-right: 0 !important;
   margin-right: 0 !important;
 }
+
+/*토스트 컨테이너 수정 css*/
+@media (max-width: 768px) {
+  .Toastify__toast-container--top-right {
+    left: 50% !important;
+    top: 10px !important;
+    transform: translateX(-50%) !important;
+    width: 80%;
+    max-width: 300px;
+  }
+}

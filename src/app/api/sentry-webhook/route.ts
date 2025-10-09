@@ -3,7 +3,6 @@ export const runtime = 'nodejs';
 
 const { DISCORD_WEBHOOK_URL } = process.env;
 
-/** 🔹 최근 중복 알림 방지용 (메모리 캐시) */
 const recentCache = new Map<string, number>();
 const DUPLICATE_INTERVAL = 5 * 60 * 1000; // 5분
 
@@ -79,6 +78,8 @@ async function postToDiscord(payload: any) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
+
+  console.log(DISCORD_WEBHOOK_URL, '전송됨!!!');
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     console.error('❌ Discord 전송 실패:', res.status, text);

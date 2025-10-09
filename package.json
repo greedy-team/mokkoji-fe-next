@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint ./**/*.{ts,tsx} --cache --fix",
@@ -94,7 +94,6 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "gh-pages": "^6.3.0",
     "husky": "^9.1.7",
-    "leasot": "^14.4.0",
     "lint-staged": "^16.1.2",
     "prettier-plugin-tailwindcss": "0.6.11",
     "storybook": "8.6.14",

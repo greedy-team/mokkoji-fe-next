@@ -6,7 +6,6 @@ import WebVitalProvider from '@/_providers/webvital-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
 import { SessionProvider } from 'next-auth/react';
-
 import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({

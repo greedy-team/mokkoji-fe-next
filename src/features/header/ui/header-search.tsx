@@ -11,6 +11,16 @@ interface HeaderSearchProps {
 function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const form = e.currentTarget;
+    const input = form.querySelector<HTMLInputElement>('input[name="q"]');
+    const value = input?.value.trim();
+    if (!value) {
+      e.preventDefault();
+      input?.focus();
+    }
+  };
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -35,6 +45,7 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
     <form
       action="/search"
       method="GET"
+      onSubmit={handleSubmit}
       ref={wrapperRef}
       className="flex items-center"
     >

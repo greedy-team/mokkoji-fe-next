@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import handleSearch from '@/shared/model/handleSearch';
 import SaveClientInput from './save-client-input';
 
 function SearchInput() {
@@ -9,6 +12,7 @@ function SearchInput() {
         <form
           action="/search"
           method="GET"
+          onSubmit={handleSearch}
           className="relative mx-auto w-[95%] lg:w-[80%]"
         >
           <SaveClientInput />

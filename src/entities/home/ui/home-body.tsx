@@ -1,24 +1,16 @@
 'use client';
 
+import handleSearch from '@/shared/model/handleSearch';
 import Image from 'next/image';
 
 function HomeBody() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const form = e.currentTarget;
-    const input = form.querySelector<HTMLInputElement>('input[name="q"]');
-    const value = input?.value.trim();
-    if (!value) {
-      e.preventDefault();
-      input?.focus();
-    }
-  };
   return (
     <div className="mb-5 flex flex-col items-center py-5 lg:mb-[15px]">
       <div className="group relative w-[90%] lg:w-[80%]">
         <form
           action="/search"
           method="GET"
-          onSubmit={handleSubmit}
+          onSubmit={handleSearch}
           className="text:md flex items-center justify-between gap-1 pb-2 lg:text-xl"
         >
           <input

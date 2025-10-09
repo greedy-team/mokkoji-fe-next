@@ -1,10 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-function HeaderSearch() {
-  const [showSearch, setShowSearch] = useState(false);
+interface HeaderSearchProps {
+  showSearch: boolean;
+  setShowSearch: (showSearch: boolean) => void;
+}
+
+function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

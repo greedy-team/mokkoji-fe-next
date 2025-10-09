@@ -12,7 +12,7 @@ interface MobileMenuClientProps {
   manageClubInfo: ManageClub[];
 }
 
-function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
+function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -80,4 +80,4 @@ function MoblieHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
   );
 }
 
-export default MoblieHeader;
+export default MobileHeader;

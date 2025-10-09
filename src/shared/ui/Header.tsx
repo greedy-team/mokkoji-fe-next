@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
-import HeaderSearch from '@/features/header/ui/header-search';
-import HeaderLogin from '@/features/header/ui/header-login';
 import { auth } from '@/auth';
 import getClubManageInfo from '@/shared/api/manage-api';
 import NavButton from './nav-button';
 import { UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
-import MoblieHeader from './moblie-header';
+import HeaderMenuSection from './header-menu-section';
 
 async function Header() {
   const session = await auth();
@@ -58,12 +56,7 @@ async function Header() {
             )}
         </nav>
         <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
-          <HeaderLogin userName={session?.user?.name || ''} />
-          <HeaderSearch />
-          <MoblieHeader
-            sessionRole={role}
-            manageClubInfo={session?.manageClubInfo || []}
-          />
+          <HeaderMenuSection role={role} session={session} />
         </div>
         <span className="absolute bottom-0 left-0 h-0.5 w-screen bg-gray-200 transition-colors duration-500" />
       </header>

@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import localFont from 'next/font/local';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import Script from 'next/script';
+import { ToDoPinProvider } from 'to-do-pin';
+import { SessionProvider } from 'next-auth/react';
+
+import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({
   src: [
@@ -49,8 +54,20 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${pretendard.className}`}>
-        <WebVitalProvider />
-        {children}
+        <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
+          <ToDoPinProvider>
+            <WebVitalProvider />
+            <ToastContainer
+              autoClose={2000}
+              hideProgressBar
+              closeOnClick
+              pauseOnHover={false}
+              newestOnTop
+              limit={1}
+            />
+            {children}
+          </ToDoPinProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-name: Develop Deploy (Safe Replace Build)
+name: Develop Deploy (.next only)
 
 on:
   push:
@@ -38,17 +38,11 @@ jobs:
           echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
           echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}" >> .env.local
           echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
+          echo "✅ .env.local written."
 
-      - name: Handle command input
+      - name: Set command
         id: control
         run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
-
-      - name: Build Next.js (only for deploy)
-        if: env.CMD == 'deploy'
-        run: |
-          pnpm install --frozen-lockfile --prefer-offline
-          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
-          ls -alh .next || echo "❌ Build failed, .next not found"
 
       - name: Clean old .next on EC2
         if: env.CMD == 'deploy'
@@ -57,24 +51,40 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          script_stop: true
           script: |
             APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            echo "🧹 Removing old .next on EC2..."
+            echo "Removing old .next folder..."
             cd "$APP_DIR"
             rm -rf .next || true
-            echo "✅ Old .next cleaned."
+            echo "✅ Old .next removed."
 
-      - name: Upload build output to EC2
+      - name: Build Next.js
+        if: env.CMD == 'deploy'
+        run: |
+          echo "Installing dependencies..."
+          pnpm install --frozen-lockfile --prefer-offline
+          echo "Building project..."
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint || { echo "Build failed"; exit 1; }
+          echo "✅ Build complete."
+          ls -alh .next || (echo ".next not found!" && exit 1)
+          du -sh .next || true
+
+      - name: Upload new .next to EC2
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: './.next ./public ./package.json ./pnpm-lock.yaml ./.env.local'
+          source: "./.next"
           target: /home/ubuntu/mokkoji-fe-dev
+        continue-on-error: false
+      - name: Confirm upload success
+        if: env.CMD == 'deploy'
+        run: echo "✅ .next uploaded successfully."
 
-      - name: Control Dev Server on EC2
+      - name: Restart PM2 on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -88,37 +98,24 @@ jobs:
             PORT=3001
             CMD="${{ github.event.inputs.cmd || 'deploy' }}"
 
-            echo "🟢 Running command: $CMD"
+            echo "Running command: $CMD"
 
-            if [ "$CMD" = "stop" ]; then
-              echo "🛑 Stopping Dev Server..."
-              pm2 stop "$APP_NAME" || true
-              pm2 delete "$APP_NAME" || true
-              pm2 save || true
-              echo "✅ Dev server stopped."
-
-            elif [ "$CMD" = "restart" ]; then
-              echo "🔁 Restarting Dev Server..."
-              pm2 restart "$APP_NAME" || {
-                echo "⚠️ Not running, starting new process..."
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-              }
-              pm2 save
-              echo "✅ Dev server restarted."
-
-            elif [ "$CMD" = "deploy" ]; then
-              echo "🚀 Starting new build..."
+            if [ "$CMD" = "deploy" ]; then
+              echo "Restarting Dev Server..."
               cd "$APP_DIR"
               pm2 restart "$APP_NAME" || \
                 pm2 start "pnpm exec next start -p $PORT" \
                   --name "$APP_NAME" \
                   --cwd "$APP_DIR"
               pm2 save
-              echo "✅ Dev deploy complete (port=$PORT)."
+              echo "✅ Deployment complete (port=$PORT)."
 
-            else
-              echo "❌ Unknown command: $CMD"
-              exit 1
+            elif [ "$CMD" = "restart" ]; then
+              pm2 restart "$APP_NAME" || true
+              echo "✅ Restart complete."
+            elif [ "$CMD" = "stop" ]; then
+              pm2 stop "$APP_NAME" || true
+              pm2 delete "$APP_NAME" || true
+              pm2 save || true
+              echo "✅ Stop complete."
             fi

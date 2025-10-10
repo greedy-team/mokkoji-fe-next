@@ -1,4 +1,4 @@
-name: Develop Deploy (Restart/Stop/Deploy)
+name: Develop Deploy
 
 on:
   push:
@@ -13,97 +13,130 @@ on:
 jobs:
   dev:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      - name: Control Develop Server
-        env:
-          NEXT_PUBLIC_API_URL_DEV: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-          NEXT_PUBLIC_SENTRY_REPLAY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
-          NEXT_PUBLIC_CLARITY_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: .env.local 작성
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" >> .env.local
+          echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env.local
+          echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}" >> .env.local
+          echo "NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
+          echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
+          echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}" >> .env.local
+          echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
+          echo "✅ .env.local written."
+
+      - name: 커맨드 세팅
+        id: control
+        run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
+
+      - name: EC2 develop 브랜치 최신화
+        if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: NEXT_PUBLIC_API_URL_DEV,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
+          script: |
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            echo "Updating repository to latest develop branch..."
+            cd "$APP_DIR"
+            git fetch --all
+            git checkout develop
+            git reset --hard origin/develop
+            git pull --ff-only
+            echo "✅ EC2 develop 브랜치 최신화 완료."
+
+      - name: Next.js 빌드
+        if: env.CMD == 'deploy'
+        run: |
+          echo "Installing dependencies..."
+          pnpm install --frozen-lockfile --prefer-offline
+          echo "Building project..."
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
+          echo "✅ Build complete."
+          ls -alh .next || (echo "❌ .next not found!" && exit 1)
+          du -sh .next || true
+
+      - name: EC2 .next 교체
+        if: env.CMD == 'deploy'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            echo "EC2 .next 폴더 삭제..."
+            cd "$APP_DIR"
+            rm -rf .next || true
+            mkdir -p .next
+            echo "✅ EC2 .next 폴더 삭제 완료"
+
+      - name: .next 업로드
+        if: env.CMD == 'deploy'
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: './.next'
+          target: /home/ubuntu/mokkoji-fe-dev
+        continue-on-error: false
+
+      - name: 업로드 완료 확인
+        if: env.CMD == 'deploy'
+        run: echo "✅ .next 업로드 완료"
+
+      - name: PM2 무중단 재시작
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
           script: |
             set -e
-
             APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            BRANCH="develop"
             APP_NAME="mokkoji-dev"
             PORT=3001
-
-            # 👉 develop push 시 자동 실행
             CMD="${{ github.event.inputs.cmd || 'deploy' }}"
 
-            echo "🟢 Command: $CMD"
+            echo "커맨드 실행: $CMD"
 
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
+            if [ "$CMD" = "deploy" ]; then
+              cd "$APP_DIR"
+              echo "EC2 무중단 배포..."
+              pm2 reload "$APP_NAME" --update-env || \
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
+              pm2 save
+              echo "✅ 무중단 배포 성공 (port=$PORT)."
 
-            # ✅ 서버 중단
-            if [ "$CMD" = "stop" ]; then
-              echo "🛑 Stopping Dev Server..."
+            elif [ "$CMD" = "restart" ]; then
+              pm2 reload "$APP_NAME" --update-env || true
+              echo "✅ 서버 재시작 성공."
+
+            elif [ "$CMD" = "stop" ]; then
               pm2 stop "$APP_NAME" || true
               pm2 delete "$APP_NAME" || true
               pm2 save || true
-              echo "✅ Dev server stopped."
-
-            # ✅ 기존 빌드 산출물 바탕으로 서버 재시작
-            elif [ "$CMD" = "restart" ]; then
-              echo "🔁 Restarting Dev Server..."
-              pm2 restart "$APP_NAME" || {
-                echo "⚠️ Not running, starting new process..."
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-              }
-              pm2 save
-              echo "✅ Dev server restarted."
-
-            # ✅ 코드 최신화 후 빌드 및 서버 재시작
-            elif [ "$CMD" = "deploy" ]; then
-              echo "📦 Deploying latest dev build..."
-              cd "$APP_DIR"
-              git fetch --all
-              git checkout "$BRANCH"
-              git reset --hard origin/$BRANCH
-              git pull --ff-only
-
-              echo "📝 Writing .env.local..."
-              ENV_FILE="$APP_DIR/.env.local"
-              rm -f "$ENV_FILE"
-              touch "$ENV_FILE"
-              echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL_DEV" >> "$ENV_FILE"
-              echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN" >> "$ENV_FILE"
-              echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN" >> "$ENV_FILE"
-              echo "NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID" >> "$ENV_FILE"
-              echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> "$ENV_FILE"
-              echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL" >> "$ENV_FILE"
-              echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN" >> "$ENV_FILE"
-              echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> "$ENV_FILE"
-
-              echo "📦 Installing & Building..."
-              pnpm install --frozen-lockfile --prefer-offline
-              pnpm build
-
-              echo "🚀 Restarting or starting with PM2..."
-              pm2 restart "$APP_NAME" || \
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-
-              pm2 save
-              echo "✅ Dev deploy complete (branch=$BRANCH, port=$PORT)"
-
-            else
-              echo "❌ Unknown command: $CMD"
-              exit 1
+              echo "✅ 서버 정지 성공."
             fi

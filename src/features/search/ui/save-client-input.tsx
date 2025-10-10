@@ -8,6 +8,7 @@ function SaveClientInput() {
 
   return (
     <input
+      required
       type="text"
       name="q"
       placeholder="동아리 명 또는 키워드를 입력해주세요."

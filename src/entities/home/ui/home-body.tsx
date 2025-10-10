@@ -1,6 +1,3 @@
-'use client';
-
-import handleSearch from '@/shared/model/handleSearch';
 import Image from 'next/image';
 
 function HomeBody() {
@@ -10,11 +7,11 @@ function HomeBody() {
         <form
           action="/search"
           method="GET"
-          onSubmit={handleSearch}
           className="text:md flex items-center justify-between gap-1 pb-2 lg:text-xl"
         >
           <input
             type="text"
+            required
             name="q"
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] py-5 indent-2 outline-none focus:placeholder-gray-300"

@@ -12,7 +12,7 @@ import SafeForm from '@/shared/ui/safe-form';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
-import isFormValid from '../util/isFormVaild';
+import isFormValid from '../util/isFormValid';
 import postRecruitmentForm from '../api/postRecruitmentForm';
 
 interface ClubInfoProp {

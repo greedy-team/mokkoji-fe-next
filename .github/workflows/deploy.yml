@@ -1,107 +1,123 @@
-name: Production Deploy
+name: Develop Deploy (Safe Replace Build)
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
   workflow_dispatch:
+    inputs:
+      cmd:
+        description: 'restart | stop | deploy'
+        required: true
+        default: 'deploy'
 
 jobs:
-  deploy:
+  dev:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      - name: Deploy to Production
-        env:
-          NEXT_PUBLIC_API_URL_PROD: ${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-          NEXT_PUBLIC_SENTRY_REPLAY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
-          NEXT_PUBLIC_CLARITY_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          NEXT_PUBLIC_S3_DOMAIN: ${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Write .env.local for build
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" >> .env.local
+          echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env.local
+          echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}" >> .env.local
+          echo "NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
+          echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
+          echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}" >> .env.local
+          echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
+
+      - name: Handle command input
+        id: control
+        run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
+      - name: Build Next.js (only for deploy)
+        if: env.CMD == 'deploy'
+        run: |
+          pnpm install --frozen-lockfile --prefer-offline
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
+          ls -alh .next || echo "❌ Build failed, .next not found"
+
+      - name: Clean old .next on EC2
+        if: env.CMD == 'deploy'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            echo "🧹 Removing old .next on EC2..."
+            cd "$APP_DIR"
+            rm -rf .next || true
+            echo "✅ Old .next cleaned."
+
+      - name: Upload build output to EC2
+        if: env.CMD == 'deploy'
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "./.next ./public ./package.json ./pnpm-lock.yaml ./.env.local"
+          target: /home/ubuntu/mokkoji-fe-dev
+
+      - name: Control Dev Server on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: NEXT_PUBLIC_API_URL_PROD,NEXT_PUBLIC_SENTRY_DSN,NEXT_PUBLIC_SENTRY_REPLAY_DSN,NEXT_PUBLIC_CLARITY_ID,NEXTAUTH_SECRET,DISCORD_WEBHOOK_URL,NEXT_PUBLIC_S3_DOMAIN
           script: |
             set -e
-            # 환경 변수 누락 검증
-            require_var() {
-              var="$1"
-              eval val="\${$var}"
-              if [ -z "${val+x}" ]; then
-                echo "❌ ERROR: required env '$var' is not set" >&2
-                exit 1
-              fi
-              if [ -z "$val" ]; then
-                echo "❌ ERROR: required env '$var' is empty" >&2
-                exit 1
-              fi
-            }
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            APP_NAME="mokkoji-dev"
+            PORT=3001
+            CMD="${{ github.event.inputs.cmd || 'deploy' }}"
 
-            echo "🚀 Starting production deployment..."
+            echo "🟢 Running command: $CMD"
 
-            APP_DIR="/home/ubuntu/mokkoji-fe-prod"
-            BRANCH="main"
-            APP_NAME="mokkoji-prod"
-            PORT=3000
-            NODE_ENV="production"
-            API_URL="$NEXT_PUBLIC_API_URL_PROD"
+            if [ "$CMD" = "stop" ]; then
+              echo "🛑 Stopping Dev Server..."
+              pm2 stop "$APP_NAME" || true
+              pm2 delete "$APP_NAME" || true
+              pm2 save || true
+              echo "✅ Dev server stopped."
 
-            # 환경 변수 누락 검증
-            require_var NEXT_PUBLIC_API_URL_PROD
-            require_var NEXT_PUBLIC_SENTRY_DSN
-            require_var NEXT_PUBLIC_SENTRY_REPLAY_DSN
-            require_var NEXT_PUBLIC_CLARITY_ID
-            require_var NEXTAUTH_SECRET
-            require_var DISCORD_WEBHOOK_URL
-            require_var NEXT_PUBLIC_S3_DOMAIN
+            elif [ "$CMD" = "restart" ]; then
+              echo "🔁 Restarting Dev Server..."
+              pm2 restart "$APP_NAME" || {
+                echo "⚠️ Not running, starting new process..."
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
+              }
+              pm2 save
+              echo "✅ Dev server restarted."
 
-            echo "✅ All required environment variables are present."
+            elif [ "$CMD" = "deploy" ]; then
+              echo "🚀 Starting new build..."
+              cd "$APP_DIR"
+              pm2 restart "$APP_NAME" || \
+                pm2 start "pnpm exec next start -p $PORT" \
+                  --name "$APP_NAME" \
+                  --cwd "$APP_DIR"
+              pm2 save
+              echo "✅ Dev deploy complete (port=$PORT)."
 
-            # 코드 최신화
-            cd "$APP_DIR"
-            git fetch --all
-            git checkout "$BRANCH"
-            git reset --hard origin/$BRANCH
-            git pull --ff-only
-
-            # .env.local 생성
-            ENV_FILE="$APP_DIR/.env.local"
-            rm -f "$ENV_FILE"
-            touch "$ENV_FILE"
-
-            echo "📝 Writing .env.local..."
-            set +x
-            {
-              echo "NEXT_PUBLIC_API_URL=$API_URL"
-              echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN"
-              echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=$NEXT_PUBLIC_SENTRY_REPLAY_DSN"
-              echo "NEXT_PUBLIC_CLARITY_ID=$NEXT_PUBLIC_CLARITY_ID"
-              echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET"
-              echo "DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL"
-              echo "NEXT_PUBLIC_S3_DOMAIN=$NEXT_PUBLIC_S3_DOMAIN"
-              echo "NEXTAUTH_URL=https://www.mokkoji.site"
-            } >> "$ENV_FILE"
-            set -x
-
-            echo "✅ .env.local written successfully ($(wc -l < "$ENV_FILE") lines)"
-
-            # 빌드 및 실행
-            echo "📦 Using pnpm..."
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
-
-            pnpm install --frozen-lockfile --prefer-offline
-            pnpm build
-
-            # pm2 실행
-            echo "🚀 Restarting app with pm2..."
-            pm2 restart "$APP_NAME" || pm2 start "pnpm exec next start -p $PORT" --name "$APP_NAME" --cwd "$APP_DIR"
-
-            pm2 save
-            echo "🎉 Production deployment complete: $APP_NAME (port $PORT)"
+            else
+              echo "❌ Unknown command: $CMD"
+              exit 1
+            fi

@@ -1,16 +1,16 @@
-name: Universal Deploy
+name: Deploy
 
 on:
   workflow_call:
     inputs:
       env:
-        description: "배포 환경 (dev | prod)"
+        description: '배포 환경 (dev | prod)'
         required: true
         type: string
       cmd:
-        description: "실행 명령 (deploy | restart | stop)"
+        description: '실행 명령 (deploy | restart | stop)'
         required: false
-        default: "deploy"
+        default: 'deploy'
         type: string
     secrets:
       SSH_HOST:
@@ -78,31 +78,13 @@ jobs:
           echo "NEXTAUTH_URL=${NEXTAUTH_URL}" >> .env.local
           echo "✅ .env.local 작성 완료 (${ENV})"
 
-      - name: Git 최신화
-        if: env.CMD == 'deploy'
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          script: |
-            echo "${ENV} 브랜치 최신화 중..."
-            cd "$APP_DIR"
-            git fetch --all
-            git checkout $([ "$ENV" = "prod" ] && echo main || echo develop)
-            git reset --hard origin/$([ "$ENV" = "prod" ] && echo main || echo develop)
-            git pull --ff-only
-            echo "✅ ${ENV} 브랜치 최신화 완료."
-
       - name: Next.js 빌드
         if: env.CMD == 'deploy'
         run: |
           echo "${ENV} 빌드 중..."
           pnpm install --frozen-lockfile --prefer-offline
-          echo "빌드 중..."
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
-          echo "✅ 빌드 완료."
+          echo "✅ ${ENV} 빌드 완료."
           ls -alh .next || (echo "❌ .next 폴더 없음!" && exit 1)
 
       - name: EC2 .next 폴더 초기화
@@ -119,7 +101,7 @@ jobs:
             mkdir -p .next
             echo "✅ ${ENV} .next 초기화 완료."
 
-      - name: .next 및 .env.local 업로드
+      - name: 필수 파일 업로드 (.next, .env.local, package.json, pnpm-lock.yaml)
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
@@ -129,9 +111,11 @@ jobs:
           source: |
             .next
             .env.local
+            package.json
+            pnpm-lock.yaml
           target: ${{ env.APP_DIR }}
 
-      - name: PM2 무중단 제어
+      - name: EC2 의존성 동기화 및 PM2 무중단 제어
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -146,12 +130,15 @@ jobs:
             echo "명령: ${CMD}"
 
             if [ "$CMD" = "deploy" ]; then
+              echo "📦 의존성 설치 중..."
+              pnpm install --frozen-lockfile --prefer-offline
+              echo "✅ 의존성 설치 완료."
+
               echo "무중단 배포 시작..."
               pm2 reload "$APP_NAME" --update-env || \
                 pm2 start "pnpm exec next start -p $APP_PORT" \
                   --name "$APP_NAME" \
-                  --cwd "$APP_DIR" \
-                  -i max
+                  --cwd "$APP_DIR"
               pm2 save
               echo "✅ ${ENV} 배포 완료 (port=$APP_PORT)"
 

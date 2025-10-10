@@ -1,17 +1,12 @@
-name: Develop Deploy (Safe Replace Build)
+name: Production Deploy
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      cmd:
-        description: 'restart | stop | deploy'
-        required: true
-        default: 'deploy'
 
 jobs:
-  dev:
+  deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -28,52 +23,49 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Write .env.local for build
+      - name: 빌드 환경을 위한 .env.local 작성
         run: |
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" >> .env.local
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}" >> .env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env.local
           echo "NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}" >> .env.local
           echo "NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}" >> .env.local
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
           echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
-          echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}" >> .env.local
-          echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
+          echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}" >> .env.local
+          echo "NEXTAUTH_URL=https://www.mokkoji.site" >> .env.local
+          echo "✅ .env.local written."
 
-      - name: Handle command input
-        id: control
-        run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
-      - name: Build Next.js (only for deploy)
-        if: env.CMD == 'deploy'
+      - name: Next.js 빌드
         run: |
           pnpm install --frozen-lockfile --prefer-offline
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
-          ls -alh .next || echo "❌ Build failed, .next not found"
+          echo "✅ Build complete."
+          ls -alh .next || (echo "❌ .next not found" && exit 1)
+          du -sh .next || true
 
-      - name: Clean old .next on EC2
-        if: env.CMD == 'deploy'
+      - name: EC2의 .next 폴더 삭제
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            echo "🧹 Removing old .next on EC2..."
+            APP_DIR="/home/ubuntu/mokkoji-fe-prod"
+            echo "Removing old .next folder..."
             cd "$APP_DIR"
             rm -rf .next || true
-            echo "✅ Old .next cleaned."
+            echo "✅ Old .next removed."
 
-      - name: Upload build output to EC2
-        if: env.CMD == 'deploy'
+      - name: EC2에 .next 폴더 업로드
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "./.next ./public ./package.json ./pnpm-lock.yaml ./.env.local"
-          target: /home/ubuntu/mokkoji-fe-dev
+          source: "./.next ./.env.local"
+          target: /home/ubuntu/mokkoji-fe-prod
 
-      - name: Control Dev Server on EC2
+      - name: 무중단 배포
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -82,42 +74,24 @@ jobs:
           script_stop: true
           script: |
             set -e
-            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            APP_NAME="mokkoji-dev"
-            PORT=3001
-            CMD="${{ github.event.inputs.cmd || 'deploy' }}"
+            APP_DIR="/home/ubuntu/mokkoji-fe-prod"
+            APP_NAME="mokkoji-prod"
+            PORT=3000
 
-            echo "🟢 Running command: $CMD"
+            echo "Updating production repository..."
+            cd "$APP_DIR"
+            git fetch --all
+            git checkout main
+            git reset --hard origin/main
+            git pull --ff-only
 
-            if [ "$CMD" = "stop" ]; then
-              echo "🛑 Stopping Dev Server..."
-              pm2 stop "$APP_NAME" || true
-              pm2 delete "$APP_NAME" || true
-              pm2 save || true
-              echo "✅ Dev server stopped."
+            echo "✅ Repository updated."
 
-            elif [ "$CMD" = "restart" ]; then
-              echo "🔁 Restarting Dev Server..."
-              pm2 restart "$APP_NAME" || {
-                echo "⚠️ Not running, starting new process..."
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-              }
-              pm2 save
-              echo "✅ Dev server restarted."
-
-            elif [ "$CMD" = "deploy" ]; then
-              echo "🚀 Starting new build..."
-              cd "$APP_DIR"
-              pm2 restart "$APP_NAME" || \
-                pm2 start "pnpm exec next start -p $PORT" \
-                  --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
-              pm2 save
-              echo "✅ Dev deploy complete (port=$PORT)."
-
-            else
-              echo "❌ Unknown command: $CMD"
-              exit 1
-            fi
+            echo "Reloading production app (zero downtime)..."
+            pm2 reload "$APP_NAME" --update-env || \
+              pm2 start "pnpm exec next start -p $PORT" \
+                --name "$APP_NAME" \
+                --cwd "$APP_DIR" \
+                -i max
+            pm2 save
+            echo "✅ Production reload complete (port=$PORT, cluster mode)."

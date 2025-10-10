@@ -1,4 +1,4 @@
-name: Develop Deploy (.next only)
+name: Develop Deploy
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Write .env.local for build
+      - name: 빌드 환경을 위한 .env.local 작성
         run: |
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" >> .env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env.local
@@ -40,11 +40,29 @@ jobs:
           echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
           echo "✅ .env.local written."
 
-      - name: Set command
+      - name: 커멘드 세팅
         id: control
         run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
 
-      - name: Clean old .next on EC2
+      - name: EC2에 develop 브랜치 코드 최신화
+        if: env.CMD == 'deploy'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            echo "Updating repository to latest develop branch..."
+            cd "$APP_DIR"
+            git fetch --all
+            git checkout develop
+            git reset --hard origin/develop
+            git pull --ff-only
+            echo "✅ Repository updated."
+
+      - name: EC2의 .next 폴더 삭제
         if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -59,7 +77,7 @@ jobs:
             rm -rf .next || true
             echo "✅ Old .next removed."
 
-      - name: Build Next.js
+      - name: Next.js 빌드
         if: env.CMD == 'deploy'
         run: |
           echo "Installing dependencies..."
@@ -70,21 +88,21 @@ jobs:
           ls -alh .next || (echo ".next not found!" && exit 1)
           du -sh .next || true
 
-      - name: Upload new .next to EC2
+      - name: EC2에 .next 폴더 업로드
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "./.next"
+          source: './.next'
           target: /home/ubuntu/mokkoji-fe-dev
         continue-on-error: false
       - name: Confirm upload success
         if: env.CMD == 'deploy'
         run: echo "✅ .next uploaded successfully."
 
-      - name: Restart PM2 on EC2
+      - name: EC2의 PM2 재시작
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}

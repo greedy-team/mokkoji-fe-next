@@ -1,4 +1,4 @@
-name: Develop Deploy (Build on Runner + Upload to EC2)
+name: Develop Deploy (Safe Replace Build)
 
 on:
   push:
@@ -42,11 +42,27 @@ jobs:
       - name: Handle command input
         id: control
         run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
+
       - name: Build Next.js (only for deploy)
         if: env.CMD == 'deploy'
         run: |
           pnpm install --frozen-lockfile --prefer-offline
-          pnpm build --no-lint
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
+          ls -alh .next || echo "❌ Build failed, .next not found"
+
+      - name: Clean old .next on EC2
+        if: env.CMD == 'deploy'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            APP_DIR="/home/ubuntu/mokkoji-fe-dev"
+            echo "🧹 Removing old .next on EC2..."
+            cd "$APP_DIR"
+            rm -rf .next || true
+            echo "✅ Old .next cleaned."
 
       - name: Upload build output to EC2
         if: env.CMD == 'deploy'
@@ -55,12 +71,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: |
-            .next
-            public
-            package.json
-            pnpm-lock.yaml
-            .env.local
+          source: './.next ./public ./package.json ./pnpm-lock.yaml ./.env.local'
           target: /home/ubuntu/mokkoji-fe-dev
 
       - name: Control Dev Server on EC2
@@ -98,7 +109,7 @@ jobs:
               echo "✅ Dev server restarted."
 
             elif [ "$CMD" = "deploy" ]; then
-              echo "🚀 Deploying uploaded build..."
+              echo "🚀 Starting new build..."
               cd "$APP_DIR"
               pm2 restart "$APP_NAME" || \
                 pm2 start "pnpm exec next start -p $PORT" \

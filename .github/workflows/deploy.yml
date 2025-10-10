@@ -132,7 +132,7 @@ jobs:
           script_stop: true
           script: |
             set -e
-            cd "$APP_DIR"
+            cd "$APP_DIR/deploy_bundle"
 
             echo "실행 환경: ${ENV}"
             echo "명령: ${CMD}"
@@ -146,7 +146,7 @@ jobs:
               pm2 reload "$APP_NAME" --update-env || \
                 pm2 start "pnpm exec next start -p $APP_PORT" \
                   --name "$APP_NAME" \
-                  --cwd "$APP_DIR"
+                  --cwd "$APP_DIR/deploy_bundle"
               pm2 save
               echo "${ENV} 배포 완료 (port=$APP_PORT)"
 

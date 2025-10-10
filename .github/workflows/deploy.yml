@@ -1,4 +1,4 @@
-name: Deploy
+name: Universal Deploy (Auto-Create & Overwrite)
 
 on:
   workflow_call:
@@ -66,7 +66,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: .env.local 작성
+      - name: Write .env.local
         run: |
           echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" >> .env.local
           echo "NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}" >> .env.local
@@ -78,16 +78,16 @@ jobs:
           echo "NEXTAUTH_URL=${NEXTAUTH_URL}" >> .env.local
           echo "✅ .env.local 작성 완료 (${ENV})"
 
-      - name: Next.js 빌드
+      - name: Build Next.js
         if: env.CMD == 'deploy'
         run: |
-          echo "${ENV} 빌드 중..."
+          echo "${ENV} 빌드 시작..."
           pnpm install --frozen-lockfile --prefer-offline
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
           echo "✅ ${ENV} 빌드 완료."
           ls -alh .next || (echo "❌ .next 폴더 없음!" && exit 1)
 
-      - name: EC2 .next 폴더 초기화
+      - name: Ensure target directory exists
         if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -96,12 +96,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            cd "$APP_DIR"
-            rm -rf .next || true
-            mkdir -p .next
-            echo "✅ ${ENV} .next 초기화 완료."
+            mkdir -p "$APP_DIR"
+            echo "✅ ${APP_DIR} 생성 확인 완료."
 
-      - name: 필수 파일 업로드 (.next, .env.local, package.json, pnpm-lock.yaml)
+      - name: Upload build output (auto overwrite)
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
@@ -114,8 +112,9 @@ jobs:
             ./package.json
             ./pnpm-lock.yaml
           target: ${{ env.APP_DIR }}
+          overwrite: true
 
-      - name: EC2 의존성 동기화 및 PM2 무중단 제어
+      - name: Install dependencies & PM2 zero-downtime control
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -130,7 +129,7 @@ jobs:
             echo "명령: ${CMD}"
 
             if [ "$CMD" = "deploy" ]; then
-              echo "📦 의존성 설치 중..."
+              echo "의존성 동기화 중..."
               pnpm install --frozen-lockfile --prefer-offline
               echo "✅ 의존성 설치 완료."
 

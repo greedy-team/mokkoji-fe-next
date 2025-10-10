@@ -1,4 +1,4 @@
-name: 통합 배포 (자동 생성 및 덮어쓰기)
+name: 통합 배포 (번들 업로드, 내용만 전송)
 
 on:
   workflow_call:
@@ -101,18 +101,24 @@ jobs:
             mkdir -p "$APP_DIR"
             echo "${APP_DIR} 생성 완료."
 
-      - name: 빌드 결과 및 설정 파일 업로드 (덮어쓰기)
+      - name: 배포 번들 생성
+        if: env.CMD == 'deploy'
+        run: |
+          rm -rf deploy_bundle
+          mkdir -p deploy_bundle
+          cp -r .next deploy_bundle/.next
+          cp .env.local package.json pnpm-lock.yaml deploy_bundle/
+          echo "번들 내용 확인:"
+          ls -alh deploy_bundle
+
+      - name: 배포 번들 업로드 (내용만 전송, 덮어쓰기)
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: |
-            ./.next
-            ./.env.local
-            ./package.json
-            ./pnpm-lock.yaml
+          source: ./deploy_bundle/.
           target: ${{ env.APP_DIR }}
           overwrite: true
 

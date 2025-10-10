@@ -110,6 +110,7 @@ jobs:
           cp .env.local package.json pnpm-lock.yaml deploy_bundle/
           echo "번들 내용 확인:"
           ls -alh deploy_bundle
+          ls -alh deploy_bundle/.next || true
 
       - name: 배포 번들 업로드 (내용만 전송, 덮어쓰기)
         if: env.CMD == 'deploy'
@@ -118,9 +119,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: ./deploy_bundle/.
+          source: ./deploy_bundle
           target: ${{ env.APP_DIR }}
           overwrite: true
+          strip_components: 1
 
       - name: EC2 의존성 설치 및 PM2 무중단 배포 제어
         uses: appleboy/ssh-action@v1.0.3

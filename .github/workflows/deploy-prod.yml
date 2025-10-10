@@ -1,0 +1,19 @@
+name: Production Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      cmd:
+        description: 'restart | stop | deploy'
+        required: false
+        default: 'deploy'
+
+jobs:
+  call-deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      env: prod
+      cmd: ${{ github.event.inputs.cmd || 'deploy' }}
+    secrets: inherit

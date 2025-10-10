@@ -33,13 +33,13 @@ jobs:
           echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
           echo "NEXT_PUBLIC_S3_DOMAIN=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}" >> .env.local
           echo "NEXTAUTH_URL=https://www.mokkoji.site" >> .env.local
-          echo "✅ .env.local written."
+          echo "✅ .env.local 작성 완료."
 
       - name: Next.js 빌드
         run: |
           pnpm install --frozen-lockfile --prefer-offline
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
-          echo "✅ Build complete."
+          echo "✅ Next.js 빌드 완료."
           ls -alh .next || (echo "❌ .next not found" && exit 1)
           du -sh .next || true
 
@@ -51,10 +51,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             APP_DIR="/home/ubuntu/mokkoji-fe-prod"
-            echo "Removing old .next folder..."
+            echo "EC2 .next 폴더 삭제..."
             cd "$APP_DIR"
             rm -rf .next || true
-            echo "✅ Old .next removed."
+            echo "✅ EC2 .next 폴더 삭제 완료."
 
       - name: EC2에 .next 폴더 업로드
         uses: appleboy/scp-action@v0.1.5
@@ -78,20 +78,20 @@ jobs:
             APP_NAME="mokkoji-prod"
             PORT=3000
 
-            echo "Updating production repository..."
+            echo "EC2 main 브랜치 최신화..."
             cd "$APP_DIR"
             git fetch --all
             git checkout main
             git reset --hard origin/main
             git pull --ff-only
 
-            echo "✅ Repository updated."
+            echo "✅ EC2 main 브랜치 최신화 완료."
 
-            echo "Reloading production app (zero downtime)..."
+            echo "EC2 무중단 배포..."
             pm2 reload "$APP_NAME" --update-env || \
               pm2 start "pnpm exec next start -p $PORT" \
                 --name "$APP_NAME" \
                 --cwd "$APP_DIR" \
                 -i max
             pm2 save
-            echo "✅ Production reload complete (port=$PORT, cluster mode)."
+            echo "✅ Production 무중단 배포 완료 (port=$PORT, cluster mode)."

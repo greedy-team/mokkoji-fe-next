@@ -28,7 +28,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: 빌드 환경을 위한 .env.local 작성
+      - name: .env.local 작성
         run: |
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" >> .env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env.local
@@ -40,11 +40,11 @@ jobs:
           echo "NEXTAUTH_URL=https://dev.mokkoji.site" >> .env.local
           echo "✅ .env.local written."
 
-      - name: 커멘드 세팅
+      - name: 커맨드 세팅
         id: control
         run: echo "CMD=${{ github.event.inputs.cmd || 'deploy' }}" >> $GITHUB_ENV
 
-      - name: EC2에 develop 브랜치 코드 최신화
+      - name: EC2 develop 브랜치 최신화
         if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -60,9 +60,20 @@ jobs:
             git checkout develop
             git reset --hard origin/develop
             git pull --ff-only
-            echo "✅ Repository updated."
+            echo "✅ EC2 develop 브랜치 최신화 완료."
 
-      - name: EC2의 .next 폴더 삭제
+      - name: Next.js 빌드
+        if: env.CMD == 'deploy'
+        run: |
+          echo "Installing dependencies..."
+          pnpm install --frozen-lockfile --prefer-offline
+          echo "Building project..."
+          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
+          echo "✅ Build complete."
+          ls -alh .next || (echo "❌ .next not found!" && exit 1)
+          du -sh .next || true
+
+      - name: EC2 .next 교체
         if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -72,23 +83,13 @@ jobs:
           script_stop: true
           script: |
             APP_DIR="/home/ubuntu/mokkoji-fe-dev"
-            echo "Removing old .next folder..."
+            echo "EC2 .next 폴더 삭제..."
             cd "$APP_DIR"
             rm -rf .next || true
-            echo "✅ Old .next removed."
+            mkdir -p .next
+            echo "✅ EC2 .next 폴더 삭제 완료"
 
-      - name: Next.js 빌드
-        if: env.CMD == 'deploy'
-        run: |
-          echo "Installing dependencies..."
-          pnpm install --frozen-lockfile --prefer-offline
-          echo "Building project..."
-          NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint || { echo "Build failed"; exit 1; }
-          echo "✅ Build complete."
-          ls -alh .next || (echo ".next not found!" && exit 1)
-          du -sh .next || true
-
-      - name: EC2에 .next 폴더 업로드
+      - name: .next 업로드
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
@@ -98,11 +99,12 @@ jobs:
           source: './.next'
           target: /home/ubuntu/mokkoji-fe-dev
         continue-on-error: false
-      - name: Confirm upload success
-        if: env.CMD == 'deploy'
-        run: echo "✅ .next uploaded successfully."
 
-      - name: EC2의 PM2 재시작
+      - name: 업로드 완료 확인
+        if: env.CMD == 'deploy'
+        run: echo "✅ .next 업로드 완료"
+
+      - name: PM2 무중단 재시작
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -116,24 +118,25 @@ jobs:
             PORT=3001
             CMD="${{ github.event.inputs.cmd || 'deploy' }}"
 
-            echo "Running command: $CMD"
+            echo "커맨드 실행: $CMD"
 
             if [ "$CMD" = "deploy" ]; then
-              echo "Restarting Dev Server..."
               cd "$APP_DIR"
-              pm2 restart "$APP_NAME" || \
+              echo "EC2 무중단 배포..."
+              pm2 reload "$APP_NAME" --update-env || \
                 pm2 start "pnpm exec next start -p $PORT" \
                   --name "$APP_NAME" \
                   --cwd "$APP_DIR"
               pm2 save
-              echo "✅ Deployment complete (port=$PORT)."
+              echo "✅ 무중단 배포 성공 (port=$PORT)."
 
             elif [ "$CMD" = "restart" ]; then
-              pm2 restart "$APP_NAME" || true
-              echo "✅ Restart complete."
+              pm2 reload "$APP_NAME" --update-env || true
+              echo "✅ 서버 재시작 성공."
+
             elif [ "$CMD" = "stop" ]; then
               pm2 stop "$APP_NAME" || true
               pm2 delete "$APP_NAME" || true
               pm2 save || true
-              echo "✅ Stop complete."
+              echo "✅ 서버 정지 성공."
             fi

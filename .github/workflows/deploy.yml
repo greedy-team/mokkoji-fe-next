@@ -1,4 +1,4 @@
-name: Universal Deploy (Auto-Create & Overwrite)
+name: 통합 배포 (자동 생성 및 덮어쓰기)
 
 on:
   workflow_call:
@@ -54,10 +54,10 @@ jobs:
       NEXTAUTH_URL: ${{ inputs.env == 'prod' && 'https://www.mokkoji.site' || 'https://dev.mokkoji.site' }}
 
     steps:
-      - name: Checkout repository
+      - name: GitHub 저장소 코드 확인
         uses: actions/checkout@v4
 
-      - name: Setup Node.js & pnpm
+      - name: Node.js 및 pnpm 환경 설정
         uses: pnpm/action-setup@v4
         with:
           version: 9
@@ -66,7 +66,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Write .env.local
+      - name: 환경 변수 파일(.env.local) 작성
         run: |
           echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" >> .env.local
           echo "NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}" >> .env.local
@@ -76,30 +76,32 @@ jobs:
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
           echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
           echo "NEXTAUTH_URL=${NEXTAUTH_URL}" >> .env.local
-          echo "✅ .env.local 작성 완료 (${ENV})"
+          echo ".env.local 작성 완료 (${ENV})"
 
-      - name: Build Next.js
+      - name: Next.js 빌드 실행
         if: env.CMD == 'deploy'
         run: |
           echo "${ENV} 빌드 시작..."
           pnpm install --frozen-lockfile --prefer-offline
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
-          echo "✅ ${ENV} 빌드 완료."
-          ls -alh .next || (echo "❌ .next 폴더 없음!" && exit 1)
+          echo "${ENV} 빌드 완료."
+          ls -alh .next || (echo ".next 폴더 없음!" && exit 1)
 
-      - name: Ensure target directory exists
+      - name: EC2 대상 디렉토리 생성 확인
         if: env.CMD == 'deploy'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: APP_DIR,ENV
           script_stop: true
           script: |
+            echo "${ENV} 환경의 배포 디렉토리 확인 중..."
             mkdir -p "$APP_DIR"
-            echo "✅ ${APP_DIR} 생성 확인 완료."
+            echo "${APP_DIR} 생성 완료."
 
-      - name: Upload build output (auto overwrite)
+      - name: 빌드 결과 및 설정 파일 업로드 (덮어쓰기)
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
@@ -114,24 +116,25 @@ jobs:
           target: ${{ env.APP_DIR }}
           overwrite: true
 
-      - name: Install dependencies & PM2 zero-downtime control
+      - name: EC2 의존성 설치 및 PM2 무중단 배포 제어
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: APP_DIR,APP_NAME,APP_PORT,ENV,CMD
           script_stop: true
           script: |
             set -e
             cd "$APP_DIR"
 
-            echo "⚙️ 실행 환경: ${ENV}"
+            echo "실행 환경: ${ENV}"
             echo "명령: ${CMD}"
 
             if [ "$CMD" = "deploy" ]; then
-              echo "의존성 동기화 중..."
+              echo "의존성 설치 중..."
               pnpm install --frozen-lockfile --prefer-offline
-              echo "✅ 의존성 설치 완료."
+              echo "의존성 설치 완료."
 
               echo "무중단 배포 시작..."
               pm2 reload "$APP_NAME" --update-env || \
@@ -139,15 +142,15 @@ jobs:
                   --name "$APP_NAME" \
                   --cwd "$APP_DIR"
               pm2 save
-              echo "✅ ${ENV} 배포 완료 (port=$APP_PORT)"
+              echo "${ENV} 배포 완료 (port=$APP_PORT)"
 
             elif [ "$CMD" = "restart" ]; then
               pm2 reload "$APP_NAME" --update-env || true
-              echo "✅ ${ENV} 서버 재시작 완료."
+              echo "${ENV} 서버 재시작 완료."
 
             elif [ "$CMD" = "stop" ]; then
               pm2 stop "$APP_NAME" || true
               pm2 delete "$APP_NAME" || true
               pm2 save || true
-              echo "🛑 ${ENV} 서버 중지 완료."
+              echo "${ENV} 서버 중지 완료."
             fi

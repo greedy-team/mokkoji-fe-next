@@ -109,10 +109,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: |
-            .next
-            .env.local
-            package.json
-            pnpm-lock.yaml
+            ./.next
+            ./.env.local
+            ./package.json
+            ./pnpm-lock.yaml
           target: ${{ env.APP_DIR }}
 
       - name: EC2 의존성 동기화 및 PM2 무중단 제어

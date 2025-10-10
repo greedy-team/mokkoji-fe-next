@@ -1,4 +1,4 @@
-name: 통합 배포 (번들 업로드, 폴더 진입점)
+name: 통합 배포 (번들 업로드, 내용만 전송)
 
 on:
   workflow_call:
@@ -76,12 +76,15 @@ jobs:
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
           echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> .env.local
           echo "NEXTAUTH_URL=${NEXTAUTH_URL}" >> .env.local
+          echo ".env.local 작성 완료 (${ENV})"
 
       - name: Next.js 빌드 실행
         if: env.CMD == 'deploy'
         run: |
+          echo "${ENV} 빌드 시작..."
           pnpm install --frozen-lockfile --prefer-offline
           NODE_OPTIONS="--max-old-space-size=4096" pnpm build --no-lint
+          echo "${ENV} 빌드 완료."
           ls -alh .next || (echo ".next 폴더 없음!" && exit 1)
 
       - name: EC2 대상 디렉토리 생성 확인
@@ -94,7 +97,9 @@ jobs:
           envs: APP_DIR,ENV
           script_stop: true
           script: |
-            mkdir -p "$APP_DIR/deploy_bundle"
+            echo "${ENV} 환경의 배포 디렉토리 확인 중..."
+            mkdir -p "$APP_DIR"
+            echo "${APP_DIR} 생성 완료."
 
       - name: 배포 번들 생성
         if: env.CMD == 'deploy'
@@ -102,18 +107,18 @@ jobs:
           rm -rf deploy_bundle
           mkdir -p deploy_bundle
           cp -r .next deploy_bundle/.next
-          install -m 600 .env.local deploy_bundle/.env.local
-          cp package.json pnpm-lock.yaml deploy_bundle/
-          ls -al deploy_bundle
+          cp .env.local package.json pnpm-lock.yaml deploy_bundle/
+          echo "번들 내용 확인:"
+          ls -alh deploy_bundle
 
-      - name: 배포 번들 업로드 (폴더 통째로, 덮어쓰기)
+      - name: 배포 번들 업로드 (내용만 전송, 덮어쓰기)
         if: env.CMD == 'deploy'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: ./deploy_bundle
+          source: ./deploy_bundle/.
           target: ${{ env.APP_DIR }}
           overwrite: true
 
@@ -127,7 +132,7 @@ jobs:
           script_stop: true
           script: |
             set -e
-            cd "$APP_DIR/deploy_bundle"
+            cd "$APP_DIR"
 
             echo "실행 환경: ${ENV}"
             echo "명령: ${CMD}"
@@ -141,7 +146,7 @@ jobs:
               pm2 reload "$APP_NAME" --update-env || \
                 pm2 start "pnpm exec next start -p $APP_PORT" \
                   --name "$APP_NAME" \
-                  --cwd "$APP_DIR/deploy_bundle"
+                  --cwd "$APP_DIR"
               pm2 save
               echo "${ENV} 배포 완료 (port=$APP_PORT)"
 

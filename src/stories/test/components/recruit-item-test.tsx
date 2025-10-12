@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { RecruitStatus } from '@/shared/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
-import PeriodSection from './period-section';
+import PeriodSection from '../../../entities/recruit/ui/period-section';
 
 interface RecruitItemProps {
   title: string;
@@ -19,7 +19,7 @@ interface RecruitItemProps {
   height?: number;
 }
 
-function RecruitItem({
+function RecruitItemTest({
   title,
   name,
   startDate,
@@ -68,4 +68,4 @@ function RecruitItem({
   );
 }
 
-export default RecruitItem;
+export default RecruitItemTest;

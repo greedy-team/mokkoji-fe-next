@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ✅ Colors */
+  --color-primary-500: #00e457; /* 모꼬지 초록색 */
+  --color-primary-300: #93f3b8;
+  --color-text-primary: #000000; /* 텍스트 제목 */
+  --color-text-secondary: #474747; /* 텍스트 본문 */
+  --color-text-tertiary: #9f9f9f; /* 텍스트 placeholder */
+  --color-alert-500: #ff383c;
+  --color-disabled: #cccccc;
+}
+
+@utility bg-gradient-primary {
+  background-image: linear-gradient(
+    to right,
+    #00e804 0%,
+    #3ae2eb 73%,
+    #3aa1eb 100%
+  );
+}

@@ -15,12 +15,12 @@ function SectionHeader({
       id="top"
     >
       <nav className="mb-4 flex flex-row justify-between lg:mb-8">
-        <h1 className="text-md mr-2 h-[36px] font-extrabold text-[#00E457] lg:text-2xl">
+        <h1 className="text-md text-primary-500 mr-2 h-[36px] font-extrabold lg:text-2xl">
           {title}
         </h1>
         {children}
       </nav>
-      <h2 className="text-lg font-bold whitespace-pre-wrap text-[#474747] lg:text-4xl lg:leading-[48px]">
+      <h2 className="text-text-primary text-lg font-bold whitespace-pre-wrap lg:text-4xl lg:leading-[48px]">
         {description}
       </h2>
     </header>

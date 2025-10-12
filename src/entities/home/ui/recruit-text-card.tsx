@@ -5,12 +5,12 @@ function RecruitTextCard() {
   return (
     <div className="flex h-[50%] w-full flex-col justify-center lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
-        <h1 className="text-lg font-bold text-[#00E457] lg:text-2xl">
+        <h1 className="text-primary-500 text-lg font-bold lg:text-2xl">
           <Link href="/recruit">모집 공고</Link>
         </h1>
       </AnimateOnView>
       <AnimateOnView animation="reveal">
-        <p className="my-1 w-full text-2xl leading-[1.5] font-bold lg:my-3 lg:w-[90%] lg:text-3xl">
+        <p className="text-text-primary my-1 w-full text-2xl leading-[1.5] font-bold lg:my-3 lg:w-[90%] lg:text-3xl">
           관심있는 동아리의 최신 모집 공고를 빠르게 확인할 수 있어요.
         </p>
       </AnimateOnView>

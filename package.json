@@ -13,6 +13,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "deploy-storybook": "gh-pages -d storybook-static",
+    "release-storybook": "storybook build && gh-pages -d storybook-static",
     "test": "playwright test",
     "test:storybook": "playwright test --project=Storybook-Chromium",
     "test:chrome": "playwright test --project=Chromium",

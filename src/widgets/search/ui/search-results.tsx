@@ -22,7 +22,7 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-13 mb-4">
-        <span className="font-bold text-[#00E457]">
+        <span className="text-primary-500 font-bold">
           {data.data?.clubs.length}건
         </span>
         <span className="text-black">의 검색결과</span>
@@ -35,7 +35,7 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
           ))}
         </section>
       ) : (
-        <section className="py-8 text-center text-gray-500">
+        <section className="text-text-secondary py-8 text-center">
           검색 결과가 없습니다.
         </section>
       )}

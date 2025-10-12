@@ -33,7 +33,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         status={data.data.status}
       />
       {data.data.description ? (
-        <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
+        <p className="text-text-secondary mb-3 text-sm leading-[1.4] whitespace-pre-wrap lg:pt-10 lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
               __html: convertLinkText(data.data.description),

@@ -5,7 +5,7 @@ function ClubTextCard() {
   return (
     <div className="flex h-[50%] w-full flex-col justify-center lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
-        <h1 className="text-lg font-bold text-[#00E457] lg:text-2xl">
+        <h1 className="text-primary-500 text-lg font-bold lg:text-2xl">
           <Link href="/club">전체 동아리</Link>
         </h1>
       </AnimateOnView>
@@ -15,7 +15,7 @@ function ClubTextCard() {
         </p>
       </AnimateOnView>
       <AnimateOnView animation="reveal-rightToleft">
-        <span className="text-md my-1 block w-full leading-[1.5] font-semibold text-[#9C9C9C] lg:my-3 lg:w-[90%] lg:text-2xl">
+        <span className="text-md text-text-tertiary my-1 block w-full leading-[1.5] font-semibold lg:my-3 lg:w-[90%] lg:text-2xl">
           간단한 동아리 설명과 동아리 카테고리를 확인할 수 있어요.
         </span>
       </AnimateOnView>

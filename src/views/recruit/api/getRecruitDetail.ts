@@ -3,7 +3,7 @@ import { ApiResponse } from '@/shared/model/type';
 import { RecruitmentDetail } from '@/views/recruit/model/type';
 import api from '@/shared/api/auth-api';
 
-async function getRecruitDetail(id: string) {
+async function getRecruitDetail(id: number) {
   try {
     const response: ApiResponse<RecruitmentDetail> = await api
       .get(`recruitments/${id}`)

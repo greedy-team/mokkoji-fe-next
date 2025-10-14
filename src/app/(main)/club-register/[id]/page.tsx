@@ -1,8 +1,14 @@
-import { DetailParams } from '@/shared/model/type';
 import ClubEditPage from '@/views/club-register/ui/club-edit-page';
+import { searchParamsCache } from './search-params';
 
-function Page({ params }: DetailParams) {
-  return <ClubEditPage params={params} />;
+function Page({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  searchParamsCache.parse(searchParams);
+
+  return <ClubEditPage />;
 }
 
 export default Page;

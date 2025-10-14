@@ -1,18 +1,17 @@
 import ClubEditForm from '@/features/club-register/ui/club-edit-form';
 import { getClubInfo } from '@/shared/api/manage-api';
-import { DetailParams } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getParams from '@/shared/util/getParams';
+import { searchParamsCache } from '@/app/(main)/club-register/[id]/search-params';
 
-async function ClubEditWidget({ params }: DetailParams) {
-  const { id } = await getParams({ params });
-  const res = await getClubInfo(Number(id));
+async function ClubEditWidget() {
+  const id = searchParamsCache.get('id');
+  const res = await getClubInfo(id);
 
   if (!res.ok) {
     return <ErrorBoundaryUi />;
   }
 
-  return <ClubEditForm clubInfo={res.data} clubId={Number(id)} />;
+  return <ClubEditForm clubInfo={res.data} clubId={id} />;
 }
 
 export default ClubEditWidget;

@@ -1,12 +1,13 @@
 import RecruitDetailPage from '@/views/recruit/ui/recruit-detail-page';
-import { DetailParams } from '@/shared/model/type';
 import { Suspense } from 'react';
 import RecruitDetailSkeleton from '@/entities/recruit/ui/recruit-detail-skeleton';
+import { searchParamsCache } from './search-params';
 
-function Page({ params }: DetailParams) {
+function Page(searchParams: Record<string, string | string[] | undefined>) {
+  searchParamsCache.parse(searchParams);
   return (
     <Suspense fallback={<RecruitDetailSkeleton />}>
-      <RecruitDetailPage params={params} />
+      <RecruitDetailPage />
     </Suspense>
   );
 }

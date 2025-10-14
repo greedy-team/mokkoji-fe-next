@@ -1,10 +1,11 @@
 import ClubPage from '@/views/club/ui/club-page';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { searchParamsCache } from './search-params';
 
 export const revalidate = 1800;
 
-function Page({ searchParams }: RecruitItemListProps) {
-  return <ClubPage searchParams={searchParams} />;
+function Page(searchParams: Record<string, string | string[] | undefined>) {
+  searchParamsCache.parse(searchParams);
+  return <ClubPage />;
 }
 
 export default Page;

@@ -34,7 +34,7 @@ async function RecruitItemList() {
     return <ErrorBoundaryUi />;
   }
 
-  if (res.data?.recruitments.length === 0) {
+  if (res.data.recruitments.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
         모집 공고가 없습니다.
@@ -44,7 +44,7 @@ async function RecruitItemList() {
 
   return (
     <RecruitItemClientList
-      recruitments={res.data?.recruitments}
+      recruitments={res.data.recruitments}
       initialColumns={columns}
       initialCardHeight={cardHeight}
     />

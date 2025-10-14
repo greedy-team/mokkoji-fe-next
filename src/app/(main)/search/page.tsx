@@ -1,8 +1,13 @@
 import SearchPage from '@/views/search/ui/search-page';
+import { type SearchParams } from 'nuqs/server';
 import { searchParamsCache } from './search-params';
 
-function Page(searchParams: Record<string, string | string[] | undefined>) {
-  searchParamsCache.parse(searchParams);
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
   return <SearchPage />;
 }
 

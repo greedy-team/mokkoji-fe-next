@@ -1,10 +1,15 @@
 import RecruitDetailPage from '@/views/recruit/ui/recruit-detail-page';
 import { Suspense } from 'react';
 import RecruitDetailSkeleton from '@/entities/recruit/ui/recruit-detail-skeleton';
+import { type SearchParams } from 'nuqs/server';
 import { searchParamsCache } from './search-params';
 
-function Page(searchParams: Record<string, string | string[] | undefined>) {
-  searchParamsCache.parse(searchParams);
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
   return (
     <Suspense fallback={<RecruitDetailSkeleton />}>
       <RecruitDetailPage />

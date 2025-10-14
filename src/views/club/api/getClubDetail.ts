@@ -3,7 +3,7 @@ import { ApiResponse } from '@/shared/model/type';
 import { ClubDetailType } from '@/views/club/model/type';
 import api from '@/shared/api/auth-api';
 
-async function getClubDetail(id: string) {
+async function getClubDetail(id: number) {
   try {
     const response: ApiResponse<ClubDetailType> = await api
       .get(`clubs/${id}`)

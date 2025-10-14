@@ -1,10 +1,15 @@
 import ClubPage from '@/views/club/ui/club-page';
+import { type SearchParams } from 'nuqs/server';
 import { searchParamsCache } from './search-params';
 
 export const revalidate = 1800;
 
-function Page(searchParams: Record<string, string | string[] | undefined>) {
-  searchParamsCache.parse(searchParams);
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
   return <ClubPage />;
 }
 

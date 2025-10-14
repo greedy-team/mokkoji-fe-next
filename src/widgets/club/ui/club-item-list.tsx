@@ -15,7 +15,7 @@ async function ClubItemList() {
     page,
     size,
     keyword,
-    category: category as ClubCategory,
+    category: category.toUpperCase() as ClubCategory,
   });
 
   if (!res.ok) {

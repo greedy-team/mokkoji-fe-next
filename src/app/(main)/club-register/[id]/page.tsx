@@ -1,12 +1,13 @@
 import ClubEditPage from '@/views/club-register/ui/club-edit-page';
+import { type SearchParams } from 'nuqs/server';
 import { searchParamsCache } from './search-params';
 
-function Page({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
-}) {
-  searchParamsCache.parse(searchParams);
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
 
   return <ClubEditPage />;
 }

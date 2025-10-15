@@ -14,7 +14,7 @@ import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
-import isFormValid from '../util/isFormVaild';
+import isFormValid from '../util/isFormValid';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
 const fields: FormField[] = [

@@ -1,14 +1,16 @@
 import RecruitPage from '@/views/recruit/ui/recruit-page';
-import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
+import { type SearchParams } from 'nuqs/server';
+import { searchParamsCache } from './search-params';
 
 export const revalidate = 1800;
 
-function Page({
-  searchParams,
-}: {
-  searchParams: Promise<RecruitmentSearchParams>;
-}) {
-  return <RecruitPage searchParams={searchParams} />;
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
+  return <RecruitPage />;
 }
 
 export default Page;

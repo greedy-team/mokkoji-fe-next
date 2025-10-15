@@ -8,7 +8,7 @@ async function getMyInfo() {
     const response: ApiResponse<UserInfoType> = await api
       .get('users', {
         cache: 'force-cache',
-        next: { revalidate: 3600, tags: ['users'] },
+        next: { tags: ['users'] },
       })
       .json();
     return {

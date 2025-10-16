@@ -1,17 +1,21 @@
-import { ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { searchParamsCache } from '@/app/(main)/club/search-params';
+import { ClubCategory } from '@/shared/model/type';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
-async function ClubItemList({ searchParams }: RecruitItemListProps) {
+async function ClubItemList() {
+  const page = searchParamsCache.get('page');
+  const size = searchParamsCache.get('size');
+  const category = searchParamsCache.get('category');
+  const keyword = searchParamsCache.get('keyword');
+
   const res = await getClubList({
-    page: Number((await searchParams).page || 1),
-    size: Number((await searchParams).size || 100),
-    keyword: (await searchParams).keyword?.toUpperCase() || '',
-    category: (await searchParams).category?.toUpperCase() as ClubCategory,
-    recruitStatus: (await searchParams).recruitStatus,
+    page,
+    size,
+    keyword,
+    category: category.toUpperCase() as ClubCategory,
   });
 
   if (!res.ok) {

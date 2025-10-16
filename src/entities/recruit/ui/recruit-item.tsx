@@ -44,7 +44,9 @@ function RecruitItem({
           </Avatar>
           <div>
             <PeriodSection startDate={startDate} endDate={endDate} />
-            <h1 className="text-[16px] font-bold lg:text-xl">{name}</h1>
+            <h1 className="text-text-primary text-base font-bold lg:text-xl">
+              {name}
+            </h1>
           </div>
         </div>
         <RadiusTag status={status} className="lg:text-[16px]" />

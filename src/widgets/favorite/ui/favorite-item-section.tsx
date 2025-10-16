@@ -4,14 +4,13 @@ import Pagination from '@/shared/ui/pagination';
 import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import cn from '@/shared/lib/utils';
+import { searchParamsCache } from '@/app/(main)/favorite/search-params';
 import getFavoriteList from '../api/getFavoriteList';
 
-interface FavoriteItemSectionProps {
-  page: number;
-  size: number;
-}
+async function FavoriteItemSection() {
+  const page = searchParamsCache.get('page');
+  const size = searchParamsCache.get('size');
 
-async function FavoriteItemSection({ page, size }: FavoriteItemSectionProps) {
   const session = await auth();
   let data;
   let login;

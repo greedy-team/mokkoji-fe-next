@@ -21,14 +21,12 @@ const buttonVariants = cva(
         link: 'flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00E804] to-[#33E3D0] text-xs lg:text-base font-semibold text-white shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105',
         disabled: 'rounded-md py-5 bg-[#D5D5D5] text-white text-base mt-6',
         submit:
-          'rounded-md py-5 bg-[#00E457] text-white text-base mt-6 hover:bg-[#00c94c] transition-colors duration-200',
+          'rounded-md py-5 bg-primary text-white text-base mt-6 hover:bg-[#00c94c] transition-colors duration-200',
         optionsSelected:
-          'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#00E457] bg-[#F1FFF6] transition-colors duration-300',
+          'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-primary bg-[#F1FFF6] transition-colors duration-300',
         options:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#D9D9D9] hover:border-[#888888] hover:bg-[#f6f6f6] transition-colors duration-300',
         none: '',
-        kakao:
-          'bg-[#FDDC3F] text-[#000000] shadow-xs hover:bg-[#FDD835] border border-[#FEE500]',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

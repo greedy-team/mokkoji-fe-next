@@ -7,7 +7,7 @@ function BugInfoButton() {
   return (
     <Link
       href="#bottom"
-      className="fixed right-6 bottom-10 z-50 flex h-[120px] w-[120px] cursor-pointer flex-col items-center justify-center gap-1 rounded-full bg-[#00E457] text-white"
+      className="bg-primary-500 fixed right-6 bottom-10 z-50 flex h-[80px] w-[80px] cursor-pointer flex-col items-center justify-center gap-1 rounded-full text-xs text-white lg:h-[120px] lg:w-[120px] lg:text-base"
     >
       <span className="text-center">
         <span className="font-bold">버그</span> <br /> 제보하기

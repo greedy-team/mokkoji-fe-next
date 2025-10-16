@@ -1,14 +1,13 @@
 import { notFound } from 'next/navigation';
 import getClubDetail from '@/views/club/api/getClubDetail';
 import ClubDetailCommentWidget from '@/widgets/club-detail/ui/club-detail-comment-widget';
-import { DetailParams } from '@/shared/model/type';
-import getParams from '@/shared/util/getParams';
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import { searchParamsCache } from '@/app/(main)/club/[id]/search-params';
 
-async function ClubDetailPage({ params }: DetailParams) {
-  const { id } = await getParams({ params });
+async function ClubDetailPage() {
+  const id = searchParamsCache.get('id');
   const data = await getClubDetail(id);
 
   if (data?.status === 404 || !data.data) {
@@ -33,7 +32,7 @@ async function ClubDetailPage({ params }: DetailParams) {
         status={data.data.status}
       />
       {data.data.description ? (
-        <p className="mb-3 text-sm leading-[1.4] whitespace-pre-wrap text-black lg:pt-10 lg:text-lg">
+        <p className="text-text-secondary mb-3 text-sm leading-[1.4] whitespace-pre-wrap lg:pt-10 lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
               __html: convertLinkText(data.data.description),

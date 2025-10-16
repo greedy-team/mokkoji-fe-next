@@ -8,7 +8,7 @@ function Footer() {
         href="https://docs.google.com/forms/d/1U3tnUQxdu8CtT9W1b8KQoQkhFs851BiwSO3l355L57w/edit"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#00E804] underline"
+        className="text-primary-500 underline"
       >
         버그 제보
       </a>

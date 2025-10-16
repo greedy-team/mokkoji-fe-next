@@ -1,14 +1,13 @@
 import { notFound } from 'next/navigation';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
-import { DetailParams } from '@/shared/model/type';
-import getParams from '@/shared/util/getParams';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
 import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import { searchParamsCache } from '@/app/(main)/recruit/[id]/search-params';
 
-async function RecruitDetailPage({ params }: DetailParams) {
-  const { id } = await getParams({ params });
+async function RecruitDetailPage() {
+  const id = searchParamsCache.get('id');
 
   const [getClubManageInfoRes, data] = await Promise.all([
     getClubManageInfo(),

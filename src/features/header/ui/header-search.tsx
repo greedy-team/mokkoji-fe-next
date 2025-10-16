@@ -42,7 +42,7 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
         name="q"
         placeholder="검색어를 입력해주세요"
         required
-        className={`border- z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none focus-within:border-[#00E804] lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
+        className={`border- focus-within:border-primary-500 z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
         autoComplete="off"
       />
       <button

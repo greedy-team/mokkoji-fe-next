@@ -3,11 +3,11 @@ import cn from '@/shared/lib/utils';
 
 type Variant = 'top' | 'right' | 'bottom' | 'left';
 
-interface FadeEgdeProps {
+interface FadeEdgeProps {
   variant: Variant;
 }
 
-function FadeEgde({ variant = 'left' }: FadeEgdeProps) {
+function FadeEdge({ variant = 'left' }: FadeEdgeProps) {
   const variantClass = {
     top: 'top-0 left-0 z-20 h-6 lg:h-20 w-full bg-gradient-to-t from-transparent to-white',
     right:
@@ -24,4 +24,4 @@ function FadeEgde({ variant = 'left' }: FadeEgdeProps) {
   );
 }
 
-export default FadeEgde;
+export default FadeEdge;

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
+@import './theme.css';
 @import 'tw-animate-css';
-@import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -324,4 +324,22 @@ html {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+/*radix bug 수정 css*/
+[data-scroll-locked][data-scroll-locked] {
+  overflow: visible !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/*토스트 컨테이너 수정 css*/
+@media (max-width: 768px) {
+  .Toastify__toast-container--top-right {
+    left: 50% !important;
+    top: 10px !important;
+    transform: translateX(-50%) !important;
+    width: 80%;
+    max-width: 300px;
+  }
 }

@@ -1,7 +1,12 @@
 import RecruitPage from '@/views/recruit/ui/recruit-page';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
+import { type SearchParams } from 'nuqs/server';
+import { searchParamsCache } from './search-params';
 
-function Page({ searchParams }: RecruitItemListProps) {
+function Page({
+  searchParams,
+}: {
+  searchParams: Promise<RecruitmentSearchParams>;
+}) {
   return <RecruitPage searchParams={searchParams} />;
 }
 

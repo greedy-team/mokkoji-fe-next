@@ -34,6 +34,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             json: credentials,
           });
           const data: LoginSuccessResponse = await response.json();
+          if (!data.data) {
+            return null;
+          }
           const userResponse = await serverApi.get('users', {
             headers: {
               Authorization: `Bearer ${data.data.accessToken}`,
@@ -73,6 +76,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           };
           const rolesRes = await serverApi.get('users/roles', { headers });
           const rolesData: RoleResponse = await rolesRes.json();
+          if (!rolesData.data) {
+            return {
+              accessToken: user.accessToken,
+              refreshToken: user.refreshToken,
+              expiresAt: expiredTime,
+              user: user.user,
+            };
+          }
           return {
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
@@ -100,6 +111,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           });
 
           const data: LoginSuccessResponse = await response.json();
+          if (!data.data) {
+            return null;
+          }
           return {
             ...token,
             accessToken: data.data.accessToken,

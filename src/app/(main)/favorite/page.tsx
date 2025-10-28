@@ -1,8 +1,14 @@
 import FavoritePage from '@/views/favorite/ui/favorite-page';
-import { SearchParams } from '@/views/favorite/model/type';
+import { type SearchParams } from 'nuqs/server';
+import { searchParamsCache } from './search-params';
 
-function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  return <FavoritePage searchParams={searchParams} />;
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+async function Page({ searchParams }: PageProps) {
+  await searchParamsCache.parse(searchParams);
+  return <FavoritePage />;
 }
 
 export default Page;

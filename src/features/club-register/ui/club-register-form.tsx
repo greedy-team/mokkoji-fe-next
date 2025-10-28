@@ -7,7 +7,7 @@ import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
 import { ClubFormData, FormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
-import isFormValid from '../util/isFormVaild';
+import isFormValid from '../util/isFormValid';
 import reducer, { initialState } from '../model/reducer/clubFormReducer';
 
 const fields: FormField[] = [
@@ -34,14 +34,10 @@ function ClubRegisterForm() {
 
     const res = await postClubRegister(data);
     if (!res.ok) {
-      toast.error(res.message, {
-        toastId: 'unique-toast',
-      });
+      toast.error(res.message);
       return;
     }
-    toast.success('등록 성공!', {
-      toastId: 'unique-toast',
-    });
+    toast.success('등록 성공!');
     router.push('/club');
   };
 

@@ -6,6 +6,7 @@ import { FavoriteDateItem } from '@/views/favorite/model/type';
 import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
 import formatNavigation from '@/entities/favorite/ui/format-navigation';
 import SharedLoading from '@/shared/ui/loading';
+import { useEffect, useState } from 'react';
 import getWeekdays from '../util/get-week-days';
 import useCalendarDeadline from '../model/useCalendarDeadline';
 
@@ -29,6 +30,20 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
     deadlineMap,
   } = useCalendarDeadline(data, setValue);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
   return (
     <>
       <Calendar
@@ -40,11 +55,11 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[450px] w-[90%] rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
+        className="h-[450px] !w-full rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
         nextLabel=">"
         prevLabel="<"
         navigationLabel={formatNavigation}
-        formatShortWeekday={(locale, date) => getWeekdays(date)}
+        formatShortWeekday={(locale, date) => getWeekdays(date, isMobile)}
         formatDay={(locale, date) => date.getDate().toString()}
         next2Label={null}
         prev2Label={null}

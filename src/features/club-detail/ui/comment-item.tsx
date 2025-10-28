@@ -26,10 +26,10 @@ export default function CommentItem({
 
     const response = await deleteComment(clubId, commentId);
     if (!response.ok) {
-      toast.error(response.message, { toastId: 'unique-toast' });
+      toast.error(response.message);
       return;
     }
-    toast.success(response.message, { toastId: 'unique-toast' });
+    toast.success(response.message);
   };
 
   return (

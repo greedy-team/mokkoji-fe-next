@@ -11,40 +11,29 @@ let nextConfig: NextConfig = {
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
-    domains: ['mokkoji-app-data.s3.ap-northeast-2.amazonaws.com'],
+    domains: [process.env.NEXT_PUBLIC_S3_DOMAIN || ''],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'way-s3.s3.ap-northeast-2.amazonaws.com',
         pathname: '**',
       },
-      {
-        protocol: 'https',
-        hostname: 'api.dicebear.com',
-      },
     ],
   },
-  webpack: (config) => {
-    const newConfig = { ...config };
-
-    if (process.env.NEXT_PUBLIC_SENTRY !== 'true') {
-      newConfig.resolve = {
-        ...newConfig.resolve,
-        alias: {
-          ...newConfig.resolve?.alias,
-          '@sentry/nextjs': require.resolve('./src/sentry-dev.tsx'),
-        },
-      };
-    }
-    return newConfig;
-  },
-  compiler: {
-    removeConsole: true,
+  logging: {
+    incomingRequests: {
+      ignore: [
+        /\/api\/auth\/session/, // NextAuth 세션 체크 무시
+      ],
+    },
+    fetches: {
+      fullUrl: true,
+    },
   },
 };
 
 // Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용
-if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   nextConfig = withSentryConfig(nextConfig, {
     // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
     org: 'sejong',
@@ -65,10 +54,6 @@ if (process.env.NEXT_PUBLIC_SENTRY === 'true') {
 
     // 콘솔에 찍히는 Sentry 관련 디버그 로그를 제거하여 번들 크기 절감
     disableLogger: true,
-
-    // Vercel의 Cron Monitor 기능 자동 설정 (App Router route handlers에서는 아직 미지원)
-    // - Sentry를 통한 스케줄 작업 모니터링 자동화
-    automaticVercelMonitors: true,
   });
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
@@ -31,9 +31,7 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
     });
     setIsSubmitting(false);
     if (result?.error) {
-      toast.error('학번 또는 비밀번호를 확인해주세요.', {
-        toastId: 'unique-toast',
-      });
+      toast.error('학번 또는 비밀번호를 확인해주세요.');
       return;
     }
 

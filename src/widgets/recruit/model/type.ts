@@ -1,13 +1,3 @@
-export interface RecruitItemListProps {
-  searchParams: Promise<{
-    page?: string;
-    size?: string;
-    keyword?: string;
-    category?: string;
-    affiliation?: string;
-    recruitStatus?: string;
-  }>;
-}
 export interface Club {
   id: number;
   name: string;

@@ -11,7 +11,8 @@ async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
   let commentList: CommentType[] = [];
 
   const data = await getClubDetailComments(clubId);
-  commentList = data.data.comments.reverse();
+
+  commentList = data.data?.comments.reverse() ?? [];
 
   return (
     <section className="mt-13 w-full">

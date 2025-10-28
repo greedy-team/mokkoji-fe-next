@@ -5,7 +5,6 @@ import { publicRoutes } from '../route';
 
 export default middleware(async (req) => {
   const { nextUrl, auth } = req;
-
   const isLoggedIn = !!auth?.user;
 
   const isPublicRoute = publicRoutes.some((route) => {
@@ -41,6 +40,6 @@ export default middleware(async (req) => {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|images|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.gif$|sitemap\\.xml).*)',
+    '/((?!api|_next/static|_next/image|images|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.gif$|sitemap\\.xml|robots\\.txt).*)',
   ],
 };

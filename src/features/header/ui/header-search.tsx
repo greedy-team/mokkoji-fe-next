@@ -1,12 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-function HeaderSearch() {
-  const [showSearch, setShowSearch] = useState(false);
+interface HeaderSearchProps {
+  showSearch: boolean;
+  setShowSearch: (showSearch: boolean) => void;
+}
+
+function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -38,7 +41,8 @@ function HeaderSearch() {
         type="text"
         name="q"
         placeholder="검색어를 입력해주세요"
-        className={`border- z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none focus-within:border-[#00E804] lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
+        required
+        className={`border- focus-within:border-primary-500 z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
         autoComplete="off"
       />
       <button

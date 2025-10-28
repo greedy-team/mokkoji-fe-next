@@ -37,14 +37,21 @@ function ErrorHandler(error: Error, customErrArray?: ErrorHandlerArray[]) {
         ok: false,
         message: customMessage?.message || ErrorMessage(error),
         data: undefined,
+        status: error.response.status,
       };
     }
-    return { ok: false, message: ErrorMessage(error), data: undefined };
+    return {
+      ok: false,
+      message: ErrorMessage(error),
+      data: undefined,
+      status: error.response.status,
+    };
   }
   return {
     ok: false,
     message: '알 수 없는 오류가 발생했습니다.',
     data: undefined,
+    status: 500,
   };
 }
 

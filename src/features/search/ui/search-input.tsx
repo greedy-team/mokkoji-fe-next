@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import SaveClientInput from './save-client-input';
 
 function SearchInput() {
   return (
@@ -10,12 +11,7 @@ function SearchInput() {
           method="GET"
           className="relative mx-auto w-[95%] lg:w-[80%]"
         >
-          <input
-            type="text"
-            name="q"
-            placeholder="동아리 명 또는 키워드를 입력해주세요."
-            className="text-md w-full rounded-none border-0 border-b-2 border-b-gray-600 pr-10 pb-3 indent-1 focus:border-b-gray-800 focus:ring-0 focus:outline-none lg:text-lg"
-          />
+          <SaveClientInput />
           <button
             type="submit"
             className="absolute top-1/2 right-2 -translate-y-1/2 pb-2"

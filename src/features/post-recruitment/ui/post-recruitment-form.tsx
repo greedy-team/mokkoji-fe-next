@@ -12,7 +12,7 @@ import SafeForm from '@/shared/ui/safe-form';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import SelectDate from './select-date';
-import isFormValid from '../util/isFormVaild';
+import isFormValid from '../util/isFormValid';
 import postRecruitmentForm from '../api/postRecruitmentForm';
 
 interface ClubInfoProp {
@@ -98,9 +98,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         ),
       );
     }
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!', {
-      toastId: 'unique-toast',
-    });
+    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
     router.push('/recruit');
     setIsSubmitting(false);
   };

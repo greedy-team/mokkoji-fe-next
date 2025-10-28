@@ -1,11 +1,10 @@
 import RecruitHeader from '@/entities/recruit/ui/recruit-header';
 import RecruitItemList from '@/widgets/recruit/ui/recruit-item-list';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
-import ScrollTopButton from '@/features/recruit/ui/scroll-top-button';
+import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 
-function RecruitPage({ searchParams }: RecruitItemListProps) {
+async function RecruitPage() {
   return (
     <>
       <div className="w-full sm:w-4xl lg:w-6xl">
@@ -16,11 +15,12 @@ function RecruitPage({ searchParams }: RecruitItemListProps) {
               description={
                 '관심 있는 동아리의 최신 모집 공고를\n한눈에 확인할 수 있어요.'
               }
+              header
             />
           }
         >
           <RecruitHeader />
-          <RecruitItemList searchParams={searchParams} />
+          <RecruitItemList />
         </Suspense>
       </div>
       <ScrollTopButton />

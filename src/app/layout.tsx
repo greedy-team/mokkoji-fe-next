@@ -1,47 +1,17 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import localFont from 'next/font/local';
-import BuildInsightProvider from '@/_providers/build-insight-provider';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import Script from 'next/script';
+import { ToDoPinProvider } from 'to-do-pin';
+import { SessionProvider } from 'next-auth/react';
+import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({
   src: [
     {
-      path: '../shared/fonts/Pretendard-Thin.ttf',
-      weight: '100',
-    },
-    {
-      path: '../shared/fonts/Pretendard-ExtraLight.ttf',
-      weight: '200',
-    },
-    {
-      path: '../shared/fonts/Pretendard-Light.ttf',
-      weight: '300',
-    },
-    {
-      path: '../shared/fonts/Pretendard-Regular.ttf',
-      weight: '400',
-    },
-    {
-      path: '../shared/fonts/Pretendard-Medium.ttf',
-      weight: '500',
-    },
-    {
-      path: '../shared/fonts/Pretendard-SemiBold.ttf',
-      weight: '600',
-    },
-    {
-      path: '../shared/fonts/Pretendard-Bold.ttf',
-      weight: '700',
-    },
-    {
-      path: '../shared/fonts/Pretendard-ExtraBold.ttf',
-      weight: '800',
-    },
-    {
-      path: '../shared/fonts/Pretendard-Black.ttf',
-      weight: '900',
+      path: '../shared/fonts/PretendardVariable.woff2',
     },
   ],
   variable: '--font-pretendard',
@@ -83,9 +53,20 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${pretendard.className}`}>
-        <WebVitalProvider />
-        <BuildInsightProvider />
-        {children}
+        <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
+          <ToDoPinProvider>
+            <WebVitalProvider />
+            <ToastContainer
+              autoClose={2000}
+              hideProgressBar
+              closeOnClick
+              pauseOnHover={false}
+              newestOnTop
+              limit={1}
+            />
+            {children}
+          </ToDoPinProvider>
+        </SessionProvider>
       </body>
     </html>
   );

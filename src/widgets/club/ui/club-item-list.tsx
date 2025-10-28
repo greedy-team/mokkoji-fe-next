@@ -1,21 +1,22 @@
-import { ClubCategory } from '@/shared/model/type';
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
-import { RecruitItemListProps } from '@/widgets/recruit/model/type';
-import { auth } from '@/auth';
+import { searchParamsCache } from '@/app/(main)/club/search-params';
+import { ClubCategory } from '@/shared/model/type';
 import ClubCustomErrorBoundary from './club-custom-error-boundary';
 
-async function ClubItemList({ searchParams }: RecruitItemListProps) {
-  const res = await getClubList({
-    page: Number((await searchParams).page || 1),
-    size: Number((await searchParams).size || 100),
-    keyword: (await searchParams).keyword?.toUpperCase() || '',
-    category: (await searchParams).category?.toUpperCase() as ClubCategory,
-    recruitStatus: (await searchParams).recruitStatus,
-  });
+async function ClubItemList() {
+  const page = searchParamsCache.get('page');
+  const size = searchParamsCache.get('size');
+  const category = searchParamsCache.get('category');
+  const keyword = searchParamsCache.get('keyword');
 
-  const session = await auth();
+  const res = await getClubList({
+    page,
+    size,
+    keyword,
+    category: category.toUpperCase() as ClubCategory,
+  });
 
   if (!res.ok) {
     return <ClubCustomErrorBoundary />;
@@ -40,7 +41,6 @@ async function ClubItemList({ searchParams }: RecruitItemListProps) {
               isFavorite={item.isFavorite}
               logo={item.logo}
               clubId={String(item.id)}
-              session={session || undefined}
             />
           </Link>
         </li>

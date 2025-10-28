@@ -1,5 +1,4 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import putEmail from '../api/putEmail';
 
@@ -7,7 +6,6 @@ function useEmailEdit(initialEmail?: string) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
   const [submitting, setSubmitting] = useState(false);
-  const router = useRouter();
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,12 +32,12 @@ function useEmailEdit(initialEmail?: string) {
     setSubmitting(true);
     const response = await putEmail(email);
     if (!response.ok) {
-      toast.error(response.message, { toastId: 'unique-toast' });
+      toast.error(response.message);
       return;
     }
-    toast.success(response.message, { toastId: 'unique-toast' });
+    toast.success(response.message);
     setOpen(false);
-    router.refresh();
+
     setSubmitting(false);
   };
 

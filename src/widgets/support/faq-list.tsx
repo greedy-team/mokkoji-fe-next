@@ -80,13 +80,13 @@ function FAQList() {
 
   return (
     <div className="mt-10 w-full space-y-6">
-      <h2 className="text-2xl font-bold text-[#20E86C]">FAQ</h2>
+      <h2 className="text-primary-500 text-2xl font-bold">FAQ</h2>
       {faqData.map((item, idx) => (
         <div key={item.question} className="border-b pb-4">
           <button
             className={cn(
-              'w-full text-left text-lg font-semibold transition hover:text-[#20E86C]',
-              openIndex === idx ? 'text-[#20E86C]' : 'text-black',
+              'hover:text-primary-500 w-full cursor-pointer text-left text-lg font-semibold transition',
+              openIndex === idx ? 'text-primary-500' : 'text-text-primary',
             )}
             onClick={() => toggle(idx)}
           >
@@ -109,6 +109,7 @@ function FAQList() {
 
       <span className="text-xl font-bold text-[#20E86C] underline">
         <a
+          id="bottom"
           href="https://docs.google.com/forms/d/1U3tnUQxdu8CtT9W1b8KQoQkhFs851BiwSO3l355L57w/viewform?edit_requested=true"
           target="_blank"
           rel="noopener noreferrer"

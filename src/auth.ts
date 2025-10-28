@@ -12,6 +12,9 @@ import UserInfoType from './entities/my/model/type';
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    maxAge: 60 * 60 * 24 * 3,
+  },
   trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',

@@ -1,5 +1,6 @@
 import RecruitPage from '@/views/recruit/ui/recruit-page';
-import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
+import { type SearchParams } from 'nuqs/server';
+import { searchParamsCache } from './search-params';
 
 function Page({
   searchParams,

@@ -3,13 +3,8 @@ import RecruitItemList from '@/widgets/recruit/ui/recruit-item-list';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
-import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
 
-async function RecruitPage({
-  searchParams,
-}: {
-  searchParams: Promise<RecruitmentSearchParams>;
-}) {
+async function RecruitPage() {
   return (
     <>
       <div className="w-full sm:w-4xl lg:w-6xl">
@@ -25,7 +20,7 @@ async function RecruitPage({
           }
         >
           <RecruitHeader />
-          <RecruitItemList searchParams={searchParams} />
+          <RecruitItemList />
         </Suspense>
       </div>
       <ScrollTopButton />

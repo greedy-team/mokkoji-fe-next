@@ -36,12 +36,14 @@ async function getClubRecruitList({
       response = await api
         .get('recruitments', {
           searchParams,
+          next: { tags: ['recruitments'] },
         })
         .json();
     } else {
       response = await serverApi
         .get('recruitments', {
           searchParams,
+          next: { tags: ['recruitments'] },
         })
         .json();
     }

@@ -2,6 +2,7 @@
 
 import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
+import { revalidateTag } from 'next/cache';
 
 async function putEmail(email: string) {
   try {
@@ -10,11 +11,12 @@ async function putEmail(email: string) {
     });
 
     const data = await response.json();
-
+    revalidateTag('users');
     return {
       ok: true,
       message: '이메일이 변경되었습니다.',
       data,
+      status: 200,
     };
   } catch (e) {
     return ErrorHandler(e as Error);

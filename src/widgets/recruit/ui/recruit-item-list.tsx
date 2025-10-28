@@ -1,7 +1,7 @@
 import { ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { headers } from 'next/headers';
-import { RecruitmentSearchParams } from '@/shared/model/recruit-type';
+import { searchParamsCache } from '@/app/(main)/recruit/search-params';
 import RecruitItemClientList from './recruit-item-client-list';
 import getClubRecruitList from '../api/getClubRecruitList';
 
@@ -15,28 +15,26 @@ function getInitialLayout(userAgent: string) {
   return { columns: 3, cardHeight: 198 };
 }
 
-async function RecruitItemList({
-  searchParams,
-}: {
-  searchParams: Promise<RecruitmentSearchParams>;
-}) {
-  const params = await searchParams;
+async function RecruitItemList() {
+  const page = searchParamsCache.get('page');
+  const size = searchParamsCache.get('size');
+  const category = searchParamsCache.get('category');
 
   const headersList = headers();
   const userAgent = (await headersList).get('user-agent') || '';
   const { columns, cardHeight } = getInitialLayout(userAgent);
 
   const res = await getClubRecruitList({
-    page: Number(params.page || 1),
-    size: Number(params.size || 1000),
-    category: params.category?.toUpperCase() as ClubCategory,
+    page,
+    size,
+    category: category.toUpperCase() as ClubCategory,
   });
 
   if (!res.ok || !res.data) {
     return <ErrorBoundaryUi />;
   }
 
-  if (res.data?.recruitments.length === 0) {
+  if (res.data.recruitments.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
         모집 공고가 없습니다.
@@ -46,7 +44,7 @@ async function RecruitItemList({
 
   return (
     <RecruitItemClientList
-      recruitments={res.data?.recruitments}
+      recruitments={res.data.recruitments}
       initialColumns={columns}
       initialCardHeight={cardHeight}
     />

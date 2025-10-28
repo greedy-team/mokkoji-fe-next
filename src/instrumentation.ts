@@ -5,8 +5,8 @@ export async function register() {
     await import('../sentry.server.config');
 
     if (process.env.NODE_ENV === 'development') {
-      const { default: nextLogger } = await import('@/shared/lib/nextLogger');
-      nextLogger();
+      const { default: nextFetchLogger } = await import('next-fetch-logger');
+      nextFetchLogger();
     }
   }
 

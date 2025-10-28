@@ -1,18 +1,12 @@
 import ClubDetailPage from '@/views/club/ui/club-detail-page';
 import { Suspense } from 'react';
 import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
-import { type SearchParams } from 'nuqs/server';
-import { searchParamsCache } from './search-params';
+import { DetailParams } from '@/shared/model/type';
 
-type PageProps = {
-  searchParams: Promise<SearchParams>;
-};
-
-async function Page({ searchParams }: PageProps) {
-  await searchParamsCache.parse(searchParams);
+async function Page({ params }: DetailParams) {
   return (
     <Suspense fallback={<ClubDetailSkeleton />}>
-      <ClubDetailPage />
+      <ClubDetailPage params={params} />
     </Suspense>
   );
 }

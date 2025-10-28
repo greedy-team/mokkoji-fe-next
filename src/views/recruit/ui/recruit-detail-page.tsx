@@ -4,14 +4,14 @@ import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-hea
 import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { searchParamsCache } from '@/app/(main)/recruit/[id]/search-params';
+import { DetailParams } from '@/shared/model/type';
 
-async function RecruitDetailPage() {
-  const id = searchParamsCache.get('id');
+async function RecruitDetailPage({ params }: DetailParams) {
+  const { id } = await params;
 
   const [getClubManageInfoRes, data] = await Promise.all([
     getClubManageInfo(),
-    getRecruitDetail(id),
+    getRecruitDetail(Number(id)),
   ]);
 
   if (data?.status === 404 || !data.data) {

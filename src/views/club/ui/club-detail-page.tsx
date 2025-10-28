@@ -4,11 +4,11 @@ import ClubDetailCommentWidget from '@/widgets/club-detail/ui/club-detail-commen
 import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { searchParamsCache } from '@/app/(main)/club/[id]/search-params';
+import { DetailParams } from '@/shared/model/type';
 
-async function ClubDetailPage() {
-  const id = searchParamsCache.get('id');
-  const data = await getClubDetail(id);
+async function ClubDetailPage({ params }: DetailParams) {
+  const { id } = await params;
+  const data = await getClubDetail(Number(id));
 
   if (data?.status === 404 || !data.data) {
     notFound();

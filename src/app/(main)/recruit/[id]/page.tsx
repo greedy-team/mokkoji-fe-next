@@ -1,18 +1,12 @@
 import RecruitDetailPage from '@/views/recruit/ui/recruit-detail-page';
 import { Suspense } from 'react';
 import RecruitDetailSkeleton from '@/entities/recruit/ui/recruit-detail-skeleton';
-import { type SearchParams } from 'nuqs/server';
-import { searchParamsCache } from './search-params';
+import { DetailParams } from '@/shared/model/type';
 
-type PageProps = {
-  searchParams: Promise<SearchParams>;
-};
-
-async function Page({ searchParams }: PageProps) {
-  await searchParamsCache.parse(searchParams);
+async function Page({ params }: DetailParams) {
   return (
     <Suspense fallback={<RecruitDetailSkeleton />}>
-      <RecruitDetailPage />
+      <RecruitDetailPage params={params} />
     </Suspense>
   );
 }

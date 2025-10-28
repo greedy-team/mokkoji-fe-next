@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import * as Sentry from '@sentry/nextjs';
 
 export async function register() {

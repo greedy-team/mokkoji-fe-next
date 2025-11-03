@@ -11,11 +11,10 @@ import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
 interface LoginFormProps {
   confirmed: boolean;
-  open: boolean;
   setOpen: (confirmed: boolean) => void;
 }
 
-function LoginForm({ confirmed, open, setOpen }: LoginFormProps) {
+function LoginForm({ confirmed, setOpen }: LoginFormProps) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');

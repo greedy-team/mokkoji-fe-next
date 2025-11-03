@@ -30,7 +30,7 @@ function LoginWidget() {
         open={open}
         setOpen={setOpen}
       />
-      <LoginForm confirmed={confirmed} open={open} setOpen={setOpen} />
+      <LoginForm confirmed={confirmed} setOpen={setOpen} />
     </>
   );
 }

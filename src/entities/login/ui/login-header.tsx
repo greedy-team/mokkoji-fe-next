@@ -1,16 +1,20 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
-import { useState } from 'react';
 
 interface LoginHeaderProps {
   confirmed: boolean;
   onConfirm: (confirmed: boolean) => void;
+  open: boolean;
+  setOpen: (confirmed: boolean) => void;
 }
 
-function LoginHeader({ confirmed, onConfirm }: LoginHeaderProps) {
-  const [open, setOpen] = useState(false);
-
+function LoginHeader({
+  confirmed,
+  onConfirm,
+  open,
+  setOpen,
+}: LoginHeaderProps) {
   return (
     <header className="relative flex cursor-default flex-col">
       <div className="flex flex-row justify-between gap-2">

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 function LoginWidget() {
   const [confirmed, setConfirmed] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('loginNoticeConfirmed');
@@ -23,8 +24,13 @@ function LoginWidget() {
   }, [confirmed]);
   return (
     <>
-      <LoginHeader confirmed={confirmed} onConfirm={setConfirmed} />
-      <LoginForm confirmed={confirmed} />
+      <LoginHeader
+        confirmed={confirmed}
+        onConfirm={setConfirmed}
+        open={open}
+        setOpen={setOpen}
+      />
+      <LoginForm confirmed={confirmed} open={open} setOpen={setOpen} />
     </>
   );
 }

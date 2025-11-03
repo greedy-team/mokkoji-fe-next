@@ -9,7 +9,13 @@ import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
-function LoginForm({ confirmed }: { confirmed: boolean }) {
+interface LoginFormProps {
+  confirmed: boolean;
+  open: boolean;
+  setOpen: (confirmed: boolean) => void;
+}
+
+function LoginForm({ confirmed, open, setOpen }: LoginFormProps) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +29,12 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+
+    if (!confirmed) {
+      setOpen(true);
+      return;
+    }
+
     setIsSubmitting(true);
     const result: any = await signIn('credentials', {
       redirect: false,
@@ -118,7 +130,7 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
         <>
           <Button
             type="submit"
-            disabled={studentId === '' || password === '' || !confirmed}
+            disabled={studentId === '' || password === ''}
             className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
           >
             확인

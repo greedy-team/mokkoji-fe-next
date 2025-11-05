@@ -8,13 +8,15 @@ import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import { Disabled } from '@/stories/atoms/button.stories';
 
 interface LoginFormProps {
   confirmed: boolean;
+  open: boolean;
   setOpen: (confirmed: boolean) => void;
 }
 
-function LoginForm({ confirmed, setOpen }: LoginFormProps) {
+function LoginForm({ confirmed, open, setOpen }: LoginFormProps) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -128,7 +130,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
       ) : (
         <Button
           type="submit"
-          disabled={studentId === '' || password === ''}
+          disabled={studentId === '' || password === '' || open}
           className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
         >
           확인

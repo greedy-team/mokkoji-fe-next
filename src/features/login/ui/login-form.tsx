@@ -126,20 +126,13 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
           <DotsPulseLoader className="mr-3" text="로그인 중..." />
         </div>
       ) : (
-        <>
-          <Button
-            type="submit"
-            disabled={studentId === '' || password === ''}
-            className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
-          >
-            확인
-          </Button>
-          {!confirmed && (
-            <p className="text-xs text-[#FF383C]">
-              *로그인 안내를 확인해주세요.
-            </p>
-          )}
-        </>
+        <Button
+          type="submit"
+          disabled={studentId === '' || password === ''}
+          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
+        >
+          확인
+        </Button>
       )}
     </form>
   );

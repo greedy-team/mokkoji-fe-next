@@ -5,12 +5,15 @@ import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widg
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { DetailParams } from '@/shared/model/type';
+import { auth } from '@/auth';
 
 async function RecruitDetailPage({ params }: DetailParams) {
   const { id } = await params;
 
+  const session = await auth();
+  const role = session?.role;
   const [getClubManageInfoRes, data] = await Promise.all([
-    getClubManageInfo(),
+    getClubManageInfo({ role }),
     getRecruitDetail(Number(id)),
   ]);
 

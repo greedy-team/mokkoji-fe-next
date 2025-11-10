@@ -74,6 +74,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const expiredTime = getTokenExpiration(user.accessToken as string);
 
         try {
+          if (!user.accessToken) {
+            return {
+              accessToken: user.accessToken,
+              refreshToken: user.refreshToken,
+              expiresAt: expiredTime,
+              user: user.user,
+            };
+          }
           const headers = {
             Authorization: `Bearer ${user.accessToken}`,
           };

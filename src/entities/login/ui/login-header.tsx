@@ -34,7 +34,7 @@ function LoginHeader({
           >
             <div className="h-[250px]">
               <h3 className="mb-2 font-semibold">로그인 안내</h3>
-              <ul className="space-y-2 pl-2 text-xs leading-relaxed">
+              <ul className="space-y-6 pl-2 text-xs leading-relaxed">
                 <li>
                   1. 로그인을 위해선{' '}
                   <a
@@ -65,7 +65,7 @@ function LoginHeader({
                 </li>
               </ul>
 
-              <div className="mt-3 flex items-center gap-2">
+              <div className="mt-5 flex items-center gap-2">
                 <input
                   id="confirm"
                   type="checkbox"

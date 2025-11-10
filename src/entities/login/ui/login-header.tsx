@@ -30,52 +30,54 @@ function LoginHeader({
         {open && (
           <div
             onMouseLeave={() => setOpen(false)}
-            className="absolute z-50 w-full rounded-lg border bg-white px-5 py-7 text-xs shadow-xl"
+            className="absolute z-50 h-[350px] w-full justify-between rounded-lg border bg-white px-5 py-7 text-sm shadow-xl"
           >
-            <h3 className="mb-2 font-semibold">로그인 안내</h3>
-            <ul className="space-y-2 pl-2 text-xs leading-relaxed">
-              <li>
-                1. 로그인을 위해선{' '}
-                <a
-                  href="https://portal.sejong.ac.kr/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#00E457] underline"
-                >
-                  세종대학교포털
-                </a>{' '}
-                사이트에서 개인정보수집 동의가 되어있어야 합니다.
-              </li>
-              <li>
-                2. 로그인 시{' '}
-                <a
-                  href="http://classic.sejong.ac.kr/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#00E457] underline"
-                >
-                  대양휴머니티칼리지를 통해
-                </a>{' '}
-                학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
-              </li>
-              <li>
-                3. 사용자의 세종대학교 포털 비밀번호는{' '}
-                <strong>절대 저장되지 않습니다.</strong>
-              </li>
-            </ul>
+            <div className="h-[250px]">
+              <h3 className="mb-2 font-semibold">로그인 안내</h3>
+              <ul className="space-y-2 pl-2 text-xs leading-relaxed">
+                <li>
+                  1. 로그인을 위해선{' '}
+                  <a
+                    href="https://portal.sejong.ac.kr/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#00E457] underline"
+                  >
+                    세종대학교포털
+                  </a>{' '}
+                  사이트에서 개인정보수집 동의가 되어있어야 합니다.
+                </li>
+                <li>
+                  2. 로그인 시{' '}
+                  <a
+                    href="http://classic.sejong.ac.kr/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#00E457] underline"
+                  >
+                    대양휴머니티칼리지를 통해
+                  </a>{' '}
+                  학생 기본 정보를 불러옵니다. (학번, 학과, 이름, 학년)
+                </li>
+                <li>
+                  3. 사용자의 세종대학교 포털 비밀번호는{' '}
+                  <strong>절대 저장되지 않습니다.</strong>
+                </li>
+              </ul>
 
-            <div className="mt-3 flex items-center gap-2">
-              <input
-                id="confirm"
-                type="checkbox"
-                checked={confirmed}
-                onChange={(e) => onConfirm(e.target.checked)}
-              />
-              <label htmlFor="confirm" className="text-xs">
-                안내사항 확인 후에 로그인이 가능합니다.
-              </label>
+              <div className="mt-3 flex items-center gap-2">
+                <input
+                  id="confirm"
+                  type="checkbox"
+                  checked={confirmed}
+                  className="h-4 w-4 rounded border"
+                  onChange={(e) => onConfirm(e.target.checked)}
+                />
+                <label htmlFor="confirm" className="text-xs">
+                  안내사항 확인 후에 로그인이 가능합니다.
+                </label>
+              </div>
             </div>
-
             <Button
               onClick={() => setOpen(false)}
               variant="submit"

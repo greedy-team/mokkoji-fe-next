@@ -34,6 +34,17 @@ function RecruitDetailView({
     setCurrentIndex((prev) => (prev + 1) % imageUrls.length);
   };
 
+  const isRecruitPeriod =
+    title || content || recruitForm || imageUrls.length !== 0;
+
+  if (!isRecruitPeriod) {
+    return (
+      <p className="py-30 text-center text-gray-500">
+        동아리 모집 기간이 아닙니다.
+      </p>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       {recruitForm && (

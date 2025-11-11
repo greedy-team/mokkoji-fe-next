@@ -5,11 +5,13 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { DetailParams } from '@/shared/model/type';
 import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
 import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
+import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await params;
 
-  const [detaildata, commentsdata] = await Promise.all([
+  const [recruitdata, detaildata, commentsdata] = await Promise.all([
+    getRecruitDetail(Number(id)),
     getClubDetail(Number(id)),
     getClubDetailComments(Number(id)),
   ]);
@@ -36,8 +38,9 @@ async function ClubDetailPage({ params }: DetailParams) {
         status={detaildata.data.status}
       />
       <ClubDetailTabs
-        clubId={Number(id)}
+        recruitData={recruitdata.data}
         description={detaildata.data.description}
+        clubId={Number(id)}
         comments={commentsdata.data?.comments ?? []}
       />
     </div>

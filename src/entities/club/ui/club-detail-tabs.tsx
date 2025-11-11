@@ -2,12 +2,21 @@
 
 import { useState } from 'react';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
+import RecruitDetailView from '@/entities/recruit-detail/ui/recruit-detail-view';
 import ClubDescriptionTab from './tabs/club-description-tab';
 import ClubDetailCommentsTab from './tabs/club-detail-comments-tab';
 
+interface RecruitDetailViewProps {
+  title: string;
+  content: string;
+  recruitForm: string;
+  imageUrls: string[];
+}
+
 interface ClubDetailTabsProps {
-  clubId: number;
+  recruitData?: RecruitDetailViewProps;
   description?: string;
+  clubId: number;
   comments?: CommentType[];
 }
 
@@ -15,8 +24,9 @@ const TABS = ['모집공고', '동아리 소개', '댓글'] as const;
 type Tab = (typeof TABS)[number];
 
 function ClubDetailTabs({
-  clubId,
+  recruitData,
   description,
+  clubId,
   comments,
 }: ClubDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<Tab>('모집공고');
@@ -39,7 +49,14 @@ function ClubDetailTabs({
           </button>
         ))}
       </div>
-      {activeTab === '모집공고' && <div />}
+      {activeTab === '모집공고' && (
+        <RecruitDetailView
+          title={recruitData?.title ?? ''}
+          content={recruitData?.content ?? ''}
+          recruitForm={recruitData?.recruitForm ?? ''}
+          imageUrls={recruitData?.imageUrls ?? []}
+        />
+      )}
       {activeTab === '동아리 소개' && (
         <ClubDescriptionTab description={description} />
       )}

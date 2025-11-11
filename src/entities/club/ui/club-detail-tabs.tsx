@@ -1,17 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDescriptionTab from './tabs/club-description-tab';
+import ClubDetailCommentsTab from './tabs/club-detail-comments-tab';
 
 interface ClubDetailTabsProps {
   clubId: number;
   description?: string;
+  comments?: CommentType[];
 }
 
 const TABS = ['모집공고', '동아리 소개', '댓글'] as const;
 type Tab = (typeof TABS)[number];
 
-function ClubDetailTabs({ clubId, description }: ClubDetailTabsProps) {
+function ClubDetailTabs({
+  clubId,
+  description,
+  comments,
+}: ClubDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<Tab>('모집공고');
 
   return (
@@ -36,7 +43,9 @@ function ClubDetailTabs({ clubId, description }: ClubDetailTabsProps) {
       {activeTab === '동아리 소개' && (
         <ClubDescriptionTab description={description} />
       )}
-      {activeTab === '댓글' && <div />}
+      {activeTab === '댓글' && (
+        <ClubDetailCommentsTab clubId={clubId} comments={comments} />
+      )}
     </div>
   );
 }

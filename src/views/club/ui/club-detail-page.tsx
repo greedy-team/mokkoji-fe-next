@@ -5,6 +5,7 @@ import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { DetailParams } from '@/shared/model/type';
+import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
 
 async function ClubDetailPage({ params }: DetailParams) {
   const { id } = await params;
@@ -31,7 +32,8 @@ async function ClubDetailPage({ params }: DetailParams) {
         logo={data.data.logo}
         status={data.data.status}
       />
-      {data.data.description ? (
+      <ClubDetailTabs clubId={Number(id)} />
+      {/* {data.data.description ? (
         <p className="text-text-secondary mb-3 text-sm leading-[1.4] whitespace-pre-wrap lg:pt-10 lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
@@ -43,8 +45,8 @@ async function ClubDetailPage({ params }: DetailParams) {
         <p className="py-30 text-center text-gray-500">
           동아리 소개 정보가 없습니다.
         </p>
-      )}
-      <ClubDetailCommentWidget clubId={Number(id)} />
+      )} */}
+      {/* <ClubDetailCommentWidget clubId={Number(id)} /> */}
     </div>
   );
 }

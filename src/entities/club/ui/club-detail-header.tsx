@@ -29,7 +29,7 @@ function ClubDetailHeader({
   status,
 }: ClubDetailHeaderProps) {
   return (
-    <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">
+    <header className="mb-5 w-full cursor-default pb-4">
       <div className="mb-4 flex flex-row items-center gap-5">
         <ClickLogo logo={logo} title={title} />
         <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>

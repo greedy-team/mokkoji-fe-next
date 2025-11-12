@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { CommentType } from '@/widgets/recruit-detail/model/type';
-import RecruitDetailView from '@/entities/recruit-detail/ui/recruit-detail-view';
 import ClubDescriptionTab from './tabs/club-description-tab';
 import ClubDetailCommentsTab from './tabs/club-detail-comments-tab';
+import RecruitDetailTab from './tabs/recruit-detail-tab';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -60,7 +60,7 @@ function ClubDetailTabs({
       </div>
 
       {activeTab === 'recruit' && (
-        <RecruitDetailView
+        <RecruitDetailTab
           title={recruitData?.title ?? ''}
           content={recruitData?.content ?? ''}
           recruitForm={recruitData?.recruitForm ?? ''}

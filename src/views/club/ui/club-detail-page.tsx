@@ -7,8 +7,14 @@ import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
 import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 
-async function ClubDetailPage({ params }: DetailParams) {
+interface ClubDetailPageProps {
+  params: { id: string };
+  searchParams: { tab?: string };
+}
+
+async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
+  const tab = searchParams.tab || 'recruit';
 
   const [recruitdata, detaildata, commentsdata] = await Promise.all([
     getRecruitDetail(Number(id)),
@@ -39,6 +45,7 @@ async function ClubDetailPage({ params }: DetailParams) {
       />
 
       <ClubDetailTabs
+        activeTab={tab}
         recruitData={recruitdata.data}
         description={detaildata.data.description}
         clubId={Number(id)}

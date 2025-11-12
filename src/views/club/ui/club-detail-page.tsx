@@ -35,8 +35,9 @@ async function ClubDetailPage({ params }: DetailParams) {
         clubId={Number(id)}
         isFavorite={detaildata.data.isFavorite}
         logo={detaildata.data.logo}
-        status={detaildata.data.status}
+        status={recruitdata.data?.status || 'CLOSED'}
       />
+
       <ClubDetailTabs
         recruitData={recruitdata.data}
         description={detaildata.data.description}

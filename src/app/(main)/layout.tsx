@@ -1,6 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css';
-import Header from '@/shared/ui/Header';
-import Footer from '@/shared/ui/Footer';
+import Header from '@/shared/ui/header';
+import Footer from '@/shared/ui/footer';
 import 'to-do-pin/index.css';
 
 export default function MainLayout({

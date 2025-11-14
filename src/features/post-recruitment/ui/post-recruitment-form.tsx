@@ -32,8 +32,16 @@ const fields: FormField[] = [
 function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { imageFiles, handleImageChange, handleImageRemove, inputRef } =
-    useImageUpload();
+  const {
+    imageFiles,
+    handleImageChange,
+    handleImageRemove,
+    inputRef,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    draggingId,
+  } = useImageUpload();
   const { formData, errors } = state;
   const router = useRouter();
 
@@ -177,6 +185,10 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}
         inputRef={inputRef}
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDragEnd={handleDragEnd}
+        draggingId={draggingId}
       />
     </SafeForm>
   );

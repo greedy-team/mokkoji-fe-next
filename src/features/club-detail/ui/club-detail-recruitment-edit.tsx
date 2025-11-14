@@ -55,8 +55,16 @@ function ClubDetailRecruitmentEdit({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { formData, errors } = state;
-  const { imageFiles, handleImageChange, handleImageRemove, inputRef } =
-    useImageUpload();
+  const {
+    imageFiles,
+    handleImageChange,
+    handleImageRemove,
+    inputRef,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    draggingId,
+  } = useImageUpload(imageUrls);
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -71,7 +79,7 @@ function ClubDetailRecruitmentEdit({
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
-      imageCount: formData.imageCount,
+      imageCount: imageFiles.length,
     };
 
     const res = await patchRecruitmentForm(data, clubId!);
@@ -81,18 +89,25 @@ function ClubDetailRecruitmentEdit({
       return;
     }
 
-    await Promise.all([
-      ...(res.data?.deleteImageUrls?.map((url: string) => ky.delete(url)) ??
-        []),
-      ...(res.data?.uploadImageUrls?.map((url: string, i: number) =>
-        ky.put(url, {
-          body: imageFiles[i].file,
-          headers: { 'Content-Type': imageFiles[i].file.type },
-        }),
-      ) ?? []),
-    ]);
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
+
+    try {
+      if (uploadUrls.length > 0) {
+        await Promise.all(
+          uploadUrls.map((url: string, i: number) =>
+            ky.put(url, {
+              body: imageFiles[i].file,
+              headers: { 'Content-Type': imageFiles[i].file.type },
+            }),
+          ),
+        );
+      }
+    } catch (error) {
+      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+      return;
+    }
     setIsEditing(false);
+    toast.success('모집 공고가 성공적으로 수정되었습니다!');
   };
 
   return (
@@ -142,6 +157,10 @@ function ClubDetailRecruitmentEdit({
         onChange={handleChange}
       />
       <ImageUploadSection
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDragEnd={handleDragEnd}
+        draggingId={draggingId}
         imageFiles={imageFiles}
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}

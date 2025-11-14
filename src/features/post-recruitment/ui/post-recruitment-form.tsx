@@ -74,19 +74,22 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
       return;
     }
 
-    if (
-      Array.isArray(res.data?.data?.uploadImageUrls) &&
-      res.data.data.uploadImageUrls.length > 0
-    ) {
-      const uploadResults = await Promise.all(
-        res.data.data.uploadImageUrls.map((url: string, i: number) =>
-          ky.put(url, {
-            body: imageFiles[i].file,
-            headers: { 'Content-Type': imageFiles[i].file.type },
-          }),
-        ),
-      );
-      console.log('uploadResults', uploadResults);
+    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
+
+    try {
+      if (uploadUrls.length > 0) {
+        await Promise.all(
+          uploadUrls.map((url: string, i: number) =>
+            ky.put(url, {
+              body: imageFiles[i].file,
+              headers: { 'Content-Type': imageFiles[i].file.type },
+            }),
+          ),
+        );
+      }
+    } catch (error) {
+      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+      return;
     }
     setIsSubmitting(false);
     router.push('/recruit');

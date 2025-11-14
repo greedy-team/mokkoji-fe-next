@@ -53,9 +53,10 @@ export interface RecruitmentPatchResponse {
   ok: boolean;
   message: string;
   data?: {
-    id: number;
-    deleteImageUrls: string[];
-    uploadImageUrls: string[];
+    data: {
+      id: number;
+      uploadImageUrls: string[];
+    };
   };
 }
 

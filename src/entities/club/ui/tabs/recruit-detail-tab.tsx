@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import convertLinkText from '../util/convetLinkText';
+import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -18,7 +18,7 @@ interface RecruitDetailViewProps {
   imageUrls: string[];
 }
 
-function RecruitDetailView({
+function RecruitDetailTab({
   title,
   content,
   recruitForm,
@@ -121,4 +121,4 @@ function RecruitDetailView({
   );
 }
 
-export default RecruitDetailView;
+export default RecruitDetailTab;

@@ -14,7 +14,7 @@ function ClubDetailHeaderControl({
   clubId,
 }: ClubDetailHeaderControlProps) {
   return (
-    <div className="mt-5 mb-5 flex w-full flex-row items-center gap-2 lg:gap-3.5">
+    <div className="mt-5 flex w-full flex-row items-center gap-2 lg:gap-3.5">
       <div className="scale-90 rounded-full border-1 border-black p-1 lg:scale-100">
         <FavoriteButton
           clubId={clubId.toString()}

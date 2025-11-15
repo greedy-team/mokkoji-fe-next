@@ -10,7 +10,7 @@ export interface RecruitmentInputProps {
 
 export interface RecruitmentFormData {
   title: string;
-  images: string[];
+  imageNames: string[];
   content: string;
   recruitStart: string;
   recruitEnd: string;
@@ -42,8 +42,10 @@ export interface RecruitmentResponse {
   ok: boolean;
   message: string;
   data?: {
-    id: number;
-    uploadImageUrls: string[];
+    data: {
+      id: number;
+      uploadImageUrls: string[];
+    };
   };
 }
 
@@ -51,9 +53,10 @@ export interface RecruitmentPatchResponse {
   ok: boolean;
   message: string;
   data?: {
-    id: number;
-    deleteImageUrls: string[];
-    uploadImageUrls: string[];
+    data: {
+      id: number;
+      uploadImageUrls: string[];
+    };
   };
 }
 

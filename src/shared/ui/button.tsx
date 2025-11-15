@@ -27,6 +27,10 @@ const buttonVariants = cva(
         options:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#D9D9D9] hover:border-[#888888] hover:bg-[#f6f6f6] transition-colors duration-300',
         none: '',
+        delete:
+          'rounded-sm py-2.5 w-fit px-7 text-sm border-1 bg-white text-red-500 border-red-500 ' +
+          'hover:bg-red-50 hover:text-red-600 ' +
+          'transition-colors duration-300',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

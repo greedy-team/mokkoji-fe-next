@@ -44,14 +44,15 @@ function ClubDetailRecruitmentEdit({
   const initialState: StateProp = {
     formData: {
       title,
-      imageCount: imageUrls.length,
       content,
       recruitStart,
       recruitEnd,
       recruitForm,
+      imageNames: imageUrls.map((url) => url.split('/').pop()!.split('?')[0]),
     },
     errors: {},
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { formData, errors } = state;
@@ -79,7 +80,7 @@ function ClubDetailRecruitmentEdit({
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
-      imageCount: imageFiles.length,
+      imageNames: imageFiles.map((file) => file.imageName),
     };
 
     const res = await patchRecruitmentForm(data, clubId!);

@@ -10,7 +10,7 @@ export interface RecruitmentInputProps {
 
 export interface RecruitmentFormData {
   title: string;
-  imageCount: number;
+  imageNames: string[];
   content: string;
   recruitStart: string;
   recruitEnd: string;

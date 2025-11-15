@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface ImageItem {
   id: string;
   file: File;
   previewUrl: string;
+  imageName: string;
 }
 
 async function urlToFile(url: string, fileName: string): Promise<File> {
@@ -12,7 +14,7 @@ async function urlToFile(url: string, fileName: string): Promise<File> {
   return new File([blob], fileName, { type: blob.type });
 }
 
-function useImageUpload(imageUrls: string[] = []) {
+function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
   const [imageFiles, setImageFiles] = useState<ImageItem[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -22,12 +24,16 @@ function useImageUpload(imageUrls: string[] = []) {
 
     const loadInitialImages = async () => {
       const items: ImageItem[] = await Promise.all(
-        imageUrls.map(async (url, index) => {
-          const file = await urlToFile(url, `image-${index}.jpg`);
+        imageUrls.map(async (url) => {
+          const imageName = url.split('/').pop()!.split('?')[0];
+
+          const file = await urlToFile(url, imageName);
+
           return {
             id: crypto.randomUUID(),
             file,
             previewUrl: URL.createObjectURL(file),
+            imageName,
           };
         }),
       );
@@ -69,10 +75,16 @@ function useImageUpload(imageUrls: string[] = []) {
     if (!files) return;
     const fileArray = Array.from(files);
 
+    if (imageFiles.length + fileArray.length > maxLength) {
+      toast.warn(`이미지는 최대 ${maxLength}개까지만 업로드할 수 있습니다.`);
+      return;
+    }
+
     const newItems: ImageItem[] = fileArray.map((file) => ({
       id: crypto.randomUUID(),
       file,
       previewUrl: URL.createObjectURL(file),
+      imageName: file.name,
     }));
 
     setImageFiles((prev) => [...prev, ...newItems]);

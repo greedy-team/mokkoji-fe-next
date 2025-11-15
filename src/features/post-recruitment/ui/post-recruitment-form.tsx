@@ -64,7 +64,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
-      imageCount: imageFiles.length,
+      imageNames: imageFiles.map((file) => file.imageName),
     };
 
     const res = await postRecruitmentForm(data, clubId!);

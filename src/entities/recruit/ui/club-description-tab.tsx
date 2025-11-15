@@ -12,7 +12,7 @@ async function ClubDescriptionTab({ clubId }: ClubDescriptionTabProps) {
   return (
     <div>
       {description ? (
-        <p className="text-text-secondary pt-8 text-sm leading-[1.4] whitespace-pre-wrap lg:text-lg">
+        <p className="text-text-secondary pt-8 text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
               __html: convertLinkText(description),

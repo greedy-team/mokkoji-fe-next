@@ -50,21 +50,22 @@ function ClubDetailTabs({ activeTab, recruitData, id }: ClubDetailTabsProps) {
           </Link>
         ))}
       </div>
-
-      {activeTab === 'recruit' && (
-        <RecruitDetailTab
-          title={recruitData?.title ?? ''}
-          content={recruitData?.content ?? ''}
-          recruitForm={recruitData?.recruitForm ?? ''}
-          imageUrls={recruitData?.imageUrls ?? []}
-        />
-      )}
-      {activeTab === 'about' && (
-        <ClubDescriptionTab clubId={recruitData!.clubId} />
-      )}
-      {activeTab === 'comments' && (
-        <ClubDetailCommentsTab clubId={recruitData!.clubId} />
-      )}
+      <div className="mx-auto w-full max-w-[1000px]">
+        {activeTab === 'recruit' && (
+          <RecruitDetailTab
+            title={recruitData?.title ?? ''}
+            content={recruitData?.content ?? ''}
+            recruitForm={recruitData?.recruitForm ?? ''}
+            imageUrls={recruitData?.imageUrls ?? []}
+          />
+        )}
+        {activeTab === 'about' && (
+          <ClubDescriptionTab clubId={recruitData!.clubId} />
+        )}
+        {activeTab === 'comments' && (
+          <ClubDetailCommentsTab clubId={recruitData!.clubId} />
+        )}
+      </div>
     </div>
   );
 }

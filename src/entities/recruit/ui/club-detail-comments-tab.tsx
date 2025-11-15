@@ -1,5 +1,4 @@
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
 import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 

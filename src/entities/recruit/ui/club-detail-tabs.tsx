@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDescriptionTab from './club-description-tab';
 import ClubDetailCommentsTab from './club-detail-comments-tab';
 import RecruitDetailTab from './recruit-detail-tab';

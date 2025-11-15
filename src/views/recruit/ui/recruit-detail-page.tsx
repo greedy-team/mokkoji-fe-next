@@ -1,10 +1,8 @@
 import { notFound } from 'next/navigation';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
-import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { DetailParams } from '@/shared/model/type';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/recruit/ui/club-detail-tabs';
 

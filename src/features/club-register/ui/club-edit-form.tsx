@@ -67,8 +67,8 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     }
     console.log('res.data', res.data);
 
-    if (logoFile && res.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.updateLogo, {
+    if (logoFile && res.data && res.data.data?.updateLogo) {
+      const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
         body: logoFile,
         headers: {
           'Content-Type': logoFile.type,
@@ -80,8 +80,8 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       }
     }
 
-    if (res.data?.deleteLogo) {
-      const resDeleteLogo = await ky.delete(res.data.deleteLogo);
+    if (res.data && res.data.data?.deleteLogo) {
+      const resDeleteLogo = await ky.delete(res.data.data.deleteLogo);
       if (!resDeleteLogo.ok) {
         toast.error('로고 삭제 실패!');
         return;

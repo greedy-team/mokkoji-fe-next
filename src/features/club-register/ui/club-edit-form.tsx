@@ -31,7 +31,7 @@ interface ClubInfoProp {
 }
 
 function getKeyByValue(obj: Record<string, string>, value: string) {
-  return Object.keys(obj).find((key) => obj[key] === value);
+  return Object.keys(obj).find((key) => obj[key].includes(value));
 }
 
 function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {

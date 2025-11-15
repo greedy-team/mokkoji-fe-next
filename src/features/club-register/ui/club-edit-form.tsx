@@ -58,12 +58,14 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       instagram: formData.instagram,
       logo: formData.logo ?? '',
     };
+
     const res = await patchClubInfo(clubId, data);
 
     if (!res.ok) {
       toast.error(res.message);
       return;
     }
+    console.log('res.data', res.data);
 
     if (logoFile && res.data?.updateLogo) {
       const resUpdateLogo = await ky.put(res.data.updateLogo, {
@@ -118,10 +120,9 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
 
-    const fileName = `club-image/${clubInfo?.id}/${crypto.randomUUID()}.${file.name.split('.').pop()}`;
     setLogoFile(file);
 
-    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: fileName });
+    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: file.name });
   };
 
   const handleClick = () => {

@@ -3,10 +3,15 @@ import { Suspense } from 'react';
 import RecruitDetailSkeleton from '@/entities/recruit/ui/recruit-detail-skeleton';
 import { DetailParams } from '@/shared/model/type';
 
-async function Page({ params }: DetailParams) {
+interface PageProps {
+  params: { id: string };
+  searchParams: { tab?: string };
+}
+
+async function Page({ params, searchParams }: PageProps) {
   return (
     <Suspense fallback={<RecruitDetailSkeleton />}>
-      <RecruitDetailPage params={params} />
+      <RecruitDetailPage params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

@@ -28,6 +28,7 @@ function SafeForm({
     <form
       className={formClassName}
       onSubmit={async (e) => {
+        e.preventDefault();
         if (isLoadingRef.current) {
           return;
         }

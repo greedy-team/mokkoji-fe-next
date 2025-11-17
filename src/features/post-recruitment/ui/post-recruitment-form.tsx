@@ -41,6 +41,8 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     handleDragOver,
     handleDragEnd,
     draggingId,
+    onDragOver,
+    onDrop,
   } = useImageUpload();
   const { formData, errors } = state;
   const router = useRouter();
@@ -192,6 +194,8 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         handleDragOver={handleDragOver}
         handleDragEnd={handleDragEnd}
         draggingId={draggingId}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
       />
     </SafeForm>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { X } from 'lucide-react';
 import cn from '../lib/utils';
 
@@ -16,6 +18,9 @@ function ImageUploadSection({
   handleDragOver,
   handleDragEnd,
   draggingId,
+  onDragOver,
+  onDrop,
+  maxLength = 20,
 }: {
   imageFiles: ImageItem[];
   handleImageRemove: (id: string) => void;
@@ -28,6 +33,9 @@ function ImageUploadSection({
   ) => void;
   handleDragEnd: () => void;
   draggingId: string | null;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  maxLength?: number;
 }) {
   return (
     <>
@@ -37,18 +45,37 @@ function ImageUploadSection({
 
       <div
         className={cn(
-          'mt-2 rounded-md border-2 px-4 py-3',
+          'mt-2 rounded-md border-2 px-4 py-3 transition-all',
           imageFiles.length > 0 && 'border-[#00D451]',
         )}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
       >
+        <div className="flex justify-between">
+          <label
+            htmlFor="imageInput"
+            className="cursor-pointer text-sm text-gray-700"
+          >
+            {`이미지 선택: ${
+              imageFiles.length > 0
+                ? imageFiles[imageFiles.length - 1].file.name
+                : ''
+            }`}
+          </label>{' '}
+          <span className="text-xs text-[#474747]">
+            {`${imageFiles.length}/${maxLength}`}
+          </span>
+        </div>
+
         <input
+          id="imageInput"
           name="image"
           type="file"
           accept="image/*"
           ref={inputRef}
           multiple
           onChange={handleImageChange}
-          className="flex cursor-pointer items-center justify-center text-sm"
+          className="hidden"
         />
         <p className="text-primary-500 text-xs">다중 선택 가능</p>
 

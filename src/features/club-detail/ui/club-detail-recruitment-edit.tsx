@@ -65,6 +65,8 @@ function ClubDetailRecruitmentEdit({
     handleDragOver,
     handleDragEnd,
     draggingId,
+    onDragOver,
+    onDrop,
   } = useImageUpload(imageUrls);
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
@@ -166,6 +168,8 @@ function ClubDetailRecruitmentEdit({
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}
         inputRef={inputRef}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
       />
     </SafeForm>
   );

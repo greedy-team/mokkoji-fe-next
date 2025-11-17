@@ -44,6 +44,25 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     loadInitialImages();
   }, [imageUrls]);
 
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { files } = e.dataTransfer;
+    if (!files || files.length === 0) return;
+
+    const syntheticEvent = {
+      target: { files },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    handleImageChange(syntheticEvent);
+  };
+
   const handleDragStart = (id: string) => {
     setDraggingId(id);
   };
@@ -113,6 +132,9 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     handleDragOver,
     handleDragEnd,
     draggingId,
+    onDragOver,
+    onDrop,
+    maxLength,
   };
 }
 

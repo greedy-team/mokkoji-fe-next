@@ -63,10 +63,9 @@ function RecruitDetailTab({
       <h4 className="text-md mb-5 font-bold lg:text-lg">[{title}]</h4>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
-        className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"
+        className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:text-lg"
       />
 
-      {/* 이미지 리스트 */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 lg:grid-cols-6">
         {imageUrls.map((imgsrc, idx) => (
           <Dialog

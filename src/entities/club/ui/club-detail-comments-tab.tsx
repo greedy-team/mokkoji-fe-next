@@ -1,16 +1,14 @@
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
+import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 
 interface ClubDetailCommentsTabProps {
   clubId: number;
-  comments?: CommentType[];
 }
 
-function ClubDetailCommentsTab({
-  clubId,
-  comments = [],
-}: ClubDetailCommentsTabProps) {
+async function ClubDetailCommentsTab({ clubId }: ClubDetailCommentsTabProps) {
+  const data = await getClubDetailComments(clubId);
+  const comments = data.data?.comments ?? [];
   const commentList = [...comments].reverse();
 
   return (

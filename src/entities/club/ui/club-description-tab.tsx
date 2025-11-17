@@ -1,14 +1,18 @@
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
+import getClubDetail from '@/views/club/api/getClubDetail';
 
 interface ClubDescriptionTabProps {
-  description?: string;
+  clubId: number;
 }
 
-function ClubDescriptionTab({ description }: ClubDescriptionTabProps) {
+async function ClubDescriptionTab({ clubId }: ClubDescriptionTabProps) {
+  const data = await getClubDetail(clubId);
+  const description = data.data?.description;
+
   return (
     <div>
       {description ? (
-        <p className="text-text-secondary pt-8 text-sm leading-[1.4] whitespace-pre-wrap lg:text-lg">
+        <p className="text-text-secondary pt-8 text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
               __html: convertLinkText(description),

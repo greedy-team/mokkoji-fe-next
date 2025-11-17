@@ -1,58 +1,74 @@
 import { notFound } from 'next/navigation';
-import getClubDetail from '@/views/club/api/getClubDetail';
-import ClubDetailHeader from '@/entities/club/ui/club-detail-header';
-import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { DetailParams } from '@/shared/model/type';
-import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
-import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
+import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
+import getClubManageInfo from '@/shared/api/manage-api';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import { auth } from '@/auth';
+import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
 
-interface ClubDetailPageProps {
+interface RecruitDetailPageProps {
   params: { id: string };
   searchParams: { tab?: string };
 }
 
-async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
+async function RecruitDetailPage({
+  params,
+  searchParams,
+}: RecruitDetailPageProps) {
   const { id } = await params;
   const tab = searchParams.tab || 'recruit';
 
-  const [recruitdata, detaildata, commentsdata] = await Promise.all([
+  const session = await auth();
+  const role = session?.role;
+  const [getClubManageInfoRes, data] = await Promise.all([
+    getClubManageInfo({ role }),
     getRecruitDetail(Number(id)),
-    getClubDetail(Number(id)),
-    getClubDetailComments(Number(id)),
   ]);
 
-  if (detaildata?.status === 404 || !detaildata.data) {
+  if (data?.status === 404 || !data.data) {
     notFound();
   }
 
-  if (!detaildata.ok) {
+  if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
 
+  const isManageClub =
+    getClubManageInfoRes?.data?.clubs.some(
+      (club) => club.clubId === data.data?.clubId,
+    ) || false;
+
   return (
     <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
-      <ClubDetailHeader
-        title={detaildata.data.name}
-        category={detaildata.data.category}
-        startDate={detaildata.data.recruitStartDate}
-        endDate={detaildata.data.recruitEndDate}
-        instagram={detaildata.data.instagram}
+      <RecruitDetailHeader
+        title={data.data.clubName}
+        category={data.data.category}
+        startDate={data.data.recruitStart}
+        endDate={data.data.recruitEnd}
+        instagram={data.data.instagramUrl}
         clubId={Number(id)}
-        isFavorite={detaildata.data.isFavorite}
-        logo={detaildata.data.logo}
-        status={recruitdata.data?.status || 'CLOSED'}
+        isFavorite={data.data.isFavorite}
+        createdAt={data.data.createdAt}
+        logo={data.data.logo}
+        status={data.data.status}
       />
 
-      <ClubDetailTabs
-        activeTab={tab}
-        recruitData={recruitdata.data}
-        description={detaildata.data.description}
+      <ClubDetailTabs activeTab={tab} recruitData={data.data} id={Number(id)} />
+
+      {/* <RecruitDetailWidget
+        isManageClub={isManageClub}
+        title={data.data.title}
+        clubName={data.data.clubName}
+        category={data.data.category}
+        content={data.data.content}
+        recruitForm={data.data.recruitForm}
+        imageUrls={data.data.imageUrls}
+        recruitStart={data.data.recruitStart}
+        recruitEnd={data.data.recruitEnd}
         clubId={Number(id)}
-        comments={commentsdata.data?.comments ?? []}
-      />
+      /> */}
     </div>
   );
 }
 
-export default ClubDetailPage;
+export default RecruitDetailPage;

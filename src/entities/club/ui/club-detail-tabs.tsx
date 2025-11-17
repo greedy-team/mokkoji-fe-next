@@ -1,22 +1,20 @@
 import Link from 'next/link';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
-import ClubDescriptionTab from './tabs/club-description-tab';
-import ClubDetailCommentsTab from './tabs/club-detail-comments-tab';
-import RecruitDetailTab from './tabs/recruit-detail-tab';
+import ClubDescriptionTab from './club-description-tab';
+import ClubDetailCommentsTab from './club-detail-comments-tab';
+import RecruitDetailTab from './recruit-detail-tab';
 
 interface RecruitDetailViewProps {
   title: string;
   content: string;
   recruitForm: string;
   imageUrls: string[];
+  clubId: number;
 }
 
 interface ClubDetailTabsProps {
   activeTab: string;
   recruitData?: RecruitDetailViewProps;
-  description?: string;
-  clubId: number;
-  comments?: CommentType[];
+  id: number;
 }
 
 const TABS = [
@@ -25,18 +23,12 @@ const TABS = [
   { key: 'comments', label: '댓글' },
 ];
 
-function ClubDetailTabs({
-  activeTab,
-  recruitData,
-  description,
-  clubId,
-  comments,
-}: ClubDetailTabsProps) {
+function ClubDetailTabs({ activeTab, recruitData, id }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
-    if (key === 'recruit') return `/club/${clubId}`;
-    if (key === 'about') return `/club/${clubId}?tab=about`;
-    if (key === 'comments') return `/club/${clubId}?tab=comments`;
-    return `/club/${clubId}`;
+    if (key === 'recruit') return `/club/${id}`;
+    if (key === 'about') return `/club/${id}?tab=about`;
+    if (key === 'comments') return `/club/${id}?tab=comments`;
+    return `/club/${id}`;
   };
 
   return (
@@ -58,21 +50,22 @@ function ClubDetailTabs({
           </Link>
         ))}
       </div>
-
-      {activeTab === 'recruit' && (
-        <RecruitDetailTab
-          title={recruitData?.title ?? ''}
-          content={recruitData?.content ?? ''}
-          recruitForm={recruitData?.recruitForm ?? ''}
-          imageUrls={recruitData?.imageUrls ?? []}
-        />
-      )}
-      {activeTab === 'about' && (
-        <ClubDescriptionTab description={description} />
-      )}
-      {activeTab === 'comments' && (
-        <ClubDetailCommentsTab clubId={clubId} comments={comments} />
-      )}
+      <div className="mx-auto w-full max-w-[1000px]">
+        {activeTab === 'recruit' && (
+          <RecruitDetailTab
+            title={recruitData?.title ?? ''}
+            content={recruitData?.content ?? ''}
+            recruitForm={recruitData?.recruitForm ?? ''}
+            imageUrls={recruitData?.imageUrls ?? []}
+          />
+        )}
+        {activeTab === 'about' && (
+          <ClubDescriptionTab clubId={recruitData!.clubId} />
+        )}
+        {activeTab === 'comments' && (
+          <ClubDetailCommentsTab clubId={recruitData!.clubId} />
+        )}
+      </div>
     </div>
   );
 }

@@ -35,7 +35,10 @@ function RecruitDetailView({
   };
 
   const isRecruitPeriod =
-    title || content || recruitForm || imageUrls.length !== 0;
+    Boolean(title?.trim()) ||
+    Boolean(content?.trim()) ||
+    Boolean(recruitForm?.trim()) ||
+    imageUrls.length > 0;
 
   if (!isRecruitPeriod) {
     return (

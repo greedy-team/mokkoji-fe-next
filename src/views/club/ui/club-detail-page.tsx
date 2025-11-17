@@ -53,20 +53,12 @@ async function RecruitDetailPage({
         status={data.data.status}
       />
 
-      <ClubDetailTabs activeTab={tab} recruitData={data.data} id={Number(id)} />
-
-      {/* <RecruitDetailWidget
+      <ClubDetailTabs
+        activeTab={tab}
         isManageClub={isManageClub}
-        title={data.data.title}
-        clubName={data.data.clubName}
-        category={data.data.category}
-        content={data.data.content}
-        recruitForm={data.data.recruitForm}
-        imageUrls={data.data.imageUrls}
-        recruitStart={data.data.recruitStart}
-        recruitEnd={data.data.recruitEnd}
-        clubId={Number(id)}
-      /> */}
+        recruitData={data.data}
+        id={Number(id)}
+      />
     </div>
   );
 }

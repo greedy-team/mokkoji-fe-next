@@ -1,18 +1,23 @@
 import Link from 'next/link';
+import RecruitDetailWidget from '@/widgets/club-detail/ui/recruit-detail-widget';
 import ClubDescriptionTab from './club-description-tab';
 import ClubDetailCommentsTab from './club-detail-comments-tab';
-import RecruitDetailTab from './recruit-detail-tab';
 
 interface RecruitDetailViewProps {
   title: string;
+  clubName: string;
+  category: string;
   content: string;
   recruitForm: string;
   imageUrls: string[];
+  recruitStart?: string;
+  recruitEnd?: string;
   clubId: number;
 }
 
 interface ClubDetailTabsProps {
   activeTab: string;
+  isManageClub: boolean;
   recruitData?: RecruitDetailViewProps;
   id: number;
 }
@@ -23,7 +28,12 @@ const TABS = [
   { key: 'comments', label: '댓글' },
 ];
 
-function ClubDetailTabs({ activeTab, recruitData, id }: ClubDetailTabsProps) {
+function ClubDetailTabs({
+  activeTab,
+  isManageClub,
+  recruitData,
+  id,
+}: ClubDetailTabsProps) {
   const getHref = (key: string) => {
     if (key === 'recruit') return `/club/${id}`;
     if (key === 'about') return `/club/${id}?tab=about`;
@@ -52,11 +62,17 @@ function ClubDetailTabs({ activeTab, recruitData, id }: ClubDetailTabsProps) {
       </div>
       <div className="mx-auto w-full max-w-[1000px]">
         {activeTab === 'recruit' && (
-          <RecruitDetailTab
+          <RecruitDetailWidget
+            isManageClub={isManageClub}
             title={recruitData?.title ?? ''}
+            clubName={recruitData?.clubName ?? ''}
+            category={recruitData?.category ?? ''}
             content={recruitData?.content ?? ''}
             recruitForm={recruitData?.recruitForm ?? ''}
             imageUrls={recruitData?.imageUrls ?? []}
+            recruitStart={recruitData?.recruitStart ?? ''}
+            recruitEnd={recruitData?.recruitEnd ?? ''}
+            clubId={Number(id)}
           />
         )}
         {activeTab === 'about' && (

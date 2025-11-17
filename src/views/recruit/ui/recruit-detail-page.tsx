@@ -4,7 +4,7 @@ import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-hea
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
-import ClubDetailTabs from '@/entities/recruit/ui/club-detail-tabs';
+import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 
 interface RecruitDetailPageProps {
   params: { id: string };
@@ -53,9 +53,7 @@ async function RecruitDetailPage({
         status={data.data.status}
       />
 
-      <ClubDetailTabs activeTab={tab} recruitData={data.data} id={Number(id)} />
-
-      {/* <RecruitDetailWidget
+      <RecruitDetailWidget
         isManageClub={isManageClub}
         title={data.data.title}
         clubName={data.data.clubName}
@@ -66,7 +64,7 @@ async function RecruitDetailPage({
         recruitStart={data.data.recruitStart}
         recruitEnd={data.data.recruitEnd}
         clubId={Number(id)}
-      /> */}
+      />
     </div>
   );
 }

@@ -61,26 +61,34 @@ function ClubDetailTabs({
         ))}
       </div>
       <div className="mx-auto w-full max-w-[1000px]">
-        {activeTab === 'recruit' && (
-          <RecruitDetailWidget
-            isManageClub={isManageClub}
-            title={recruitData?.title ?? ''}
-            clubName={recruitData?.clubName ?? ''}
-            category={recruitData?.category ?? ''}
-            content={recruitData?.content ?? ''}
-            recruitForm={recruitData?.recruitForm ?? ''}
-            imageUrls={recruitData?.imageUrls ?? []}
-            recruitStart={recruitData?.recruitStart ?? ''}
-            recruitEnd={recruitData?.recruitEnd ?? ''}
-            clubId={Number(id)}
-          />
-        )}
-        {activeTab === 'about' && (
-          <ClubDescriptionTab clubId={recruitData!.clubId} />
-        )}
-        {activeTab === 'comments' && (
-          <ClubDetailCommentsTab clubId={recruitData!.clubId} />
-        )}
+        {(() => {
+          switch (activeTab) {
+            case 'recruit':
+              return (
+                <RecruitDetailWidget
+                  isManageClub={isManageClub}
+                  title={recruitData?.title ?? ''}
+                  clubName={recruitData?.clubName ?? ''}
+                  category={recruitData?.category ?? ''}
+                  content={recruitData?.content ?? ''}
+                  recruitForm={recruitData?.recruitForm ?? ''}
+                  imageUrls={recruitData?.imageUrls ?? []}
+                  recruitStart={recruitData?.recruitStart ?? ''}
+                  recruitEnd={recruitData?.recruitEnd ?? ''}
+                  clubId={Number(id)}
+                />
+              );
+
+            case 'about':
+              return <ClubDescriptionTab clubId={recruitData!.clubId} />;
+
+            case 'comments':
+              return <ClubDetailCommentsTab clubId={recruitData!.clubId} />;
+
+            default:
+              return null;
+          }
+        })()}
       </div>
     </div>
   );

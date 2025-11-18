@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
 import RecruitItem from '@/entities/club/ui/recruit-item';
@@ -24,7 +24,6 @@ export default function RecruitItemClientList({
   initialCardHeight = 198,
 }: RecruitItemClientListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const id = useId();
 
   const [columns, setColumns] = useState(initialColumns);
   const [cardHeight, setCardHeight] = useState(initialCardHeight);
@@ -78,7 +77,7 @@ export default function RecruitItemClientList({
             }}
           >
             {rowItems.map((item) => (
-              <Link key={item.id} href={`/club/${item.id}`}>
+              <Link key={item.id} href={`/club/${item.club.id}`}>
                 <RecruitItem
                   title={item.title}
                   name={item.club.name || ''}
@@ -95,7 +94,10 @@ export default function RecruitItemClientList({
             ))}
             {rowItems.length < columns &&
               Array.from({ length: columns - rowItems.length }).map(() => (
-                <div key={id} style={{ height: `${cardHeight}px` }} />
+                <div
+                  key={crypto.randomUUID()}
+                  style={{ height: `${cardHeight}px` }}
+                />
               ))}
           </div>
         );

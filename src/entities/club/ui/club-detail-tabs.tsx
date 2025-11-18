@@ -80,10 +80,10 @@ function ClubDetailTabs({
               );
 
             case 'about':
-              return <ClubDescriptionTab clubId={recruitData!.clubId} />;
+              return <ClubDescriptionTab clubId={id} />;
 
             case 'comments':
-              return <ClubDetailCommentsTab clubId={recruitData!.clubId} />;
+              return <ClubDetailCommentsTab clubId={id} />;
 
             default:
               return null;

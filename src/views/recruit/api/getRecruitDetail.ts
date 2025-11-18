@@ -6,7 +6,7 @@ import api from '@/shared/api/auth-api';
 async function getRecruitDetail(id: number) {
   try {
     const response: ApiResponse<RecruitmentDetail> = await api
-      .get(`recruitments/${id}`)
+      .get(`recruitments/club/recent/${id}`)
       .json();
     return { ok: true, data: response.data, status: 200 };
   } catch (e) {

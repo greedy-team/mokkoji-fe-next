@@ -39,12 +39,7 @@ function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
         )}
       >
         <nav className="flex flex-col gap-4 py-4">
-          <NavButton label="전체 동아리" href="/club" onItemClick={closeMenu} />
-          <NavButton
-            label="모집 공고"
-            href="/recruit"
-            onItemClick={closeMenu}
-          />
+          <NavButton label="동아리" href="/club" onItemClick={closeMenu} />
           <NavButton
             label="즐겨찾기"
             href="/favorite?page=1&size=6"

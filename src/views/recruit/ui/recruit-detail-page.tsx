@@ -1,16 +1,27 @@
 import { notFound } from 'next/navigation';
 import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
 import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
-import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { DetailParams } from '@/shared/model/type';
+import { auth } from '@/auth';
+import RecruitDetailWidget from '@/widgets/recruit-detail/ui/recruit-detail-widget';
 
-async function RecruitDetailPage({ params }: DetailParams) {
+interface RecruitDetailPageProps {
+  params: { id: string };
+  searchParams: { tab?: string };
+}
+
+async function RecruitDetailPage({
+  params,
+  searchParams,
+}: RecruitDetailPageProps) {
   const { id } = await params;
+  const tab = searchParams.tab || 'recruit';
 
+  const session = await auth();
+  const role = session?.role;
   const [getClubManageInfoRes, data] = await Promise.all([
-    getClubManageInfo(),
+    getClubManageInfo({ role }),
     getRecruitDetail(Number(id)),
   ]);
 
@@ -41,6 +52,7 @@ async function RecruitDetailPage({ params }: DetailParams) {
         logo={data.data.logo}
         status={data.data.status}
       />
+
       <RecruitDetailWidget
         isManageClub={isManageClub}
         title={data.data.title}

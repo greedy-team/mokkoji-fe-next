@@ -5,11 +5,24 @@ import {
   ApiResponse,
   ClubInfoResponse,
   GetClubManageInfoResponse,
+  UserRole,
 } from '../model/type';
 import ErrorHandler from '../lib/error-message';
 
-export default async function getClubManageInfo() {
+interface ClubManageInfoProps {
+  role: UserRole | undefined;
+}
+
+export default async function getClubManageInfo({ role }: ClubManageInfoProps) {
   try {
+    if (role === UserRole.NORMAL || !role) {
+      return {
+        ok: true,
+        message: '권한이 없습니다.',
+        data: null,
+        status: 200,
+      };
+    }
     const response = await api
       .get('users/manage/clubs')
       .json<ApiResponse<GetClubManageInfoResponse>>();

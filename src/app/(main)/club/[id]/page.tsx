@@ -1,12 +1,16 @@
 import ClubDetailPage from '@/views/club/ui/club-detail-page';
 import { Suspense } from 'react';
 import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
-import { DetailParams } from '@/shared/model/type';
 
-async function Page({ params }: DetailParams) {
+interface PageProps {
+  params: { id: string };
+  searchParams: { tab?: string };
+}
+
+async function Page({ params, searchParams }: PageProps) {
   return (
     <Suspense fallback={<ClubDetailSkeleton />}>
-      <ClubDetailPage params={params} />
+      <ClubDetailPage params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

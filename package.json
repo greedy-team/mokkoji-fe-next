@@ -44,7 +44,7 @@
     "lucide-react": "^0.548.0",
     "next": "15.3.4",
     "next-auth": "5.0.0-beta.28",
-    "next-fetch-logger": "^1.0.9",
+    "next-fetch-logger": "^1.0.12",
     "nuqs": "^2.7.1",
     "pnpm": "^10.9.0",
     "prettier": "^3.6.2",

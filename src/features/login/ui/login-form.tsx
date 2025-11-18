@@ -9,7 +9,12 @@ import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
-function LoginForm({ confirmed }: { confirmed: boolean }) {
+interface LoginFormProps {
+  confirmed: boolean;
+  setOpen: (confirmed: boolean) => void;
+}
+
+function LoginForm({ confirmed, setOpen }: LoginFormProps) {
   const router = useRouter();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +28,12 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+
+    if (!confirmed) {
+      setOpen(true);
+      return;
+    }
+
     setIsSubmitting(true);
     const result: any = await signIn('credentials', {
       redirect: false,
@@ -115,20 +126,13 @@ function LoginForm({ confirmed }: { confirmed: boolean }) {
           <DotsPulseLoader className="mr-3" text="로그인 중..." />
         </div>
       ) : (
-        <>
-          <Button
-            type="submit"
-            disabled={studentId === '' || password === '' || !confirmed}
-            className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
-          >
-            확인
-          </Button>
-          {!confirmed && (
-            <p className="text-xs text-[#FF383C]">
-              *로그인 안내를 확인해주세요.
-            </p>
-          )}
-        </>
+        <Button
+          type="submit"
+          disabled={studentId === '' || password === ''}
+          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
+        >
+          확인
+        </Button>
       )}
     </form>
   );

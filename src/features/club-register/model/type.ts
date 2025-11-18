@@ -37,8 +37,10 @@ export type Action =
   | { type: 'UPDATE_MULTIPLE_FIELDS'; payload: Partial<ClubFormData> };
 
 export interface EditResponseField {
-  updateLogo: string;
-  deleteLogo: string;
+  data?: {
+    updateLogo: string;
+    deleteLogo: string;
+  };
 }
 
 export interface EditResponse {

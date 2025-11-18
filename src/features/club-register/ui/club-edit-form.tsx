@@ -31,7 +31,7 @@ interface ClubInfoProp {
 }
 
 function getKeyByValue(obj: Record<string, string>, value: string) {
-  return Object.keys(obj).find((key) => obj[key] === value);
+  return Object.keys(obj).find((key) => obj[key].includes(value));
 }
 
 function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
@@ -58,15 +58,17 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       instagram: formData.instagram,
       logo: formData.logo ?? '',
     };
+
     const res = await patchClubInfo(clubId, data);
 
     if (!res.ok) {
       toast.error(res.message);
       return;
     }
+    console.log('res.data', res.data);
 
-    if (logoFile && res.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.updateLogo, {
+    if (logoFile && res.data && res.data.data?.updateLogo) {
+      const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
         body: logoFile,
         headers: {
           'Content-Type': logoFile.type,
@@ -78,8 +80,8 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       }
     }
 
-    if (res.data?.deleteLogo) {
-      const resDeleteLogo = await ky.delete(res.data.deleteLogo);
+    if (res.data && res.data.data?.deleteLogo) {
+      const resDeleteLogo = await ky.delete(res.data.data.deleteLogo);
       if (!resDeleteLogo.ok) {
         toast.error('로고 삭제 실패!');
         return;
@@ -118,10 +120,9 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     const imageUrl = URL.createObjectURL(file);
     setPreview(imageUrl);
 
-    const fileName = `club-image/${clubInfo?.id}/${crypto.randomUUID()}.${file.name.split('.').pop()}`;
     setLogoFile(file);
 
-    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: fileName });
+    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: file.name });
   };
 
   const handleClick = () => {

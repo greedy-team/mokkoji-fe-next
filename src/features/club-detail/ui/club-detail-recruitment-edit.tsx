@@ -3,18 +3,18 @@
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import { Button } from '@/shared/ui/button';
 import SelectDate from '@/features/post-recruitment/ui/select-date';
 import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import {
   RecruitmentFormData,
   StateProp,
 } from '@/features/post-recruitment/model/type';
-import cn from '@/shared/lib/utils';
 import { toast } from 'react-toastify';
 import ky from 'ky';
-import patchRecruitmentForm from '../api/patchRecruitment';
+import patchRecruitmentForm from '@/features/club-detail/api/patchRecruitment';
+import useImageUpload from '@/shared/model/useImageUpload';
+import ImageUploadSection from '@/shared/ui/image-upload-section';
 
 interface RecruitDetailEditProps {
   title: string;
@@ -44,43 +44,33 @@ function ClubDetailRecruitmentEdit({
   const initialState: StateProp = {
     formData: {
       title,
-      images: [],
       content,
       recruitStart,
       recruitEnd,
       recruitForm,
+      imageNames: imageUrls.map((url) => url.split('/').pop()!.split('?')[0]),
     },
     errors: {},
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
   const { formData, errors } = state;
+  const {
+    imageFiles,
+    handleImageChange,
+    handleImageRemove,
+    inputRef,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    draggingId,
+    onDragOver,
+    onDrop,
+  } = useImageUpload(imageUrls);
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!files) return;
-
-    const newFiles = Array.from(files);
-    setImageFiles((prev) => [...prev, ...newFiles]);
-
-    const newFileNames = newFiles.map(
-      (file) =>
-        `recruitment-image/${clubId}/${crypto.randomUUID()}.${file.name.split('.').pop()}`,
-    );
-
-    dispatch({
-      type: 'UPDATE_FIELD',
-      name: 'images',
-      value: [...formData.images, ...newFileNames],
-    });
-  };
-
-  const handleImageRemove = (index: number) => {
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,7 +82,7 @@ function ClubDetailRecruitmentEdit({
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
-      images: formData.images,
+      imageNames: imageFiles.map((file) => file.imageName),
     };
 
     const res = await patchRecruitmentForm(data, clubId!);
@@ -102,18 +92,25 @@ function ClubDetailRecruitmentEdit({
       return;
     }
 
-    await Promise.all([
-      ...(res.data?.deleteImageUrls?.map((url: string) => ky.delete(url)) ??
-        []),
-      ...(res.data?.uploadImageUrls?.map((url: string, i: number) =>
-        ky.put(url, {
-          body: imageFiles[i],
-          headers: { 'Content-Type': imageFiles[i].type },
-        }),
-      ) ?? []),
-    ]);
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
+
+    try {
+      if (uploadUrls.length > 0) {
+        await Promise.all(
+          uploadUrls.map((url: string, i: number) =>
+            ky.put(url, {
+              body: imageFiles[i].file,
+              headers: { 'Content-Type': imageFiles[i].file.type },
+            }),
+          ),
+        );
+      }
+    } catch (error) {
+      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+      return;
+    }
     setIsEditing(false);
+    toast.success('모집 공고가 성공적으로 수정되었습니다!');
   };
 
   return (
@@ -162,41 +159,18 @@ function ClubDetailRecruitmentEdit({
         endDate={formData.recruitEnd}
         onChange={handleChange}
       />
-      <label htmlFor="image" className="mt-4 text-xl font-bold">
-        이미지 파일 업로드
-      </label>
-      <div
-        className={cn(
-          'mt-2 rounded-md border-2 px-4 py-3',
-          imageFiles.length > 0 && 'border-[#00D451]',
-        )}
-      >
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          className="flex cursor-pointer items-center justify-center text-sm"
-        />
-
-        {imageFiles.length > 0 && (
-          <ul className="mt-2 list-inside list-disc text-sm text-gray-700">
-            {imageFiles.map((file, index) => (
-              <li key={file.name} className="flex items-center justify-between">
-                <span>{file.name}</span>
-                <button
-                  type="button"
-                  onClick={() => handleImageRemove(index)}
-                  className="ml-4 cursor-pointer text-red-500 hover:underline"
-                >
-                  삭제
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <ImageUploadSection
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDragEnd={handleDragEnd}
+        draggingId={draggingId}
+        imageFiles={imageFiles}
+        handleImageRemove={handleImageRemove}
+        handleImageChange={handleImageChange}
+        inputRef={inputRef}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+      />
     </SafeForm>
   );
 }

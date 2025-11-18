@@ -32,7 +32,6 @@ async function Header() {
 
         <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
           <NavButton label="전체 동아리" href="/club" />
-          <NavButton label="모집 공고" href="/recruit" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           <NavButton label="고객센터" href="/support" />
           {role &&

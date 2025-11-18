@@ -1,18 +1,15 @@
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
-import getClubDetailComments from '../api/getClubDetailComments';
+import getClubDetailComments from '@/widgets/club-detail/api/getClubDetailComments';
 
-interface CommentWidgetProps {
+interface ClubDetailCommentsTabProps {
   clubId: number;
 }
 
-async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
-  let commentList: CommentType[] = [];
-
+async function ClubDetailCommentsTab({ clubId }: ClubDetailCommentsTabProps) {
   const data = await getClubDetailComments(clubId);
-
-  commentList = data.data?.comments.reverse() ?? [];
+  const comments = data.data?.comments ?? [];
+  const commentList = [...comments].reverse();
 
   return (
     <section className="mt-8 w-full">
@@ -22,4 +19,4 @@ async function ClubDetailCommentWidget({ clubId }: CommentWidgetProps) {
   );
 }
 
-export default ClubDetailCommentWidget;
+export default ClubDetailCommentsTab;

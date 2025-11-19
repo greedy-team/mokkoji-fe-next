@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useReducer, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
@@ -10,6 +10,7 @@ import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import CalenderBody from '@/shared/ui/calender/calender-body';
+import useCalender from '@/shared/ui/calender/useCalender';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import isFormValid from '../util/isFormValid';
@@ -33,68 +34,36 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [isCalenderOpen, setIsCalenderOpen] = useState(false);
-  const [isCalenderClosing, setIsCalenderClosing] = useState(false);
-  const calendarRef = useRef<HTMLDivElement>(null);
   const { formData, errors } = state;
   const router = useRouter();
-
-  const handleCloseCalendar = () => {
-    setIsCalenderClosing(true);
-    setTimeout(() => {
-      setIsCalenderOpen(false);
-      setIsCalenderClosing(false);
-    }, 150);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isCalenderOpen &&
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node)
-      ) {
-        handleCloseCalendar();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isCalenderOpen]);
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
-  const formatDateRange = (start: string | null, end: string | null) => {
-    const formattedStart = start ? start.replace(/-/g, '.') : '시작일';
-    const formattedEnd = end ? end.replace(/-/g, '.') : '마감일';
-
-    if (start || end) {
-      return `${formattedStart} ~ ${formattedEnd}`;
-    }
-    return '모집 기간을 선택해주세요';
-  };
-
-  const handleDateSelect = (selectedDate: Date) => {
-    const year = selectedDate.getFullYear();
-    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-    const day = String(selectedDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-
-    if (!formData.recruitStart || formData.recruitEnd) {
-      handleChange('recruitStart', formattedDate);
-      handleChange('recruitEnd', '');
-    } else if (formattedDate < formData.recruitStart) {
-      handleChange('recruitStart', formattedDate);
-    } else {
-      handleChange('recruitEnd', formattedDate);
+  const {
+    isCalenderOpen,
+    isCalenderClosing,
+    calendarRef,
+    closeCalender,
+    toggleCalender,
+    handleDateSelect: handleCalenderDateSelect,
+    formatDateRange,
+  } = useCalender({
+    onStartDateChange: (date) => handleChange('recruitStart', date),
+    onEndDateChange: (date) => handleChange('recruitEnd', date),
+    onRangeComplete: () => {
       handleBlur('recruitStart');
       handleBlur('recruitEnd');
-    }
+    },
+  });
+
+  const handleDateSelect = (selectedDate: Date) => {
+    handleCalenderDateSelect(
+      selectedDate,
+      formData.recruitStart,
+      formData.recruitEnd,
+    );
   };
 
   const handleBlur = (name: keyof RecruitmentFormData) => {
@@ -242,7 +211,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         <button
           type="button"
           className="mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 py-3 text-xs text-gray-700 transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm"
-          onClick={() => setIsCalenderOpen((prev) => !prev)}
+          onClick={toggleCalender}
         >
           {formatDateRange(formData.recruitStart, formData.recruitEnd)}
         </button>
@@ -261,7 +230,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
             <button
               type="button"
               className="mt-5 w-[90%] cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
-              onClick={handleCloseCalendar}
+              onClick={closeCalender}
             >
               닫기
             </button>

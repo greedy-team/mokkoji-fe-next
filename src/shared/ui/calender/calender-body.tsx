@@ -66,9 +66,9 @@ function CalenderBody({ onDateSelect, startDate, endDate }: CalenderBodyProps) {
         >
           <Image src="/calenderPrev.svg" alt="저번달" width={20} height={20} />
         </button>
-        <h2 className="flex-1 cursor-default py-3 text-center font-bold">
+        <h1 className="flex-1 cursor-default py-3 text-center font-bold">
           {currentYear}년 {currentMonth + 1}월
-        </h2>
+        </h1>
         <button
           type="button"
           className="cursor-pointer"

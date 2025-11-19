@@ -3,9 +3,9 @@
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import { Button } from '@/shared/ui/button';
 import CalenderBody from '@/shared/ui/calender/calender-body';
 import useCalender from '@/shared/ui/calender/useCalender';
+import cn from '@/shared/lib/utils';
 import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
 import { useReducer } from 'react';
 import {
@@ -20,21 +20,27 @@ import ImageUploadSection from '@/shared/ui/image-upload-section';
 
 interface RecruitDetailEditProps {
   title: string;
+  clubName: string;
+  category: string;
   content: string;
   recruitForm: string;
   recruitStart: string;
   recruitEnd: string;
   clubId: number;
+  imageUrls: string[];
   setIsEditing: (isEditing: boolean) => void;
 }
 
 function ClubDetailRecruitmentEdit({
   title,
+  clubName,
+  category,
   content,
   recruitForm,
   recruitStart,
   recruitEnd,
   clubId,
+  imageUrls,
   setIsEditing,
 }: RecruitDetailEditProps) {
   const initialState: StateProp = {
@@ -51,7 +57,7 @@ function ClubDetailRecruitmentEdit({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { formData, errors } = state;
+  const { formData } = state;
   const {
     imageFiles,
     handleImageChange,
@@ -80,10 +86,6 @@ function ClubDetailRecruitmentEdit({
   } = useCalender({
     onStartDateChange: (date) => handleChange('recruitStart', date),
     onEndDateChange: (date) => handleChange('recruitEnd', date),
-    onRangeComplete: () => {
-      handleBlur('recruitStart');
-      handleBlur('recruitEnd');
-    },
   });
 
   const handleDateSelect = (selectedDate: Date) => {
@@ -92,33 +94,6 @@ function ClubDetailRecruitmentEdit({
       formData.recruitStart,
       formData.recruitEnd,
     );
-  };
-
-  const handleBlur = (name: keyof RecruitmentFormData) => {
-    dispatch({ type: 'VALIDATE_FIELD', name });
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!files) return;
-
-    const newFiles = Array.from(files);
-    setImageFiles((prev) => [...prev, ...newFiles]);
-
-    const newFileNames = newFiles.map(
-      (file) =>
-        `recruitment-image/${clubId}/${crypto.randomUUID()}.${file.name.split('.').pop()}`,
-    );
-
-    dispatch({
-      type: 'UPDATE_FIELD',
-      name: 'images',
-      value: [...formData.images, ...newFileNames],
-    });
-  };
-
-  const handleImageRemove = (index: number) => {
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -232,41 +207,18 @@ function ClubDetailRecruitmentEdit({
           </div>
         )}
       </div>
-      <label htmlFor="image" className="mt-4 text-xl font-bold">
-        이미지 파일 업로드
-      </label>
-      <div
-        className={cn(
-          'mt-2 rounded-md border-2 px-4 py-3',
-          imageFiles.length > 0 && 'border-[#00D451]',
-        )}
-      >
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          className="flex cursor-pointer items-center justify-center text-sm"
-        />
-
-        {imageFiles.length > 0 && (
-          <ul className="mt-2 list-inside list-disc text-sm text-gray-700">
-            {imageFiles.map((file, index) => (
-              <li key={file.name} className="flex items-center justify-between">
-                <span>{file.name}</span>
-                <button
-                  type="button"
-                  onClick={() => handleImageRemove(index)}
-                  className="ml-4 cursor-pointer text-red-500 hover:underline"
-                >
-                  삭제
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <ImageUploadSection
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDragEnd={handleDragEnd}
+        draggingId={draggingId}
+        imageFiles={imageFiles}
+        handleImageRemove={handleImageRemove}
+        handleImageChange={handleImageChange}
+        inputRef={inputRef}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+      />
     </SafeForm>
   );
 }

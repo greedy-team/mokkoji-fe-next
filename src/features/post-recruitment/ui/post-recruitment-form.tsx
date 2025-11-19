@@ -5,11 +5,12 @@ import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
+import CalenderBody from '@/shared/ui/calender/calender-body';
+import useCalender from '@/shared/ui/calender/useCalender';
+import cn from '@/shared/lib/utils';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
-import CalenderBody from '@/shared/ui/calender/calender-body';
-import useCalender from '@/shared/ui/calender/useCalender';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
 import { FormField, RecruitmentFormData } from '../model/type';
@@ -232,41 +233,18 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
           </div>
         )}
       </div>
-      <label htmlFor="image" className="mt-4 font-bold">
-        이미지 파일 업로드
-      </label>
-      <div
-        className={cn(
-          'mt-2 rounded-md border-2 px-4 py-3',
-          imageFiles.length > 0 && 'border-[#00D451]',
-        )}
-      >
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          className="flex cursor-pointer items-center justify-center text-sm"
-        />
-
-        {imageFiles.length > 0 && (
-          <ul className="mt-2 list-inside list-disc text-sm text-gray-700">
-            {imageFiles.map((file, index) => (
-              <li key={file.name} className="flex items-center justify-between">
-                <span>{file.name}</span>
-                <button
-                  type="button"
-                  onClick={() => handleImageRemove(index)}
-                  className="ml-4 cursor-pointer text-red-500 hover:underline"
-                >
-                  삭제
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <ImageUploadSection
+        imageFiles={imageFiles}
+        handleImageRemove={handleImageRemove}
+        handleImageChange={handleImageChange}
+        inputRef={inputRef}
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDragEnd={handleDragEnd}
+        draggingId={draggingId}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+      />
     </SafeForm>
   );
 }

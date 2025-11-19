@@ -7,15 +7,16 @@ import { Button } from '@/shared/ui/button';
 import CalenderBody from '@/shared/ui/calender/calender-body';
 import useCalender from '@/shared/ui/calender/useCalender';
 import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import {
   RecruitmentFormData,
   StateProp,
 } from '@/features/post-recruitment/model/type';
-import cn from '@/shared/lib/utils';
 import { toast } from 'react-toastify';
 import ky from 'ky';
-import patchRecruitmentForm from '../api/patchRecruitment';
+import patchRecruitmentForm from '@/features/club-detail/api/patchRecruitment';
+import useImageUpload from '@/shared/model/useImageUpload';
+import ImageUploadSection from '@/shared/ui/image-upload-section';
 
 interface RecruitDetailEditProps {
   title: string;
@@ -39,17 +40,30 @@ function ClubDetailRecruitmentEdit({
   const initialState: StateProp = {
     formData: {
       title,
-      images: [],
       content,
       recruitStart,
       recruitEnd,
       recruitForm,
+      imageNames: imageUrls.map((url) => url.split('/').pop()!.split('?')[0]),
     },
     errors: {},
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
   const { formData, errors } = state;
+  const {
+    imageFiles,
+    handleImageChange,
+    handleImageRemove,
+    inputRef,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    draggingId,
+    onDragOver,
+    onDrop,
+  } = useImageUpload(imageUrls);
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -116,7 +130,7 @@ function ClubDetailRecruitmentEdit({
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
-      images: formData.images,
+      imageNames: imageFiles.map((file) => file.imageName),
     };
 
     const res = await patchRecruitmentForm(data, clubId!);
@@ -126,18 +140,25 @@ function ClubDetailRecruitmentEdit({
       return;
     }
 
-    await Promise.all([
-      ...(res.data?.deleteImageUrls?.map((url: string) => ky.delete(url)) ??
-        []),
-      ...(res.data?.uploadImageUrls?.map((url: string, i: number) =>
-        ky.put(url, {
-          body: imageFiles[i],
-          headers: { 'Content-Type': imageFiles[i].type },
-        }),
-      ) ?? []),
-    ]);
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
+
+    try {
+      if (uploadUrls.length > 0) {
+        await Promise.all(
+          uploadUrls.map((url: string, i: number) =>
+            ky.put(url, {
+              body: imageFiles[i].file,
+              headers: { 'Content-Type': imageFiles[i].file.type },
+            }),
+          ),
+        );
+      }
+    } catch (error) {
+      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+      return;
+    }
     setIsEditing(false);
+    toast.success('모집 공고가 성공적으로 수정되었습니다!');
   };
 
   return (

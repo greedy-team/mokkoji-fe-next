@@ -6,6 +6,8 @@ type PageProps = {
   searchParams: Promise<SearchParams>;
 };
 
+export const revalidate = 86400;
+
 async function Page({ searchParams }: PageProps) {
   await searchParamsCache.parse(searchParams);
   return <RecruitPage />;

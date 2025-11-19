@@ -29,35 +29,33 @@ function ClubDetailHeader({
   status,
 }: ClubDetailHeaderProps) {
   return (
-    <>
-      <header className="w-full cursor-default border-b border-b-[#D6D6D6] pb-4">
-        <div className="mb-4 flex flex-row items-center gap-5">
-          <ClickLogo logo={logo} title={title} />
-          <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
-          <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
-            <Link
-              href={`/club?category=${ClubCategoryToLabel[category].toLowerCase()}`}
-            >
-              {category} 동아리
-            </Link>
-          </p>
-        </div>
-        <div className="mb-2 flex flex-row items-center gap-2 lg:text-xl">
-          <RadiusTag status={status} className="lg:text-[16px]" />
-          <PeriodSection
-            startDate={startDate}
-            endDate={endDate}
-            decoration={false}
-            className="lg:text-lg"
-          />
-        </div>
-      </header>
+    <header className="mb-5 w-full cursor-default pb-4">
+      <div className="mb-4 flex flex-row items-center gap-5">
+        <ClickLogo logo={logo} title={title} />
+        <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
+        <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
+          <Link
+            href={`/club?category=${ClubCategoryToLabel[category].toLowerCase()}`}
+          >
+            {category} 동아리
+          </Link>
+        </p>
+      </div>
+      <div className="mb-2 flex flex-row items-center gap-2 lg:text-xl">
+        <RadiusTag status={status} className="lg:text-[16px]" />
+        <PeriodSection
+          startDate={startDate}
+          endDate={endDate}
+          decoration={false}
+          className="lg:text-lg"
+        />
+      </div>
       <ClubDetailHeaderControl
         instagram={instagram}
         clubId={clubId}
         isFavorite={isFavorite || false}
       />
-    </>
+    </header>
   );
 }
 

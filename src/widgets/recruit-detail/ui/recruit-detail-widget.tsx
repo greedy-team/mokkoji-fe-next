@@ -85,15 +85,12 @@ function RecruitDetailWidget({
       ) : (
         <ClubDetailRecruitmentEdit
           title={title}
-          clubName={clubName}
-          category={category}
           content={content}
           recruitForm={recruitForm}
           recruitStart={recruitStart}
           recruitEnd={recruitEnd}
           clubId={clubId}
           setIsEditing={setIsEditing}
-          imageUrls={imageUrls}
         />
       )}
     </>

@@ -4,7 +4,7 @@ import CategoryNavButton from '@/shared/ui/category-nav-button';
 function RecruitHeader() {
   return (
     <SectionHeader
-      title="모집 공고"
+      title="전체 동아리"
       description={
         '관심 있는 동아리의 최신 모집 공고를\n한눈에 확인할 수 있어요.'
       }

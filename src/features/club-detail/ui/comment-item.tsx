@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import timeAgo from '@/entities/recruit-detail/util/timeAgo';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
+import { CommentType } from '@/widgets/club-detail/model/type';
 import StarRating from '@/entities/recruit-detail/ui/review-star';
 import { deleteComment } from '../api/postComment';
 

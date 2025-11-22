@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import RecruitDetailWidget from '@/widgets/club-detail/ui/recruit-detail-widget';
-import ClubDescriptionTab from './club-description-tab';
-import ClubDetailCommentsTab from './club-detail-comments-tab';
+import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
+import ClubDescriptionWidget from '../../../widgets/club-detail/ui/club-description-tab';
+import ClubCommentsWidget from '../../../widgets/club-detail/ui/club-comments-tab';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -65,7 +65,7 @@ function ClubDetailTabs({
           switch (activeTab) {
             case 'recruit':
               return (
-                <RecruitDetailWidget
+                <ClubRecruitWidget
                   isManageClub={isManageClub}
                   title={recruitData?.title ?? ''}
                   clubName={recruitData?.clubName ?? ''}
@@ -80,10 +80,10 @@ function ClubDetailTabs({
               );
 
             case 'about':
-              return <ClubDescriptionTab clubId={id} />;
+              return <ClubDescriptionWidget clubId={id} />;
 
             case 'comments':
-              return <ClubDetailCommentsTab clubId={id} />;
+              return <ClubCommentsWidget clubId={id} />;
 
             default:
               return null;

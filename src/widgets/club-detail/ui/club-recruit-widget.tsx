@@ -8,7 +8,7 @@ import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import deleteRecruitmentForm from '../api/deleteRecruitment';
 
-interface RecruitDetailWidgetProps {
+interface ClubRecruitWidgetProps {
   isManageClub?: boolean;
   title: string;
   clubName: string;
@@ -21,7 +21,7 @@ interface RecruitDetailWidgetProps {
   clubId: number;
 }
 
-function RecruitDetailWidget({
+function ClubRecruitWidget({
   isManageClub,
   title,
   clubName,
@@ -32,7 +32,7 @@ function RecruitDetailWidget({
   recruitStart,
   recruitEnd,
   clubId,
-}: RecruitDetailWidgetProps) {
+}: ClubRecruitWidgetProps) {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
@@ -100,4 +100,4 @@ function RecruitDetailWidget({
   );
 }
 
-export default RecruitDetailWidget;
+export default ClubRecruitWidget;

@@ -1,7 +1,7 @@
 import ErrorHandler from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
-import { RecruitmentDetail } from '@/views/recruit/model/type';
 import api from '@/shared/api/auth-api';
+import { RecruitmentDetail } from '../model/type';
 
 async function getRecruitDetail(id: number) {
   try {

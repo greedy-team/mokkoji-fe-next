@@ -1,20 +1,17 @@
 import { notFound } from 'next/navigation';
-import getRecruitDetail from '@/views/recruit/api/getRecruitDetail';
-import RecruitDetailHeader from '@/entities/recruit-detail/ui/recruit-detail-header';
+import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
 import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
-import ClubDetailTabs from '@/entities/club/ui/club-detail-tabs';
+import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
+import getRecruitDetail from '../api/getRecruitDetail';
 
-interface RecruitDetailPageProps {
+interface ClubDetailPageProps {
   params: { id: string };
   searchParams: { tab?: string };
 }
 
-async function RecruitDetailPage({
-  params,
-  searchParams,
-}: RecruitDetailPageProps) {
+async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
   const tab = searchParams.tab || 'recruit';
 
@@ -63,4 +60,4 @@ async function RecruitDetailPage({
   );
 }
 
-export default RecruitDetailPage;
+export default ClubDetailPage;

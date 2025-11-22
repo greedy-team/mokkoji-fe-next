@@ -18,3 +18,25 @@ export interface ClubDetailType {
 export interface ClubDetailData {
   data: ClubDetailType;
 }
+
+export interface RecruitmentDetail {
+  id: number;
+  title: string;
+  content: string;
+  clubId: number;
+  recruitStart: string; // ISO 날짜 문자열
+  recruitEnd: string; // ISO 날짜 문자열
+  status: RecruitStatus;
+  createdAt: string; // ISO 날짜 문자열
+  imageUrls: string[];
+  recruitForm: string;
+  isFavorite: boolean;
+  instagramUrl: string;
+  category: string;
+  clubName: string;
+  logo: string;
+}
+
+export interface RecruitmentDetailResponse {
+  data: RecruitmentDetail;
+}

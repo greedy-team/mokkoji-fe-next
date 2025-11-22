@@ -1,11 +1,11 @@
 import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
 import getClubDetail from '@/views/club/api/getClubDetail';
 
-interface ClubDescriptionTabProps {
+interface ClubDescriptionWidgetProps {
   clubId: number;
 }
 
-async function ClubDescriptionTab({ clubId }: ClubDescriptionTabProps) {
+async function ClubDescriptionWidget({ clubId }: ClubDescriptionWidgetProps) {
   const data = await getClubDetail(clubId);
   const description = data.data?.description;
 
@@ -28,4 +28,4 @@ async function ClubDescriptionTab({ clubId }: ClubDescriptionTabProps) {
   );
 }
 
-export default ClubDescriptionTab;
+export default ClubDescriptionWidget;

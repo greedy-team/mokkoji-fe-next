@@ -1,7 +1,7 @@
 import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
-import { CommentType } from '../../recruit-detail/model/type';
+import { CommentType } from '../model/type';
 
 interface CommentsResponse {
   comments: CommentType[];

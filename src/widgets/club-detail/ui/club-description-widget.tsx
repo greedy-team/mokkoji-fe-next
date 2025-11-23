@@ -10,7 +10,7 @@ async function ClubDescriptionWidget({ clubId }: ClubDescriptionWidgetProps) {
   const description = data.data?.description;
 
   return (
-    <div>
+    <div className="min-h-[300px]">
       {description ? (
         <p className="text-text-secondary pt-8 text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
           <span

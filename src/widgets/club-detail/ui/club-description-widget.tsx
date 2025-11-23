@@ -1,4 +1,4 @@
-import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
+import convertLinkText from '@/entities/club-detail/util/convetLinkText';
 import getClubDetail from '@/views/club/api/getClubDetail';
 
 interface ClubDescriptionWidgetProps {

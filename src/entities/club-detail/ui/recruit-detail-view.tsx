@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import convertLinkText from '@/entities/recruit-detail/util/convetLinkText';
+import convertLinkText from '@/entities/club-detail/util/convetLinkText';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -18,7 +18,7 @@ interface RecruitDetailViewProps {
   imageUrls: string[];
 }
 
-function RecruitDetailTab({
+function RecruitDetailView({
   title,
   content,
   recruitForm,
@@ -35,7 +35,10 @@ function RecruitDetailTab({
   };
 
   const isRecruitPeriod =
-    title || content || recruitForm || imageUrls.length !== 0;
+    Boolean(title?.trim()) ||
+    Boolean(content?.trim()) ||
+    Boolean(recruitForm?.trim()) ||
+    imageUrls.length > 0;
 
   if (!isRecruitPeriod) {
     return (
@@ -63,7 +66,7 @@ function RecruitDetailTab({
       <h4 className="text-md mb-5 font-bold lg:text-lg">[{title}]</h4>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
-        className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:text-lg"
+        className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"
       />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 lg:grid-cols-6">
@@ -120,4 +123,4 @@ function RecruitDetailTab({
   );
 }
 
-export default RecruitDetailTab;
+export default RecruitDetailView;

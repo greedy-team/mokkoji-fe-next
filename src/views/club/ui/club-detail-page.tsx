@@ -4,7 +4,7 @@ import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
-import getRecruitDetail from '../api/getRecruitDetail';
+import getRecruitDetail from '@/views/club/api/getRecruitDetail';
 
 interface ClubDetailPageProps {
   params: { id: string };

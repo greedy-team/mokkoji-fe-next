@@ -5,22 +5,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { Recruitment } from '@/widgets/recruit/model/type';
+import { ClubType } from '@/shared/model/type';
 
 const movePx = 250;
 const mobileMovePx = 100;
 
 interface CardSliderProps {
-  data: Recruitment[];
+  clubs: ClubType[];
 }
 
-function CardSlider({ data }: CardSliderProps) {
+function CardSlider({ clubs }: CardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % data.length);
+      setCurrentIndex((prev) => (prev + 1) % clubs.length);
     }, 2000);
 
     const checkMobile = () => {
@@ -34,14 +34,14 @@ function CardSlider({ data }: CardSliderProps) {
       clearInterval(interval);
       window.removeEventListener('resize', checkMobile);
     };
-  }, [data.length]);
+  }, [clubs.length]);
 
   return (
     <div className="relative mt-10 flex h-[150px] w-full items-center justify-center overflow-hidden lg:mt-0 lg:h-[300px] lg:w-[50%]">
       <FadeEdge variant="left" />
       <FadeEdge variant="right" />
       <div className="relative flex items-center justify-center">
-        {data.map((item, idx) => {
+        {clubs.map((item, idx) => {
           const offset = idx - currentIndex + 1;
           const isActive = offset === 1;
           const cardWidth = isMobile ? mobileMovePx : movePx;
@@ -54,7 +54,7 @@ function CardSlider({ data }: CardSliderProps) {
 
           return (
             <NavLink
-              href={`/recruit/${item.id}`}
+              href={`/club/${item.id}`}
               key={item.id}
               isActive={isActive}
               translateX={currentTranslateX}
@@ -65,12 +65,12 @@ function CardSlider({ data }: CardSliderProps) {
                   <Avatar
                     className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
-                    <AvatarImage src={item.club.logo} loading="lazy" />
-                    <AvatarFallback>{item.club.name}</AvatarFallback>
+                    <AvatarImage src={item.logo} loading="lazy" />
+                    <AvatarFallback>{item.name}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-[#474747] lg:text-xs">
-                      {item.club.clubCategory}
+                      {item.category}
                     </span>
                     <h1
                       className={cn(
@@ -78,7 +78,7 @@ function CardSlider({ data }: CardSliderProps) {
                         'font-bold transition-all duration-500',
                       )}
                     >
-                      {item.club.name}
+                      {item.name}
                     </h1>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ function CardSlider({ data }: CardSliderProps) {
                     'line-clamp-2 overflow-hidden text-ellipsis text-gray-600 transition-all duration-500',
                   )}
                 >
-                  {item.club.description}
+                  {item.description}
                 </div>
               </div>
             </NavLink>

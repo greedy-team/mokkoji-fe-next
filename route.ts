@@ -11,7 +11,6 @@ export const publicRoutes = [
   '/favorite',
   '/club',
   '/club/:path*',
-  '/recruit/:path*',
   '/search/:path*',
   '/support',
   '/test/:path*',

@@ -110,7 +110,7 @@ function FAQList() {
       <span className="text-xl font-bold text-[#20E86C] underline">
         <a
           id="bottom"
-          href="https://docs.google.com/forms/d/1U3tnUQxdu8CtT9W1b8KQoQkhFs851BiwSO3l355L57w/viewform?edit_requested=true"
+          href="https://docs.google.com/forms/d/1u6AGdUKGkL6pmVTZ7I8YteotetlHK6DBsoC4jJ6Yv9I/edit"
           target="_blank"
           rel="noopener noreferrer"
         >

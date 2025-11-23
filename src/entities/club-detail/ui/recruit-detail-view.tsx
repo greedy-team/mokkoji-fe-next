@@ -49,9 +49,9 @@ function RecruitDetailView({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pt-8">
       {recruitForm && (
-        <div className="mt-8 mb-5 text-sm font-bold lg:text-lg">
+        <div className="mb-5 text-sm font-bold lg:text-lg">
           동아리 지원하러 가기: <br />
           <a
             href={recruitForm}
@@ -63,7 +63,7 @@ function RecruitDetailView({
           </a>
         </div>
       )}
-      <h4 className="text-md mb-5 font-bold lg:text-lg">[{title}]</h4>
+      <h1 className="text-md mb-5 font-bold lg:text-lg">[{title}]</h1>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
         className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"

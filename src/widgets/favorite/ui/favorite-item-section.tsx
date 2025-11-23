@@ -1,10 +1,10 @@
-import ClubItem from '@/entities/club/ui/club-item';
 import Link from 'next/link';
 import Pagination from '@/shared/ui/pagination';
 import { auth } from '@/auth';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import cn from '@/shared/lib/utils';
 import { searchParamsCache } from '@/app/(main)/favorite/search-params';
+import FavoriteItem from '@/entities/favorite/ui/favorite-item';
 import getFavoriteList from '../api/getFavoriteList';
 
 async function FavoriteItemSection() {
@@ -40,9 +40,9 @@ async function FavoriteItemSection() {
         {data.data?.clubs.map((item) => (
           <li key={item.id}>
             <Link href={`/club/${item.id}`}>
-              <ClubItem
+              <FavoriteItem
                 title={item.name}
-                description={item.description}
+                description={item.description || ''}
                 clubId={String(item.id)}
                 category={item.category}
                 isFavorite={item.isFavorite}

@@ -7,6 +7,7 @@ import NavButton from './nav-button';
 import { UserRole } from '../model/type';
 import HeaderManageModal from './header-manage-modal';
 import HeaderMenuSection from './header-menu-section';
+import ScrollProgressBar from './scroll-progress-bar';
 
 async function Header() {
   const session = await auth();
@@ -14,6 +15,7 @@ async function Header() {
   const getClubManageInfoRes = await getClubManageInfo({ role });
   return (
     <>
+      <ScrollProgressBar />
       <div className="h-[65px]" />
       <header className="fixed top-0 right-0 left-0 z-50 flex h-[60px] items-center bg-white px-4 text-base font-semibold sm:px-8 lg:px-[150px]">
         <Link

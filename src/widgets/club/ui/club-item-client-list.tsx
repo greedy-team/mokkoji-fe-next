@@ -1,12 +1,12 @@
 'use client';
 
-import { useId, useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
-import RecruitItem from '@/entities/club/ui/recruit-item';
+import ClubItem from '@/entities/club/ui/club-item';
 import { Recruitment } from '../model/type';
 
-interface RecruitItemClientListProps {
+interface ClubItemClientListProps {
   recruitments: Recruitment[];
   initialColumns?: number;
   initialCardHeight?: number;
@@ -18,13 +18,12 @@ function getColumnsAndHeight(width: number) {
   return { columns: 3, cardHeight: 198 };
 }
 
-export default function RecruitItemClientList({
+function ClubItemClientList({
   recruitments,
   initialColumns = 3,
   initialCardHeight = 198,
-}: RecruitItemClientListProps) {
+}: ClubItemClientListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const id = useId();
 
   const [columns, setColumns] = useState(initialColumns);
   const [cardHeight, setCardHeight] = useState(initialCardHeight);
@@ -78,8 +77,8 @@ export default function RecruitItemClientList({
             }}
           >
             {rowItems.map((item) => (
-              <Link key={item.id} href={`/recruit/${item.id}`}>
-                <RecruitItem
+              <Link key={item.id} href={`/club/${item.club.id}`}>
+                <ClubItem
                   title={item.title}
                   name={item.club.name || ''}
                   startDate={item.recruitStart}
@@ -95,7 +94,10 @@ export default function RecruitItemClientList({
             ))}
             {rowItems.length < columns &&
               Array.from({ length: columns - rowItems.length }).map(() => (
-                <div key={id} style={{ height: `${cardHeight}px` }} />
+                <div
+                  key={crypto.randomUUID()}
+                  style={{ height: `${cardHeight}px` }}
+                />
               ))}
           </div>
         );
@@ -103,3 +105,5 @@ export default function RecruitItemClientList({
     </div>
   );
 }
+
+export default ClubItemClientList;

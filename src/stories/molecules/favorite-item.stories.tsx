@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ClubItem from '@/entities/club/ui/club-item';
+import FavoriteItem from '@/entities/favorite/ui/favorite-item';
 import { SessionProvider } from 'next-auth/react';
 
-const meta: Meta<typeof ClubItem> = {
-  title: 'molecules/ClubItem',
-  component: ClubItem,
+const meta: Meta<typeof FavoriteItem> = {
+  title: 'molecules/FavoriteItem',
+  component: FavoriteItem,
   tags: ['autodocs'],
   decorators: [
     (Story) => (
@@ -32,7 +32,7 @@ const meta: Meta<typeof ClubItem> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ClubItem>;
+type Story = StoryObj<typeof FavoriteItem>;
 
 export const Default: Story = {};
 

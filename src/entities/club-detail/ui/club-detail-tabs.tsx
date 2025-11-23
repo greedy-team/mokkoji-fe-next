@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
-import ClubDescriptionWidget from '../../../widgets/club-detail/ui/club-description-widget';
-import ClubCommentsWidget from '../../../widgets/club-detail/ui/club-comments-widget';
+import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
+import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
 
 interface RecruitDetailViewProps {
   title: string;

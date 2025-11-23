@@ -3,7 +3,7 @@ import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-he
 import RadiusTag from '@/shared/ui/radius-tag';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import ClickLogo from '@/shared/ui/click-logo';
-import PeriodSection from './period-section';
+import PeriodSection from '@/entities/club-detail/ui/period-section';
 
 interface RecruitDetailHeaderProps {
   title: string;

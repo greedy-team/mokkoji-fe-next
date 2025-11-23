@@ -1,7 +1,7 @@
 import { ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { headers } from 'next/headers';
-import { searchParamsCache } from '@/app/(main)/recruit/search-params';
+import { searchParamsCache } from '@/app/(main)/club/search-params';
 import RecruitItemClientList from './recruit-item-client-list';
 import getClubRecruitList from '../api/getClubRecruitList';
 

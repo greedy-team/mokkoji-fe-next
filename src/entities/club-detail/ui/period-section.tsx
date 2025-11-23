@@ -1,6 +1,6 @@
 import getDateUtil, {
   formatToMonthDay,
-} from '@/entities/recruit/lib/getDateUtil';
+} from '@/entities/club/util/getDateUtil';
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {

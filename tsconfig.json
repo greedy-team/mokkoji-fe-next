@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "types/**/*.d.ts",
     "tailwind.config.js",
-    "src/entities/recruit-detail/ui/review-star.tsx"
+    "src/entities/club-detail/ui/review-star.tsx"
   ],
   "exclude": ["node_modules", ".next", "dist", "build"]
 }

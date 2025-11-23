@@ -1,14 +1,14 @@
 'use client';
 
-import RecruitDetailView from '@/entities/recruit-detail/ui/recruit-detail-view';
+import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
 import ClubDetailRecruitmentEdit from '@/features/club-detail/ui/club-detail-recruitment-edit';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
-import deleteRecruitmentForm from '../api/deleteRecruitment';
+import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
 
-interface RecruitDetailWidgetProps {
+interface ClubRecruitWidgetProps {
   isManageClub?: boolean;
   title: string;
   clubName: string;
@@ -21,7 +21,7 @@ interface RecruitDetailWidgetProps {
   clubId: number;
 }
 
-function RecruitDetailWidget({
+function ClubRecruitWidget({
   isManageClub,
   title,
   clubName,
@@ -32,7 +32,7 @@ function RecruitDetailWidget({
   recruitStart,
   recruitEnd,
   clubId,
-}: RecruitDetailWidgetProps) {
+}: ClubRecruitWidgetProps) {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
@@ -100,4 +100,4 @@ function RecruitDetailWidget({
   );
 }
 
-export default RecruitDetailWidget;
+export default ClubRecruitWidget;

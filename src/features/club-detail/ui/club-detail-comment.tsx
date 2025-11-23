@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
+import { CommentType } from '@/widgets/club-detail/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';

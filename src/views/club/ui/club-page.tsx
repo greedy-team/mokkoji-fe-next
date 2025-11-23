@@ -1,8 +1,8 @@
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
-import RecruitHeader from '@/entities/club/ui/recruit-header';
-import RecruitItemList from '@/widgets/club/ui/recruit-item-list';
+import ClubHeader from '@/entities/club/ui/club-header';
+import RecruitItemList from '@/widgets/club/ui/club-item-list';
 
 function ClubPage() {
   return (
@@ -17,7 +17,7 @@ function ClubPage() {
             />
           }
         >
-          <RecruitHeader />
+          <ClubHeader />
           <RecruitItemList />
         </Suspense>
       </div>

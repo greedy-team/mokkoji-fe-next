@@ -3,14 +3,14 @@ import ClubTextCard from '@/entities/home/ui/club-text-card';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import RecruitVerticalCarousel from '@/features/home/ui/recruit-vertical-carousel';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getClubRecruitList from '@/widgets/recruit/api/getClubRecruitList';
+import getClubList from '@/widgets/recruit/api/getClubList';
 
 async function ClubCardWidget() {
-  const data = await getClubRecruitList({
+  const res = await getClubList({
     page: 1,
     size: 10,
   });
-  if (!data.ok || !data.data) {
+  if (!res.ok || !res.data) {
     return <ErrorBoundaryUi />;
   }
 
@@ -21,10 +21,10 @@ async function ClubCardWidget() {
         className="mb-10 flex h-fit flex-col items-center pt-30 lg:mb-40 lg:h-[300px] lg:flex-row lg:pt-20"
       >
         <ClubTextCard />
-        <CardSlider data={data.data.recruitments} />
+        <CardSlider clubs={res.data.clubs} />
       </div>
       <div className="mb-40 flex h-[550px] w-full flex-col-reverse items-center gap-6 pt-10 lg:mb-60 lg:h-[300px] lg:flex-row lg:gap-0 lg:pt-20">
-        <RecruitVerticalCarousel data={data.data.recruitments} />
+        <RecruitVerticalCarousel clubs={res.data.clubs} />
         <RecruitTextCard />
       </div>
     </div>

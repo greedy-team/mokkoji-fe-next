@@ -1,51 +1,53 @@
-import Link from 'next/link';
-import ClubItem from '@/entities/club/ui/club-item';
-import getClubList from '@/widgets/recruit/api/getClubList';
-import { searchParamsCache } from '@/app/(main)/club/search-params';
 import { ClubCategory } from '@/shared/model/type';
-import ClubCustomErrorBoundary from './club-custom-error-boundary';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import { headers } from 'next/headers';
+import { searchParamsCache } from '@/app/(main)/club/search-params';
+import getClubRecruitList from '../api/getClubRecruitList';
+import ClubItemClientList from './club-item-client-list';
+
+function getInitialLayout(userAgent: string) {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+  const isTablet =
+    /iPad|Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
+
+  if (isMobile) return { columns: 1, cardHeight: 140 };
+  if (isTablet) return { columns: 2, cardHeight: 140 };
+  return { columns: 3, cardHeight: 198 };
+}
 
 async function ClubItemList() {
   const page = searchParamsCache.get('page');
   const size = searchParamsCache.get('size');
   const category = searchParamsCache.get('category');
-  const keyword = searchParamsCache.get('keyword');
 
-  const res = await getClubList({
+  const headersList = headers();
+  const userAgent = (await headersList).get('user-agent') || '';
+  const { columns, cardHeight } = getInitialLayout(userAgent);
+
+  const res = await getClubRecruitList({
     page,
     size,
-    keyword,
     category: category.toUpperCase() as ClubCategory,
   });
 
-  if (!res.ok) {
-    return <ClubCustomErrorBoundary />;
+  if (!res.ok || !res.data) {
+    return <ErrorBoundaryUi />;
   }
-  if (res.data?.clubs.length === 0) {
+
+  if (res.data.recruitments.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
-        해당 동아리가 없습니다.
+        모집 공고가 없습니다.
       </p>
     );
   }
 
   return (
-    <ul className="grid w-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {res.data?.clubs?.map((item) => (
-        <li key={item.id}>
-          <Link href={`/club/${item.id}`}>
-            <ClubItem
-              title={item.name}
-              category={item.category}
-              description={item.description}
-              isFavorite={item.isFavorite}
-              logo={item.logo}
-              clubId={String(item.id)}
-            />
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <ClubItemClientList
+      recruitments={res.data.recruitments}
+      initialColumns={columns}
+      initialCardHeight={cardHeight}
+    />
   );
 }
 

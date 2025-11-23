@@ -36,7 +36,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
     ) || false;
 
   return (
-    <div className="mt-20 mb-10 max-w-[95%] min-w-[95%] lg:max-w-[85%] lg:min-w-[75%]">
+    <div className="mt-20 mb-10 w-[80%] lg:max-w-[85%] lg:min-w-[75%]">
       <RecruitDetailHeader
         title={data.data.clubName}
         category={data.data.category}

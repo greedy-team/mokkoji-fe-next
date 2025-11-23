@@ -1,6 +1,6 @@
 'use client';
 
-import RecruitDetailView from '@/entities/recruit-detail/ui/recruit-detail-view';
+import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
 import ClubDetailRecruitmentEdit from '@/features/club-detail/ui/club-detail-recruitment-edit';
 import { useState } from 'react';
 import { toast } from 'react-toastify';

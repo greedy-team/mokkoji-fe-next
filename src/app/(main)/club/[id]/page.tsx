@@ -3,8 +3,8 @@ import { Suspense } from 'react';
 import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
 
 interface PageProps {
-  params: { id: string };
-  searchParams: { tab?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab: string }>;
 }
 
 async function Page({ params, searchParams }: PageProps) {

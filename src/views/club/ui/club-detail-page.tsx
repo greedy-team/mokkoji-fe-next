@@ -7,13 +7,13 @@ import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
 import getRecruitDetail from '@/views/club/api/getRecruitDetail';
 
 interface ClubDetailPageProps {
-  params: { id: string };
-  searchParams: { tab?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab: string }>;
 }
 
 async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
-  const tab = searchParams.tab || 'recruit';
+  const tab = (await searchParams).tab || 'recruit';
 
   const session = await auth();
   const role = session?.role;

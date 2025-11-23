@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
-import deleteRecruitmentForm from '../api/deleteRecruitment';
+import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
 
 interface ClubRecruitWidgetProps {
   isManageClub?: boolean;

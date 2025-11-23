@@ -3,7 +3,7 @@
 import { useId, useRef, useState, useEffect } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import Link from 'next/link';
-import RecruitItem from '@/entities/recruit/ui/recruit-item';
+import RecruitItem from '@/entities/club/ui/recruit-item';
 import { Recruitment } from '../model/type';
 
 interface RecruitItemClientListProps {

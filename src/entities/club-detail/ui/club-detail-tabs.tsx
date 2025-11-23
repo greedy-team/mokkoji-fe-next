@@ -52,7 +52,7 @@ function ClubDetailTabs({
             data-selected={tab.key === activeTab ? 'true' : 'false'}
             className="data-[selected=true]:text-primary-500 relative flex-1 text-center text-sm font-medium text-[#9C9C9C] lg:text-lg"
           >
-            {tab.label}
+            <span className="whitespace-nowrap"> {tab.label}</span>
             <span
               data-selected={tab.key === activeTab ? 'true' : 'false'}
               className="data-[selected=true]:bg-primary-500 absolute bottom-[-13px] left-0 h-[2px] w-full"

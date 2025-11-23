@@ -60,7 +60,7 @@ function ClubDetailTabs({
           </Link>
         ))}
       </div>
-      <div className="mx-auto w-full max-w-[1000px]">
+      <div className="mx-auto w-full">
         {(() => {
           switch (activeTab) {
             case 'recruit':

@@ -49,9 +49,9 @@ function RecruitDetailView({
   }
 
   return (
-    <div className="mt-8 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       {recruitForm && (
-        <div className="mt-5 mb-5 text-sm font-bold lg:text-lg">
+        <div className="mt-8 mb-5 text-sm font-bold lg:text-lg">
           동아리 지원하러 가기: <br />
           <a
             href={recruitForm}

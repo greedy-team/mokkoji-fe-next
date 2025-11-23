@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SessionProvider } from 'next-auth/react';
-import RecruitItem from '../../entities/recruit/ui/recruit-item';
+import RecruitItem from '../../entities/club/ui/recruit-item';
 
 const meta: Meta<typeof RecruitItem> = {
   title: 'molecules/RecruitItem',

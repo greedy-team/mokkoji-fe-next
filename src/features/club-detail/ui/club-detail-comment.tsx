@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
-import { CommentType } from '@/widgets/recruit-detail/model/type';
+import { CommentType } from '@/widgets/club-detail/model/type';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';
 
@@ -27,14 +27,13 @@ export default function ClubDetailComment({
             key={comment.id}
             className="flex gap-4 rounded-2xl border border-[#D6D6D6] p-5"
           >
-            <div className="h-10 w-10 rounded-full bg-[rgb(244,244,244)] p-2">
-              <Image
-                src="/detail/profileIcon.svg"
-                alt="프로필 이미지"
-                width={35}
-                height={35}
+            <Avatar className="size-12">
+              <AvatarImage
+                src={`/chat/profile-${Math.max(comment.id % 10, 1)}.png`}
+                className="rounded-full"
               />
-            </div>
+              <AvatarFallback />
+            </Avatar>
             {isEditing ? (
               <ClubDetailCommentEdit
                 clubId={clubId}

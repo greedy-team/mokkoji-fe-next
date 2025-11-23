@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Send Enhanced Discord Notification
         shell: bash
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        # env:
+        #   DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           set -euo pipefail
 

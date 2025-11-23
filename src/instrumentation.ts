@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import * as Sentry from '@sentry/nextjs';
 
 export async function register() {
@@ -5,8 +6,8 @@ export async function register() {
     await import('../sentry.server.config');
 
     if (process.env.NODE_ENV === 'development') {
-      const { default: nextLogger } = await import('@/shared/lib/nextLogger');
-      nextLogger();
+      const { default: nextFetchLogger } = await import('next-fetch-logger');
+      nextFetchLogger();
     }
   }
 

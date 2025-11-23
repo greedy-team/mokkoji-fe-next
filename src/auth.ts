@@ -12,6 +12,9 @@ import UserInfoType from './entities/my/model/type';
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    maxAge: 60 * 60 * 24 * 3,
+  },
   trustHost: true,
   pages: {
     error: '/login?callbackUrl=/',
@@ -71,6 +74,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const expiredTime = getTokenExpiration(user.accessToken as string);
 
         try {
+          if (!user.accessToken) {
+            return {
+              accessToken: user.accessToken,
+              refreshToken: user.refreshToken,
+              expiresAt: expiredTime,
+              user: user.user,
+            };
+          }
           const headers = {
             Authorization: `Bearer ${user.accessToken}`,
           };

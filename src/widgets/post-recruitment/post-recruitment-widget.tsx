@@ -2,10 +2,9 @@ import PostRecruitmentForm from '@/features/post-recruitment/ui/post-recruitment
 import { getClubInfo } from '@/shared/api/manage-api';
 import { DetailParams } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getParams from '@/shared/util/getParams';
 
 async function PostRecruitmentWidget({ params }: DetailParams) {
-  const { id } = await getParams({ params });
+  const { id } = await params;
   const res = await getClubInfo(Number(id));
 
   if (!res.ok) {

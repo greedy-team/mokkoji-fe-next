@@ -10,9 +10,15 @@ interface CalenderBodyProps {
   onDateSelect: (date: Date) => void;
   startDate: string | null;
   endDate: string | null;
+  onClose: () => void;
 }
 
-function CalenderBody({ onDateSelect, startDate, endDate }: CalenderBodyProps) {
+function CalenderBody({
+  onDateSelect,
+  startDate,
+  endDate,
+  onClose,
+}: CalenderBodyProps) {
   const [currentDate, setCurrentDateState] = useState(new Date());
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   const currentYear = currentDate.getFullYear();
@@ -139,6 +145,13 @@ function CalenderBody({ onDateSelect, startDate, endDate }: CalenderBodyProps) {
           ))}
         </div>
       </div>
+      <button
+        type="button"
+        className="mt-5 w-[90%] cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
+        onClick={onClose}
+      >
+        닫기
+      </button>
     </div>
   );
 }

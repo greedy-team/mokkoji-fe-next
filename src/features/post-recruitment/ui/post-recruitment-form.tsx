@@ -222,14 +222,8 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
               onDateSelect={handleDateSelect}
               startDate={formData.recruitStart}
               endDate={formData.recruitEnd}
+              onClose={closeCalender}
             />
-            <button
-              type="button"
-              className="mt-5 w-[90%] cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
-              onClick={closeCalender}
-            >
-              닫기
-            </button>
           </div>
         )}
       </div>

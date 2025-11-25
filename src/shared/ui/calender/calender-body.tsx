@@ -42,7 +42,8 @@ function CalenderBody({
 
   const parseDateString = (dateString: string | null): Date | null => {
     if (!dateString) return null;
-    return new Date(`${dateString}T00:00:00`);
+    const dateOnly = dateString.split('T')[0];
+    return new Date(`${dateOnly}T00:00:00`);
   };
 
   const start = parseDateString(startDate);

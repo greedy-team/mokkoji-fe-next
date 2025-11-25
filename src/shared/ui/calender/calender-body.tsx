@@ -64,6 +64,7 @@ function CalenderBody({
 
   return (
     <div className="w-full">
+      {/* 캘린더 헤더 영역 */}
       <div className="mb-2 flex w-full justify-between">
         <button
           type="button"
@@ -89,6 +90,7 @@ function CalenderBody({
           />
         </button>
       </div>
+      {/* 캘린더 요일 영역 */}
       <div className="grid w-full grid-cols-7 gap-2 text-sm font-semibold text-[#878787]">
         {WEEKDAYS.map((day) => (
           <span
@@ -99,7 +101,7 @@ function CalenderBody({
           </span>
         ))}
       </div>
-
+      {/* 캘린더 날짜 영역 */}
       <div className="overflow-hidden">
         <div
           key={`${currentYear}-${currentMonth}`}

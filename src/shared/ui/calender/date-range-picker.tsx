@@ -31,6 +31,12 @@ function DateRangePicker({
     toggleCalender,
     handleDateSelect: handleCalenderDateSelect,
     formatDateRange,
+    timeEnabled,
+    setTimeEnabled,
+    startTime,
+    endTime,
+    setStartTime,
+    setEndTime,
   } = useCalender({
     onStartDateChange,
     onEndDateChange,
@@ -74,6 +80,12 @@ function DateRangePicker({
             startDate={startDate}
             endDate={endDate}
             onClose={closeCalender}
+            timeEnabled={timeEnabled}
+            onTimeEnabledChange={setTimeEnabled}
+            startTime={startTime}
+            endTime={endTime}
+            onStartTimeChange={setStartTime}
+            onEndTimeChange={setEndTime}
           />
         </div>
       )}

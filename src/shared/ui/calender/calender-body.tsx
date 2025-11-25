@@ -5,12 +5,20 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { WEEKDAYS } from './constants';
 import getDateGrid from './getDateGrid';
+import TimePicker from './time-picker';
+import type { TimeValue } from './useCalender';
 
 interface CalenderBodyProps {
   onDateSelect: (date: Date) => void;
   startDate: string | null;
   endDate: string | null;
   onClose: () => void;
+  timeEnabled: boolean;
+  onTimeEnabledChange: (enabled: boolean) => void;
+  startTime: TimeValue | null;
+  endTime: TimeValue | null;
+  onStartTimeChange: (time: TimeValue) => void;
+  onEndTimeChange: (time: TimeValue) => void;
 }
 
 function CalenderBody({
@@ -18,6 +26,12 @@ function CalenderBody({
   startDate,
   endDate,
   onClose,
+  timeEnabled,
+  onTimeEnabledChange,
+  startTime,
+  endTime,
+  onStartTimeChange,
+  onEndTimeChange,
 }: CalenderBodyProps) {
   const [currentDate, setCurrentDateState] = useState(new Date());
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
@@ -147,9 +161,20 @@ function CalenderBody({
           ))}
         </div>
       </div>
+      {/* 시간 선택 영역 */}
+      <TimePicker
+        enabled={timeEnabled}
+        onEnabledChange={onTimeEnabledChange}
+        startTime={startTime}
+        endTime={endTime}
+        onStartTimeChange={onStartTimeChange}
+        onEndTimeChange={onEndTimeChange}
+        hasStartDate={!!startDate}
+        hasEndDate={!!endDate}
+      />
       <button
         type="button"
-        className="mt-5 w-[90%] cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
+        className="mt-5 w-full cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
         onClick={onClose}
       >
         닫기

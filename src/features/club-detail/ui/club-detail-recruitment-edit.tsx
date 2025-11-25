@@ -3,9 +3,7 @@
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import CalenderBody from '@/shared/ui/calender/calender-body';
-import useCalender from '@/shared/ui/calender/useCalender';
-import cn from '@/shared/lib/utils';
+import DateRangePicker from '@/shared/ui/calender/date-range-picker';
 import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
 import { useReducer } from 'react';
 import {
@@ -73,27 +71,6 @@ function ClubDetailRecruitmentEdit({
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
-  };
-
-  const {
-    isCalenderOpen,
-    isCalenderClosing,
-    calendarRef,
-    closeCalender,
-    toggleCalender,
-    handleDateSelect: handleCalenderDateSelect,
-    formatDateRange,
-  } = useCalender({
-    onStartDateChange: (date) => handleChange('recruitStart', date),
-    onEndDateChange: (date) => handleChange('recruitEnd', date),
-  });
-
-  const handleDateSelect = (selectedDate: Date) => {
-    handleCalenderDateSelect(
-      selectedDate,
-      formData.recruitStart,
-      formData.recruitEnd,
-    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -171,42 +148,13 @@ function ClubDetailRecruitmentEdit({
         value={formData.recruitForm}
         onChange={(e) => handleChange('recruitForm', e.target.value)}
       />
-      <div className="relative" ref={calendarRef}>
-        <label
-          htmlFor="recruitPeriod"
-          className="mt-4 flex gap-2 text-xl font-bold"
-        >
-          모집 기간
-        </label>
-        <button
-          type="button"
-          className="mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 py-3 text-xs text-gray-700 transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm"
-          onClick={toggleCalender}
-        >
-          {formatDateRange(formData.recruitStart, formData.recruitEnd)}
-        </button>
-        {isCalenderOpen && (
-          <div
-            className={cn(
-              'absolute z-50 mt-1 min-w-full origin-top rounded-lg border bg-white p-4 text-center shadow-2xl',
-              isCalenderClosing ? 'animate-scale-out' : 'animate-scale-in',
-            )}
-          >
-            <CalenderBody
-              onDateSelect={handleDateSelect}
-              startDate={formData.recruitStart}
-              endDate={formData.recruitEnd}
-            />
-            <button
-              type="button"
-              className="mt-5 w-[90%] cursor-pointer rounded-md bg-[#00D451] py-2 font-bold text-white hover:bg-[#00d451cf]"
-              onClick={closeCalender}
-            >
-              닫기
-            </button>
-          </div>
-        )}
-      </div>
+      <DateRangePicker
+        startDate={formData.recruitStart}
+        endDate={formData.recruitEnd}
+        onStartDateChange={(date) => handleChange('recruitStart', date)}
+        onEndDateChange={(date) => handleChange('recruitEnd', date)}
+        label="모집 기간"
+      />
       <ImageUploadSection
         handleDragStart={handleDragStart}
         handleDragOver={handleDragOver}

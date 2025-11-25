@@ -91,16 +91,26 @@ export default function useCalender({
     const formattedDate = `${year}-${month}-${day}`;
 
     if (!currentStart || currentEnd) {
-      onStartDateChange?.(formattedDate);
+      const newStartTime = { hour: 0, minute: 0, second: 0 };
+      const newEndTime = { hour: 23, minute: 59, second: 59 };
+      setStartTime(newStartTime);
+      setEndTime(newEndTime);
+
+      const startDateTime = `${formattedDate}T00:00:00`;
+      onStartDateChange?.(startDateTime);
       onEndDateChange?.('');
-      setStartTime({ hour: 0, minute: 0, second: 0 });
-      setEndTime({ hour: 23, minute: 59, second: 59 });
     } else if (formattedDate < currentStart) {
-      onStartDateChange?.(formattedDate);
-      setStartTime({ hour: 0, minute: 0, second: 0 });
+      const newStartTime = { hour: 0, minute: 0, second: 0 };
+      setStartTime(newStartTime);
+
+      const startDateTime = `${formattedDate}T00:00:00`;
+      onStartDateChange?.(startDateTime);
     } else {
-      onEndDateChange?.(formattedDate);
-      setEndTime({ hour: 23, minute: 59, second: 59 });
+      const newEndTime = { hour: 23, minute: 59, second: 59 };
+      setEndTime(newEndTime);
+
+      const endDateTime = `${formattedDate}T23:59:59`;
+      onEndDateChange?.(endDateTime);
       onRangeComplete?.(currentStart, formattedDate);
     }
   };
@@ -109,23 +119,22 @@ export default function useCalender({
     start: string | null,
     end: string | null,
   ): string => {
-    const formatDateTime = (date: string | null, time: TimeValue | null) => {
-      if (!date) return null;
-      const dateStr = date.replace(/-/g, '.');
+    const formatDateTime = (dateTimeStr: string | null) => {
+      if (!dateTimeStr) return null;
 
-      if (!timeEnabled || !time) {
-        return dateStr;
+      const [dateStr, timeStr] = dateTimeStr.split('T');
+      const displayDate = dateStr.replace(/-/g, '.');
+
+      if (!timeEnabled || !timeStr) {
+        return displayDate;
       }
 
-      const hour = String(time.hour).padStart(2, '0');
-      const minute = String(time.minute).padStart(2, '0');
-      const second = String(time.second).padStart(2, '0');
-
-      return `${dateStr} ${hour}:${minute}:${second}`;
+      const [hour, minute, second] = timeStr.split(':');
+      return `${displayDate} ${hour}:${minute}:${second}`;
     };
 
-    const formattedStart = formatDateTime(start, startTime) || '시작일';
-    const formattedEnd = formatDateTime(end, endTime) || '마감일';
+    const formattedStart = formatDateTime(start) || '시작일';
+    const formattedEnd = formatDateTime(end) || '마감일';
 
     if (start || end) {
       return `${formattedStart} ~ ${formattedEnd}`;
@@ -139,7 +148,6 @@ export default function useCalender({
   ): string => {
     if (!date) return '';
 
-    // 시간이 지정되지 않았거나 체크박스 미선택 시 time 값의 기본값 사용
     const finalTime = time || { hour: 0, minute: 0, second: 0 };
     const hour = String(finalTime.hour).padStart(2, '0');
     const minute = String(finalTime.minute).padStart(2, '0');

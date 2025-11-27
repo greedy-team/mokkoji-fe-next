@@ -30,18 +30,20 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   };
 
   return (
-    <span className="absolute right-[22%] rounded-sm bg-[#F4F4F4] p-2 px-4 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
+    <span className="absolute right-[22%] rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
       {userName ? (
         <div
           className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="flex items-center gap-2">
-            <span className="cursor-pointer font-bold">{userName}님!</span>
-            안녕하세요
-          </div>
-
+          <Image
+            src="/header/profile.svg"
+            alt="프로필"
+            width={21}
+            height={22}
+            className="cursor-pointer"
+          />
           {showDropdown && (
             <>
               <Link
@@ -70,10 +72,6 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
         </div>
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
-          {/* <Link href="/register" className="whitespace-nowrap">
-            회원가입
-          </Link>
-          <span className="whitespace-nowrap">|</span> */}
           <button
             onClick={() => setIsLoginOpen(true)}
             className="cursor-pointer whitespace-nowrap"

@@ -1,4 +1,4 @@
-import { ClubCategory } from '@/shared/model/type';
+import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { headers } from 'next/headers';
 import { searchParamsCache } from '@/app/(main)/club/search-params';
@@ -19,6 +19,7 @@ async function ClubItemList() {
   const page = searchParamsCache.get('page');
   const size = searchParamsCache.get('size');
   const category = searchParamsCache.get('category');
+  const affiliation = searchParamsCache.get('affiliation');
 
   const headersList = headers();
   const userAgent = (await headersList).get('user-agent') || '';
@@ -28,6 +29,7 @@ async function ClubItemList() {
     page,
     size,
     category: category.toUpperCase() as ClubCategory,
+    affiliation: affiliation.toUpperCase() as ClubAffiliation,
   });
 
   if (!res.ok || !res.data) {

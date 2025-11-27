@@ -1,4 +1,8 @@
-import { ApiResponse, ClubCategory } from '@/shared/model/type';
+import {
+  ApiResponse,
+  ClubAffiliation,
+  ClubCategory,
+} from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 import { auth } from '@/auth';
@@ -9,10 +13,12 @@ async function getClubRecruitList({
   page,
   size,
   category,
+  affiliation,
 }: {
   page: number;
   size: number;
   category?: ClubCategory;
+  affiliation?: ClubAffiliation;
 }) {
   const session = await auth();
 
@@ -20,6 +26,7 @@ async function getClubRecruitList({
     page,
     size,
     category,
+    affiliation,
   };
 
   const searchParams = new URLSearchParams();

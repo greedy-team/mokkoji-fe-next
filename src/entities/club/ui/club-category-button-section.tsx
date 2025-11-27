@@ -1,8 +1,8 @@
 'use client';
 
 import { ClubCategory, ClubCategoryLabel } from '@/shared/model/type';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
+import useUrlParams from '@/shared/model/useUrlParams';
 
 const categories: ClubCategory[] = [
   ClubCategory.CULTURAL_ART,
@@ -14,17 +14,22 @@ const categories: ClubCategory[] = [
 ];
 
 function ClubCategoryButtonSection() {
-  const router = useRouter();
-  return categories.map((category) => (
-    <Button
-      key={category}
-      variant="outline"
-      className="mr-2"
-      onClick={() => router.push(`/club?category=${category}`)}
-    >
-      {ClubCategoryLabel[category]}
-    </Button>
-  ));
+  const { handleChange } = useUrlParams('category');
+
+  return (
+    <div>
+      {categories.map((category) => (
+        <Button
+          key={category}
+          variant="outline"
+          className="mr-2"
+          onClick={() => handleChange(category)}
+        >
+          {ClubCategoryLabel[category]}
+        </Button>
+      ))}
+    </div>
+  );
 }
 
 export default ClubCategoryButtonSection;

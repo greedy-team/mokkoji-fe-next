@@ -4,7 +4,7 @@ import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
-import getRecruitDetail from '@/views/club/api/getRecruitDetail';
+import getRecentRecruitDetail from '@/views/club/api/getRecentRecruitDetail';
 
 interface ClubDetailPageProps {
   params: Promise<{ id: string }>;
@@ -19,7 +19,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const role = session?.role;
   const [getClubManageInfoRes, data] = await Promise.all([
     getClubManageInfo({ role }),
-    getRecruitDetail(Number(id)),
+    getRecentRecruitDetail(Number(id)),
   ]);
 
   if (data?.status === 404 || !data.data) {

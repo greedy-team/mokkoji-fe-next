@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
 import { RecruitmentDetail } from '../model/type';
 
-async function getRecruitDetail(id: number) {
+async function getRecentRecruitDetail(id: number) {
   const session = await auth();
   try {
     let response: ApiResponse<RecruitmentDetail>;
@@ -25,4 +25,4 @@ async function getRecruitDetail(id: number) {
   }
 }
 
-export default getRecruitDetail;
+export default getRecentRecruitDetail;

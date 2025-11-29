@@ -13,9 +13,8 @@ import {
 } from './select';
 import useUrlParams from '../model/useUrlParams';
 
-function CategorySelect() {
-  const { handleChange, searchParams } = useUrlParams('affiliation');
-  const active = searchParams.get('affiliation')?.toUpperCase() ?? '';
+function AffiliationNavSelect() {
+  const { handleChange, active } = useUrlParams('affiliation');
 
   const affiliations = [
     ClubAffiliation.CENTRAL_CLUB,
@@ -25,16 +24,21 @@ function CategorySelect() {
 
   return (
     <Select value={active} onValueChange={handleChange}>
-      <SelectTrigger aria-label="카테고리 선택" className="mb-0">
+      <SelectTrigger
+        aria-label="카테고리 선택"
+        className="data-[placeholder]:text-foreground mb-0 cursor-pointer"
+      >
         <SelectValue placeholder="전체" />
       </SelectTrigger>
 
       <SelectContent position="popper">
         <SelectGroup>
-          <SelectLabel>카테고리</SelectLabel>
-          <SelectItem value="ALL">전체</SelectItem>
+          <SelectLabel>소속</SelectLabel>
+          <SelectItem value="ALL" className="cursor-pointer">
+            전체
+          </SelectItem>
           {affiliations.map((c) => (
-            <SelectItem key={c} value={c}>
+            <SelectItem key={c} value={c} className="cursor-pointer">
               {ClubAffiliationLabel[c]}
             </SelectItem>
           ))}
@@ -44,4 +48,4 @@ function CategorySelect() {
   );
 }
 
-export default CategorySelect;
+export default AffiliationNavSelect;

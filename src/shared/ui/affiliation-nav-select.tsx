@@ -25,7 +25,7 @@ function AffiliationNavSelect() {
   return (
     <Select value={active} onValueChange={handleChange}>
       <SelectTrigger
-        aria-label="카테고리 선택"
+        aria-label="소속 선택"
         className="data-[placeholder]:text-foreground mb-0 cursor-pointer"
       >
         <SelectValue placeholder="전체" />

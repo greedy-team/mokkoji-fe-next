@@ -7,6 +7,8 @@ export interface TimeValue {
 }
 
 interface UseCalenderProps {
+  startDate?: string | null;
+  endDate?: string | null;
   onStartDateChange?: (date: string) => void;
   onEndDateChange?: (date: string) => void;
   onRangeComplete?: (start: string, end: string) => void;
@@ -31,10 +33,11 @@ interface UseCalenderReturn {
   endTime: TimeValue | null;
   setStartTime: (time: TimeValue) => void;
   setEndTime: (time: TimeValue) => void;
-  getFormattedDateTime: (date: string | null, time: TimeValue | null) => string;
 }
 
 export default function useCalender({
+  startDate,
+  endDate,
   onStartDateChange,
   onEndDateChange,
   onRangeComplete,
@@ -79,6 +82,41 @@ export default function useCalender({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isCalenderOpen]);
+
+  const getFormattedDateTime = (
+    date: string | null,
+    time: TimeValue | null,
+  ): string => {
+    if (!date) return '';
+
+    const finalTime = time || { hour: 0, minute: 0, second: 0 };
+    const hour = String(finalTime.hour).padStart(2, '0');
+    const minute = String(finalTime.minute).padStart(2, '0');
+    const second = String(finalTime.second).padStart(2, '0');
+
+    return `${date}T${hour}:${minute}:${second}`;
+  };
+
+  // 시간이 변경될 때 자동으로 부모 컴포넌트에 업데이트
+  useEffect(() => {
+    if (startDate && startTime) {
+      const dateOnly = startDate.split('T')[0];
+      const formatted = getFormattedDateTime(dateOnly, startTime);
+      if (formatted !== startDate) {
+        onStartDateChange?.(formatted);
+      }
+    }
+  }, [startTime]);
+
+  useEffect(() => {
+    if (endDate && endTime) {
+      const dateOnly = endDate.split('T')[0];
+      const formatted = getFormattedDateTime(dateOnly, endTime);
+      if (formatted !== endDate) {
+        onEndDateChange?.(formatted);
+      }
+    }
+  }, [endTime]);
 
   const handleDateSelect = (
     selectedDate: Date,
@@ -142,20 +180,6 @@ export default function useCalender({
     return '모집 기간을 선택해주세요';
   };
 
-  const getFormattedDateTime = (
-    date: string | null,
-    time: TimeValue | null,
-  ): string => {
-    if (!date) return '';
-
-    const finalTime = time || { hour: 0, minute: 0, second: 0 };
-    const hour = String(finalTime.hour).padStart(2, '0');
-    const minute = String(finalTime.minute).padStart(2, '0');
-    const second = String(finalTime.second).padStart(2, '0');
-
-    return `${date}T${hour}:${minute}:${second}`;
-  };
-
   return {
     isCalenderOpen,
     isCalenderClosing,
@@ -171,6 +195,5 @@ export default function useCalender({
     endTime,
     setStartTime,
     setEndTime,
-    getFormattedDateTime,
   };
 }

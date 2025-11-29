@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import cn from '@/shared/lib/utils';
 import CalenderBody from './calender-body';
 import useCalender from './useCalender';
@@ -38,33 +37,13 @@ function DateRangePicker({
     endTime,
     setStartTime,
     setEndTime,
-    getFormattedDateTime,
   } = useCalender({
+    startDate,
+    endDate,
     onStartDateChange,
     onEndDateChange,
     onRangeComplete,
   });
-
-  // 시간이 변경될 때 부모 컴포넌트에 업데이트 전달
-  useEffect(() => {
-    if (startDate && startTime) {
-      const dateOnly = startDate.split('T')[0];
-      const formatted = getFormattedDateTime(dateOnly, startTime);
-      if (formatted !== startDate) {
-        onStartDateChange(formatted);
-      }
-    }
-  }, [startTime]);
-
-  useEffect(() => {
-    if (endDate && endTime) {
-      const dateOnly = endDate.split('T')[0];
-      const formatted = getFormattedDateTime(dateOnly, endTime);
-      if (formatted !== endDate) {
-        onEndDateChange(formatted);
-      }
-    }
-  }, [endTime]);
 
   const handleDateSelect = (selectedDate: Date) => {
     handleCalenderDateSelect(selectedDate, startDate, endDate);

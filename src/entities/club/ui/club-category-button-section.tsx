@@ -21,7 +21,10 @@ function ClubCategoryButtonSection() {
     <div>
       <Button
         variant="outline"
-        className={cn('mr-2 mb-2', active === '' && 'bg-primary-500')}
+        className={cn(
+          'mr-2 mb-2',
+          active === '' && 'bg-primary-500 text-white',
+        )}
         onClick={() => handleChange('')}
         aria-pressed={active === ''}
       >
@@ -31,7 +34,10 @@ function ClubCategoryButtonSection() {
         <Button
           key={category}
           variant="outline"
-          className={cn('mr-2 mb-2', active === category && 'bg-primary-500')}
+          className={cn(
+            'mr-2 mb-2',
+            active === category && 'bg-primary-500 text-white',
+          )}
           onClick={() => handleChange(category)}
           aria-pressed={active === category}
         >

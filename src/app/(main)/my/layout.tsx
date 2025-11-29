@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '모꼬지 | 마이페이지',
     description: '모꼬지 마이페이지',
+    url: 'https://mokkoji.site/my',
     images: ['/mokkojiBanner.png'],
   },
 };

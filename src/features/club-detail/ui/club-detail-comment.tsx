@@ -31,6 +31,7 @@ export default function ClubDetailComment({
               <AvatarImage
                 src={`/chat/profile-${Math.max(comment.id % 10, 1)}.png`}
                 className="rounded-full"
+                alt="채팅 프로필"
               />
               <AvatarFallback />
             </Avatar>

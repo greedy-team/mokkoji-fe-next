@@ -15,7 +15,7 @@ function ScrollItem({ title, description, logo, id }: ScrollItemProps) {
         <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
           <div className="flex flex-row items-center gap-3">
             <Avatar className="size-6 lg:size-12">
-              <AvatarImage src={logo} />
+              <AvatarImage src={logo} alt={logo} />
               <AvatarFallback>{title}</AvatarFallback>
             </Avatar>
             <div>

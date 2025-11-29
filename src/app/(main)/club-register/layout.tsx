@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: '모꼬지 | 세종대 모집 공고',
-  description: '세종대 동아리 모집 공고',
+  title: '모꼬지 | 세종대 동아리 등록',
+  description: '세종대 동아리 등록',
   openGraph: {
-    title: '모꼬지 | 세종대 모집 공고',
+    title: '모꼬지 | 세종대 동아리 등록',
     description: '세종대 동아리 모집 공고',
     images: ['/mokkojiBanner.png'],
   },

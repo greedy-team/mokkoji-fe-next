@@ -124,7 +124,6 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
 
   return {
     imageFiles,
-    setImageFiles,
     handleImageChange,
     handleImageRemove,
     inputRef,

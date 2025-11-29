@@ -25,7 +25,7 @@ function FavoriteItem({
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
         <div className="flex flex-row items-center gap-4">
           <Avatar className="size-12 lg:size-14">
-            <AvatarImage src={logo} />
+            <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
           <div>

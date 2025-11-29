@@ -13,7 +13,7 @@ function ClubSearchItemTest2({ club }: ClubItemProps) {
         <header className="mb-2">
           <div className="flex items-center gap-2">
             <Avatar className="size-12 lg:size-14">
-              <AvatarImage src={club.logo} />
+              <AvatarImage src={club.logo} alt={club.logo} />
               <AvatarFallback />
             </Avatar>
             <div>

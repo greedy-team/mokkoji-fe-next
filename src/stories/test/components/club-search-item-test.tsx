@@ -11,7 +11,7 @@ function ClubSearchItemTest({ club }: ClubItemProps) {
     <Link href={`/club/${club.id}`}>
       <article className="mb-3 flex cursor-pointer items-center justify-between gap-2 rounded-lg border-2 border-gray-100 bg-white p-4 transition-colors hover:bg-gray-50">
         <Avatar className="size-12 lg:size-14">
-          <AvatarImage src={club.logo} />
+          <AvatarImage src={club.logo} alt={club.logo} />
           <AvatarFallback />
         </Avatar>
         <div>

@@ -18,7 +18,7 @@ interface RecruitDetailViewProps {
 interface ClubDetailTabsProps {
   activeTab: string;
   isManageClub: boolean;
-  recruitData?: RecruitDetailViewProps;
+  recruitData: RecruitDetailViewProps;
   id: number;
 }
 
@@ -53,14 +53,14 @@ function ClubDetailTabs({
       return (
         <ClubRecruitWidget
           isManageClub={isManageClub}
-          title={recruitData?.title ?? ''}
-          clubName={recruitData?.clubName ?? ''}
-          category={recruitData?.category ?? ''}
-          content={recruitData?.content ?? ''}
-          recruitForm={recruitData?.recruitForm ?? ''}
-          imageUrls={recruitData?.imageUrls ?? []}
-          recruitStart={recruitData?.recruitStart ?? ''}
-          recruitEnd={recruitData?.recruitEnd ?? ''}
+          title={recruitData.title}
+          clubName={recruitData.clubName}
+          category={recruitData.category}
+          content={recruitData.content}
+          recruitForm={recruitData.recruitForm}
+          imageUrls={recruitData.imageUrls}
+          recruitStart={recruitData.recruitStart || ''}
+          recruitEnd={recruitData.recruitEnd || ''}
           clubId={Number(id)}
         />
       );

@@ -1,8 +1,9 @@
 'use client';
 
 import { ClubCategory, ClubCategoryLabel } from '@/shared/model/type';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
+import cn from '@/shared/lib/utils';
+import useUrlParams from '@/shared/model/useUrlParams';
 
 const categories: ClubCategory[] = [
   ClubCategory.CULTURAL_ART,
@@ -14,17 +15,37 @@ const categories: ClubCategory[] = [
 ];
 
 function ClubCategoryButtonSection() {
-  const router = useRouter();
-  return categories.map((category) => (
-    <Button
-      key={category}
-      variant="outline"
-      className="mr-2"
-      onClick={() => router.push(`/club?category=${category}`)}
-    >
-      {ClubCategoryLabel[category]}
-    </Button>
-  ));
+  const { handleChange, active } = useUrlParams('category');
+
+  return (
+    <div>
+      <Button
+        variant="outline"
+        className={cn(
+          'mr-2 mb-2',
+          active === '' && 'bg-primary-500 text-white',
+        )}
+        onClick={() => handleChange('')}
+        aria-pressed={active === ''}
+      >
+        전체
+      </Button>
+      {categories.map((category) => (
+        <Button
+          key={category}
+          variant="outline"
+          className={cn(
+            'mr-2 mb-2',
+            active === category && 'bg-primary-500 text-white',
+          )}
+          onClick={() => handleChange(category)}
+          aria-pressed={active === category}
+        >
+          {ClubCategoryLabel[category]}
+        </Button>
+      ))}
+    </div>
+  );
 }
 
 export default ClubCategoryButtonSection;

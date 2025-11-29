@@ -66,12 +66,16 @@ export default function useCalender({
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
+    const isClickOutside = (event: MouseEvent) => {
+      return (
         isCalenderOpen &&
         calendarRef.current &&
         !calendarRef.current.contains(event.target as Node)
-      ) {
+      );
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isClickOutside(event)) {
         closeCalender();
       }
     };
@@ -97,7 +101,6 @@ export default function useCalender({
     return `${date}T${hour}:${minute}:${second}`;
   };
 
-  // 시간이 변경될 때 자동으로 부모 컴포넌트에 업데이트
   useEffect(() => {
     if (startDate && startTime) {
       const dateOnly = startDate.split('T')[0];

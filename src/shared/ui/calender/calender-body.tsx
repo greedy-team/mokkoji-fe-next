@@ -42,8 +42,8 @@ function CalenderBody({
 
   const parseDateString = (dateString: string | null): Date | null => {
     if (!dateString) return null;
-    const dateOnly = dateString.split('T')[0];
-    return new Date(`${dateOnly}T00:00:00`);
+    const date = dateString.split('T')[0];
+    return new Date(`${date}T00:00:00`);
   };
 
   const start = parseDateString(startDate);
@@ -126,40 +126,42 @@ function CalenderBody({
             direction === 'right' && 'animate-slide-in-right',
           )}
         >
-          {allDate.map((data) => (
-            <div
-              key={data?.getDate()}
-              className={cn(
-                'mb-4 flex items-center justify-center',
-                data && isInRange(data) && 'bg-gray-100',
-                start &&
-                  end &&
-                  data &&
-                  isSameDay(data, start) &&
-                  'rounded-l-full bg-gray-100',
-                end &&
-                  data &&
-                  isSameDay(data, end) &&
-                  'rounded-r-full bg-gray-100',
-              )}
-            >
-              <button
-                type="button"
-                tabIndex={data ? 0 : -1}
+          {allDate.map((data) => {
+            const isCurrent = Boolean(data);
+            const inRange = isCurrent && data && isInRange(data);
+            const isStart = start && data && isSameDay(data, start);
+            const isEnd = end && data && isSameDay(data, end);
+            const isSelected = isCurrent && data && isSelectedDay(data);
+            const isOtherMonth =
+              isCurrent && data && data.getMonth() !== currentMonth;
+
+            return (
+              <div
+                key={data?.getDate()}
                 className={cn(
-                  'w-full cursor-pointer rounded-full border-3 border-transparent p-2 text-center hover:border-[#00D451] hover:bg-gray-100 hover:text-black',
-                  data && data.getMonth() !== currentMonth && 'text-gray-400',
-                  data &&
-                    isSelectedDay(data) &&
-                    'rounded-full border-2 border-[#00D451] bg-[#00D451] font-bold text-white',
-                  !data && 'pointer-events-none',
+                  'mb-4 flex items-center justify-center',
+                  inRange && 'bg-gray-100',
+                  isStart && 'rounded-l-full bg-gray-100',
+                  isEnd && 'rounded-r-full bg-gray-100',
                 )}
-                onClick={() => data && onDateSelect(data)}
               >
-                {data?.getDate()}
-              </button>
-            </div>
-          ))}
+                <button
+                  type="button"
+                  tabIndex={data ? 0 : -1}
+                  className={cn(
+                    'w-full cursor-pointer rounded-full border-3 border-transparent p-2 text-center hover:border-[#00D451] hover:bg-gray-100 hover:text-black',
+                    isOtherMonth && 'text-gray-400',
+                    isSelected &&
+                      'rounded-full border-2 border-[#00D451] bg-[#00D451] font-bold text-white',
+                    !data && 'pointer-events-none',
+                  )}
+                  onClick={() => data && onDateSelect(data)}
+                >
+                  {data?.getDate()}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
       {/* 시간 선택 영역 */}

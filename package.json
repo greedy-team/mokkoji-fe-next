@@ -50,7 +50,7 @@
     "prettier": "^3.6.2",
     "react": "^19.1.2",
     "react-calendar": "^6.0.0",
-    "react-dom": "^19.1.0",
+    "react-dom": "^19.1.2",
     "react-error-boundary": "^6.0.0",
     "react-intersection-observer": "^9.16.0",
     "react-toastify": "^11.0.5",

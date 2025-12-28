@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   app-blue:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKER_IMAGE:-mokkoji-fe-next:dev}
     container_name: mokkoji-blue
     restart: unless-stopped
     ports:
@@ -29,9 +27,7 @@ services:
       start_period: 40s
 
   app-green:
-      build:
-        context: .
-        dockerfile: Dockerfile
+      image: ${DOCKER_IMAGE:-mokkoji-fe-next:dev}
       container_name: mokkoji-green
       restart: unless-stopped
       ports:

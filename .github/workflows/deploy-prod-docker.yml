@@ -1,0 +1,13 @@
+name: Production Deploy (Docker)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy-docker:
+    uses: ./.github/workflows/deploy-docker.yml
+    with:
+      env: prod
+    secrets: inherit

@@ -140,9 +140,9 @@ jobs:
 
             echo "Testing health endpoint through Nginx..."
             if curl -f http://localhost/api/health > /dev/null 2>&1; then
-              echo "✓ Deployment verified successfully"
+              echo "Deployment verified successfully"
             else
-              echo "✗ Health check failed"
+              echo "Health check failed"
               docker-compose logs --tail=50
               exit 1
             fi

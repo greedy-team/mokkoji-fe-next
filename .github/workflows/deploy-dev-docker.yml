@@ -1,0 +1,13 @@
+name: Develop Deploy (Docker)
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  deploy-docker:
+    uses: ./.github/workflows/deploy-docker.yml
+    with:
+      env: dev
+    secrets: inherit

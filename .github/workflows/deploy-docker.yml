@@ -118,6 +118,7 @@ jobs:
             rm mokkoji-fe-next-${{ inputs.env }}.tar.gz
 
             echo "Running Blue-Green deployment"
+            export DOCKER_IMAGE="${DOCKER_IMAGE_NAME}:${{ inputs.env }}"
             chmod +x scripts/deploy-blue-green.sh
             bash scripts/deploy-blue-green.sh
 

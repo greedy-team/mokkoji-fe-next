@@ -126,7 +126,7 @@ jobs:
             echo "Cleaning up old images"
             docker image prune -af
 
-      - name: Health check
+      - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -135,19 +135,17 @@ jobs:
           envs: APP_DIR
           script: |
             cd "$APP_DIR"
+            echo "Checking deployed containers status..."
+            docker-compose ps
 
-            for i in {1..30}; do
-              if curl -f http://localhost:3000/api/health > /dev/null 2>&1; then
-                echo "Health check passed"
-                exit 0
-              fi
-              echo "Waiting for service to be healthy ($i/30)"
-              sleep 1
-            done
-
-            echo "Health check failed after 30 seconds"
-            docker-compose logs --tail=50 app
-            exit 1
+            echo "Testing health endpoint through Nginx..."
+            if curl -f http://localhost/api/health > /dev/null 2>&1; then
+              echo "✓ Deployment verified successfully"
+            else
+              echo "✗ Health check failed"
+              docker-compose logs --tail=50
+              exit 1
+            fi
 
       - name: Clean up local artifacts
         if: always()

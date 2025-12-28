@@ -7,6 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 let nextConfig: NextConfig = {
   reactStrictMode: false,
   transpilePackages: ['msw', 'next-auth'],
+  output: 'standalone', // Docker 배포를 위한 standalone 모드
   pageExtensions: isProd
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],

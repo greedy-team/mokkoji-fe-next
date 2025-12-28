@@ -71,6 +71,7 @@ jobs:
       - name: Create .env file
         run: |
           cat > deploy_files/.env << EOF
+          DOCKER_IMAGE=${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }}
           NEXT_PUBLIC_API_URL=${{ inputs.env == 'prod' && secrets.NEXT_PUBLIC_API_URL_PROD || secrets.NEXT_PUBLIC_API_URL_DEV }}
           NEXT_PUBLIC_S3_DOMAIN=${{ inputs.env == 'prod' && secrets.NEXT_PUBLIC_S3_DOMAIN_PROD || secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}
           NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}

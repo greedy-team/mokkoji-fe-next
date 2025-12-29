@@ -1,15 +1,16 @@
 version: '3.8'
 
 services:
-  app-blue:
-    image: ${DOCKER_IMAGE:-mokkoji-fe-next:dev}
-    container_name: mokkoji-blue
+  # Production Blue
+  app-prod-blue:
+    image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
+    container_name: mokkoji-prod-blue
     restart: unless-stopped
     ports:
       - "3001:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_PROD}
       - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
       - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
@@ -26,30 +27,83 @@ services:
       retries: 3
       start_period: 40s
 
-  app-green:
-      image: ${DOCKER_IMAGE:-mokkoji-fe-next:dev}
-      container_name: mokkoji-green
-      restart: unless-stopped
-      ports:
-        - "3002:3000"
-      environment:
-        - NODE_ENV=production
-        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-        - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
-        - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
-        - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-        - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
-        - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-        - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
-        - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
-      networks:
-        - mokkoji-network
-      healthcheck:
-        test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-        interval: 10s
-        timeout: 5s
-        retries: 3
-        start_period: 40s
+  # Production Green
+  app-prod-green:
+    image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
+    container_name: mokkoji-prod-green
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_PROD}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  # Development Blue
+  app-dev-blue:
+    image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
+    container_name: mokkoji-dev-blue
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_DEV}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  # Development Green
+  app-dev-green:
+    image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
+    container_name: mokkoji-dev-green
+    restart: unless-stopped
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_DEV}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
 
   nginx:
     image: nginx:alpine

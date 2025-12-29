@@ -63,6 +63,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - ./nginx/active:/etc/nginx/active:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - mokkoji-network
 

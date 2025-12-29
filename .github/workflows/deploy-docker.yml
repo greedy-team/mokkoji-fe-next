@@ -35,7 +35,7 @@ on:
 
 env:
   DOCKER_IMAGE_NAME: mokkoji-fe-next
-  APP_DIR: /home/ubuntu/mokkoji-fe-${{ inputs.env }}
+  APP_DIR: /home/ubuntu/mokkoji-fe
 
 jobs:
   build-and-deploy:
@@ -71,16 +71,18 @@ jobs:
       - name: Create .env file
         run: |
           cat > deploy_files/.env << EOF
-          DOCKER_IMAGE=${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }}
-          NEXT_PUBLIC_API_URL=${{ inputs.env == 'prod' && secrets.NEXT_PUBLIC_API_URL_PROD || secrets.NEXT_PUBLIC_API_URL_DEV }}
-          NEXT_PUBLIC_S3_DOMAIN=${{ inputs.env == 'prod' && secrets.NEXT_PUBLIC_S3_DOMAIN_PROD || secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}
+          DOCKER_IMAGE_PROD=${{ env.DOCKER_IMAGE_NAME }}:prod
+          DOCKER_IMAGE_DEV=${{ env.DOCKER_IMAGE_NAME }}:dev
+          NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+          NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+          NEXT_PUBLIC_S3_DOMAIN_PROD=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}
+          NEXT_PUBLIC_S3_DOMAIN_DEV=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}
           NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
           NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
           NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
           NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
           DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
           NEXT_PUBLIC_ANALYZE=false
-          NEXTAUTH_URL=${{ inputs.env == 'prod' && 'https://www.mokkoji.site' || 'https://dev.mokkoji.site' }}
           EOF
 
       - name: Create EC2 directory
@@ -109,7 +111,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: APP_DIR,DOCKER_IMAGE_NAME
+          envs: APP_DIR
           script: |
             set -e
             cd "$APP_DIR"
@@ -119,9 +121,8 @@ jobs:
             rm mokkoji-fe-next-${{ inputs.env }}.tar.gz
 
             echo "Running Blue-Green deployment"
-            export DOCKER_IMAGE="${DOCKER_IMAGE_NAME}:${{ inputs.env }}"
-            chmod +x scripts/deploy-blue-green.sh
-            bash scripts/deploy-blue-green.sh
+            chmod +x scripts/deploy-${{ inputs.env }}.sh
+            bash scripts/deploy-${{ inputs.env }}.sh
 
             echo "Cleaning up old images"
             docker image prune -af

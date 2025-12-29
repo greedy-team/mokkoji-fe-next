@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Production Blue
   app-prod-blue:
     image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
     container_name: mokkoji-prod-blue
@@ -16,7 +15,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_PROD}
       - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
     networks:
       - mokkoji-network
@@ -27,7 +26,6 @@ services:
       retries: 3
       start_period: 40s
 
-  # Production Green
   app-prod-green:
     image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
     container_name: mokkoji-prod-green
@@ -42,7 +40,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_PROD}
       - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
     networks:
       - mokkoji-network
@@ -53,7 +51,6 @@ services:
       retries: 3
       start_period: 40s
 
-  # Development Blue
   app-dev-blue:
     image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
     container_name: mokkoji-dev-blue
@@ -68,7 +65,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_DEV}
       - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
     networks:
       - mokkoji-network
@@ -79,7 +76,6 @@ services:
       retries: 3
       start_period: 40s
 
-  # Development Green
   app-dev-green:
     image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
     container_name: mokkoji-dev-green
@@ -94,7 +90,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
       - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_DEV}
       - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
     networks:
       - mokkoji-network

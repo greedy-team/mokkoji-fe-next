@@ -120,6 +120,13 @@ jobs:
             docker load < mokkoji-fe-next-${{ inputs.env }}.tar.gz
             rm mokkoji-fe-next-${{ inputs.env }}.tar.gz
 
+            echo "Ensuring Nginx is running"
+            if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then
+              echo "Starting Nginx container"
+              docker-compose up -d nginx
+              sleep 5
+            fi
+
             echo "Running Blue-Green deployment"
             chmod +x scripts/deploy-${{ inputs.env }}.sh
             bash scripts/deploy-${{ inputs.env }}.sh

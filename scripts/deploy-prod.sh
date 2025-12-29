@@ -13,12 +13,12 @@ if [ "$CURRENT_COLOR" == "blue" ]; then
     NEW_COLOR="green"
     NEW_CONTAINER="mokkoji-prod-green"
     NEW_PORT=3002
-    OLD_CONTAINER="mokkoji-prod-blue"
+    OLD_SERVICE="app-prod-blue"
 else
     NEW_COLOR="blue"
     NEW_CONTAINER="mokkoji-prod-blue"
     NEW_PORT=3001
-    OLD_CONTAINER="mokkoji-prod-green"
+    OLD_SERVICE="app-prod-green"
 fi
 
 echo "현재 활성 컨테이너: $CURRENT_COLOR"
@@ -41,8 +41,9 @@ for i in {1..60}; do
     if [ $i -eq 60 ]; then
         echo "헬스 체크 실패"
         echo "$NEW_COLOR 컨테이너를 중지하고 $CURRENT_COLOR를 유지"
-        docker-compose stop app-prod-$NEW_COLOR
-        docker-compose logs --tail=50 app-prod-$NEW_COLOR
+        NEW_SERVICE="app-prod-$NEW_COLOR"
+        docker-compose stop $NEW_SERVICE
+        docker-compose logs --tail=50 $NEW_SERVICE
         exit 1
     fi
 
@@ -64,14 +65,14 @@ sleep 10
 
 echo ""
 echo "이전 $CURRENT_COLOR 컨테이너 중지"
-docker-compose stop app-prod-$OLD_CONTAINER
+docker-compose stop $OLD_SERVICE
 
 echo $NEW_COLOR > nginx/active/prod-color.txt
 
 echo ""
 echo "배포 완료"
 echo "활성 컨테이너: $NEW_COLOR ($NEW_CONTAINER)"
-echo "중지된 컨테이너: $CURRENT_COLOR ($OLD_CONTAINER)"
+echo "중지된 컨테이너: $CURRENT_COLOR ($OLD_SERVICE)"
 
 echo ""
 echo "현재 컨테이너 상태:"

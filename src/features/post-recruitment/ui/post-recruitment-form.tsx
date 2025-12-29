@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
+import DateRangePicker from '@/shared/ui/calender/date-range-picker';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
@@ -12,7 +13,6 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
-import SelectDate from './select-date';
 import isFormValid from '../util/isFormValid';
 import postRecruitmentForm from '../api/postRecruitmentForm';
 
@@ -173,17 +173,16 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         onChange={(e) => handleChange('recruitForm', e.target.value)}
         onBlur={() => handleBlur('recruitForm')}
       />
-      <label htmlFor="recruitPeriod" className="mt-4 flex gap-2 font-bold">
-        모집 기간
-      </label>
-      <SelectDate
+      <DateRangePicker
         startDate={formData.recruitStart}
         endDate={formData.recruitEnd}
-        onChange={handleChange}
-        errors={{
-          recruitStart: errors.recruitStart,
-          recruitEnd: errors.recruitEnd,
+        onStartDateChange={(date) => handleChange('recruitStart', date)}
+        onEndDateChange={(date) => handleChange('recruitEnd', date)}
+        onRangeComplete={() => {
+          handleBlur('recruitStart');
+          handleBlur('recruitEnd');
         }}
+        label="모집 기간"
       />
       <ImageUploadSection
         imageFiles={imageFiles}

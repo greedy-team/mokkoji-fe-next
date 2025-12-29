@@ -1,0 +1,120 @@
+services:
+  app-prod-blue:
+    image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
+    container_name: mokkoji-prod-blue
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_PROD}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_PROD}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  app-prod-green:
+    image: ${DOCKER_IMAGE_PROD:-mokkoji-fe-next:prod}
+    container_name: mokkoji-prod-green
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_PROD}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_PROD}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  app-dev-blue:
+    image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
+    container_name: mokkoji-dev-blue
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_DEV}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_DEV}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  app-dev-green:
+    image: ${DOCKER_IMAGE_DEV:-mokkoji-fe-next:dev}
+    container_name: mokkoji-dev-green
+    restart: unless-stopped
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL_DEV}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      - NEXT_PUBLIC_SENTRY_REPLAY_DSN=${NEXT_PUBLIC_SENTRY_REPLAY_DSN}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PUBLIC_CLARITY_ID=${NEXT_PUBLIC_CLARITY_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - NEXT_PUBLIC_S3_DOMAIN=${NEXT_PUBLIC_S3_DOMAIN_DEV}
+      - NEXT_PUBLIC_ANALYZE=${NEXT_PUBLIC_ANALYZE:-false}
+    networks:
+      - mokkoji-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    image: nginx:alpine
+    container_name: mokkoji-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/active:/etc/nginx/active:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - mokkoji-network
+
+networks:
+  mokkoji-network:
+    driver: bridge

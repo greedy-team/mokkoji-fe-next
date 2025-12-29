@@ -7,7 +7,7 @@ function CommentCard() {
       <AnimateOnView animation="reveal-0">
         <div className="absolute top-[10%] lg:top-[5%] lg:left-[20%]">
           <Image
-            src="/main/불면증염소.svg"
+            src="/main/불면증염소.png"
             alt="댓글 이미지 1"
             width={230}
             height={230}
@@ -18,7 +18,7 @@ function CommentCard() {
       <AnimateOnView animation="reveal-1">
         <div className="absolute top-[20%] left-[15%] z-10 lg:top-[30%] lg:left-[35%]">
           <Image
-            src="/main/격투기선수.svg"
+            src="/main/격투기선수.png"
             alt="댓글 이미지 2"
             width={300}
             height={300}
@@ -29,7 +29,7 @@ function CommentCard() {
       <AnimateOnView animation="reveal-2">
         <div className="absolute top-[7%] left-[38%] z-20 lg:left-[55%]">
           <Image
-            src="/main/졸린사자.svg"
+            src="/main/졸린사자.png"
             alt="댓글 이미지 2"
             width={300}
             height={300}

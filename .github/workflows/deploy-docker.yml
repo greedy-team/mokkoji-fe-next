@@ -1,0 +1,162 @@
+name: Docker 공통
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: '공통 배포 설정'
+        required: true
+        type: string
+    secrets:
+      SSH_HOST:
+        required: true
+      SSH_USER:
+        required: true
+      SSH_KEY:
+        required: true
+      NEXTAUTH_SECRET:
+        required: true
+      DISCORD_WEBHOOK_URL:
+        required: true
+      NEXT_PUBLIC_SENTRY_DSN:
+        required: true
+      NEXT_PUBLIC_SENTRY_REPLAY_DSN:
+        required: true
+      NEXT_PUBLIC_CLARITY_ID:
+        required: true
+      NEXT_PUBLIC_API_URL_DEV:
+        required: false
+      NEXT_PUBLIC_API_URL_PROD:
+        required: false
+      NEXT_PUBLIC_S3_DOMAIN_DEV:
+        required: false
+      NEXT_PUBLIC_S3_DOMAIN_PROD:
+        required: false
+
+env:
+  DOCKER_IMAGE_NAME: mokkoji-fe-next
+  APP_DIR: /home/ubuntu/mokkoji-fe
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg NODE_ENV=production \
+            -t ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }} \
+            -t ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }}-${{ github.sha }} \
+            .
+
+      - name: Save Docker image
+        run: docker save ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }} | gzip > mokkoji-fe-next-${{ inputs.env }}.tar.gz
+
+      - name: Prepare deployment files
+        run: |
+          mkdir -p deploy_files
+          cp docker-compose.yml deploy_files/
+          cp -r nginx deploy_files/
+          cp -r scripts deploy_files/
+          cp mokkoji-fe-next-${{ inputs.env }}.tar.gz deploy_files/
+
+      - name: Create .env file
+        run: |
+          cat > deploy_files/.env << EOF
+          DOCKER_IMAGE_PROD=${{ env.DOCKER_IMAGE_NAME }}:prod
+          DOCKER_IMAGE_DEV=${{ env.DOCKER_IMAGE_NAME }}:dev
+          NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
+          NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+          NEXT_PUBLIC_S3_DOMAIN_PROD=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}
+          NEXT_PUBLIC_S3_DOMAIN_DEV=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_DEV }}
+          NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
+          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
+          DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
+          NEXT_PUBLIC_ANALYZE=false
+          EOF
+
+      - name: Create EC2 directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: APP_DIR
+          script: |
+            mkdir -p "$APP_DIR"
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy_files/*"
+          target: ${{ env.APP_DIR }}
+          strip_components: 1
+
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: APP_DIR
+          script: |
+            set -e
+            cd "$APP_DIR"
+
+            echo "Loading Docker image"
+            docker load < mokkoji-fe-next-${{ inputs.env }}.tar.gz
+            rm mokkoji-fe-next-${{ inputs.env }}.tar.gz
+
+            echo "Ensuring Nginx is running"
+            if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then
+              echo "Starting Nginx container"
+              docker-compose up -d nginx
+              sleep 5
+            fi
+
+            echo "Running Blue-Green deployment"
+            chmod +x scripts/deploy-${{ inputs.env }}.sh
+            bash scripts/deploy-${{ inputs.env }}.sh
+
+            echo "Cleaning up old images"
+            docker image prune -af
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: APP_DIR
+          script: |
+            cd "$APP_DIR"
+            echo "Checking deployed containers status..."
+            docker-compose ps
+
+            echo "Testing health endpoint through Nginx..."
+            if curl -f http://localhost/api/health > /dev/null 2>&1; then
+              echo "Deployment verified successfully"
+            else
+              echo "Health check failed"
+              docker-compose logs --tail=50
+              exit 1
+            fi
+
+      - name: Clean up local artifacts
+        if: always()
+        run: |
+          rm -rf deploy_files
+          rm -f mokkoji-fe-next-${{ inputs.env }}.tar.gz

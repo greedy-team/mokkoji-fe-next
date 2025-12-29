@@ -3,7 +3,7 @@
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import SelectDate from '@/features/post-recruitment/ui/select-date';
+import DateRangePicker from '@/shared/ui/calender/date-range-picker';
 import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
 import { useReducer } from 'react';
 import {
@@ -55,7 +55,7 @@ function ClubDetailRecruitmentEdit({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { formData, errors } = state;
+  const { formData } = state;
   const {
     imageFiles,
     handleImageChange,
@@ -148,16 +148,12 @@ function ClubDetailRecruitmentEdit({
         value={formData.recruitForm}
         onChange={(e) => handleChange('recruitForm', e.target.value)}
       />
-      <label
-        htmlFor="recruitPeriod"
-        className="mt-4 flex gap-2 text-xl font-bold"
-      >
-        모집 기간
-      </label>
-      <SelectDate
+      <DateRangePicker
         startDate={formData.recruitStart}
         endDate={formData.recruitEnd}
-        onChange={handleChange}
+        onStartDateChange={(date) => handleChange('recruitStart', date)}
+        onEndDateChange={(date) => handleChange('recruitEnd', date)}
+        label="모집 기간"
       />
       <ImageUploadSection
         handleDragStart={handleDragStart}

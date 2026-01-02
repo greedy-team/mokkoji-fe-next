@@ -3,7 +3,7 @@
  * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
-export const authRoutes = ['/my/:path*'];
+export const authRoutes = ['/my/:path*', '/admin/:path*'];
 
 export const publicRoutes = [
   '/',

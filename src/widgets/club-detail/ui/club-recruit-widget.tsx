@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
+import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 
 interface ClubRecruitWidgetProps {
   isManageClub?: boolean;
@@ -76,12 +77,15 @@ function ClubRecruitWidget({
         </div>
       )}
       {!isEditing ? (
-        <RecruitDetailView
-          title={title}
-          content={content}
-          recruitForm={recruitForm}
-          imageUrls={imageUrls}
-        />
+        <>
+          <RecruitDetailView
+            title={title}
+            content={content}
+            recruitForm={recruitForm}
+            imageUrls={imageUrls}
+          />
+          <RecruitHistorySection title={title} />
+        </>
       ) : (
         <ClubDetailRecruitmentEdit
           title={title}

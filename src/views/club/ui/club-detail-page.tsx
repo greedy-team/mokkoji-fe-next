@@ -5,6 +5,7 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
 import getRecentRecruitDetail from '@/views/club/api/getRecentRecruitDetail';
+import getClubRecruitments from '../api/getClubRecruitments';
 
 interface ClubDetailPageProps {
   params: Promise<{ id: string }>;
@@ -17,9 +18,10 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
 
   const session = await auth();
   const role = session?.role;
-  const [getClubManageInfoRes, data] = await Promise.all([
+  const [getClubManageInfoRes, data, recruitHistories] = await Promise.all([
     getClubManageInfo({ role }),
     getRecentRecruitDetail(Number(id)),
+    getClubRecruitments(Number(id)),
   ]);
 
   if (data?.status === 404 || !data.data) {
@@ -29,6 +31,10 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   if (!data.ok) {
     return <ErrorBoundaryUi />;
   }
+
+  const historiesArray = recruitHistories.ok
+    ? (recruitHistories.data?.recruitments ?? [])
+    : [];
 
   const isManageClub =
     getClubManageInfoRes?.data?.clubs.some(
@@ -54,6 +60,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         activeTab={tab}
         isManageClub={isManageClub}
         recruitData={data.data}
+        recruitHistories={historiesArray}
         id={Number(id)}
       />
     </div>

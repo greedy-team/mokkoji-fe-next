@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
+import { ClubRecruitments } from '@/views/club/model/type';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -19,6 +20,7 @@ interface ClubDetailTabsProps {
   activeTab: string;
   isManageClub: boolean;
   recruitData: RecruitDetailViewProps;
+  recruitHistories: ClubRecruitments[];
   id: number;
 }
 
@@ -32,6 +34,7 @@ function ClubDetailTabs({
   activeTab,
   isManageClub,
   recruitData,
+  recruitHistories,
   id,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
@@ -62,6 +65,7 @@ function ClubDetailTabs({
           recruitStart={recruitData.recruitStart || ''}
           recruitEnd={recruitData.recruitEnd || ''}
           clubId={Number(id)}
+          recruitHistories={recruitHistories}
         />
       );
     }

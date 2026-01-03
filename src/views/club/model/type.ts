@@ -40,3 +40,19 @@ export interface RecruitmentDetail {
 export interface RecruitmentDetailResponse {
   data: RecruitmentDetail;
 }
+
+export interface ClubRecruitments {
+  id: number;
+  title: string;
+  content: string;
+  recruitStart: string;
+  recruitEnd: string;
+  status: RecruitStatus;
+  createdAt: string;
+  firstImage?: string;
+  isAlwaysRecruiting: boolean;
+}
+
+export interface ClubRecruitmentsResponse {
+  recruitments: ClubRecruitments[];
+}

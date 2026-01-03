@@ -8,6 +8,7 @@ import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
+import { ClubRecruitments } from '@/views/club/model/type';
 
 interface ClubRecruitWidgetProps {
   isManageClub?: boolean;
@@ -20,6 +21,7 @@ interface ClubRecruitWidgetProps {
   recruitStart: string;
   recruitEnd: string;
   clubId: number;
+  recruitHistories: ClubRecruitments[];
 }
 
 function ClubRecruitWidget({
@@ -33,6 +35,7 @@ function ClubRecruitWidget({
   recruitStart,
   recruitEnd,
   clubId,
+  recruitHistories,
 }: ClubRecruitWidgetProps) {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
@@ -84,7 +87,7 @@ function ClubRecruitWidget({
             recruitForm={recruitForm}
             imageUrls={imageUrls}
           />
-          <RecruitHistorySection title={title} />
+          <RecruitHistorySection recruitHistories={recruitHistories} />
         </>
       ) : (
         <ClubDetailRecruitmentEdit

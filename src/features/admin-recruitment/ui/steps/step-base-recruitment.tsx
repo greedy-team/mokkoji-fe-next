@@ -110,6 +110,7 @@ function StepBaseRecruitment({
           onBlur('recruitEnd');
         }}
         label="모집 기간"
+        variant="dark"
       />
       <ImageUploadSection
         imageFiles={imageFiles}

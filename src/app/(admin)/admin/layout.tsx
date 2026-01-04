@@ -23,9 +23,10 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white">
+    <div className="flex min-h-screen flex-col">
+      <div className="fixed inset-0 -z-10 bg-black" />
       <AdminHeader />
-      <main className="scrollbar-hide relative flex min-h-screen w-full flex-grow items-center justify-center px-[30%] pt-[100px]">
+      <main className="scrollbar-hide relative flex w-full flex-grow items-center justify-center px-[30%] pt-[100px] pb-[100px] text-white">
         {children}
       </main>
       <Footer />

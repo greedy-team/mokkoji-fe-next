@@ -12,6 +12,7 @@ interface DateRangePickerProps {
   onRangeComplete?: () => void;
   label?: string;
   error?: string;
+  variant?: 'dark' | 'light';
 }
 
 function DateRangePicker({
@@ -22,6 +23,7 @@ function DateRangePicker({
   onRangeComplete,
   label = '날짜 범위',
   error,
+  variant = 'light',
 }: DateRangePickerProps) {
   const {
     isCalenderOpen,
@@ -78,6 +80,9 @@ function DateRangePicker({
           className={cn(
             'absolute z-50 mt-1 min-w-full origin-top rounded-lg border bg-white p-4 text-center shadow-2xl',
             isCalenderClosing ? 'animate-scale-out' : 'animate-scale-in',
+            variant === 'light'
+              ? 'bg-white text-black'
+              : 'bg-[#1B1B1B] text-white',
           )}
         >
           <CalenderBody
@@ -91,6 +96,7 @@ function DateRangePicker({
             endTime={endTime}
             onStartTimeChange={setStartTime}
             onEndTimeChange={setEndTime}
+            variant="dark"
           />
         </div>
       )}

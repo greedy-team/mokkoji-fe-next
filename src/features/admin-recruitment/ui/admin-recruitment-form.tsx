@@ -9,15 +9,19 @@ import ky from 'ky';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import { PrevButton } from '@/shared/ui/navigation-button';
+import { RecruitmentDetail } from '@/views/club/model/type';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import StepBaseRecruitment from './steps/step-base-recruitment';
 import StepContentRecruitment from './steps/step-content-recruitment';
 import postRecruitmentForm from '../api/postRecruitmentForm';
+import patchRecruitmentForm from '../api/patchRecruitmentForm';
 
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
   clubId?: number;
+  action?: 'create' | 'edit';
+  initialData?: RecruitmentDetail | null;
 }
 
 const step1Fields: FormField[] = [
@@ -31,13 +35,36 @@ const step2Fields: FormField[] = [
   { label: '모집 공고', name: 'content', type: 'textarea' },
 ];
 
-function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
+function AdminRecruitmentForm({
+  clubInfo,
+  clubId,
+  action = 'create',
+  initialData,
+}: ClubInfoProp) {
   const router = useRouter();
   const isLoadingRef = useRef(false);
   const [targetStep, setTargetStep] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const getInitialState = () => {
+    if (action === 'edit' && initialData) {
+      return {
+        formData: {
+          title: initialData.title,
+          content: initialData.content,
+          recruitStart: initialData.recruitStart,
+          recruitEnd: initialData.recruitEnd,
+          recruitForm: initialData.recruitForm,
+          imageNames: [],
+        },
+        errors: {},
+      };
+    }
+    return initialState;
+  };
+
+  const [state, dispatch] = useReducer(reducer, getInitialState());
   const { formData, errors } = state;
   const {
     imageFiles,
@@ -50,7 +77,9 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     draggingId,
     onDragOver,
     onDrop,
-  } = useImageUpload();
+  } = useImageUpload(
+    action === 'edit' && initialData ? initialData.imageUrls : [],
+  );
 
   useEffect(() => {
     if (targetStep !== currentStep) {
@@ -126,7 +155,10 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
       imageNames: imageFiles.map((file) => file.imageName),
     };
 
-    const res = await postRecruitmentForm(data, clubId!);
+    const res =
+      action === 'edit' && initialData
+        ? await patchRecruitmentForm(data, initialData.id)
+        : await postRecruitmentForm(data, clubId!);
 
     if (!res.ok) {
       toast.error(res.message);
@@ -154,7 +186,11 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     }
     isLoadingRef.current = false;
     router.push('/recruit');
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    toast.success(
+      action === 'edit'
+        ? '모집 공고가 성공적으로 수정되었습니다!'
+        : '모집 공고가 성공적으로 업로드되었습니다!',
+    );
   };
 
   return (
@@ -230,7 +266,7 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
                 disabled={!isStep2Valid()}
                 className="mt-4 w-full"
               >
-                등록하기
+                {action === 'edit' ? '수정하기' : '등록하기'}
               </Button>
             )}
           </>

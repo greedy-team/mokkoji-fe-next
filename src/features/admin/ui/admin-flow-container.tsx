@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { redirect } from 'next/navigation';
 import type { AdminClubInfo } from '../model/types';
 import StepSelectAction from './steps/step-select-action';
 import useAdminFlow from '../model/use-admin-flow';
@@ -17,6 +18,12 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    if (flow.step === '4') {
+      redirect(
+        `/admin/${flow.contentType}/${flow.actionType}/${flow.selectedClubId}`,
+      );
+    }
+
     if (flow.step !== currentStep) {
       setIsTransitioning(true);
 
@@ -58,12 +65,6 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
           onNext={flow.selectActionType}
           onBack={flow.goBack}
         />
-      )}
-
-      {currentStep === '4' && (
-        <div className="flex w-full flex-col items-center gap-6">
-          <p>선택 완료</p>
-        </div>
       )}
     </div>
   );

@@ -1,0 +1,17 @@
+import { RecruitmentActionParams } from '@/shared/model/type';
+import SharedLoading from '@/shared/ui/loading';
+import { Suspense } from 'react';
+import AdminClubDescriptionWidget from '@/widgets/admin-club-description/admin-club-description-widget';
+
+function AdminClubDescriptionPage({ params }: RecruitmentActionParams) {
+  return (
+    <div className="w-full">
+      <h1 className="text-[28px] font-bold">동아리 기본 정보</h1>
+      <Suspense fallback={<SharedLoading />}>
+        <AdminClubDescriptionWidget params={params} />
+      </Suspense>
+    </div>
+  );
+}
+
+export default AdminClubDescriptionPage;

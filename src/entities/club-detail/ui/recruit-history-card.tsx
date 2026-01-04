@@ -20,7 +20,9 @@ function RecruitHistoryCard({
       <span className="text-sm text-[#474747] lg:text-lg">
         {formatDateDot(recruitHistories.createdAt)}
       </span>
-      <span className="font-semibold lg:text-lg">{recruitHistories.title}</span>
+      <span className="line-clamp-2 font-semibold lg:text-lg">
+        {recruitHistories.title}
+      </span>
     </div>
   );
 }

@@ -50,11 +50,11 @@ function DateRangePicker({
   };
 
   return (
-    <div className="relative" ref={calendarRef}>
+    <fieldset className="relative" ref={calendarRef}>
       {label && (
         <label
           htmlFor="recruitPeriod"
-          className="mt-4 flex gap-2 text-base font-semibold"
+          className="flex gap-2 text-base font-semibold"
         >
           {label}
           {error && (
@@ -94,7 +94,7 @@ function DateRangePicker({
           />
         </div>
       )}
-    </div>
+    </fieldset>
   );
 }
 

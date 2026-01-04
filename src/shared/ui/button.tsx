@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import cn from '@/shared/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:bg-[#D5D5D5] disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:bg-[#D9D9D920] disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer",
   {
     variants: {
       variant: {
@@ -15,7 +15,8 @@ const buttonVariants = cva(
         link: 'flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00E804] to-[#33E3D0] text-xs lg:text-base font-semibold text-white shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105',
         disabled: 'rounded-md py-5 bg-[#D5D5D5] text-white text-base mt-6',
         submit:
-          'rounded-md py-5 bg-primary text-white text-base mt-6 hover:bg-[#00c94c] transition-colors duration-200',
+          'rounded-md py-5 bg-primary text-black text-base font-semibold mt-6 bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
+        back: 'rounded-md py-5 bg-primary text-white text-base font-semibold mt-6 bg-[#FFFFFF10] hover:bg-[#FFFFFF15] transition-colors duration-200',
         optionsSelected:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-primary bg-[#F1FFF6] transition-colors duration-300',
         options:

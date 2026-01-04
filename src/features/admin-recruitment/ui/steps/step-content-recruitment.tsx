@@ -30,14 +30,14 @@ function StepContentRecruitment({
           </p>
         )}
       </label>
-      <p className="text-xs text-[#00D451]">5000자 이내로 작성해주세요!</p>
       <Textarea
         id="content"
         name="content"
         value={formData.content}
         onChange={(e) => onChange('content', e.target.value)}
-        variant={errors.content ? 'error' : 'default'}
+        variant={errors.content ? 'blackError' : 'blackDefault'}
         maxLength={5000}
+        placeholder="5000자 이내로 작성해주세요!"
         className="transition-colors duration-300"
         onBlur={() => onBlur('content')}
       />

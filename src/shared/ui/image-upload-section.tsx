@@ -38,7 +38,7 @@ function ImageUploadSection({
   maxLength?: number;
 }) {
   return (
-    <>
+    <fieldset>
       <label htmlFor="image" className="mt-4 text-base font-semibold">
         이미지 파일 업로드
       </label>
@@ -108,7 +108,7 @@ function ImageUploadSection({
           </div>
         )}
       </div>
-    </>
+    </fieldset>
   );
 }
 

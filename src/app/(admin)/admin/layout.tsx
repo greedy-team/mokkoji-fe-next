@@ -25,7 +25,7 @@ export default function MainLayout({
   return (
     <div className="flex min-h-screen flex-col bg-black text-white">
       <AdminHeader />
-      <main className="flex w-full flex-grow items-center justify-center px-[25%] pt-[60px]">
+      <main className="flex w-full flex-grow items-center justify-center px-[30%] pt-[60px]">
         {children}
       </main>
       <Footer />

@@ -17,7 +17,7 @@ interface UseCalenderProps {
 interface UseCalenderReturn {
   isCalenderOpen: boolean;
   isCalenderClosing: boolean;
-  calendarRef: React.RefObject<HTMLDivElement | null>;
+  calendarRef: React.RefObject<HTMLFieldSetElement | null>;
   openCalender: () => void;
   closeCalender: () => void;
   toggleCalender: () => void;
@@ -47,7 +47,7 @@ export default function useCalender({
   const [timeEnabled, setTimeEnabled] = useState(false);
   const [startTime, setStartTime] = useState<TimeValue | null>(null);
   const [endTime, setEndTime] = useState<TimeValue | null>(null);
-  const calendarRef = useRef<HTMLDivElement | null>(null);
+  const calendarRef = useRef<HTMLFieldSetElement | null>(null);
 
   const closeCalender = () => {
     setIsCalenderClosing(true);

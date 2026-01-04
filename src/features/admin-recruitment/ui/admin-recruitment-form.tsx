@@ -195,7 +195,12 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
             {isLoadingRef.current ? (
               <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
             ) : (
-              <Button type="submit" disabled={!isStep1Valid()} className="mt-4">
+              <Button
+                type="submit"
+                variant="submit"
+                disabled={!isStep1Valid()}
+                className="mt-13 w-full"
+              >
                 다음
               </Button>
             )}
@@ -214,15 +219,12 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
               <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
             ) : (
               <div className="mt-4 flex gap-2">
-                <Button
-                  type="button"
-                  onClick={handlePrevStep}
-                  variant="outline"
-                >
+                <Button type="button" variant="back" onClick={handlePrevStep}>
                   이전
                 </Button>
                 <Button
                   type="submit"
+                  variant="submit"
                   disabled={!isStep2Valid()}
                   className="flex-1"
                 >

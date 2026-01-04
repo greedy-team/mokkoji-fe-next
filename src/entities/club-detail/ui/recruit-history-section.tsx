@@ -25,7 +25,7 @@ function RecruitHistorySection({
         const href = `/club/${clubId}?${qs.toString()}`;
 
         return (
-          <Link key={r.id} href={href} scroll={false}>
+          <Link key={r.id} href={href}>
             <RecruitHistoryCard
               recruitHistories={r}
               isSelected={selectedRid === r.id}

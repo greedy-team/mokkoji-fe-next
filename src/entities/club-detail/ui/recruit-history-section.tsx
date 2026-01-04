@@ -1,6 +1,6 @@
 import { ClubRecruitments } from '@/views/club/model/type';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -9,7 +9,25 @@ interface RecruitHistorySectionProps {
   selectedRid: number;
 }
 
-const PAGE_SIZE = 3;
+function usePageSize() {
+  const [pageSize, setPageSize] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+
+      if (w >= 1024) setPageSize(3);
+      else if (w >= 640) setPageSize(2);
+      else setPageSize(1);
+    };
+
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  return pageSize;
+}
 
 function RecruitHistorySection({
   clubId,
@@ -17,12 +35,13 @@ function RecruitHistorySection({
   selectedRid,
 }: RecruitHistorySectionProps) {
   const list = Array.isArray(recruitHistories) ? recruitHistories : [];
+  const pageSize = usePageSize();
 
   const [page, setPage] = useState(0);
-  const start = page * PAGE_SIZE;
-  const visible = list.slice(start, start + PAGE_SIZE);
+  const start = page * pageSize;
+  const visible = list.slice(start, start + pageSize);
   const canPrev = page > 0;
-  const canNext = start + PAGE_SIZE < list.length;
+  const canNext = start + pageSize < list.length;
 
   return (
     <>

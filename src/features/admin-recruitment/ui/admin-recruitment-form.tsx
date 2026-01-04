@@ -198,7 +198,8 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
             ) : (
               <Button
                 type="submit"
-                variant="submit"
+                variant="next"
+                size="none"
                 disabled={!isStep1Valid()}
                 className="mt-13 w-full"
               >

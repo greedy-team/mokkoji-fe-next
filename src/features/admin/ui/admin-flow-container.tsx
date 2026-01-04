@@ -61,7 +61,6 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
       {currentStep === '3' && (
         <StepSelectAction
           clubName={flow.selectedClubName}
-          contentType={flow.contentType!}
           onNext={flow.selectActionType}
           onBack={flow.goBack}
         />

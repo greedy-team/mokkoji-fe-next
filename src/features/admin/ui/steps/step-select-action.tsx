@@ -1,53 +1,47 @@
 'use client';
 
-import { Button } from '@/shared/ui/button';
-import type { ActionType, ContentType } from '../../model/types';
+import Image from 'next/image';
+import { PrevButton } from '@/shared/ui/navigation-button';
+import type { ActionType } from '../../model/types';
 
 interface StepSelectActionProps {
   clubName?: string;
-  contentType: ContentType;
   onNext: (actionType: ActionType) => void;
   onBack: () => void;
 }
 
-function StepSelectAction({
-  clubName,
-  contentType,
-  onNext,
-  onBack,
-}: StepSelectActionProps) {
-  const contentTypeLabel =
-    contentType === 'recruitment' ? '모집 공고' : '소개글';
-
+function StepSelectAction({ clubName, onNext, onBack }: StepSelectActionProps) {
   return (
-    <div className="flex w-full flex-col items-center gap-10">
+    <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm text-gray-400">
-          {clubName} · {contentTypeLabel}
+        <Image src="/admin/main_logo.png" alt="logo" width={329} height={119} />
+        <p className="text-sm text-[#1AE166]">
+          권한 | <span className="font-bold">{clubName} 동아리장</span>
         </p>
-        <p className="text-xl font-semibold">작업을 선택해주세요</p>
       </div>
 
-      <div className="flex flex-col items-center gap-4">
-        <Button
-          variant="optionsBlackGround"
-          size="none"
+      <div className="flex flex-col items-center gap-9">
+        <button
+          type="button"
+          className="flex gap-3.5"
           onClick={() => onNext('create')}
         >
-          새로 작성하기
-        </Button>
-        <Button
-          variant="optionsBlackGround"
-          size="none"
+          <span className="text-2xl font-bold">모집글 생성</span>
+          <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
+        </button>
+        <button
+          type="button"
+          className="flex gap-3.5"
           onClick={() => onNext('edit')}
         >
-          수정하기
-        </Button>
+          <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
+          <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
+        </button>
       </div>
 
-      <Button variant="options" size="none" onClick={onBack} className="mt-4">
-        이전으로
-      </Button>
+      <PrevButton onClick={onBack} className="mt-4">
+        콘텐츠 다시 선택하기
+      </PrevButton>
     </div>
   );
 }

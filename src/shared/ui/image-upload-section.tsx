@@ -1,7 +1,8 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 import cn from '../lib/utils';
 
 interface ImageItem {
@@ -36,15 +37,67 @@ function ImageUploadSection({
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }) {
+  const [isDragActive, setIsDragActive] = useState(false);
+
+  const handleDragEnter = (e: React.DragEvent<HTMLFieldSetElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLFieldSetElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (
+      x <= rect.left ||
+      x >= rect.right ||
+      y <= rect.top ||
+      y >= rect.bottom
+    ) {
+      setIsDragActive(false);
+    }
+  };
+
+  const handleDropWithOverlay = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragActive(false);
+    onDrop(e);
+  };
+
+  const handleDragOverWithOverlay = (e: React.DragEvent<HTMLDivElement>) => {
+    onDragOver(e);
+  };
+
   return (
-    <fieldset>
+    <fieldset
+      className="relative"
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+    >
+      {isDragActive && (
+        <div
+          className="absolute inset-0 z-50 flex items-center justify-center rounded-lg border-2 border-dashed border-[#00D451] bg-black/80 backdrop-blur-sm"
+          onDragOver={handleDragOverWithOverlay}
+          onDrop={handleDropWithOverlay}
+        >
+          <div className="pointer-events-none flex flex-col items-center gap-3">
+            <Upload className="h-12 w-12 text-[#00D451]" />
+            <p className="text-lg font-semibold text-white">
+              이미지를 여기에 드롭하세요
+            </p>
+          </div>
+        </div>
+      )}
       <label htmlFor="image" className="text-base font-semibold">
         이미지 파일 업로드
       </label>
       <div
         className="mt-3 flex h-fit w-full cursor-pointer flex-col"
-        onDragOver={onDragOver}
-        onDrop={onDrop}
+        onDragOver={handleDragOverWithOverlay}
+        onDrop={handleDropWithOverlay}
       >
         <div className="flex gap-5">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D9D9D930]">

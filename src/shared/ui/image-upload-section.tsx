@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import Image from 'next/image';
 import cn from '../lib/utils';
 
 interface ImageItem {
@@ -20,7 +21,6 @@ function ImageUploadSection({
   draggingId,
   onDragOver,
   onDrop,
-  maxLength = 20,
 }: {
   imageFiles: ImageItem[];
   handleImageRemove: (id: string) => void;
@@ -35,38 +35,35 @@ function ImageUploadSection({
   draggingId: string | null;
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
-  maxLength?: number;
 }) {
   return (
     <fieldset>
-      <label htmlFor="image" className="mt-4 text-base font-semibold">
+      <label htmlFor="image" className="text-base font-semibold">
         이미지 파일 업로드
       </label>
-
       <div
-        className={cn(
-          'mt-2 rounded-md border-2 border-transparent bg-[#D9D9D920] px-4 py-3 transition-all',
-          imageFiles.length > 0 && 'border-[#00D451]',
-        )}
+        className="mt-3 flex h-fit w-full cursor-pointer flex-col"
         onDragOver={onDragOver}
         onDrop={onDrop}
       >
-        <div className="flex justify-between">
-          <label
-            htmlFor="imageInput"
-            className="cursor-pointer text-sm text-gray-700"
-          >
-            {`이미지 선택: ${
-              imageFiles.length > 0
-                ? imageFiles[imageFiles.length - 1].file.name
-                : ''
-            }`}
-          </label>{' '}
-          <span className="text-xs text-[#474747]">
-            {`${imageFiles.length}/${maxLength}`}
-          </span>
+        <div className="flex gap-5">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D9D9D930]">
+            <Image
+              src="/admin/Image_upload.png"
+              alt="이미지 업로드"
+              width={20}
+              height={20}
+            />
+          </div>
+          <div className="flex flex-col justify-center">
+            <span className="text-left text-base font-bold">
+              모집 공고 이미지
+            </span>
+            <span className="text-xs text-[#9D9D9D]">
+              PNG, JPG 형식의 이미지를 업로드해주세요!
+            </span>
+          </div>
         </div>
-
         <input
           id="imageInput"
           name="image"
@@ -77,10 +74,8 @@ function ImageUploadSection({
           onChange={handleImageChange}
           className="hidden"
         />
-        <p className="text-primary-500 text-xs">다중 선택 가능</p>
-
         {imageFiles.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="scrollbar-hide mt-4 flex gap-3 overflow-x-auto">
             {imageFiles.map((item) => (
               <div
                 key={item.id}
@@ -89,14 +84,14 @@ function ImageUploadSection({
                 onDragOver={(e) => handleDragOver(e, item.id)}
                 onDragEnd={handleDragEnd}
                 className={cn(
-                  'relative h-32 w-full overflow-hidden rounded-md border transition-all sm:h-40',
+                  'relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md border transition-all sm:h-40 sm:w-40',
                   draggingId === item.id && 'scale-95 opacity-50',
                 )}
               >
                 <img
                   src={item.previewUrl}
                   alt="preview"
-                  className="pointer-events-none h-full w-full object-cover"
+                  className="pointer-events-none h-full w-full object-contain"
                 />
 
                 <X

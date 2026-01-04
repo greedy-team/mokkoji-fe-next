@@ -8,6 +8,7 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import ky from 'ky';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import { PrevButton } from '@/shared/ui/navigation-button';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
 import StepBaseRecruitment from './steps/step-base-recruitment';
@@ -209,6 +210,10 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
 
         {currentStep === 2 && (
           <>
+            <PrevButton
+              onClick={handlePrevStep}
+              className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
+            />
             <StepContentRecruitment
               formData={formData}
               errors={errors}
@@ -218,19 +223,14 @@ function AdminRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
             {isLoadingRef.current ? (
               <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
             ) : (
-              <div className="mt-4 flex gap-2">
-                <Button type="button" variant="back" onClick={handlePrevStep}>
-                  이전
-                </Button>
-                <Button
-                  type="submit"
-                  variant="submit"
-                  disabled={!isStep2Valid()}
-                  className="flex-1"
-                >
-                  등록하기
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                variant="submit"
+                disabled={!isStep2Valid()}
+                className="mt-4 w-full"
+              >
+                등록하기
+              </Button>
             )}
           </>
         )}

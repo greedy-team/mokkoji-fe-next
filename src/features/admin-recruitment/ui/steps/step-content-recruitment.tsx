@@ -19,13 +19,9 @@ function StepContentRecruitment({
 }: ContentRecruitmentProps) {
   return (
     <>
-      <label
-        htmlFor="content"
-        className="mt-4 flex gap-2 text-base font-semibold"
-      >
-        모집 공고
+      <label htmlFor="content" className="flex gap-2 text-base font-semibold">
         {errors.content && (
-          <p className="pt-1 text-xs font-medium text-red-500">
+          <p className="pb-1 text-sm font-medium text-red-500">
             {errors.content}
           </p>
         )}

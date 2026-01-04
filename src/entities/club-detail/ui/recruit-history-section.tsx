@@ -45,6 +45,10 @@ function RecruitHistorySection({
 
   return (
     <>
+      <div className="mt-10 flex items-center gap-3">
+        <img src="/pin.svg" alt="pin" />
+        <span className="text-2xl font-bold">전체 모집 공고</span>
+      </div>
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {visible.map((r) => {
           const qs = new URLSearchParams();

@@ -39,13 +39,13 @@ function ImageUploadSection({
 }) {
   return (
     <>
-      <label htmlFor="image" className="mt-4 font-bold">
+      <label htmlFor="image" className="mt-4 text-base font-semibold">
         이미지 파일 업로드
       </label>
 
       <div
         className={cn(
-          'mt-2 rounded-md border-2 px-4 py-3 transition-all',
+          'mt-2 rounded-md border-2 border-transparent bg-[#D9D9D920] px-4 py-3 transition-all',
           imageFiles.length > 0 && 'border-[#00D451]',
         )}
         onDragOver={onDragOver}

@@ -52,7 +52,10 @@ function DateRangePicker({
   return (
     <div className="relative" ref={calendarRef}>
       {label && (
-        <label htmlFor="recruitPeriod" className="mt-4 flex gap-2 font-bold">
+        <label
+          htmlFor="recruitPeriod"
+          className="mt-4 flex gap-2 text-base font-semibold"
+        >
           {label}
           {error && (
             <p className="pt-1 text-xs font-medium text-red-500">{error}</p>
@@ -63,7 +66,7 @@ function DateRangePicker({
         type="button"
         id="recruitPeriod"
         className={cn(
-          'mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 py-3 text-xs text-gray-700 transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm',
+          'mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 border-transparent bg-[#D9D9D920] py-3 text-xs text-white transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm',
           error && 'border-red-500',
         )}
         onClick={toggleCalender}

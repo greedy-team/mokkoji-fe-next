@@ -14,6 +14,7 @@ interface RecruitDetailViewProps {
   recruitStart?: string;
   recruitEnd?: string;
   clubId: number;
+  id: number;
 }
 
 interface ClubDetailTabsProps {
@@ -22,6 +23,7 @@ interface ClubDetailTabsProps {
   recruitData: RecruitDetailViewProps;
   recruitHistories: ClubRecruitments[];
   id: number;
+  rid: number;
 }
 
 const TABS = [
@@ -36,17 +38,13 @@ function ClubDetailTabs({
   recruitData,
   recruitHistories,
   id,
+  rid,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
-    switch (key) {
-      case 'about':
-        return `/club/${id}?tab=about`;
-      case 'comments':
-        return `/club/${id}?tab=comments`;
-      case 'recruit':
-      default:
-        return `/club/${id}`;
-    }
+    const qs = new URLSearchParams();
+    qs.set('rid', String(rid));
+    if (key !== 'recruit') qs.set('tab', key);
+    return `/club/${id}?${qs.toString()}`;
   };
 
   const renderContent = () => {
@@ -56,16 +54,19 @@ function ClubDetailTabs({
       return (
         <ClubRecruitWidget
           isManageClub={isManageClub}
-          title={recruitData.title}
-          clubName={recruitData.clubName}
-          category={recruitData.category}
-          content={recruitData.content}
-          recruitForm={recruitData.recruitForm}
-          imageUrls={recruitData.imageUrls}
-          recruitStart={recruitData.recruitStart || ''}
-          recruitEnd={recruitData.recruitEnd || ''}
           clubId={Number(id)}
           recruitHistories={recruitHistories}
+          rid={rid}
+          recruitDetail={{
+            title: recruitData.title,
+            clubName: recruitData.clubName,
+            category: recruitData.category,
+            content: recruitData.content,
+            recruitForm: recruitData.recruitForm,
+            imageUrls: recruitData.imageUrls,
+            recruitStart: recruitData.recruitStart || '',
+            recruitEnd: recruitData.recruitEnd || '',
+          }}
         />
       );
     }

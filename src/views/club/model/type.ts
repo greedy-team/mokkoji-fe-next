@@ -35,6 +35,7 @@ export interface RecruitmentDetail {
   category: string;
   clubName: string;
   logo: string;
+  isAlwaysRecruiting: boolean;
 }
 
 export interface RecruitmentDetailResponse {

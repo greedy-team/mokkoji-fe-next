@@ -10,8 +10,7 @@ import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 import { ClubRecruitments } from '@/views/club/model/type';
 
-interface ClubRecruitWidgetProps {
-  isManageClub?: boolean;
+interface RecruitDetail {
   title: string;
   clubName: string;
   category: string;
@@ -20,24 +19,25 @@ interface ClubRecruitWidgetProps {
   imageUrls: string[];
   recruitStart: string;
   recruitEnd: string;
+}
+interface ClubRecruitWidgetProps {
+  isManageClub?: boolean;
+
   clubId: number;
   recruitHistories: ClubRecruitments[];
+  rid: number;
+  recruitDetail: RecruitDetail;
 }
 
 function ClubRecruitWidget({
   isManageClub,
-  title,
-  clubName,
-  category,
-  content,
-  recruitForm,
-  imageUrls,
-  recruitStart,
-  recruitEnd,
   clubId,
   recruitHistories,
+  rid,
+  recruitDetail,
 }: ClubRecruitWidgetProps) {
   const [isEditing, setIsEditing] = useState(false);
+
   const router = useRouter();
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -82,25 +82,29 @@ function ClubRecruitWidget({
       {!isEditing ? (
         <>
           <RecruitDetailView
-            title={title}
-            content={content}
-            recruitForm={recruitForm}
-            imageUrls={imageUrls}
+            title={recruitDetail.title}
+            content={recruitDetail.content}
+            recruitForm={recruitDetail.recruitForm}
+            imageUrls={recruitDetail.imageUrls}
           />
-          <RecruitHistorySection recruitHistories={recruitHistories} />
+          <RecruitHistorySection
+            clubId={clubId}
+            recruitHistories={recruitHistories}
+            selectedRid={rid}
+          />
         </>
       ) : (
         <ClubDetailRecruitmentEdit
-          title={title}
-          clubName={clubName}
-          category={category}
-          content={content}
-          recruitForm={recruitForm}
-          recruitStart={recruitStart}
-          recruitEnd={recruitEnd}
+          title={recruitDetail.title}
+          clubName={recruitDetail.clubName}
+          category={recruitDetail.category}
+          content={recruitDetail.content}
+          recruitForm={recruitDetail.recruitForm}
+          recruitStart={recruitDetail.recruitStart}
+          recruitEnd={recruitDetail.recruitEnd}
           clubId={clubId}
           setIsEditing={setIsEditing}
-          imageUrls={imageUrls}
+          imageUrls={recruitDetail.imageUrls}
         />
       )}
     </>

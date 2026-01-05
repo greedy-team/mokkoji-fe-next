@@ -83,6 +83,17 @@
     }
   }
 
+  /* 페이드아웃 효과 */
+  --animate-fadeout: fadeout 0.5s ease-out forwards;
+  @keyframes fadeout {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
   /* 노트북 애니메이션 */
   --animate-open: open 0.5s ease-out forwards;
   @keyframes open {
@@ -231,10 +242,22 @@
 body {
   margin: 0;
   padding: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 html {
   scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 @layer utilities {

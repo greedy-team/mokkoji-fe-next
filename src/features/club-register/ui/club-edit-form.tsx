@@ -65,7 +65,6 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       toast.error(res.message);
       return;
     }
-    console.log('res.data', res.data);
 
     if (logoFile && res.data && res.data.data?.updateLogo) {
       const resUpdateLogo = await ky.put(res.data.data.updateLogo, {

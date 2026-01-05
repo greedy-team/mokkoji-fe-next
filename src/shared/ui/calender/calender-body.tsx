@@ -19,6 +19,7 @@ interface CalenderBodyProps {
   endTime: TimeValue | null;
   onStartTimeChange: (time: TimeValue) => void;
   onEndTimeChange: (time: TimeValue) => void;
+  variant?: 'dark' | 'light';
 }
 
 function CalenderBody({
@@ -32,6 +33,7 @@ function CalenderBody({
   endTime,
   onStartTimeChange,
   onEndTimeChange,
+  variant = 'light',
 }: CalenderBodyProps) {
   const [currentDate, setCurrentDateState] = useState(new Date());
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
@@ -86,7 +88,13 @@ function CalenderBody({
           className="cursor-pointer"
           onClick={() => handleMonthChange(-1)}
         >
-          <Image src="/calenderPrev.svg" alt="저번달" width={20} height={20} />
+          <Image
+            src="/calenderPrev.svg"
+            alt="저번달"
+            width={20}
+            height={20}
+            className={variant === 'dark' ? 'invert' : ''}
+          />
         </button>
         <h1 className="flex-1 cursor-default py-3 text-center font-bold">
           {currentYear}년 {currentMonth + 1}월
@@ -101,7 +109,7 @@ function CalenderBody({
             alt="다음달"
             width={20}
             height={20}
-            className="rotate-180"
+            className={`rotate-180 ${variant === 'dark' ? 'invert' : ''}`}
           />
         </button>
       </div>
@@ -140,9 +148,16 @@ function CalenderBody({
                 key={data?.getDate()}
                 className={cn(
                   'mb-4 flex items-center justify-center',
-                  inRange && 'bg-gray-100',
-                  isStart && 'rounded-l-full bg-gray-100',
-                  isEnd && 'rounded-r-full bg-gray-100',
+                  inRange &&
+                    (variant === 'dark' ? 'bg-gray-900' : 'bg-gray-100'),
+                  isStart &&
+                    (variant === 'dark'
+                      ? 'rounded-l-full bg-gray-900'
+                      : 'rounded-l-full bg-gray-100'),
+                  isEnd &&
+                    (variant === 'dark'
+                      ? 'rounded-r-full bg-gray-900'
+                      : 'rounded-r-full bg-gray-100'),
                 )}
               >
                 <button
@@ -174,6 +189,7 @@ function CalenderBody({
         onEndTimeChange={onEndTimeChange}
         hasStartDate={!!startDate}
         hasEndDate={!!endDate}
+        variant={variant}
       />
       <button
         type="button"

@@ -12,6 +12,7 @@ interface DateRangePickerProps {
   onRangeComplete?: () => void;
   label?: string;
   error?: string;
+  variant?: 'dark' | 'light';
 }
 
 function DateRangePicker({
@@ -22,6 +23,7 @@ function DateRangePicker({
   onRangeComplete,
   label = '날짜 범위',
   error,
+  variant = 'light',
 }: DateRangePickerProps) {
   const {
     isCalenderOpen,
@@ -50,9 +52,12 @@ function DateRangePicker({
   };
 
   return (
-    <div className="relative" ref={calendarRef}>
+    <fieldset className="relative" ref={calendarRef}>
       {label && (
-        <label htmlFor="recruitPeriod" className="mt-4 flex gap-2 font-bold">
+        <label
+          htmlFor="recruitPeriod"
+          className="flex gap-2 text-base font-semibold"
+        >
           {label}
           {error && (
             <p className="pt-1 text-xs font-medium text-red-500">{error}</p>
@@ -63,7 +68,7 @@ function DateRangePicker({
         type="button"
         id="recruitPeriod"
         className={cn(
-          'mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 py-3 text-xs text-gray-700 transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm',
+          'mt-1 flex w-full cursor-pointer items-center justify-center gap-1 rounded-md border-2 border-transparent bg-[#D9D9D920] py-3 text-xs text-white transition-colors duration-300 focus:border-[#00D451] lg:gap-1 lg:px-2 lg:text-sm',
           error && 'border-red-500',
         )}
         onClick={toggleCalender}
@@ -75,6 +80,9 @@ function DateRangePicker({
           className={cn(
             'absolute z-50 mt-1 min-w-full origin-top rounded-lg border bg-white p-4 text-center shadow-2xl',
             isCalenderClosing ? 'animate-scale-out' : 'animate-scale-in',
+            variant === 'light'
+              ? 'bg-white text-black'
+              : 'bg-[#1B1B1B] text-white',
           )}
         >
           <CalenderBody
@@ -88,10 +96,11 @@ function DateRangePicker({
             endTime={endTime}
             onStartTimeChange={setStartTime}
             onEndTimeChange={setEndTime}
+            variant="dark"
           />
         </div>
       )}
-    </div>
+    </fieldset>
   );
 }
 

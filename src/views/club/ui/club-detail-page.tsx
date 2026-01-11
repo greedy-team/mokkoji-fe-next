@@ -15,7 +15,7 @@ interface ClubDetailPageProps {
 
 async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
-  const tab = (await searchParams).tab || 'recruit';
+  const { tab = 'recruit', rid } = await searchParams;
 
   const session = await auth();
   const role = session?.role;
@@ -45,10 +45,10 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
     redirect(`/club/${id}?${qs.toString()}`);
   }
 
-  const rid = Number((await searchParams).rid) || recent.data.id;
+  const recruitmentId = Number(rid) || recent.data.id;
   if (!rid) notFound();
 
-  const selected = await getRecruitDetail(rid);
+  const selected = await getRecruitDetail(recruitmentId);
   if (selected?.status === 404 || !selected.data) notFound();
   if (!selected.ok) return <ErrorBoundaryUi />;
 
@@ -73,7 +73,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         recruitData={selected.data}
         recruitHistories={historiesArray}
         id={Number(id)}
-        rid={rid}
+        rid={recruitmentId}
       />
     </div>
   );

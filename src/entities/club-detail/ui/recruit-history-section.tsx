@@ -37,11 +37,13 @@ function RecruitHistorySection({
   const list = Array.isArray(recruitHistories) ? recruitHistories : [];
   const pageSize = usePageSize();
 
-  const [page, setPage] = useState(0);
-  const start = page * pageSize;
-  const visible = list.slice(start, start + pageSize);
-  const canPrev = page > 0;
-  const canNext = start + pageSize < list.length;
+  const [index, setIndex] = useState(0);
+  const maxIndex = Math.max(0, list.length - pageSize);
+
+  const canPrev = index > 0;
+  const canNext = index < maxIndex;
+
+  const itemWidth = `${100 / pageSize}%`;
 
   return (
     <>
@@ -49,39 +51,53 @@ function RecruitHistorySection({
         <img src="/pin.svg" alt="pin" />
         <span className="text-2xl font-bold">전체 모집 공고</span>
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((r) => {
-          const qs = new URLSearchParams();
-          qs.set('rid', String(r.id));
-          const href = `/club/${clubId}?${qs.toString()}`;
 
-          return (
-            <Link key={r.id} href={href}>
-              <RecruitHistoryCard
-                recruitHistories={r}
-                isSelected={selectedRid === r.id}
-              />
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className="mt-6 flex justify-center gap-6 text-sm">
-        <button
-          onClick={() => setPage(page - 1)}
-          disabled={!canPrev}
-          className="disabled:opacity-40"
+      <div className="mt-6 overflow-hidden pt-2">
+        <div
+          className="flex transition-transform duration-300 ease-out"
+          style={{
+            transform: `translateX(-${index * (100 / pageSize)}%)`,
+          }}
         >
-          &lt; 이전
-        </button>
+          {list.map((r) => {
+            const qs = new URLSearchParams();
+            qs.set('rid', String(r.id));
+            const href = `/club/${clubId}?${qs.toString()}`;
 
-        <button
-          onClick={() => setPage(page + 1)}
-          disabled={!canNext}
-          className="disabled:opacity-40"
-        >
-          다음 &gt;
-        </button>
+            return (
+              <div
+                key={r.id}
+                style={{ width: itemWidth }}
+                className="shrink-0 px-2"
+              >
+                <Link href={href}>
+                  <RecruitHistoryCard
+                    recruitHistories={r}
+                    isSelected={selectedRid === r.id}
+                  />
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 flex justify-center gap-6 text-sm">
+          <button
+            onClick={() => setIndex((v) => Math.max(0, v - 1))}
+            disabled={!canPrev}
+            className="disabled:opacity-40"
+          >
+            &lt; 이전
+          </button>
+
+          <button
+            onClick={() => setIndex((v) => Math.min(maxIndex, v + 1))}
+            disabled={!canNext}
+            className="disabled:opacity-40"
+          >
+            다음 &gt;
+          </button>
+        </div>
       </div>
     </>
   );

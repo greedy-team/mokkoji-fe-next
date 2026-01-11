@@ -47,12 +47,12 @@ function RecruitHistorySection({
 
   return (
     <>
-      <div className="mt-10 flex items-center gap-3">
-        <img src="/pin.svg" alt="pin" />
-        <span className="text-2xl font-bold">전체 모집 공고</span>
+      <div className="mt-10 flex items-center gap-2 lg:gap-3">
+        <img src="/pin.svg" alt="pin" className="w-8" />
+        <span className="text-xl font-bold lg:text-2xl">전체 모집 공고</span>
       </div>
 
-      <div className="mt-6 overflow-hidden pt-2">
+      <div className="mt-5 overflow-hidden pt-2">
         <div
           className="flex transition-transform duration-300 ease-out"
           style={{

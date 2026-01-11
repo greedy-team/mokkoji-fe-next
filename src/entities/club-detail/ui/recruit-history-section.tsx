@@ -9,7 +9,7 @@ interface RecruitHistorySectionProps {
   selectedRid: number;
 }
 
-function useVisibleCardCount() {
+function useRecruitHistoryVisibleCardCount() {
   const [cardCount, setCardCount] = useState(1);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function RecruitHistorySection({
   selectedRid,
 }: RecruitHistorySectionProps) {
   const list = Array.isArray(recruitHistories) ? recruitHistories : [];
-  const visibleCardCount = useVisibleCardCount();
+  const visibleCardCount = useRecruitHistoryVisibleCardCount();
 
   const [index, setIndex] = useState(0);
   const maxIndex = Math.max(0, list.length - visibleCardCount);

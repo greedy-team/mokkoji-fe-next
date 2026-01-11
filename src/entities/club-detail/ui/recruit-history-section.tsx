@@ -60,9 +60,9 @@ function RecruitHistorySection({
           }}
         >
           {list.map((r) => {
-            const qs = new URLSearchParams();
-            qs.set('rid', String(r.id));
-            const href = `/club/${clubId}?${qs.toString()}`;
+            const queryString = new URLSearchParams();
+            queryString.set('rid', String(r.id));
+            const href = `/club/${clubId}?${queryString.toString()}`;
 
             return (
               <div

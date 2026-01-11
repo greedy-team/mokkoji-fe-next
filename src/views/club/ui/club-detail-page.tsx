@@ -39,10 +39,10 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
     : [];
 
   if (!(await searchParams).rid) {
-    const qs = new URLSearchParams();
-    qs.set('rid', String(recent.data.id));
-    if (tab !== 'recruit') qs.set('tab', tab);
-    redirect(`/club/${id}?${qs.toString()}`);
+    const queryString = new URLSearchParams();
+    queryString.set('rid', String(recent.data.id));
+    if (tab !== 'recruit') queryString.set('tab', tab);
+    redirect(`/club/${id}?${queryString.toString()}`);
   }
 
   const recruitmentId = Number(rid) || recent.data.id;

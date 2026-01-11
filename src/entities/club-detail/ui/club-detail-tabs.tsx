@@ -41,10 +41,10 @@ function ClubDetailTabs({
   rid,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
-    const qs = new URLSearchParams();
-    qs.set('rid', String(rid));
-    if (key !== 'recruit') qs.set('tab', key);
-    return `/club/${id}?${qs.toString()}`;
+    const queryString = new URLSearchParams();
+    queryString.set('rid', String(rid));
+    if (key !== 'recruit') queryString.set('tab', key);
+    return `/club/${id}?${queryString.toString()}`;
   };
 
   const renderContent = () => {

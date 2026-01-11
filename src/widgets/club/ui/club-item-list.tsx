@@ -12,7 +12,7 @@ function getInitialLayout(userAgent: string) {
 
   if (isMobile) return { columns: 1, cardHeight: 140 };
   if (isTablet) return { columns: 2, cardHeight: 140 };
-  return { columns: 3, cardHeight: 198 };
+  return { columns: 3, cardHeight: 150 };
 }
 
 async function ClubItemList() {

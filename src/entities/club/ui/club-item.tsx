@@ -29,7 +29,7 @@ function ClubItem({
   logo,
   clubId,
   status,
-  height = 198,
+  height = 150,
 }: ClubItemProps) {
   return (
     <div

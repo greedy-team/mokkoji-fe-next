@@ -35,8 +35,25 @@ export interface RecruitmentDetail {
   category: string;
   clubName: string;
   logo: string;
+  isAlwaysRecruiting: boolean;
 }
 
 export interface RecruitmentDetailResponse {
   data: RecruitmentDetail;
+}
+
+export interface ClubRecruitments {
+  id: number;
+  title: string;
+  content: string;
+  recruitStart: string;
+  recruitEnd: string;
+  status: RecruitStatus;
+  createdAt: string;
+  firstImage?: string;
+  isAlwaysRecruiting: boolean;
+}
+
+export interface ClubRecruitmentsResponse {
+  recruitments: ClubRecruitments[];
 }

@@ -34,10 +34,12 @@ function RecruitDetailHeader({
   return (
     <>
       <header className="w-full cursor-default">
-        <div className="mb-4 flex flex-row items-center gap-5">
+        <div className="mb-4 flex flex-row items-center gap-2.5 lg:gap-5">
           <ClickLogo logo={logo} title={title} />
-          <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
-          <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
+          <h1 className="text-xl font-bold whitespace-nowrap lg:text-4xl">
+            {title}
+          </h1>
+          <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-3xl">
             <Link
               href={`/recruit?category=${ClubCategoryToLabel[category].toLowerCase()}`}
             >
@@ -46,12 +48,15 @@ function RecruitDetailHeader({
           </p>
         </div>
         <div className="mb-4 flex flex-row items-center gap-4 lg:text-xl">
-          <RadiusTag status={status} className="lg:text-[16px]" />
+          <RadiusTag
+            status={status}
+            className="whitespace-nowrap lg:text-[16px]"
+          />
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
             decoration={false}
-            className="lg:text-lg"
+            className="whitespace-nowrap lg:text-lg"
           />
         </div>
         <div className="flex justify-between">

@@ -3,17 +3,17 @@ import { ApiResponse } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import { auth } from '@/auth';
 import serverApi from '@/shared/api/server-api';
-import { RecruitmentDetail } from '../model/type';
+import { ClubRecruitmentsResponse } from '../model/type';
 
-async function getRecruitDetail(id: number) {
+async function getClubRecruitments(clubId: number) {
   const session = await auth();
   try {
-    let response: ApiResponse<RecruitmentDetail>;
+    let response: ApiResponse<ClubRecruitmentsResponse>;
     if (session?.accessToken) {
-      response = await api.get(`recruitments/club/recent/${id}`).json();
+      response = await api.get(`recruitments/club/${clubId}`).json();
     } else {
       response = await serverApi
-        .get(`recruitments/club/recent/${id}`, {
+        .get(`recruitments/club/${clubId}`, {
           cache: 'force-cache',
           next: { revalidate: 3600 },
         })
@@ -25,4 +25,4 @@ async function getRecruitDetail(id: number) {
   }
 }
 
-export default getRecruitDetail;
+export default getClubRecruitments;

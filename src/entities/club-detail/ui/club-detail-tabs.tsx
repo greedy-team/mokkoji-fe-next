@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
+import { ClubRecruitments } from '@/views/club/model/type';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -13,13 +14,16 @@ interface RecruitDetailViewProps {
   recruitStart?: string;
   recruitEnd?: string;
   clubId: number;
+  id: number;
 }
 
 interface ClubDetailTabsProps {
   activeTab: string;
   isManageClub: boolean;
   recruitData: RecruitDetailViewProps;
+  recruitHistories: ClubRecruitments[];
   id: number;
+  rid: number;
 }
 
 const TABS = [
@@ -32,18 +36,15 @@ function ClubDetailTabs({
   activeTab,
   isManageClub,
   recruitData,
+  recruitHistories,
   id,
+  rid,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
-    switch (key) {
-      case 'about':
-        return `/club/${id}?tab=about`;
-      case 'comments':
-        return `/club/${id}?tab=comments`;
-      case 'recruit':
-      default:
-        return `/club/${id}`;
-    }
+    const queryString = new URLSearchParams();
+    queryString.set('rid', String(rid));
+    if (key !== 'recruit') queryString.set('tab', key);
+    return `/club/${id}?${queryString.toString()}`;
   };
 
   const renderContent = () => {
@@ -53,15 +54,19 @@ function ClubDetailTabs({
       return (
         <ClubRecruitWidget
           isManageClub={isManageClub}
-          title={recruitData.title}
-          clubName={recruitData.clubName}
-          category={recruitData.category}
-          content={recruitData.content}
-          recruitForm={recruitData.recruitForm}
-          imageUrls={recruitData.imageUrls}
-          recruitStart={recruitData.recruitStart || ''}
-          recruitEnd={recruitData.recruitEnd || ''}
           clubId={Number(id)}
+          recruitHistories={recruitHistories}
+          rid={rid}
+          recruitDetail={{
+            title: recruitData.title,
+            clubName: recruitData.clubName,
+            category: recruitData.category,
+            content: recruitData.content,
+            recruitForm: recruitData.recruitForm,
+            imageUrls: recruitData.imageUrls,
+            recruitStart: recruitData.recruitStart || '',
+            recruitEnd: recruitData.recruitEnd || '',
+          }}
         />
       );
     }

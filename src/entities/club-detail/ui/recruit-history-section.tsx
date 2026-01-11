@@ -9,16 +9,16 @@ interface RecruitHistorySectionProps {
   selectedRid: number;
 }
 
-function usePageSize() {
-  const [pageSize, setPageSize] = useState(1);
+function useVisibleCardCount() {
+  const [cardCount, setCardCount] = useState(1);
 
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth;
 
-      if (w >= 1024) setPageSize(3);
-      else if (w >= 640) setPageSize(2);
-      else setPageSize(1);
+      if (w >= 1024) setCardCount(3);
+      else if (w >= 640) setCardCount(2);
+      else setCardCount(1);
     };
 
     update();
@@ -26,7 +26,7 @@ function usePageSize() {
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  return pageSize;
+  return cardCount;
 }
 
 function RecruitHistorySection({
@@ -35,15 +35,15 @@ function RecruitHistorySection({
   selectedRid,
 }: RecruitHistorySectionProps) {
   const list = Array.isArray(recruitHistories) ? recruitHistories : [];
-  const pageSize = usePageSize();
+  const visibleCardCount = useVisibleCardCount();
 
   const [index, setIndex] = useState(0);
-  const maxIndex = Math.max(0, list.length - pageSize);
+  const maxIndex = Math.max(0, list.length - visibleCardCount);
 
   const canPrev = index > 0;
   const canNext = index < maxIndex;
 
-  const itemWidth = `${100 / pageSize}%`;
+  const itemWidth = `${100 / visibleCardCount}%`;
 
   return (
     <>
@@ -56,7 +56,7 @@ function RecruitHistorySection({
         <div
           className="flex transition-transform duration-300 ease-out"
           style={{
-            transform: `translateX(-${index * (100 / pageSize)}%)`,
+            transform: `translateX(-${index * (100 / visibleCardCount)}%)`,
           }}
         >
           {list.map((r) => {

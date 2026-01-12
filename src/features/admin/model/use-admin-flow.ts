@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import type {
   AdminClubInfo,
@@ -18,48 +18,42 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     actionType: undefined,
   });
 
-  const validateClubAccess = useCallback(
-    (clubId: number) => {
-      return allowedClubs.some((club) => club.clubId === clubId);
-    },
-    [allowedClubs],
-  );
+  const validateClubAccess = (clubId: number) => {
+    return allowedClubs.some((club) => club.clubId === clubId);
+  };
 
-  const selectClub = useCallback(
-    (clubId: number, clubName: string) => {
-      if (!validateClubAccess(clubId)) {
-        toast.error('접근 권한이 없는 동아리입니다.');
-        return;
-      }
+  const selectClub = (clubId: number, clubName: string) => {
+    if (!validateClubAccess(clubId)) {
+      toast.error('접근 권한이 없는 동아리입니다.');
+      return;
+    }
 
-      setState({
-        step: 'postType',
-        selectedClubId: clubId,
-        selectedClubName: clubName,
-        contentType: undefined,
-        actionType: undefined,
-      });
-    },
-    [validateClubAccess],
-  );
+    setState({
+      step: 'postType',
+      selectedClubId: clubId,
+      selectedClubName: clubName,
+      contentType: undefined,
+      actionType: undefined,
+    });
+  };
 
-  const selectContentType = useCallback((contentType: ContentType) => {
+  const selectContentType = (contentType: ContentType) => {
     setState((prev) => ({
       ...prev,
       step: 'editMode',
       contentType,
     }));
-  }, []);
+  };
 
-  const selectActionType = useCallback((actionType: ActionType) => {
+  const selectActionType = (actionType: ActionType) => {
     setState((prev) => ({
       ...prev,
       actionType,
       isReadyToRedirect: true,
     }));
-  }, []);
+  };
 
-  const goBack = useCallback(() => {
+  const goBack = () => {
     setState((prev) => {
       if (prev.step === 'postType') {
         return {
@@ -79,9 +73,9 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
 
       return prev;
     });
-  }, []);
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setState({
       step: 'selectClub',
       selectedClubId: undefined,
@@ -89,9 +83,9 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
       contentType: undefined,
       actionType: undefined,
     });
-  }, []);
+  };
 
-  const getRedirectUrl = useCallback(() => {
+  const getRedirectUrl = () => {
     if (
       state.isReadyToRedirect &&
       state.selectedClubId &&
@@ -101,12 +95,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
       return `/admin/${state.contentType}/${state.actionType}/${state.selectedClubId}`;
     }
     return null;
-  }, [
-    state.isReadyToRedirect,
-    state.selectedClubId,
-    state.contentType,
-    state.actionType,
-  ]);
+  };
 
   return {
     ...state,

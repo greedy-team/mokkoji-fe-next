@@ -15,8 +15,3 @@ export interface AdminFlowState {
   actionType?: ActionType;
   isReadyToRedirect?: boolean;
 }
-
-export interface StepProps {
-  onNext: (data?: any) => void;
-  onBack?: () => void;
-}

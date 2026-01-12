@@ -1,6 +1,6 @@
 import { ClubFormData } from '../model/type';
 
-function validateField(name: keyof ClubFormData, value: string): string {
+function getValidationError(name: keyof ClubFormData, value: string): string {
   if (name !== 'instagram' && !value.trim()) {
     return '필수 입력 항목입니다.';
   }
@@ -20,4 +20,4 @@ function validateField(name: keyof ClubFormData, value: string): string {
   return '';
 }
 
-export default validateField;
+export default getValidationError;

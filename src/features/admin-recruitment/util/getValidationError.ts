@@ -1,6 +1,9 @@
 import { RecruitmentFormData } from '../model/type';
 
-function validateField(name: keyof RecruitmentFormData, value: string): string {
+function getValidationError(
+  name: keyof RecruitmentFormData,
+  value: string,
+): string {
   if (!value.trim()) {
     return '필수 입력 항목입니다.';
   }
@@ -12,4 +15,4 @@ function validateField(name: keyof RecruitmentFormData, value: string): string {
   return '';
 }
 
-export default validateField;
+export default getValidationError;

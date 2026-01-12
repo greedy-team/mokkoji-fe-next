@@ -66,6 +66,10 @@ function AdminRecruitmentForm({
 
   const [state, dispatch] = useReducer(reducer, getInitialState());
   const { formData, errors } = state;
+
+  const initialImageUrls =
+    action === 'edit' && initialData ? initialData.imageUrls : [];
+
   const {
     imageFiles,
     handleImageChange,
@@ -77,9 +81,7 @@ function AdminRecruitmentForm({
     draggingId,
     onDragOver,
     onDrop,
-  } = useImageUpload(
-    action === 'edit' && initialData ? initialData.imageUrls : [],
-  );
+  } = useImageUpload(initialImageUrls);
 
   useEffect(() => {
     if (targetStep !== currentStep) {

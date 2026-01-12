@@ -1,4 +1,4 @@
-import validateField from '../../util/validateField';
+import getValidationError from '../../util/getValidationError';
 import { Action, StateProp } from '../type';
 
 export const initialState: StateProp = {
@@ -25,7 +25,7 @@ export default function reducer(state: StateProp, action: Action): StateProp {
     case 'VALIDATE_FIELD': {
       const { name } = action;
       const value = state.formData[name];
-      const errorMsg = validateField(name, value as string);
+      const errorMsg = getValidationError(name, value as string);
       return {
         ...state,
         errors: { ...state.errors, [name]: errorMsg },

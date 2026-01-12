@@ -2,15 +2,19 @@
 
 import Image from 'next/image';
 import { PrevButton } from '@/shared/ui/navigation-button';
-import type { ActionType } from '../../model/types';
+import type { ContentType } from '../../model/types';
 
-interface StepSelectActionProps {
+interface StepSelectPostTypeProps {
   clubName?: string;
-  onNext: (actionType: ActionType) => void;
+  onNext: (contentType: ContentType) => void;
   onBack: () => void;
 }
 
-function StepSelectAction({ clubName, onNext, onBack }: StepSelectActionProps) {
+function StepSelectPostType({
+  clubName,
+  onNext,
+  onBack,
+}: StepSelectPostTypeProps) {
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2">
@@ -24,26 +28,26 @@ function StepSelectAction({ clubName, onNext, onBack }: StepSelectActionProps) {
         <button
           type="button"
           className="flex gap-3.5"
-          onClick={() => onNext('create')}
+          onClick={() => onNext('recruitment')}
         >
-          <span className="text-2xl font-bold">모집글 생성</span>
+          <span className="text-2xl font-bold">모집글</span>
           <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
         </button>
         <button
           type="button"
           className="flex gap-3.5"
-          onClick={() => onNext('edit')}
+          onClick={() => onNext('description')}
         >
-          <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
+          <span className="text-2xl font-bold">소개글</span>
           <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
         </button>
       </div>
 
       <PrevButton onClick={onBack} className="mt-4">
-        콘텐츠 다시 선택하기
+        동아리 다시 선택하기
       </PrevButton>
     </div>
   );
 }
 
-export default StepSelectAction;
+export default StepSelectPostType;

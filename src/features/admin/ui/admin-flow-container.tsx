@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import type { AdminClubInfo } from '../model/types';
-import StepSelectAction from './steps/step-select-action';
 import useAdminFlow from '../model/use-admin-flow';
 import StepSelectClub from './steps/step-select-club';
-import StepSelectContent from './steps/step-select-content';
+import StepSelectPostType from './steps/step-select-post-type';
+import StepSelectEditMode from './steps/step-select-edit-mode';
 
 interface AdminFlowContainerProps {
   allowedClubs: AdminClubInfo[];
@@ -18,10 +18,8 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    if (flow.step === '4') {
-      redirect(
-        `/admin/${flow.contentType}/${flow.actionType}/${flow.selectedClubId}`,
-      );
+    if (flow.redirectUrl) {
+      redirect(flow.redirectUrl);
     }
 
     if (flow.step !== currentStep) {
@@ -36,7 +34,7 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
     }
 
     return undefined;
-  }, [flow.step, currentStep]);
+  }, [flow.redirectUrl, flow.step, currentStep]);
 
   return (
     <div
@@ -46,20 +44,20 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
           : 'var(--animate-reveal)',
       }}
     >
-      {currentStep === '1' && (
+      {currentStep === 'selectClub' && (
         <StepSelectClub clubs={allowedClubs} onNext={flow.selectClub} />
       )}
 
-      {currentStep === '2' && (
-        <StepSelectContent
+      {currentStep === 'postType' && (
+        <StepSelectPostType
           clubName={flow.selectedClubName}
           onNext={flow.selectContentType}
           onBack={flow.goBack}
         />
       )}
 
-      {currentStep === '3' && (
-        <StepSelectAction
+      {currentStep === 'editMode' && (
+        <StepSelectEditMode
           clubName={flow.selectedClubName}
           onNext={flow.selectActionType}
           onBack={flow.goBack}

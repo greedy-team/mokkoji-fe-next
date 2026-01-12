@@ -2,19 +2,19 @@
 
 import Image from 'next/image';
 import { PrevButton } from '@/shared/ui/navigation-button';
-import type { ContentType } from '../../model/types';
+import type { ActionType } from '../../model/types';
 
-interface StepSelectContentProps {
+interface StepSelectEditModeProps {
   clubName?: string;
-  onNext: (contentType: ContentType) => void;
+  onNext: (actionType: ActionType) => void;
   onBack: () => void;
 }
 
-function StepSelectContent({
+function StepSelectEditMode({
   clubName,
   onNext,
   onBack,
-}: StepSelectContentProps) {
+}: StepSelectEditModeProps) {
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2">
@@ -28,26 +28,26 @@ function StepSelectContent({
         <button
           type="button"
           className="flex gap-3.5"
-          onClick={() => onNext('recruitment')}
+          onClick={() => onNext('create')}
         >
-          <span className="text-2xl font-bold">모집글</span>
+          <span className="text-2xl font-bold">모집글 생성</span>
           <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
         </button>
         <button
           type="button"
           className="flex gap-3.5"
-          onClick={() => onNext('description')}
+          onClick={() => onNext('edit')}
         >
-          <span className="text-2xl font-bold">소개글</span>
+          <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
           <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
         </button>
       </div>
 
       <PrevButton onClick={onBack} className="mt-4">
-        동아리 다시 선택하기
+        콘텐츠 다시 선택하기
       </PrevButton>
     </div>
   );
 }
 
-export default StepSelectContent;
+export default StepSelectEditMode;

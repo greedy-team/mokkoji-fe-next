@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import type {
-  Step,
   AdminClubInfo,
   ContentType,
   ActionType,
@@ -12,7 +11,7 @@ import type {
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const [state, setState] = useState<AdminFlowState>({
-    step: '1',
+    step: 'selectClub',
     selectedClubId: undefined,
     selectedClubName: undefined,
     contentType: undefined,
@@ -34,7 +33,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
       }
 
       setState({
-        step: '2',
+        step: 'postType',
         selectedClubId: clubId,
         selectedClubName: clubName,
         contentType: undefined,
@@ -47,7 +46,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const selectContentType = useCallback((contentType: ContentType) => {
     setState((prev) => ({
       ...prev,
-      step: '3',
+      step: 'editMode',
       contentType,
     }));
   }, []);
@@ -55,39 +54,25 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const selectActionType = useCallback((actionType: ActionType) => {
     setState((prev) => ({
       ...prev,
-      step: '4',
       actionType,
+      isReadyToRedirect: true,
     }));
   }, []);
 
   const goBack = useCallback(() => {
     setState((prev) => {
-      const currentStep = Number(prev.step);
-      if (currentStep <= 1) return prev;
-
-      const newStep = String(currentStep - 1) as Step;
-
-      if (newStep === '1') {
+      if (prev.step === 'postType') {
         return {
-          step: newStep,
-          selectedClubId: undefined,
-          selectedClubName: undefined,
+          ...prev,
+          step: 'selectClub',
           contentType: undefined,
           actionType: undefined,
         };
       }
-      if (newStep === '2') {
+      if (prev.step === 'editMode') {
         return {
           ...prev,
-          step: newStep,
-          contentType: undefined,
-          actionType: undefined,
-        };
-      }
-      if (newStep === '3') {
-        return {
-          ...prev,
-          step: newStep,
+          step: 'postType',
           actionType: undefined,
         };
       }
@@ -98,7 +83,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
 
   const reset = useCallback(() => {
     setState({
-      step: '1',
+      step: 'selectClub',
       selectedClubId: undefined,
       selectedClubName: undefined,
       contentType: undefined,
@@ -106,9 +91,26 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     });
   }, []);
 
+  const getRedirectUrl = useCallback(() => {
+    if (
+      state.isReadyToRedirect &&
+      state.selectedClubId &&
+      state.contentType &&
+      state.actionType
+    ) {
+      return `/admin/${state.contentType}/${state.actionType}/${state.selectedClubId}`;
+    }
+    return null;
+  }, [
+    state.isReadyToRedirect,
+    state.selectedClubId,
+    state.contentType,
+    state.actionType,
+  ]);
+
   return {
     ...state,
-
+    redirectUrl: getRedirectUrl(),
     selectClub,
     selectContentType,
     selectActionType,

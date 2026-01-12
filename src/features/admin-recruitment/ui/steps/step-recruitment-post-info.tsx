@@ -1,7 +1,7 @@
 import Textarea from '@/shared/ui/textarea';
 import { RecruitmentFormData } from '../../model/type';
 
-interface ContentRecruitmentProps {
+interface StepRecruitmentPostInfoProps {
   formData: RecruitmentFormData;
   errors: Partial<Record<keyof RecruitmentFormData, string>>;
   onChange: <K extends keyof RecruitmentFormData>(
@@ -11,12 +11,12 @@ interface ContentRecruitmentProps {
   onBlur: (field: keyof RecruitmentFormData) => void;
 }
 
-function StepContentRecruitment({
+function StepRecruitmentPostInfo({
   formData,
   errors,
   onChange,
   onBlur,
-}: ContentRecruitmentProps) {
+}: StepRecruitmentPostInfoProps) {
   return (
     <>
       <label htmlFor="content" className="flex gap-2 text-base font-semibold">
@@ -45,4 +45,4 @@ function StepContentRecruitment({
   );
 }
 
-export default StepContentRecruitment;
+export default StepRecruitmentPostInfo;

@@ -12,10 +12,10 @@ import { PrevButton } from '@/shared/ui/navigation-button';
 import { RecruitmentDetail } from '@/views/club/model/type';
 import { FormField, RecruitmentFormData } from '../model/type';
 import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
-import StepBaseRecruitment from './steps/step-base-recruitment';
-import StepContentRecruitment from './steps/step-content-recruitment';
 import postRecruitmentForm from '../api/postRecruitmentForm';
 import patchRecruitmentForm from '../api/patchRecruitmentForm';
+import StepRecruitmentPostInfo from './steps/step-recruitment-post-info';
+import StepRecruitmentBasicInfo from './steps/step-recruitment-basic-info';
 
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
@@ -107,7 +107,7 @@ function AdminRecruitmentForm({
     dispatch({ type: 'VALIDATE_FIELD', name });
   };
 
-  const isStep1Valid = () => {
+  const isBasicInfoValid = () => {
     return step1Fields.every((field) => {
       const value = formData[field.name];
       const error = errors[field.name];
@@ -115,7 +115,7 @@ function AdminRecruitmentForm({
     });
   };
 
-  const isStep2Valid = () => {
+  const isPostInfoValid = () => {
     return step2Fields.every((field) => {
       const value = formData[field.name];
       const error = errors[field.name];
@@ -130,7 +130,7 @@ function AdminRecruitmentForm({
       handleBlur(field.name);
     });
 
-    if (isStep1Valid()) {
+    if (isBasicInfoValid()) {
       setTargetStep(2);
     } else {
       toast.error('모든 필수 항목을 입력해주세요.');
@@ -212,7 +212,7 @@ function AdminRecruitmentForm({
       >
         {currentStep === 1 && (
           <>
-            <StepBaseRecruitment
+            <StepRecruitmentBasicInfo
               formData={formData}
               errors={errors}
               onChange={handleChange}
@@ -236,7 +236,7 @@ function AdminRecruitmentForm({
                 type="submit"
                 variant="next"
                 size="none"
-                disabled={!isStep1Valid()}
+                disabled={!isBasicInfoValid()}
                 className="mt-13 w-full"
               >
                 다음
@@ -251,7 +251,7 @@ function AdminRecruitmentForm({
               onClick={handlePrevStep}
               className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
             />
-            <StepContentRecruitment
+            <StepRecruitmentPostInfo
               formData={formData}
               errors={errors}
               onChange={handleChange}
@@ -263,7 +263,7 @@ function AdminRecruitmentForm({
               <Button
                 type="submit"
                 variant="submit"
-                disabled={!isStep2Valid()}
+                disabled={!isPostInfoValid()}
                 className="mt-4 w-full"
               >
                 {action === 'edit' ? '수정하기' : '등록하기'}

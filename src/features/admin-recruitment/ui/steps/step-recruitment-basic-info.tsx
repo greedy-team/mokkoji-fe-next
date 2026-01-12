@@ -11,7 +11,7 @@ interface ImageItem {
   imageName: string;
 }
 
-interface BaseRecruitmentProps {
+interface StepRecruitmentBasicInfoProps {
   formData: RecruitmentFormData;
   errors: Partial<Record<keyof RecruitmentFormData, string>>;
   onChange: <K extends keyof RecruitmentFormData>(
@@ -35,7 +35,7 @@ interface BaseRecruitmentProps {
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-function StepBaseRecruitment({
+function StepRecruitmentBasicInfo({
   formData,
   errors,
   onChange,
@@ -51,7 +51,7 @@ function StepBaseRecruitment({
   draggingId,
   onDragOver,
   onDrop,
-}: BaseRecruitmentProps) {
+}: StepRecruitmentBasicInfoProps) {
   return (
     <div className="flex flex-col gap-10">
       <fieldset>
@@ -128,4 +128,4 @@ function StepBaseRecruitment({
   );
 }
 
-export default StepBaseRecruitment;
+export default StepRecruitmentBasicInfo;

@@ -23,7 +23,7 @@ function PeriodSection({
   ) : (
     <span className={cn(`text-xs leading-1 font-semibold ${className}`)}>
       {decoration ? (
-        <p className="text-gray-400">모집기한</p>
+        <span className="text-gray-400">모집기한 · </span>
       ) : (
         <span>모집기한 | </span>
       )}

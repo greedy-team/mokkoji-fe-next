@@ -34,31 +34,45 @@ function ClubItem({
   return (
     <div
       style={{ height }}
-      className="relative flex w-[100%] flex-col gap-2 rounded-lg bg-[#F8F8F8] p-3 text-[#474747] transition-shadow duration-300 hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2)] lg:w-auto lg:p-5"
+      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-lg bg-[#F8F8F8] px-7 py-8 text-[#474747] transition-shadow duration-300"
     >
-      <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
-        <div className="flex flex-row items-center gap-4">
-          <Avatar className="size-12 lg:size-14">
+      <div className="flex w-full items-center">
+        <div className="flex gap-4">
+          <Avatar className="h-[54px] w-[54px]">
             <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
-          <div>
-            <PeriodSection startDate={startDate} endDate={endDate} />
-            <h1 className="text-text-primary text-base font-bold lg:text-xl">
-              {name}
-            </h1>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1">
+              <h1 className="text-text-primary min-w-0 font-extrabold whitespace-nowrap lg:text-2xl">
+                {name}
+              </h1>
+
+              <div className="shrink-0">
+                <FavoriteButton
+                  isFavorite={isFavorite || false}
+                  clubId={clubId}
+                  customClass="scale-80 lg:scale-100"
+                />
+              </div>
+
+              <RadiusTag
+                status={status}
+                className="absolute top-8 right-7 shrink-0 lg:text-[16px]"
+              />
+            </div>
+
+            <div className="mt-1 whitespace-nowrap">
+              <PeriodSection startDate={startDate} endDate={endDate} />
+            </div>
           </div>
         </div>
-        <RadiusTag status={status} className="lg:text-[16px]" />
       </div>
-      <p className="overflow-hidden pr-7 text-[12px] break-words text-ellipsis whitespace-nowrap lg:text-xs">
+
+      <p className="overflow-hidden text-[12px] break-words text-ellipsis whitespace-nowrap lg:text-xs">
         {description}
       </p>
-      <FavoriteButton
-        isFavorite={isFavorite || false}
-        clubId={clubId}
-        customClass="absolute bottom-4 right-4 scale-80 lg:scale-100"
-      />
     </div>
   );
 }

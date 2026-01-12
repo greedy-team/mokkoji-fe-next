@@ -38,35 +38,26 @@ export type Action =
   | { type: 'UPDATE_IMAGE'; file: File }
   | { type: 'RESET_FORM' };
 
-export interface RecruitmentResponse {
+interface BaseResponse<T> {
   ok: boolean;
   message: string;
-  data?: {
-    data: {
-      id: number;
-      uploadImageUrls: string[];
-    };
-  };
+  data?: T;
 }
 
-export interface RecruitmentPatchResponse {
-  ok: boolean;
-  message: string;
-  data?: {
-    data: {
-      id: number;
-      uploadImageUrls: string[];
-    };
-  };
-}
-
-export interface RecruitmentDeleteResponse {
-  ok: boolean;
-  message: string;
-  data?: {
+export interface RecruitmentData {
+  data: {
     id: number;
-    deleteImageUrls: string[];
+    uploadImageUrls: string[];
   };
 }
+
+export interface RecruitmentDeleteData {
+  id: number;
+  deleteImageUrls: string[];
+}
+
+export type RecruitmentResponse = BaseResponse<RecruitmentData>;
+export type RecruitmentPatchResponse = BaseResponse<RecruitmentData>;
+export type RecruitmentDeleteResponse = BaseResponse<RecruitmentDeleteData>;
 
 export type Step = '1' | '2';

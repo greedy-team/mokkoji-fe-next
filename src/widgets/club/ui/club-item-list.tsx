@@ -10,8 +10,8 @@ function getInitialLayout(userAgent: string) {
   const isTablet =
     /iPad|Android/i.test(userAgent) && !/Mobile/i.test(userAgent);
 
-  if (isMobile) return { columns: 1, cardHeight: 140 };
-  if (isTablet) return { columns: 2, cardHeight: 140 };
+  if (isMobile) return { columns: 1, cardHeight: 150 };
+  if (isTablet) return { columns: 2, cardHeight: 150 };
   return { columns: 3, cardHeight: 150 };
 }
 

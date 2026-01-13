@@ -45,7 +45,7 @@ function ClubItem({
 
           <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-1">
-              <h1 className="text-text-primary leading-none font-extrabold whitespace-nowrap lg:text-[24px]">
+              <h1 className="text-text-primary leading-none font-bold whitespace-nowrap lg:text-[20px]">
                 {name}
               </h1>
 
@@ -65,7 +65,7 @@ function ClubItem({
         </div>
       </div>
 
-      <p className="weight-600 overflow-hidden text-[16px] font-semibold break-words text-ellipsis whitespace-nowrap text-[#474747]">
+      <p className="weight-600 overflow-hidden text-[14px] break-words text-ellipsis whitespace-nowrap text-[#474747]">
         {description}
       </p>
     </div>

@@ -13,8 +13,8 @@ interface ClubItemClientListProps {
 }
 
 function getColumnsAndHeight(width: number) {
-  if (width < 640) return { columns: 1, cardHeight: 140 };
-  if (width < 1024) return { columns: 2, cardHeight: 140 };
+  if (width < 640) return { columns: 1, cardHeight: 150 };
+  if (width < 1024) return { columns: 2, cardHeight: 150 };
   return { columns: 3, cardHeight: 150 };
 }
 

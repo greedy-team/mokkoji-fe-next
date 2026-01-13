@@ -45,17 +45,20 @@ function ClubItem({
 
           <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-1">
-              <h1 className="text-text-primary leading-none font-bold whitespace-nowrap lg:text-[20px]">
+              <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {name}
               </h1>
 
               <FavoriteButton
                 isFavorite={isFavorite || false}
                 clubId={clubId}
-                customClass="scale-80 lg:scale-100 flex-1"
+                customClass="scale-100 "
               />
 
-              <RadiusTag status={status} className="shrink-0" />
+              <RadiusTag
+                status={status}
+                className="absolute top-8 right-7 shrink-0"
+              />
             </div>
 
             <div className="whitespace-nowrap">

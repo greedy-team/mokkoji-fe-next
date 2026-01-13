@@ -34,43 +34,38 @@ function ClubItem({
   return (
     <div
       style={{ height }}
-      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-lg bg-[#F8F8F8] px-7 py-8 text-[#474747] transition-shadow duration-300"
+      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-xl bg-[#F8F8F8] px-7 py-8 text-[#474747] transition-shadow duration-300"
     >
-      <div className="flex w-full items-center">
-        <div className="flex gap-4">
+      <div className="flex w-full">
+        <div className="flex w-full items-center gap-4">
           <Avatar className="h-[54px] w-[54px]">
             <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
 
-          <div className="flex flex-col">
+          <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-1">
-              <h1 className="text-text-primary min-w-0 font-extrabold whitespace-nowrap lg:text-2xl">
+              <h1 className="text-text-primary leading-none font-extrabold whitespace-nowrap lg:text-[24px]">
                 {name}
               </h1>
 
-              <div className="shrink-0">
-                <FavoriteButton
-                  isFavorite={isFavorite || false}
-                  clubId={clubId}
-                  customClass="scale-80 lg:scale-100"
-                />
-              </div>
-
-              <RadiusTag
-                status={status}
-                className="absolute top-8 right-7 shrink-0 lg:text-[16px]"
+              <FavoriteButton
+                isFavorite={isFavorite || false}
+                clubId={clubId}
+                customClass="scale-80 lg:scale-100 flex-1"
               />
+
+              <RadiusTag status={status} className="shrink-0" />
             </div>
 
-            <div className="mt-1 whitespace-nowrap">
+            <div className="whitespace-nowrap">
               <PeriodSection startDate={startDate} endDate={endDate} />
             </div>
           </div>
         </div>
       </div>
 
-      <p className="overflow-hidden text-[12px] break-words text-ellipsis whitespace-nowrap lg:text-xs">
+      <p className="weight-600 overflow-hidden text-[16px] font-semibold break-words text-ellipsis whitespace-nowrap text-[#474747]">
         {description}
       </p>
     </div>

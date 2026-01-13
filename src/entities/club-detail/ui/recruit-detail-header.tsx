@@ -40,9 +40,7 @@ function RecruitDetailHeader({
             {title}
           </h1>
           <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-3xl">
-            <Link
-              href={`/recruit?category=${ClubCategoryToLabel[category].toLowerCase()}`}
-            >
+            <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
               {category} 동아리
             </Link>
           </p>

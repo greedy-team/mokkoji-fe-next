@@ -28,8 +28,8 @@ async function ClubItemList() {
   const res = await getClubRecruitList({
     page,
     size,
-    category: category.toUpperCase() as ClubCategory,
-    affiliation: affiliation.toUpperCase() as ClubAffiliation,
+    category: category as ClubCategory,
+    affiliation: affiliation as ClubAffiliation,
   });
 
   if (!res.ok || !res.data) {

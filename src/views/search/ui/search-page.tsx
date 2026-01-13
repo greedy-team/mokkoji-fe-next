@@ -12,7 +12,7 @@ async function SearchPage() {
     <div className="flex w-full flex-col items-center">
       <SearchInput />
       <Suspense fallback={<SearchListSkeletonLoading />}>
-        <SearchResults keyword={q} category={category.toUpperCase()} />
+        <SearchResults keyword={q} category={category} />
       </Suspense>
       <ScrollTopButton />
     </div>

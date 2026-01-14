@@ -91,6 +91,13 @@ export interface DetailParams {
   params: Promise<{ id: string }>;
 }
 
+export interface RecruitmentActionParams {
+  params: {
+    action: 'create' | 'edit';
+    id: string;
+  };
+}
+
 export interface ManageClub {
   clubId: number;
   clubName: string;

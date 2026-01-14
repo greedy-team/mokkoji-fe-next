@@ -1,5 +1,7 @@
 'use client';
 
+import TimeSelect from './time-select';
+
 const TIME_UNITS = [
   { key: 'hour', unit: '시' },
   { key: 'minute', unit: '분' },
@@ -23,42 +25,7 @@ interface TimePickerProps {
   }) => void;
   hasStartDate: boolean;
   hasEndDate: boolean;
-}
-
-interface TimeSelectProps {
-  value: number;
-  onChange: (value: number) => void;
-  disabled: boolean;
-  options: number[];
-  unit: string;
-}
-
-function TimeSelect({
-  value,
-  onChange,
-  disabled,
-  options,
-  unit,
-}: TimeSelectProps) {
-  const formatTimeUnit = (num: number) => String(num).padStart(2, '0');
-
-  return (
-    <>
-      <select
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        disabled={disabled}
-        className="flex-1 rounded border border-gray-300 px-2 py-1 focus:border-[#00D451] focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100"
-      >
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {formatTimeUnit(option)}
-          </option>
-        ))}
-      </select>
-      {unit}
-    </>
-  );
+  variant?: 'dark' | 'light';
 }
 
 function TimePicker({
@@ -70,6 +37,7 @@ function TimePicker({
   onEndTimeChange,
   hasStartDate,
   hasEndDate,
+  variant = 'light',
 }: TimePickerProps) {
   const hours = Array.from({ length: 24 }, (_, i) => i);
   const minutes = Array.from({ length: 60 }, (_, i) => i);
@@ -92,8 +60,16 @@ function TimePicker({
     },
   ];
 
+  const getLabelTextColor = () => {
+    if (!enabled) return 'text-gray-400';
+    if (variant === 'dark') return 'text-white';
+    return 'text-black';
+  };
+
   return (
-    <div className="mt-4 border-t pt-4">
+    <div
+      className={`mt-4 border-t pt-4 ${variant === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}
+    >
       <label className="flex cursor-pointer items-center gap-2">
         <input
           type="checkbox"
@@ -101,7 +77,7 @@ function TimePicker({
           onChange={(e) => onEnabledChange(e.target.checked)}
           className="h-4 w-4 cursor-pointer accent-[#00D451]"
         />
-        <span className={`text-sm font-medium ${!enabled && 'text-gray-400'}`}>
+        <span className={`text-sm font-medium ${getLabelTextColor()}`}>
           모집 시각 지정
         </span>
       </label>
@@ -116,7 +92,11 @@ function TimePicker({
                 key={label}
                 className="flex h-fit items-center justify-around"
               >
-                <p className="text-xs font-medium text-gray-600">{label}</p>
+                <p
+                  className={`text-xs font-medium ${variant === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}
+                >
+                  {label}
+                </p>
                 <div className="flex items-center gap-2 text-xs font-medium">
                   {TIME_UNITS.map(({ key, unit }) => {
                     let options: number[];
@@ -145,6 +125,7 @@ function TimePicker({
                         disabled={!enabled}
                         options={options}
                         unit={unit}
+                        variant={variant}
                       />
                     );
                   })}

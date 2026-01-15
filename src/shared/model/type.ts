@@ -59,12 +59,12 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
 };
 
 export const ClubCategoryToLabel: Record<string, ClubCategory> = {
-  '문화/예술': ClubCategory.CULTURAL_ART,
-  '학술/교양': ClubCategory.ACADEMIC_CULTURAL,
-  '봉사/사회': ClubCategory.VOLUNTEER_SOCIAL,
-  체육: ClubCategory.SPORTS,
-  종교: ClubCategory.RELIGIOUS,
-  기타: ClubCategory.OTHER,
+  CULTURAL_ART: ClubCategory.CULTURAL_ART,
+  ACADEMIC_CULTURAL: ClubCategory.ACADEMIC_CULTURAL,
+  VOLUNTEER_SOCIAL: ClubCategory.VOLUNTEER_SOCIAL,
+  SPORTS: ClubCategory.SPORTS,
+  RELIGIOUS: ClubCategory.RELIGIOUS,
+  OTHER: ClubCategory.OTHER,
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {
@@ -89,6 +89,13 @@ export const UserRoleLabel: Record<UserRole, string> = {
 
 export interface DetailParams {
   params: Promise<{ id: string }>;
+}
+
+export interface RecruitmentActionParams {
+  params: {
+    action: 'create' | 'edit';
+    id: string;
+  };
 }
 
 export interface ManageClub {

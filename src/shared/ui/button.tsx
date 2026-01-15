@@ -4,33 +4,26 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import cn from '@/shared/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:bg-[#D5D5D5] disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:bg-[#D9D9D920] disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer",
   {
     variants: {
       variant: {
         default:
           'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary:
-          'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00E804] to-[#33E3D0] text-xs lg:text-base font-semibold text-white shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105',
         disabled: 'rounded-md py-5 bg-[#D5D5D5] text-white text-base mt-6',
         submit:
-          'rounded-md py-5 bg-primary text-white text-base mt-6 hover:bg-[#00c94c] transition-colors duration-200',
+          'rounded-md py-5 bg-primary text-black text-base font-bold mt-6 bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
+        next: 'rounded-md py-3.5 bg-primary text-black text-base font-bold mt-6 bg-[#FFFFFF] hover:bg-[#FFFFFF80] transition-colors duration-200 disabled:bg-[#FFFFFF80] disabled:text-black',
         optionsSelected:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-primary bg-[#F1FFF6] transition-colors duration-300',
         options:
           'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#D9D9D9] hover:border-[#888888] hover:bg-[#f6f6f6] transition-colors duration-300',
         none: '',
-        delete:
-          'rounded-sm py-2.5 w-fit px-7 text-sm border-1 bg-white text-red-500 border-red-500 ' +
-          'hover:bg-red-50 hover:text-red-600 ' +
-          'transition-colors duration-300',
+        optionsBlackGround:
+          'rounded-full py-5 px-6 w-fit font-bold text-base text-[#A9A9A9] bg-[#2C2E2C] hover:bg-[#1AE166] hover:text-black transition-colors duration-300',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

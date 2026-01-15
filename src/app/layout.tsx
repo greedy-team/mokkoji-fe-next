@@ -52,7 +52,7 @@ export default function RootLayout({
   `}
         </Script>
       </head>
-      <body className={`${pretendard.className}`}>
+      <body className={`${pretendard.className} scrollbar-hide`}>
         <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
           <ToDoPinProvider>
             <WebVitalProvider />

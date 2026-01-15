@@ -17,7 +17,7 @@ interface UseCalenderProps {
 interface UseCalenderReturn {
   isCalenderOpen: boolean;
   isCalenderClosing: boolean;
-  calendarRef: React.RefObject<HTMLDivElement | null>;
+  calendarRef: React.RefObject<HTMLFieldSetElement | null>;
   openCalender: () => void;
   closeCalender: () => void;
   toggleCalender: () => void;
@@ -47,7 +47,7 @@ export default function useCalender({
   const [timeEnabled, setTimeEnabled] = useState(false);
   const [startTime, setStartTime] = useState<TimeValue | null>(null);
   const [endTime, setEndTime] = useState<TimeValue | null>(null);
-  const calendarRef = useRef<HTMLDivElement | null>(null);
+  const calendarRef = useRef<HTMLFieldSetElement | null>(null);
 
   const closeCalender = () => {
     setIsCalenderClosing(true);
@@ -164,7 +164,8 @@ export default function useCalender({
       if (!dateTimeStr) return null;
 
       const [dateStr, timeStr] = dateTimeStr.split('T');
-      const displayDate = dateStr.replace(/-/g, '.');
+      const [year, month, day] = dateStr.split('-');
+      const displayDate = `${year}년 ${month}월 ${day}일`;
 
       if (!timeEnabled || !timeStr) {
         return displayDate;
@@ -174,13 +175,13 @@ export default function useCalender({
       return `${displayDate} ${hour}:${minute}:${second}`;
     };
 
-    const formattedStart = formatDateTime(start) || '시작일';
-    const formattedEnd = formatDateTime(end) || '마감일';
+    const formattedStart = formatDateTime(start) || 'YYYY년 / MM월 / DD일';
+    const formattedEnd = formatDateTime(end) || 'YYYY년 / MM월 / DD일';
 
     if (start || end) {
       return `${formattedStart} ~ ${formattedEnd}`;
     }
-    return '모집 기간을 선택해주세요';
+    return 'YYYY년 / MM월 / DD일 ~ YYYY년 / MM월 / DD일';
   };
 
   return {

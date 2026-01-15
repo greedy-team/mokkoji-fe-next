@@ -65,6 +65,7 @@ jobs:
           mkdir -p deploy_files
           cp docker-compose.yml deploy_files/
           cp -r nginx deploy_files/
+          rm -rf deploy_files/nginx/active
           cp -r scripts deploy_files/
           cp mokkoji-fe-next-${{ inputs.env }}.tar.gz deploy_files/
 

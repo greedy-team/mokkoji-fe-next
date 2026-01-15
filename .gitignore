@@ -49,3 +49,5 @@ next-env.d.ts
 /storybook-static
 /test-results
 logs
+
+nginx/active/

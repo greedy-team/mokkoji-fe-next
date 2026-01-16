@@ -92,10 +92,10 @@ export interface DetailParams {
 }
 
 export interface RecruitmentActionParams {
-  params: {
+  params: Promise<{
     action: 'create' | 'edit';
     id: string;
-  };
+  }>;
 }
 
 export interface ManageClub {

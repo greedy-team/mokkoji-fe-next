@@ -9,19 +9,24 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+
 import reducer, {
   initialState,
 } from '@/features/admin-recruitment/model/reducer/recruitmentFormReducer';
 import { RecruitmentFormData } from '@/features/admin-recruitment/model/type';
-import postRecruitmentForm from '@/features/admin-recruitment/api/postRecruitmentForm';
+import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
+import deleteRecruitmentForm from '@/features/admin-recruitment/api/deleteRecruitmentForm';
+import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmentDetail';
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
+import StepSelectPost from '@/features/admin-recruitment/ui/steps/step-select-post';
 
-import useCreateFlow from './use-create-flow';
+import { ClubRecruitments, RecruitmentDetail } from '@/views/club/model/type';
+import useEditFlow from './use-edit-flow';
 
 interface Props {
-  clubId: number;
   clubInfo: ClubInfoType;
+  recruitments: ClubRecruitments[];
 }
 
 const BASIC_FIELDS: (keyof RecruitmentFormData)[] = [
@@ -30,19 +35,22 @@ const BASIC_FIELDS: (keyof RecruitmentFormData)[] = [
   'recruitEnd',
   'recruitForm',
 ];
-
 const CONTENT_FIELDS: (keyof RecruitmentFormData)[] = ['content'];
 
-function CreateFlowContainer({ clubId, clubInfo }: Props) {
+function EditFlowContainer({ clubInfo, recruitments }: Props) {
   const router = useRouter();
-  const flow = useCreateFlow();
+  const flow = useEditFlow();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { formData, errors } = state;
-
+  const [recruitmentDetail, setRecruitmentDetail] =
+    useState<RecruitmentDetail | null>(null);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
-
-  const imageUpload = useImageUpload([]);
+  const imageUpload = useImageUpload(recruitmentDetail?.imageUrls ?? []);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [localRecruitments, setLocalRecruitments] =
+    useState<ClubRecruitments[]>(recruitments);
 
   useEffect(() => {
     if (flow.currentStep !== displayStep) {
@@ -55,6 +63,53 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
     }
     return undefined;
   }, [flow.currentStep, displayStep]);
+
+  const handleEdit = async (post: ClubRecruitments) => {
+    setIsLoadingDetail(true);
+    const detail = await getRecruitmentDetail(post.id);
+
+    if (!detail) {
+      toast.error('모집글 정보를 불러오는데 실패했습니다.');
+      setIsLoadingDetail(false);
+      return;
+    }
+
+    setRecruitmentDetail(detail);
+
+    dispatch({ type: 'UPDATE_FIELD', name: 'title', value: detail.title });
+    dispatch({ type: 'UPDATE_FIELD', name: 'content', value: detail.content });
+    dispatch({
+      type: 'UPDATE_FIELD',
+      name: 'recruitStart',
+      value: detail.recruitStart,
+    });
+    dispatch({
+      type: 'UPDATE_FIELD',
+      name: 'recruitEnd',
+      value: detail.recruitEnd,
+    });
+    dispatch({
+      type: 'UPDATE_FIELD',
+      name: 'recruitForm',
+      value: detail.recruitForm,
+    });
+
+    setIsLoadingDetail(false);
+    flow.startEdit(post);
+  };
+
+  const handleDelete = async (post: ClubRecruitments) => {
+    setIsDeleting(true);
+    const result = await deleteRecruitmentForm(post.id);
+
+    if (result.ok) {
+      toast.success('모집 공고가 삭제되었습니다.');
+      setLocalRecruitments((prev) => prev.filter((r) => r.id !== post.id));
+    } else {
+      toast.error(result.message || '삭제에 실패했습니다.');
+    }
+    setIsDeleting(false);
+  };
 
   const handleChange = <K extends keyof RecruitmentFormData>(
     name: K,
@@ -85,6 +140,8 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
   };
 
   const handleSubmit = async () => {
+    if (!recruitmentDetail) return;
+
     flow.setSubmitting(true);
 
     const data = {
@@ -92,7 +149,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       imageNames: imageUpload.imageFiles.map((f) => f.imageName),
     };
 
-    const res = await postRecruitmentForm(data, clubId);
+    const res = await patchRecruitmentForm(data, recruitmentDetail.id);
 
     if (!res.ok) {
       toast.error(res.message);
@@ -121,14 +178,39 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
     flow.setSubmitting(false);
     flow.complete();
-    toast.success('모집 공고가 등록되었습니다!');
+    toast.success('모집 공고가 수정되었습니다!');
   };
+
+  if (isLoadingDetail) {
+    return (
+      <div className="flex justify-center py-20">
+        <DotsPulseLoader />
+      </div>
+    );
+  }
+
+  if (displayStep === 'selectPost') {
+    return (
+      <>
+        <PrevButton
+          onClick={() => router.push('/admin')}
+          className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
+        />
+        <StepSelectPost
+          recruitments={localRecruitments}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          isDeleting={isDeleting}
+        />
+      </>
+    );
+  }
 
   if (displayStep === 'complete') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
-        <h2 className="text-2xl font-semibold">등록 완료!</h2>
-        <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
+        <h2 className="text-2xl font-semibold">수정 완료!</h2>
+        <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button onClick={() => router.push('/recruit')}>모집글 확인하기</Button>
       </div>
     );
@@ -136,11 +218,15 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`px-[35%] transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
       <h1 className="text-[28px] font-bold">모집 공고</h1>
+      <PrevButton
+        onClick={flow.goToSelectPost}
+        className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
+      />
       {displayStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
           <StepRecruitmentBasicInfo
@@ -195,7 +281,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
               onClick={handleSubmit}
               className="mt-4 w-full"
             >
-              등록하기
+              수정하기
             </Button>
           )}
         </div>
@@ -204,4 +290,4 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
   );
 }
 
-export default CreateFlowContainer;
+export default EditFlowContainer;

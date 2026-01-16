@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
@@ -9,10 +9,7 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
-import reducer, {
-  initialState,
-} from '@/features/admin-recruitment/model/reducer/recruitmentFormReducer';
-import { RecruitmentFormData } from '@/features/admin-recruitment/model/type';
+import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import postRecruitmentForm from '@/features/admin-recruitment/api/postRecruitmentForm';
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
@@ -24,20 +21,18 @@ interface Props {
   clubInfo: ClubInfoType;
 }
 
-const BASIC_FIELDS: (keyof RecruitmentFormData)[] = [
-  'title',
-  'recruitStart',
-  'recruitEnd',
-  'recruitForm',
-];
-
-const CONTENT_FIELDS: (keyof RecruitmentFormData)[] = ['content'];
-
 function CreateFlowContainer({ clubId, clubInfo }: Props) {
   const router = useRouter();
   const flow = useCreateFlow();
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { formData, errors } = state;
+  const {
+    formData,
+    errors,
+    handleChange,
+    handleBlur,
+    isBasicInfoValid,
+    isContentValid,
+    handleNextStep,
+  } = useRecruitmentForm({ onNextStep: flow.nextStep });
 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
@@ -55,34 +50,6 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
     }
     return undefined;
   }, [flow.currentStep, displayStep]);
-
-  const handleChange = <K extends keyof RecruitmentFormData>(
-    name: K,
-    value: RecruitmentFormData[K],
-  ) => {
-    dispatch({ type: 'UPDATE_FIELD', name, value });
-  };
-
-  const handleBlur = (name: keyof RecruitmentFormData) => {
-    dispatch({ type: 'VALIDATE_FIELD', name });
-  };
-
-  const isBasicInfoValid = () => {
-    return BASIC_FIELDS.every((field) => formData[field] && !errors[field]);
-  };
-
-  const isContentValid = () => {
-    return CONTENT_FIELDS.every((field) => formData[field] && !errors[field]);
-  };
-
-  const handleNextStep = () => {
-    BASIC_FIELDS.forEach(handleBlur);
-    if (isBasicInfoValid()) {
-      flow.nextStep();
-    } else {
-      toast.error('모든 필수 항목을 입력해주세요.');
-    }
-  };
 
   const handleSubmit = async () => {
     flow.setSubmitting(true);

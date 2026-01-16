@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
@@ -10,10 +10,7 @@ import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 
-import reducer, {
-  initialState,
-} from '@/features/admin-recruitment/model/reducer/recruitmentFormReducer';
-import { RecruitmentFormData } from '@/features/admin-recruitment/model/type';
+import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
 import deleteRecruitmentForm from '@/features/admin-recruitment/api/deleteRecruitmentForm';
 import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmentDetail';
@@ -29,19 +26,20 @@ interface Props {
   recruitments: ClubRecruitments[];
 }
 
-const BASIC_FIELDS: (keyof RecruitmentFormData)[] = [
-  'title',
-  'recruitStart',
-  'recruitEnd',
-  'recruitForm',
-];
-const CONTENT_FIELDS: (keyof RecruitmentFormData)[] = ['content'];
-
 function EditFlowContainer({ clubInfo, recruitments }: Props) {
   const router = useRouter();
   const flow = useEditFlow();
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { formData, errors } = state;
+  const {
+    formData,
+    errors,
+    handleChange,
+    handleBlur,
+    isBasicInfoValid,
+    isContentValid,
+    handleNextStep,
+    setFormData,
+  } = useRecruitmentForm({ onNextStep: flow.nextStep });
+
   const [recruitmentDetail, setRecruitmentDetail] =
     useState<RecruitmentDetail | null>(null);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
@@ -75,23 +73,12 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
     }
 
     setRecruitmentDetail(detail);
-
-    dispatch({ type: 'UPDATE_FIELD', name: 'title', value: detail.title });
-    dispatch({ type: 'UPDATE_FIELD', name: 'content', value: detail.content });
-    dispatch({
-      type: 'UPDATE_FIELD',
-      name: 'recruitStart',
-      value: detail.recruitStart,
-    });
-    dispatch({
-      type: 'UPDATE_FIELD',
-      name: 'recruitEnd',
-      value: detail.recruitEnd,
-    });
-    dispatch({
-      type: 'UPDATE_FIELD',
-      name: 'recruitForm',
-      value: detail.recruitForm,
+    setFormData({
+      title: detail.title,
+      content: detail.content,
+      recruitStart: detail.recruitStart,
+      recruitEnd: detail.recruitEnd,
+      recruitForm: detail.recruitForm,
     });
 
     setIsLoadingDetail(false);
@@ -109,34 +96,6 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       toast.error(result.message || '삭제에 실패했습니다.');
     }
     setIsDeleting(false);
-  };
-
-  const handleChange = <K extends keyof RecruitmentFormData>(
-    name: K,
-    value: RecruitmentFormData[K],
-  ) => {
-    dispatch({ type: 'UPDATE_FIELD', name, value });
-  };
-
-  const handleBlur = (name: keyof RecruitmentFormData) => {
-    dispatch({ type: 'VALIDATE_FIELD', name });
-  };
-
-  const isBasicInfoValid = () => {
-    return BASIC_FIELDS.every((field) => formData[field] && !errors[field]);
-  };
-
-  const isContentValid = () => {
-    return CONTENT_FIELDS.every((field) => formData[field] && !errors[field]);
-  };
-
-  const handleNextStep = () => {
-    BASIC_FIELDS.forEach(handleBlur);
-    if (isBasicInfoValid()) {
-      flow.nextStep();
-    } else {
-      toast.error('모든 필수 항목을 입력해주세요.');
-    }
   };
 
   const handleSubmit = async () => {
@@ -211,7 +170,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">수정 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
-        <Button onClick={() => router.push('/recruit')}>모집글 확인하기</Button>
+        <Button onClick={() => router.push('/club')}>모집글 확인하기</Button>
       </div>
     );
   }

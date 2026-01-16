@@ -2,19 +2,23 @@
 
 import Image from 'next/image';
 import { PrevButton } from '@/shared/ui/navigation-button';
-import type { ActionType } from '../../model/types';
+import type { ActionType, ContentType } from '../../model/types';
 
 interface StepSelectEditModeProps {
   clubName?: string;
+  contentType?: ContentType;
   onNext: (actionType: ActionType) => void;
   onBack: () => void;
 }
 
 function StepSelectEditMode({
   clubName,
+  contentType,
   onNext,
   onBack,
 }: StepSelectEditModeProps) {
+  const isDescription = contentType === 'description';
+
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2">
@@ -25,22 +29,50 @@ function StepSelectEditMode({
       </div>
 
       <div className="flex flex-col items-center gap-9">
-        <button
-          type="button"
-          className="flex gap-3.5"
-          onClick={() => onNext('create')}
-        >
-          <span className="text-2xl font-bold">모집글 생성</span>
-          <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
-        </button>
-        <button
-          type="button"
-          className="flex gap-3.5"
-          onClick={() => onNext('edit')}
-        >
-          <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
-          <Image src="/admin/arrow.svg" alt="바로가기" width={18} height={14} />
-        </button>
+        {isDescription ? (
+          <button
+            type="button"
+            className="flex gap-3.5"
+            onClick={() => onNext('edit')}
+          >
+            <span className="text-2xl font-bold">소개글 수정</span>
+            <Image
+              src="/admin/arrow.svg"
+              alt="바로가기"
+              width={18}
+              height={14}
+            />
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="flex gap-3.5"
+              onClick={() => onNext('create')}
+            >
+              <span className="text-2xl font-bold">모집글 생성</span>
+              <Image
+                src="/admin/arrow.svg"
+                alt="바로가기"
+                width={18}
+                height={14}
+              />
+            </button>
+            <button
+              type="button"
+              className="flex gap-3.5"
+              onClick={() => onNext('edit')}
+            >
+              <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
+              <Image
+                src="/admin/arrow.svg"
+                alt="바로가기"
+                width={18}
+                height={14}
+              />
+            </button>
+          </>
+        )}
       </div>
 
       <PrevButton onClick={onBack} className="mt-4">

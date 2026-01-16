@@ -59,6 +59,7 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
       {currentStep === 'editMode' && (
         <StepSelectEditMode
           clubName={flow.selectedClubName}
+          contentType={flow.contentType}
           onNext={flow.selectActionType}
           onBack={flow.goBack}
         />

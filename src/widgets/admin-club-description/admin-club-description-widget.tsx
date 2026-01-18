@@ -2,9 +2,15 @@ import { getClubInfo } from '@/shared/api/manage-api';
 import { RecruitmentActionParams } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import EditFlowContainer from '@/features/admin-club-description/ui/edit/edit-flow-container';
+import CreateFlowContainer from '@/features/admin-club-description/ui/create/create-flow-container';
 
 async function AdminClubDescriptionWidget({ params }: RecruitmentActionParams) {
-  const { id } = await params;
+  const { action, id } = await params;
+
+  if (action === 'create') {
+    return <CreateFlowContainer />;
+  }
+
   const clubId = Number(id);
   const res = await getClubInfo(clubId);
 

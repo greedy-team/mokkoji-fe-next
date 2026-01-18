@@ -2,6 +2,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
+import { UserRole } from '@/shared/model/type';
 import AdminHeader from '@/shared/ui/AdminHeader';
 
 export const metadata: Metadata = {
@@ -17,11 +20,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function MainLayout({
+const ALLOWED_ROLES = [
+  UserRole.GREEDY_ADMIN,
+  UserRole.CLUB_ADMIN,
+  UserRole.CLUB_MASTER,
+];
+
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  const role = session?.role;
+
+  if (!role || !ALLOWED_ROLES.includes(role)) {
+    redirect('/');
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="fixed inset-0 -z-10 bg-black" />

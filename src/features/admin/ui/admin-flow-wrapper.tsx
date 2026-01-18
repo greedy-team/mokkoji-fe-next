@@ -19,7 +19,7 @@ async function AdminFlowWrapper() {
     );
   }
 
-  return <AdminFlowContainer allowedClubs={allowedClubs} />;
+  return <AdminFlowContainer allowedClubs={allowedClubs} role={role} />;
 }
 
 export default AdminFlowWrapper;

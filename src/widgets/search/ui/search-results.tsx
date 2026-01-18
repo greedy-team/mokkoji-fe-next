@@ -2,6 +2,7 @@ import { ClubCategory } from '@/shared/model/type';
 import ClubSearchItem from '@/entities/search/ui/club-search-item';
 import getClubList from '@/widgets/recruit/api/getClubList';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import getClubRecruitList from '@/widgets/club/api/getClubRecruitList';
 
 interface SearchResultsProps {
   keyword?: string;
@@ -20,28 +21,44 @@ const CATEGORY_MAP: Record<string, ClubCategory> = {
 async function SearchResults({ keyword, category }: SearchResultsProps) {
   const safeCategory = category ? CATEGORY_MAP[category] : undefined;
 
-  const data = await getClubList({
-    page: 1,
-    size: 200,
-    keyword,
-    ...(safeCategory ? { category: safeCategory } : {}),
-  });
-  if (!data.ok || !data.data) {
-    return <ErrorBoundaryUi />;
-  }
+  const [clubsRes, recruitmentsRes] = await Promise.all([
+    getClubList({
+      page: 1,
+      size: 200,
+      keyword,
+      ...(safeCategory ? { category: safeCategory } : {}),
+    }),
+    getClubRecruitList({
+      page: 1,
+      size: 500,
+    }),
+  ]);
+
+  if (!clubsRes.ok || !clubsRes.data) return <ErrorBoundaryUi />;
+  if (!recruitmentsRes.ok || !recruitmentsRes.data) return <ErrorBoundaryUi />;
+
+  const recruitmentClubIdSet = new Set<number>(
+    recruitmentsRes.data.recruitments
+      .map((r) => r.club?.id)
+      .filter((id): id is number => typeof id === 'number'),
+  );
+
+  const filteredClubs = clubsRes.data.clubs.filter((club) =>
+    recruitmentClubIdSet.has(club.id),
+  );
 
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-13 mb-4">
         <span className="text-primary-500 font-bold">
-          {data.data?.clubs.length}건
+          {filteredClubs.length}건
         </span>
         <span className="text-black">의 검색결과</span>
       </section>
 
-      {data.data?.clubs.length > 0 ? (
+      {clubsRes.data?.clubs.length > 0 ? (
         <section className="space-y-3">
-          {data.data?.clubs.map((club) => (
+          {filteredClubs.map((club) => (
             <ClubSearchItem key={club.id} club={club} />
           ))}
         </section>

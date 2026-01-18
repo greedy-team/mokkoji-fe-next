@@ -8,12 +8,23 @@ interface SearchResultsProps {
   category?: string;
 }
 
+const CATEGORY_MAP: Record<string, ClubCategory> = {
+  cultural_art: ClubCategory.CULTURAL_ART,
+  academic_cultural: ClubCategory.ACADEMIC_CULTURAL,
+  volunteer_social: ClubCategory.VOLUNTEER_SOCIAL,
+  sports: ClubCategory.SPORTS,
+  religious: ClubCategory.RELIGIOUS,
+  other: ClubCategory.OTHER,
+};
+
 async function SearchResults({ keyword, category }: SearchResultsProps) {
+  const safeCategory = category ? CATEGORY_MAP[category] : undefined;
+
   const data = await getClubList({
     page: 1,
     size: 200,
     keyword,
-    category: category as ClubCategory,
+    ...(safeCategory ? { category: safeCategory } : {}),
   });
   if (!data.ok || !data.data) {
     return <ErrorBoundaryUi />;

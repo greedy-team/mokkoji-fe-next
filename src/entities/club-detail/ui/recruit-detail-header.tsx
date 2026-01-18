@@ -30,7 +30,7 @@ function RecruitDetailHeader({
   createdAt,
   status,
 }: RecruitDetailHeaderProps) {
-  const [date, time] = (createdAt || '').split('T');
+  const [date] = (createdAt || '').split('T');
   const [year, month, day] = date.split('-');
   const formattedDate = `${year}년 ${month}월 ${day}일`;
 

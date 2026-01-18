@@ -27,7 +27,7 @@ function PeriodSection({
       ) : (
         <span>모집기한 | </span>
       )}
-      {formatToMonthDay(startDate)} ~ {formatToMonthDay(endDate)}
+      {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
     </span>
   );
 }

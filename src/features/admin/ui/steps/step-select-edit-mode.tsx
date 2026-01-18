@@ -2,11 +2,13 @@
 
 import Image from 'next/image';
 import { PrevButton } from '@/shared/ui/navigation-button';
+import { UserRole } from '@/shared/model/type';
 import type { ActionType, ContentType } from '../../model/types';
 
 interface StepSelectEditModeProps {
   clubName?: string;
   contentType?: ContentType;
+  role?: UserRole;
   onNext: (actionType: ActionType) => void;
   onBack: () => void;
 }
@@ -14,10 +16,12 @@ interface StepSelectEditModeProps {
 function StepSelectEditMode({
   clubName,
   contentType,
+  role,
   onNext,
   onBack,
 }: StepSelectEditModeProps) {
   const isDescription = contentType === 'description';
+  const isGreedyAdmin = role === UserRole.GREEDY_ADMIN;
 
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
@@ -30,19 +34,36 @@ function StepSelectEditMode({
 
       <div className="flex flex-col items-center gap-9">
         {isDescription ? (
-          <button
-            type="button"
-            className="flex gap-3.5"
-            onClick={() => onNext('edit')}
-          >
-            <span className="text-2xl font-bold">소개글 수정</span>
-            <Image
-              src="/admin/arrow.svg"
-              alt="바로가기"
-              width={18}
-              height={14}
-            />
-          </button>
+          <>
+            {isGreedyAdmin && (
+              <button
+                type="button"
+                className="flex gap-3.5"
+                onClick={() => onNext('create')}
+              >
+                <span className="text-2xl font-bold">소개글 등록</span>
+                <Image
+                  src="/admin/arrow.svg"
+                  alt="바로가기"
+                  width={18}
+                  height={14}
+                />
+              </button>
+            )}
+            <button
+              type="button"
+              className="flex gap-3.5"
+              onClick={() => onNext('edit')}
+            >
+              <span className="text-2xl font-bold">소개글 수정</span>
+              <Image
+                src="/admin/arrow.svg"
+                alt="바로가기"
+                width={18}
+                height={14}
+              />
+            </button>
+          </>
         ) : (
           <>
             <button

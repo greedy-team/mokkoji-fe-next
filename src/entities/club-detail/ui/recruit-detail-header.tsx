@@ -36,42 +36,44 @@ function RecruitDetailHeader({
 
   return (
     <header className="w-full cursor-default">
-      <div className="mb-4 flex flex-row items-center gap-2.5 lg:gap-5">
+      <div className="mb-8 flex flex-row items-center gap-4">
         <ClickLogo logo={logo} title={title} />
         <h1 className="text-xl font-bold whitespace-nowrap lg:text-4xl">
           {title}
         </h1>
-        <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-3xl">
+        <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
           <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
             {category} 동아리
           </Link>
         </p>
       </div>
-      <div className="slg:text-xl mb-4 flex gap-4">
+      <div className="flex items-center gap-6 lg:text-xl">
         <RadiusTag
           status={status}
-          className="whitespace-nowrap lg:text-[16px]"
+          className="shrink-0 whitespace-nowrap lg:text-[14px]"
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2 pt-4">
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
             decoration={false}
             className="whitespace-nowrap lg:text-lg"
           />
-          <div className="flex">
+          <div className="mr-auto shrink-0">
             {date && (
-              <p className="lg:text-md mb-2 text-sm text-[#9C9C9C]">
+              <p className="mt-1 text-sm text-[#9C9C9C]">
                 작성일 · {formattedDate}
               </p>
             )}
           </div>
         </div>
-        <RecruitDetailHeaderControl
-          instagram={instagram}
-          clubId={clubId}
-          isFavorite={isFavorite || false}
-        />
+        <div className="ml-auto shrink-0">
+          <RecruitDetailHeaderControl
+            instagram={instagram}
+            clubId={clubId}
+            isFavorite={isFavorite || false}
+          />
+        </div>
       </div>
     </header>
   );

@@ -7,7 +7,7 @@ import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Recruitment } from '@/widgets/club/model/type';
 import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
-import isRecruiting from '../util/isRecruiting';
+import getRecruitmentStatus from '../util/getRecruitmentStatus';
 
 interface CardSliderProps {
   clubs: Recruitment[];
@@ -76,7 +76,10 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          const status = isRecruiting(item.recruitStart, item.recruitEnd);
+          const status = getRecruitmentStatus(
+            item.recruitStart,
+            item.recruitEnd,
+          );
 
           return (
             <div

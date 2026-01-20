@@ -396,6 +396,22 @@ html::-webkit-scrollbar {
   content: none !important;
 }
 
+.react-calendar__tile.selected-date abbr {
+  position: relative;
+  display: inline-block;
+}
+
+.react-calendar__tile.selected-date abbr::after {
+  content: '' !important;
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 2px;
+  background-color: #00e457;
+}
+
 .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
   margin-right: 50%;
 }
@@ -416,6 +432,10 @@ html::-webkit-scrollbar {
   width: auto !important;
   display: flex !important;
   flex-direction: row !important;
+  gap: 24px !important;
+  padding-left: 16px !important;
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
 }
 
 .scrollbar-hide {

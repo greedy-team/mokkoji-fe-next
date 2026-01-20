@@ -37,14 +37,12 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
   if (!clubsRes.ok || !clubsRes.data) return <ErrorBoundaryUi />;
   if (!recruitmentsRes.ok || !recruitmentsRes.data) return <ErrorBoundaryUi />;
 
-  const recruitmentClubIdSet = new Set<number>(
-    recruitmentsRes.data.recruitments
-      .map((r) => r.club?.id)
-      .filter((id): id is number => typeof id === 'number'),
-  );
+  const recruitmentClubIds = recruitmentsRes.data.recruitments
+    .map((recruitment) => recruitment.club?.id)
+    .filter((id): id is number => typeof id === 'number');
 
   const filteredClubs = clubsRes.data.clubs.filter((club) =>
-    recruitmentClubIdSet.has(club.id),
+    recruitmentClubIds.includes(club.id),
   );
 
   return (

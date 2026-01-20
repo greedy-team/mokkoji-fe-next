@@ -53,7 +53,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   if (!selected.ok) return <ErrorBoundaryUi />;
 
   return (
-    <div className="mt-[45px] w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
+    <div className="mt-[50px] w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
       <RecruitDetailHeader
         title={recent.data.clubName}
         category={recent.data.category}

@@ -117,7 +117,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deploy_files/*"
+          source: 'deploy_files/*'
           target: ${{ env.APP_DIR }}
           strip_components: 1
 
@@ -128,31 +128,31 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           envs: APP_DIR, GITHUB_TOKEN
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          set -e
-          cd "$APP_DIR"
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            set -e
+            cd "$APP_DIR"
 
-          echo "Logging into GHCR..."
-          echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "Logging into GHCR..."
+            echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-          echo "Pulling latest images..."
-          docker-compose pull
+            echo "Pulling latest images..."
+            docker-compose pull
 
-          echo "Ensuring Nginx is running"
-          if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then
-            echo "Starting Nginx container"
-            docker-compose up -d nginx
-            sleep 5
-          fi
+            echo "Ensuring Nginx is running"
+            if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then
+              echo "Starting Nginx container"
+              docker-compose up -d nginx
+              sleep 5
+            fi
 
-          echo "Running Blue-Green deployment"
-          chmod +x scripts/deploy-${{ inputs.env }}.sh
-          bash scripts/deploy-${{ inputs.env }}.sh
+            echo "Running Blue-Green deployment"
+            chmod +x scripts/deploy-${{ inputs.env }}.sh
+            bash scripts/deploy-${{ inputs.env }}.sh
 
-          echo "Cleaning up old images"
-          docker image prune -af
+            echo "Cleaning up old images"
+            docker image prune -af
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3

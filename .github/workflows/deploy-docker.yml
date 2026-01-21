@@ -130,16 +130,16 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: APP_DIR, GITHUB_TOKEN
+          envs: APP_DIR
           script: |
             set -e
             cd "$APP_DIR"
 
             echo "Logging into GHCR..."
-            echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            echo "Pulling latest images..."
-            docker-compose pull
+            echo "Pulling images for ${{ inputs.env }} environment..."
+            docker-compose pull app-${{ inputs.env }}-blue app-${{ inputs.env }}-green nginx
 
             echo "Ensuring Nginx is running"
             if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then

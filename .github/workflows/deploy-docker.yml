@@ -128,8 +128,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           envs: APP_DIR, GITHUB_TOKEN
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
             set -e
             cd "$APP_DIR"

@@ -9,7 +9,6 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
-
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
 import deleteRecruitmentForm from '@/features/admin-recruitment/api/deleteRecruitmentForm';
@@ -17,7 +16,6 @@ import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmen
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
 import StepSelectPost from '@/features/admin-recruitment/ui/steps/step-select-post';
-
 import { ClubRecruitments, RecruitmentDetail } from '@/views/club/model/type';
 import useEditFlow from './use-edit-flow';
 
@@ -42,7 +40,8 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   const [recruitmentDetail, setRecruitmentDetail] =
     useState<RecruitmentDetail | null>(null);
-  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  const [isLoadingRecruitmentDetail, setIsLoadingRecruitmentDetail] =
+    useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
   const imageUpload = useImageUpload(recruitmentDetail?.imageUrls ?? []);
@@ -63,25 +62,25 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
   }, [flow.currentStep, displayStep]);
 
   const handleEdit = async (post: ClubRecruitments) => {
-    setIsLoadingDetail(true);
-    const detail = await getRecruitmentDetail(post.id);
+    setIsLoadingRecruitmentDetail(true);
+    const recruitmentDetailData = await getRecruitmentDetail(post.id);
 
-    if (!detail) {
+    if (!recruitmentDetailData) {
       toast.error('모집글 정보를 불러오는데 실패했습니다.');
-      setIsLoadingDetail(false);
+      setIsLoadingRecruitmentDetail(false);
       return;
     }
 
-    setRecruitmentDetail(detail);
+    setRecruitmentDetail(recruitmentDetailData);
     setFormData({
-      title: detail.title,
-      content: detail.content,
-      recruitStart: detail.recruitStart,
-      recruitEnd: detail.recruitEnd,
-      recruitForm: detail.recruitForm,
+      title: recruitmentDetailData.title,
+      content: recruitmentDetailData.content,
+      recruitStart: recruitmentDetailData.recruitStart,
+      recruitEnd: recruitmentDetailData.recruitEnd,
+      recruitForm: recruitmentDetailData.recruitForm,
     });
 
-    setIsLoadingDetail(false);
+    setIsLoadingRecruitmentDetail(false);
     flow.startEdit(post);
   };
 
@@ -140,7 +139,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
     toast.success('모집 공고가 수정되었습니다!');
   };
 
-  if (isLoadingDetail) {
+  if (isLoadingRecruitmentDetail) {
     return (
       <div className="flex justify-center py-20">
         <DotsPulseLoader />

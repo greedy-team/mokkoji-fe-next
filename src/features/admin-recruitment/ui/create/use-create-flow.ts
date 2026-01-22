@@ -23,7 +23,7 @@ function useCreateFlow() {
     }
   };
 
-  const setSubmitting = (isSubmitting: boolean) => {
+  const setIsSubmitting = (isSubmitting: boolean) => {
     setState((prev) => ({ ...prev, isSubmitting }));
   };
 
@@ -39,7 +39,7 @@ function useCreateFlow() {
     ...state,
     nextStep,
     prevStep,
-    setSubmitting,
+    setIsSubmitting,
     complete,
     reset,
   };

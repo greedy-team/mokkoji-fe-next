@@ -20,24 +20,24 @@ function StepSelectPost({
   title = '전체 모집 공고',
 }: Props) {
   const [selectedPost, setSelectedPost] = useState<ClubRecruitments>();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
 
   const handleSelect = (post: ClubRecruitments) => {
     setSelectedPost(post);
   };
 
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
+    setIsShowDeleteModal(true);
   };
 
   const handleCancelDelete = () => {
-    setShowDeleteModal(false);
+    setIsShowDeleteModal(false);
   };
 
   const handleConfirmDelete = async () => {
     if (selectedPost) {
       await onDelete(selectedPost);
-      setShowDeleteModal(false);
+      setIsShowDeleteModal(false);
       setSelectedPost(undefined);
     }
   };
@@ -93,7 +93,7 @@ function StepSelectPost({
         </Button>
       </div>
 
-      {showDeleteModal && (
+      {isShowDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="flex h-[168px] w-[442px] flex-col justify-center rounded-[20px] bg-[#1A1A1A] p-5">
             <p className="text-center text-[#FBFBFB]">

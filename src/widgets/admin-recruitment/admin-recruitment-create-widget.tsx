@@ -6,7 +6,7 @@ interface Props {
   clubId: number;
 }
 
-async function CreateWidget({ clubId }: Props) {
+async function AdminRecruitmentCreateWidget({ clubId }: Props) {
   const res = await getClubInfo(clubId);
 
   if (!res.ok || !res.data) {
@@ -16,4 +16,4 @@ async function CreateWidget({ clubId }: Props) {
   return <CreateFlowContainer clubId={clubId} clubInfo={res.data} />;
 }
 
-export default CreateWidget;
+export default AdminRecruitmentCreateWidget;

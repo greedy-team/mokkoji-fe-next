@@ -52,7 +52,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
   }, [flow.currentStep, displayStep]);
 
   const handleSubmit = async () => {
-    flow.setSubmitting(true);
+    flow.setIsSubmitting(true);
 
     const data = {
       ...formData,
@@ -63,7 +63,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
     if (!res.ok) {
       toast.error(res.message);
-      flow.setSubmitting(false);
+      flow.setIsSubmitting(false);
       return;
     }
 
@@ -82,11 +82,11 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       }
     } catch {
       toast.error('이미지 업로드에 실패했습니다.');
-      flow.setSubmitting(false);
+      flow.setIsSubmitting(false);
       return;
     }
 
-    flow.setSubmitting(false);
+    flow.setIsSubmitting(false);
     flow.complete();
     toast.success('모집 공고가 등록되었습니다!');
   };

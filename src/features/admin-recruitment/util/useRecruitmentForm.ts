@@ -19,8 +19,8 @@ interface UseRecruitmentFormOptions {
 }
 
 function useRecruitmentForm({ onNextStep }: UseRecruitmentFormOptions) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { formData, errors } = state;
+  const [formState, dispatch] = useReducer(reducer, initialState);
+  const { formData, errors } = formState;
 
   const handleChange = <K extends keyof RecruitmentFormData>(
     name: K,

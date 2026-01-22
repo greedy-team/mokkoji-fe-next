@@ -7,7 +7,7 @@ interface Props {
   clubId: number;
 }
 
-async function EditWidget({ clubId }: Props) {
+async function AdminRecruitmentEditWidget({ clubId }: Props) {
   const [clubInfoRes, recruitmentsRes] = await Promise.all([
     getClubInfo(clubId),
     getClubRecruitments(clubId),
@@ -29,4 +29,4 @@ async function EditWidget({ clubId }: Props) {
   );
 }
 
-export default EditWidget;
+export default AdminRecruitmentEditWidget;

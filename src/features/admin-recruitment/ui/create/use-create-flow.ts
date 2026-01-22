@@ -35,9 +35,6 @@ function useCreateFlow() {
     setState({ currentStep: 'basicInfo', isSubmitting: false });
   };
 
-  const getCurrentStepIndex = () => STEPS.indexOf(state.currentStep);
-  const getTotalSteps = () => STEPS.length - 1;
-
   return {
     ...state,
     nextStep,
@@ -45,8 +42,6 @@ function useCreateFlow() {
     setSubmitting,
     complete,
     reset,
-    getCurrentStepIndex,
-    getTotalSteps,
   };
 }
 

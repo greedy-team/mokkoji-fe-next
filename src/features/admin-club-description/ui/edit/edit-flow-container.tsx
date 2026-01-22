@@ -9,6 +9,7 @@ import {
   ClubCategoryLabel,
   ClubAffiliationLabel,
 } from '@/shared/model/type';
+import getKeyByValue from '@/shared/lib/getKeyByValue';
 import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
@@ -23,10 +24,6 @@ import StepClubDescription from '../steps/step-club-description';
 interface Props {
   clubInfo: ClubInfoType;
   clubId: number;
-}
-
-function getKeyByValue(obj: Record<string, string>, value: string) {
-  return Object.keys(obj).find((key) => obj[key].includes(value));
 }
 
 function EditFlowContainer({ clubInfo, clubId }: Props) {

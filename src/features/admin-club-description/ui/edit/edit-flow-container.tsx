@@ -17,6 +17,7 @@ import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useClubForm from '@/features/admin-club-description/util/useClubForm';
 import { patchClubInfo } from '@/features/admin-club-description/api/postClubRegister';
 
+import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useEditFlow from './use-edit-flow';
 import StepClubBasicInfo from '../steps/step-club-basic-info';
 import StepClubDescription from '../steps/step-club-description';
@@ -159,19 +160,16 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <PrevButton
-        onClick={() =>
-          displayStep === 'basicInfo' ? router.push('/admin') : flow.prevStep()
-        }
-        className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-      />
-
       {displayStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
+          <AdminPageHeader
+            title="동아리 기본 정보"
+            onBack={() => router.push('/admin')}
+          />
           <StepClubBasicInfo
             formData={formData}
             errors={errors}
@@ -197,12 +195,7 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
 
       {displayStep === 'description' && (
         <div className="flex flex-col gap-2 py-8">
-          <StepClubDescription
-            formData={formData}
-            errors={errors}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+          <AdminPageHeader title="동아리 소개" onBack={() => flow.prevStep()} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
@@ -211,11 +204,18 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
               variant="submit"
               disabled={!isDescriptionValid()}
               onClick={handleSubmit}
-              className="mt-4 w-full"
+              className="w-[23%] self-end"
             >
               수정하기
             </Button>
           )}
+          <span className="w-full border border-[#71717148]" />
+          <StepClubDescription
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </div>
       )}
     </div>

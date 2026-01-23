@@ -7,7 +7,6 @@ import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
-import { PrevButton } from '@/shared/ui/navigation-button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';

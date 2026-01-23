@@ -13,6 +13,7 @@ async function Header() {
   const session = await auth();
   const role = session?.role;
   const getClubManageInfoRes = await getClubManageInfo({ role });
+
   return (
     <>
       <ScrollProgressBar />

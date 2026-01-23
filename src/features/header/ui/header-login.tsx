@@ -30,7 +30,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   };
 
   return (
-    <span className="absolute right-[22%] rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:right-[15%] lg:text-sm">
+    <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
       {userName ? (
         <div
           className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"

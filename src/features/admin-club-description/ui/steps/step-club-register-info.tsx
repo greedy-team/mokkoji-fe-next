@@ -17,11 +17,11 @@ function StepClubRegisterInfo({
   onBlur,
 }: StepClubRegisterInfoProps) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-7 lg:gap-10">
       <fieldset className="flex flex-col gap-1.5">
         <label
           htmlFor="name"
-          className="flex items-center gap-3 text-base font-semibold"
+          className="flex items-center gap-3 text-base font-medium lg:font-semibold"
         >
           동아리 이름
           {errors.name && (
@@ -43,7 +43,7 @@ function StepClubRegisterInfo({
       <fieldset className="flex flex-col gap-1.5">
         <label
           htmlFor="category"
-          className="flex items-center gap-3 text-base font-semibold"
+          className="flex items-center gap-3 text-base font-medium lg:font-semibold"
         >
           카테고리
           {errors.category && (
@@ -52,7 +52,7 @@ function StepClubRegisterInfo({
             </p>
           )}
         </label>
-        <div className="mt-2 flex flex-wrap gap-5">
+        <div className="mt-2 flex flex-wrap gap-3 lg:gap-5">
           {Object.entries(ClubCategoryLabel).map(([key, label]) => (
             <Button
               variant={
@@ -73,7 +73,7 @@ function StepClubRegisterInfo({
       <fieldset className="flex flex-col gap-1.5">
         <label
           htmlFor="affiliation"
-          className="flex items-center gap-3 text-base font-semibold"
+          className="flex items-center gap-3 text-base font-medium lg:font-semibold"
         >
           소속
           {errors.affiliation && (
@@ -82,7 +82,7 @@ function StepClubRegisterInfo({
             </p>
           )}
         </label>
-        <div className="mt-2 flex flex-wrap gap-5">
+        <div className="mt-2 flex flex-wrap gap-3 lg:gap-5">
           {Object.entries(ClubAffiliationLabel).map(([key, label]) => (
             <Button
               variant={
@@ -103,7 +103,7 @@ function StepClubRegisterInfo({
       <fieldset className="flex flex-col gap-1.5">
         <label
           htmlFor="clubMasterStudentId"
-          className="flex items-center gap-3 text-base font-semibold"
+          className="flex items-center gap-3 text-base font-medium lg:font-semibold"
         >
           동아리 회장 학번
           {errors.clubMasterStudentId && (

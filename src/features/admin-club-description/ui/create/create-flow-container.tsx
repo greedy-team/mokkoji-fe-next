@@ -81,7 +81,7 @@ function CreateFlowContainer() {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
@@ -102,7 +102,8 @@ function CreateFlowContainer() {
           ) : (
             <Button
               type="button"
-              variant="submit"
+              variant="next"
+              size="none"
               disabled={!isRegisterInfoValid()}
               onClick={handleSubmit}
               className="mt-13 w-full"

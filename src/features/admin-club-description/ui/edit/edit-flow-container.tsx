@@ -11,12 +11,9 @@ import {
 } from '@/shared/model/type';
 import getKeyByValue from '@/shared/lib/getKeyByValue';
 import { Button } from '@/shared/ui/button';
-import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
-
 import useClubForm from '@/features/admin-club-description/util/useClubForm';
 import { patchClubInfo } from '@/features/admin-club-description/api/postClubRegister';
-
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useEditFlow from './use-edit-flow';
 import StepClubBasicInfo from '../steps/step-club-basic-info';

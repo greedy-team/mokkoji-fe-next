@@ -52,9 +52,8 @@ function ClubItem({
               <FavoriteButton
                 isFavorite={isFavorite || false}
                 clubId={clubId}
-                customClass="scale-100 "
+                customClass="scale-100"
               />
-
               <RadiusTag
                 status={status}
                 className="absolute top-8 right-7 shrink-0"

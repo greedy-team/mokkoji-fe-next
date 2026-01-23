@@ -2,15 +2,6 @@
 
 import React from 'react';
 import { ClubAffiliation, ClubAffiliationLabel } from '@/shared/model/type';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from './select';
 import useUrlParams from '../model/useUrlParams';
 
 function AffiliationNavSelect() {
@@ -23,28 +14,30 @@ function AffiliationNavSelect() {
   ];
 
   return (
-    <Select value={active} onValueChange={handleChange}>
-      <SelectTrigger
-        aria-label="소속 선택"
-        className="data-[placeholder]:text-foreground mb-0 cursor-pointer"
+    <div className="mb-5 flex gap-3 text-xs sm:mb-13 sm:gap-4 sm:text-base">
+      <button
+        onClick={() => handleChange('ALL')}
+        data-selected={active === ''}
+        className="cursor-pointer data-[selected=false]:text-[#9F9F9F] data-[selected=true]:text-black"
       >
-        <SelectValue placeholder="전체" />
-      </SelectTrigger>
+        전체
+      </button>
 
-      <SelectContent position="popper">
-        <SelectGroup>
-          <SelectLabel>소속</SelectLabel>
-          <SelectItem value="ALL" className="cursor-pointer">
-            전체
-          </SelectItem>
-          {affiliations.map((c) => (
-            <SelectItem key={c} value={c} className="cursor-pointer">
-              {ClubAffiliationLabel[c]}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+      {affiliations.map((affiliation) => {
+        const isActive = active === affiliation;
+
+        return (
+          <button
+            key={affiliation}
+            onClick={() => handleChange(affiliation)}
+            data-selected={isActive}
+            className="cursor-pointer data-[selected=false]:text-[#9F9F9F] data-[selected=true]:text-black"
+          >
+            {ClubAffiliationLabel[affiliation]}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

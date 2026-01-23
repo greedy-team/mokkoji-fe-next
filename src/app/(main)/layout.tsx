@@ -24,7 +24,9 @@ export default function MainLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <div className="hidden sm:block">
+        <Header />
+      </div>
       <main className="flex-grow">{children}</main>
       <Footer />
     </div>

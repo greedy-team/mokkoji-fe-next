@@ -18,7 +18,7 @@ function ClubCategoryButtonSection() {
   const { handleChange, active } = useUrlParams('category');
 
   return (
-    <div>
+    <div className="scrollbar-hide flex overflow-x-auto">
       <Button
         variant="outline"
         className={cn(

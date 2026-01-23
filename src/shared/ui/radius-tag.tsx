@@ -9,7 +9,7 @@ export const RecruitStatusLabel: Record<RecruitStatus, string> = {
 };
 
 export const RecruitStatusColor: Record<RecruitStatus, string> = {
-  OPEN: 'bg-[#00E457] text-white',
+  OPEN: 'bg-[#00E457] text-black',
   CLOSED: 'bg-[#E9E7E7] text-[#9C9C9C]',
   BEFORE: 'bg-[#D9D9D9] text-[#9C9C9C]',
   IMMINENT: 'bg-[#F9796F] text-[#FCD7D4]',

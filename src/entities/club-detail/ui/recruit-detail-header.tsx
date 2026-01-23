@@ -30,47 +30,52 @@ function RecruitDetailHeader({
   createdAt,
   status,
 }: RecruitDetailHeaderProps) {
-  const [date, time] = (createdAt || '').split('T');
+  const [date] = (createdAt || '').split('T');
+  const [year, month, day] = date.split('-');
+  const formattedDate = `${year}년 ${month}월 ${day}일`;
+
   return (
-    <>
-      <header className="w-full cursor-default">
-        <div className="mb-4 flex flex-row items-center gap-2.5 lg:gap-5">
-          <ClickLogo logo={logo} title={title} />
-          <h1 className="text-xl font-bold whitespace-nowrap lg:text-4xl">
-            {title}
-          </h1>
-          <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-3xl">
-            <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
-              {category} 동아리
-            </Link>
-          </p>
-        </div>
-        <div className="mb-4 flex flex-row items-center gap-4 lg:text-xl">
-          <RadiusTag
-            status={status}
-            className="whitespace-nowrap lg:text-[16px]"
-          />
+    <header className="w-full cursor-default">
+      <div className="mb-8 flex flex-row items-center gap-4">
+        <ClickLogo logo={logo} title={title} />
+        <h1 className="text-xl font-bold whitespace-nowrap lg:text-4xl">
+          {title}
+        </h1>
+        <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
+          <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
+            {category} 동아리
+          </Link>
+        </p>
+      </div>
+      <div className="flex items-center gap-6 lg:text-xl">
+        <RadiusTag
+          status={status}
+          className="shrink-0 whitespace-nowrap lg:text-[14px]"
+        />
+        <div className="flex flex-col gap-2 pt-4">
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
             decoration={false}
             className="whitespace-nowrap lg:text-lg"
           />
+          <div className="mr-auto shrink-0">
+            {date && (
+              <p className="mt-1 text-sm text-[#9C9C9C]">
+                작성일 · {formattedDate}
+              </p>
+            )}
+          </div>
         </div>
-        <div className="flex justify-between">
-          {date && (
-            <p className="lg:text-md mb-2 text-sm text-[#9C9C9C]">
-              작성일: {date} {time}
-            </p>
-          )}
+        <div className="ml-auto shrink-0">
+          <RecruitDetailHeaderControl
+            instagram={instagram}
+            clubId={clubId}
+            isFavorite={isFavorite || false}
+          />
         </div>
-      </header>
-      <RecruitDetailHeaderControl
-        instagram={instagram}
-        clubId={clubId}
-        isFavorite={isFavorite || false}
-      />
-    </>
+      </div>
+    </header>
   );
 }
 

@@ -12,7 +12,7 @@ async function ClubDescriptionWidget({ clubId }: ClubDescriptionWidgetProps) {
   return (
     <div className="min-h-[300px]">
       {description ? (
-        <p className="text-text-secondary mt-8 text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
+        <p className="text-text-secondary pt-12 text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
           <span
             dangerouslySetInnerHTML={{
               __html: convertLinkText(description),

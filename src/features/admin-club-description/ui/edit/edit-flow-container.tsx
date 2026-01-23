@@ -201,7 +201,7 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
               variant="submit"
               disabled={!isDescriptionValid()}
               onClick={handleSubmit}
-              className="w-[23%] self-end"
+              className="self-end"
             >
               수정하기
             </Button>

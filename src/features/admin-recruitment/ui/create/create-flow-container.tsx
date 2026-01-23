@@ -158,7 +158,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
               variant="submit"
               disabled={!isContentValid()}
               onClick={handleSubmit}
-              className="w-[23%] self-end"
+              className="self-end"
             >
               등록하기
             </Button>

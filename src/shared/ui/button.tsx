@@ -15,7 +15,7 @@ const buttonVariants = cva(
         link: 'flex cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00E804] to-[#33E3D0] text-xs lg:text-base font-semibold text-white shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105',
         disabled: 'rounded-md py-5 bg-[#D5D5D5] text-white text-base mt-6',
         submit:
-          'rounded-md py-5 bg-primary text-black text-base font-bold mt-6 bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
+          'rounded-[4px] px-4 lg:px-0 py-[10px] lg:py-5 bg-[var(--color-blackmode-tag)] text-black text-xs lg:text-base font-bold mt-6 bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
         next: 'rounded-md py-3.5 bg-primary text-black text-base font-bold mt-6 bg-[#FFFFFF] hover:bg-[#FFFFFF80] transition-colors duration-200 disabled:bg-[#FFFFFF80] disabled:text-black',
         optionsSelected:
           'rounded-full py-3 w-fit px-8 text-sm border-2 text-black font-semibold border-primary bg-[#F1FFF6] transition-colors duration-300',

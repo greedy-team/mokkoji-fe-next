@@ -8,6 +8,7 @@ import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import { PrevButton } from '@/shared/ui/navigation-button';
+import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
@@ -149,18 +150,12 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   if (displayStep === 'selectPost') {
     return (
-      <>
-        <PrevButton
-          onClick={() => router.push('/admin')}
-          className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-        />
-        <StepSelectPost
-          recruitments={localRecruitments}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          isDeleting={isDeleting}
-        />
-      </>
+      <StepSelectPost
+        recruitments={localRecruitments}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        isDeleting={isDeleting}
+      />
     );
   }
 
@@ -176,17 +171,16 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   return (
     <div
-      className={`px-[35%] transition-opacity duration-300 ${
+      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <h1 className="text-[28px] font-bold">모집 공고</h1>
-      <PrevButton
-        onClick={flow.goToSelectPost}
-        className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-      />
       {displayStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
+          <AdminPageHeader
+            title="모집글 기본 정보"
+            onBack={flow.goToSelectPost}
+          />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -219,29 +213,28 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
       {displayStep === 'postinfo' && (
         <div className="flex flex-col gap-2 py-8">
-          <PrevButton
-            onClick={flow.prevStep}
-            className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-          />
-          <StepRecruitmentPostInfo
-            formData={formData}
-            errors={errors}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+          <AdminPageHeader title="모집글" onBack={flow.goToSelectPost} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
             <Button
               type="button"
               variant="submit"
+              size="none"
               disabled={!isContentValid()}
               onClick={handleSubmit}
-              className="mt-4 w-full"
+              className="w-[23%] self-end"
             >
               수정하기
             </Button>
           )}
+          <span className="w-full border border-[#71717148]" />
+          <StepRecruitmentPostInfo
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </div>
       )}
     </div>

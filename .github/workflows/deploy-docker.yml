@@ -32,6 +32,10 @@ on:
         required: false
       NEXT_PUBLIC_S3_DOMAIN_PROD:
         required: false
+      NEXTAUTH_URL_DEV:
+        required: false
+      NEXTAUTH_URL_PROD:
+        required: false
 
 env:
   DOCKER_IMAGE_NAME: mokkoji-fe-next
@@ -99,6 +103,8 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
           NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
           NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL_PROD=${{ secrets.NEXTAUTH_URL_PROD }}
+          NEXTAUTH_URL_DEV=${{ secrets.NEXTAUTH_URL_DEV }}
           NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
           DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
           NEXT_PUBLIC_ANALYZE=false

@@ -4,6 +4,7 @@ import api from '@/shared/api/auth-api';
 import {
   ApiResponse,
   ClubInfoResponse,
+  ClubList,
   GetClubManageInfoResponse,
   UserRole,
 } from '../model/type';
@@ -23,6 +24,20 @@ export default async function getClubManageInfo({ role }: ClubManageInfoProps) {
         status: 200,
       };
     }
+
+    if (role === UserRole.GREEDY_ADMIN) {
+      const response = await api
+        .get('clubs', { searchParams: { page: 0, size: 1000 } })
+        .json<ApiResponse<ClubList>>();
+
+      const clubs = (response.data?.clubs ?? []).map((club) => ({
+        clubId: club.id,
+        clubName: club.name,
+      }));
+
+      return { ok: true, message: '성공', data: { clubs }, status: 200 };
+    }
+
     const response = await api
       .get('users/manage/clubs')
       .json<ApiResponse<GetClubManageInfoResponse>>();

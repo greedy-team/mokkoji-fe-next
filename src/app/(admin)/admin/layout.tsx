@@ -26,7 +26,7 @@ export default function MainLayout({
     <div className="flex min-h-screen flex-col">
       <div className="fixed inset-0 -z-10 bg-black" />
       <AdminHeader />
-      <main className="scrollbar-hide relative flex w-full flex-grow items-center justify-center px-[30%] pt-[100px] pb-[100px] text-white">
+      <main className="scrollbar-hide relative flex w-full flex-grow items-center justify-center pt-[100px] pb-[100px] text-white">
         {children}
       </main>
       <Footer />

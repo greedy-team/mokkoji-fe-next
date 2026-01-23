@@ -27,7 +27,7 @@ export default async function getClubManageInfo({ role }: ClubManageInfoProps) {
 
     if (role === UserRole.GREEDY_ADMIN) {
       const response = await api
-        .get('clubs', { searchParams: { page: 0, size: 1000 } })
+        .get('clubs', { searchParams: { page: 1, size: 1000 } })
         .json<ApiResponse<ClubList>>();
 
       const clubs = (response.data?.clubs ?? []).map((club) => ({

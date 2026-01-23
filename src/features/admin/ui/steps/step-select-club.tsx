@@ -11,7 +11,7 @@ interface StepSelectClubProps {
 function StepSelectClub({ clubs, onNext }: StepSelectClubProps) {
   return (
     <div className="flex w-full flex-col items-center gap-10">
-      <p className="text-xl font-semibold">
+      <p className="text-center text-base font-semibold lg:text-xl">
         동아리 등록/모집 공고를 작성할 동아리를 선택해주세요!
       </p>
 

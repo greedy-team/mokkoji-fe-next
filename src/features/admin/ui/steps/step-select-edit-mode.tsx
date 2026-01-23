@@ -25,42 +25,54 @@ function StepSelectEditMode({
 
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
-      <div className="flex flex-col items-center gap-2">
-        <Image src="/admin/main_logo.png" alt="logo" width={329} height={119} />
+      <div className="flex flex-col items-center gap-2 pt-10">
+        <Image
+          src="/admin/main_logo.png"
+          alt="logo"
+          width={329}
+          height={119}
+          className="h-auto w-[158px] object-contain md:w-[250px]"
+        />
         <p className="text-sm text-[#1AE166]">
           권한 | <span className="font-bold">{clubName} 동아리장</span>
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-9">
+      <div className="flex flex-col items-center gap-5 lg:gap-9">
         {isDescription ? (
           <>
             {isGreedyAdmin && (
               <button
                 type="button"
-                className="flex gap-3.5"
+                className="flex gap-2 lg:gap-3.5"
                 onClick={() => onNext('create')}
               >
-                <span className="text-2xl font-bold">소개글 등록</span>
+                <span className="text-base font-bold lg:text-2xl">
+                  소개글 등록
+                </span>
                 <Image
                   src="/admin/arrow.svg"
                   alt="바로가기"
                   width={18}
                   height={14}
+                  className="h-auto w-4"
                 />
               </button>
             )}
             <button
               type="button"
-              className="flex gap-3.5"
+              className="flex gap-2 lg:gap-3.5"
               onClick={() => onNext('edit')}
             >
-              <span className="text-2xl font-bold">소개글 수정</span>
+              <span className="text-base font-bold lg:text-2xl">
+                소개글 수정
+              </span>
               <Image
                 src="/admin/arrow.svg"
                 alt="바로가기"
                 width={18}
                 height={14}
+                className="h-auto w-4"
               />
             </button>
           </>
@@ -71,12 +83,15 @@ function StepSelectEditMode({
               className="flex gap-3.5"
               onClick={() => onNext('create')}
             >
-              <span className="text-2xl font-bold">모집글 생성</span>
+              <span className="text-base font-bold lg:text-2xl">
+                모집글 생성
+              </span>
               <Image
                 src="/admin/arrow.svg"
                 alt="바로가기"
                 width={18}
                 height={14}
+                className="h-auto w-4"
               />
             </button>
             <button
@@ -84,12 +99,15 @@ function StepSelectEditMode({
               className="flex gap-3.5"
               onClick={() => onNext('edit')}
             >
-              <span className="text-2xl font-bold">모집글 수정 및 삭제</span>
+              <span className="text-base font-bold lg:text-2xl">
+                모집글 수정 및 삭제
+              </span>
               <Image
                 src="/admin/arrow.svg"
                 alt="바로가기"
                 width={18}
                 height={14}
+                className="h-auto w-4"
               />
             </button>
           </>

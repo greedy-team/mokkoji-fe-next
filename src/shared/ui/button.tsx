@@ -23,7 +23,7 @@ const buttonVariants = cva(
           'rounded-full py-3 w-fit px-8 text-sm border-2 font-semibold bg-[#262726] border-[#262726] hover:border-[#888888] hover:bg-[#f6f6f6] hover:text-black transition-colors duration-300',
         none: '',
         optionsBlackGround:
-          'rounded-full py-5 px-6 w-fit font-bold text-base text-[#A9A9A9] bg-[#2C2E2C] hover:bg-[#1AE166] hover:text-black transition-colors duration-300',
+          'rounded-full py-4 px-5 w-fit font-bold text-sm text-[#A9A9A9] bg-[#2C2E2C] hover:bg-[#1AE166] hover:text-black transition-colors duration-300 lg:py-5 lg:px-6 lg:text-base',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

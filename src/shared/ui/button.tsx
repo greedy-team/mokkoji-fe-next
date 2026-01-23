@@ -18,9 +18,9 @@ const buttonVariants = cva(
           'rounded-md py-5 bg-primary text-black text-base font-bold mt-6 bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
         next: 'rounded-md py-3.5 bg-primary text-black text-base font-bold mt-6 bg-[#FFFFFF] hover:bg-[#FFFFFF80] transition-colors duration-200 disabled:bg-[#FFFFFF80] disabled:text-black',
         optionsSelected:
-          'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-primary bg-[#F1FFF6] transition-colors duration-300',
+          'rounded-full py-3 w-fit px-8 text-sm border-2 text-black font-semibold border-primary bg-[#F1FFF6] transition-colors duration-300',
         options:
-          'rounded-full py-2.5 w-fit px-7 text-sm border-2 border-[#D9D9D9] hover:border-[#888888] hover:bg-[#f6f6f6] transition-colors duration-300',
+          'rounded-full py-3 w-fit px-8 text-sm border-2 font-semibold bg-[#262726] border-[#262726] hover:border-[#888888] hover:bg-[#f6f6f6] hover:text-black transition-colors duration-300',
         none: '',
         optionsBlackGround:
           'rounded-full py-5 px-6 w-fit font-bold text-base text-[#A9A9A9] bg-[#2C2E2C] hover:bg-[#1AE166] hover:text-black transition-colors duration-300',

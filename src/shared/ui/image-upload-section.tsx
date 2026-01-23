@@ -99,7 +99,11 @@ function ImageUploadSection({
         onDragOver={handleDragOverWithOverlay}
         onDrop={handleDropWithOverlay}
       >
-        <div className="flex gap-5">
+        <button
+          type="button"
+          className="flex cursor-pointer gap-5"
+          onClick={() => inputRef.current?.click()}
+        >
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D9D9D930]">
             <Image
               src="/admin/Image_upload.png"
@@ -116,7 +120,7 @@ function ImageUploadSection({
               PNG, JPG 형식의 이미지를 업로드해주세요!
             </span>
           </div>
-        </div>
+        </button>
         <input
           id="imageInput"
           name="image"

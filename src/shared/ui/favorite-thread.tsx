@@ -35,14 +35,9 @@ function FavoriteThread({
       }
     >
       {optimisticFavorite ? (
-        <StarIcon
-          fill="black"
-          stroke="black"
-          className="h-6 w-6"
-          strokeWidth={1}
-        />
+        <img src="/favorite/starFill.svg" alt="채워진별" />
       ) : (
-        <Star className="h-6 w-6" strokeWidth={1} />
+        <img src="/favorite/star.svg" alt="비워진별" />
       )}
     </button>
   );

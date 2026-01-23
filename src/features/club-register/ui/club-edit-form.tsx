@@ -9,6 +9,7 @@ import {
   ClubCategoryLabel,
   ClubInfoType,
 } from '@/shared/model/type';
+import getKeyByValue from '@/shared/lib/getKeyByValue';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
@@ -28,10 +29,6 @@ const fields: FormField[] = [
 interface ClubInfoProp {
   clubInfo?: ClubInfoType;
   clubId?: number;
-}
-
-function getKeyByValue(obj: Record<string, string>, value: string) {
-  return Object.keys(obj).find((key) => obj[key].includes(value));
 }
 
 function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {

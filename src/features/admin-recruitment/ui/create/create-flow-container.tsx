@@ -14,6 +14,7 @@ import postRecruitmentForm from '@/features/admin-recruitment/api/postRecruitmen
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
 
+import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useCreateFlow from './use-create-flow';
 
 interface Props {
@@ -103,13 +104,16 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <h1 className="text-[28px] font-bold">모집 공고</h1>
       {displayStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
+          <AdminPageHeader
+            title="모집글 기본 정보"
+            onBack={() => router.push('/admin')}
+          />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -146,12 +150,6 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
             onClick={flow.prevStep}
             className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
           />
-          <StepRecruitmentPostInfo
-            formData={formData}
-            errors={errors}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
@@ -160,11 +158,18 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
               variant="submit"
               disabled={!isContentValid()}
               onClick={handleSubmit}
-              className="mt-4 w-full"
+              className="w-[23%] self-end"
             >
               등록하기
             </Button>
           )}
+          <span className="w-full border border-[#71717148]" />
+          <StepRecruitmentPostInfo
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </div>
       )}
     </div>

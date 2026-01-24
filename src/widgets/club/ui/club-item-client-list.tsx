@@ -7,9 +7,13 @@ interface ClubItemClientListProps {
 }
 
 function ClubItemClientList({ clubs }: ClubItemClientListProps) {
+  const uniqueClubs = Array.from(
+    new Map(clubs.map((club) => [club.id, club])).values(),
+  );
+
   return (
     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-      {clubs.map((item) => (
+      {uniqueClubs.map((item) => (
         <Link key={item.id} href={`/club/${item.id}`} className="block">
           <ClubItem
             name={item.name}

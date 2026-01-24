@@ -11,6 +11,7 @@ import UserInfoType from './entities/my/model/type';
 
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  debug: process.env.NODE_ENV === 'development',
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     maxAge: 60 * 60 * 24 * 3,
@@ -53,7 +54,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             user: userData.data.user,
           };
         } catch (error) {
-          console.error('[authorize error]', error);
+          console.error(
+            '[authorize error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
           return null;
         }
       },
@@ -103,7 +107,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             role: rolesData.data.role,
           };
         } catch (error) {
-          console.error('[role fetch error]', error);
+          console.error(
+            '[role fetch error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
           return {
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
@@ -131,7 +138,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             expiresAt: getTokenExpiration(data.data.accessToken),
           };
         } catch (error) {
-          console.error('[refresh error]', error);
+          console.error(
+            '[refresh error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
           return null;
         }
       }

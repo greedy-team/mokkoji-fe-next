@@ -17,14 +17,6 @@ async function ClubItemList() {
     affiliation: affiliation as ClubAffiliation,
   });
 
-  const clubs = res.data?.clubs ?? [];
-  console.log('clubs.length', clubs.length);
-  console.log('unique ids', new Set(clubs.map((c) => c.id)).size);
-  console.log(
-    'ids',
-    clubs.map((c) => c.id),
-  );
-
   if (!res.ok || !res.data) {
     return <ErrorBoundaryUi />;
   }

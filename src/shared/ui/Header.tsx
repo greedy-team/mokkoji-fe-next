@@ -33,7 +33,7 @@ async function Header() {
           <span>Mokkoji</span>
         </Link>
 
-        <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap md:flex lg:gap-2 xl:gap-3">
+        <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap lg:flex lg:gap-2 xl:gap-3">
           <NavButton label="전체 동아리" href="/club" />
           <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
           <NavButton label="고객센터" href="/support" />
@@ -56,10 +56,10 @@ async function Header() {
               />
             )}
         </nav>
-        <div className="ml-auto flex flex-shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">
+        <div className="ml-auto hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
           <HeaderMenuSection role={role} session={session} />
         </div>
-        <span className="absolute bottom-0 left-0 h-0.5 w-screen bg-gray-200 transition-colors duration-500" />
+        <span className="absolute bottom-0 left-0 hidden h-0.5 w-screen bg-gray-200 transition-colors duration-500 lg:flex" />
       </header>
     </>
   );

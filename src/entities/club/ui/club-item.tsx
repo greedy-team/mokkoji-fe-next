@@ -55,7 +55,7 @@ function ClubItem({
               {recruitStatus && (
                 <RadiusTag
                   recruitStatus={recruitStatus}
-                  className="absolute top-8 right-7 shrink-0"
+                  className="absolute top-8 right-7 shrink-0 px-3 py-2 text-xs"
                 />
               )}
             </div>

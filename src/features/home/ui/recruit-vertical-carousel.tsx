@@ -7,7 +7,7 @@ import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Club } from '@/widgets/club/model/type';
 import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
-import getRecruitmentStatus from '../util/getRecruitmentStatus';
+import RadiusTag from '@/shared/ui/radius-tag';
 
 interface CardSliderProps {
   clubs?: Club[];
@@ -76,10 +76,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          //   const status = getRecruitmentStatus(
-          //     item.recruitmentPreviewResponse.recruitStart,
-          //     item.recruitmentPreviewResponse.recruitEnd,
-          //   );
+          const recruitStatus = item.recruitmentPreviewResponse?.recruitStatus;
 
           return (
             <div
@@ -93,7 +90,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
               }}
             >
               <Link href={`/club/${item.id}`}>
-                <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
+                <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">
                       <AvatarImage src={item.logo} loading="lazy" />
@@ -114,16 +111,12 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                         {item.name}
                       </h1>
                     </div>
-                    {/* <div
-                      className={cn(
-                        status === '모집 중'
-                          ? 'bg-[#00E457] text-white'
-                          : 'bg-[#E9E7E7] text-[#9C9C9C]',
-                        'rounded-full px-2 py-1 text-[6px] lg:text-[10px]',
-                      )}
-                    >
-                      {status}
-                    </div> */}
+                    {recruitStatus && (
+                      <RadiusTag
+                        recruitStatus={recruitStatus}
+                        className="rounded-full px-2 py-1 text-[6px] lg:text-[10px]"
+                      />
+                    )}
                   </div>
                   <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
                     {item.description}

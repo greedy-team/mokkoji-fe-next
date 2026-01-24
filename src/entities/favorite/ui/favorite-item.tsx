@@ -9,7 +9,7 @@ interface ClubItemProps {
   isFavorite?: boolean;
   logo?: string;
   category?: string;
-  clubId: string;
+  clubId: number;
 }
 
 function FavoriteItem({

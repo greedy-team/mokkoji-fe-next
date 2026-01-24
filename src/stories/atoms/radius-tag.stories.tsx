@@ -6,7 +6,7 @@ const meta: Meta<typeof RadiusTag> = {
   component: RadiusTag,
   tags: ['autodocs'],
   args: {
-    status: 'OPEN', // 기본값
+    recruitStatus: 'OPEN', // 기본값
   },
 };
 export default meta;
@@ -15,24 +15,24 @@ type Story = StoryObj<typeof RadiusTag>;
 
 export const Open: Story = {
   args: {
-    status: 'OPEN',
+    recruitStatus: 'OPEN',
   },
 };
 
 export const Closed: Story = {
   args: {
-    status: 'CLOSED',
+    recruitStatus: 'CLOSED',
   },
 };
 
 export const Before: Story = {
   args: {
-    status: 'BEFORE',
+    recruitStatus: 'BEFORE',
   },
 };
 
 export const Imminent: Story = {
   args: {
-    status: 'IMMINENT',
+    recruitStatus: 'IMMINENT',
   },
 };

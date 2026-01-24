@@ -24,7 +24,7 @@ async function ClubItemList() {
   if (res.data.clubs.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
-        모집 공고가 없습니다.
+        동아리가 없습니다.
       </p>
     );
   }

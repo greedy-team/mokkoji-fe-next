@@ -1,12 +1,13 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { searchParamsCache } from '@/app/(main)/club/search-params';
+import NumberPagination from '@/shared/ui/numberPagination';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';
 
 async function ClubItemList() {
-  const page = searchParamsCache.get('page');
-  const size = searchParamsCache.get('size');
+  const page = Number(searchParamsCache.get('page') ?? 1);
+  const size = 15;
   const category = searchParamsCache.get('category');
   const affiliation = searchParamsCache.get('affiliation');
   const res = await getClubList({
@@ -15,8 +16,6 @@ async function ClubItemList() {
     category: category as ClubCategory,
     affiliation: affiliation as ClubAffiliation,
   });
-
-  console.log(res);
 
   if (!res.ok || !res.data) {
     return <ErrorBoundaryUi />;
@@ -30,7 +29,12 @@ async function ClubItemList() {
     );
   }
 
-  return <ClubItemClientList clubs={res.data.clubs} />;
+  return (
+    <>
+      <ClubItemClientList clubs={res.data.clubs} />
+      <NumberPagination page={page} totalPages={res.data.page.totalPages} />
+    </>
+  );
 }
 
 export default ClubItemList;

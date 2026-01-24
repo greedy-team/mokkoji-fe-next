@@ -40,14 +40,9 @@ async function getClubList({
   try {
     const client = session?.accessToken ? api : serverApi;
 
-    const res = await client.get('clubs', { searchParams });
-    console.log('final url', res.url);
-
     const response = await client
       .get('clubs', { searchParams, next: { tags: ['clubs'] } })
       .json<ApiResponse<ClubsResponse>>();
-
-    console.log('first club', response.data?.clubs?.[0]);
 
     return { ok: true, message: '성공', data: response.data };
   } catch (e) {

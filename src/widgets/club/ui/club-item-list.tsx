@@ -7,7 +7,7 @@ import ClubItemClientList from './club-item-client-list';
 
 async function ClubItemList() {
   const page = Number(searchParamsCache.get('page') ?? 1);
-  const size = 15;
+  const size = 9;
   const category = searchParamsCache.get('category');
   const affiliation = searchParamsCache.get('affiliation');
   const res = await getClubList({

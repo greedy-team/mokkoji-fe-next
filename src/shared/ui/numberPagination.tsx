@@ -75,7 +75,7 @@ export default function NumberPagination({
   return (
     <nav
       data-from="NumberPagination"
-      className="flex items-center justify-center gap-6 py-10"
+      className="flex items-center justify-center gap-6 py-5 sm:py-8"
       aria-label="페이지네이션"
     >
       <button
@@ -83,21 +83,21 @@ export default function NumberPagination({
         onClick={() => canPrev && go(page - 1)}
         disabled={!canPrev}
         aria-label="이전 페이지"
-        className={cn('text-2xl', !canPrev && 'cursor-not-allowed opacity-30')}
+        className={cn('text-3xl', !canPrev && 'cursor-not-allowed opacity-30')}
       >
-        ‹
+        <img src="/pagination/prev.svg" alt="이전페이지" />
       </button>
 
-      <div className="flex items-center gap-8 text-3xl">
+      <div className="flex items-center gap-4 text-3xl">
         {items.map((item) => {
           if (item === 'ellipsis') {
             ellipsisCount += 1;
             return (
               <span
                 key={`ellipsis-${ellipsisCount}`}
-                className="text-[#BDBDBD]"
+                className="text-base text-[#BDBDBD]"
               >
-                …
+                <img src="/pagination/ellipses.svg" />
               </span>
             );
           }
@@ -111,10 +111,8 @@ export default function NumberPagination({
               onClick={() => go(item)}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'transition-colors',
-                isActive
-                  ? 'font-semibold text-black'
-                  : 'text-[#BDBDBD] hover:text-black',
+                'transition-colors, text-base sm:text-lg',
+                isActive ? 'text-black' : 'text-[#BDBDBD] hover:text-black',
               )}
             >
               {item}
@@ -128,9 +126,9 @@ export default function NumberPagination({
         onClick={() => canNext && go(page + 1)}
         disabled={!canNext}
         aria-label="다음 페이지"
-        className={cn('text-2xl', !canNext && 'cursor-not-allowed opacity-30')}
+        className={cn('text-3xl', !canNext && 'cursor-not-allowed opacity-30')}
       >
-        ›
+        <img src="/pagination/next.svg" alt="다음페이지" />
       </button>
     </nav>
   );

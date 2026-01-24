@@ -1,26 +1,25 @@
 import Link from 'next/link';
 import ClubItem from '@/entities/club/ui/club-item';
-import { Recruitment } from '../model/type';
+import { Club } from '../model/type';
 
 interface ClubItemClientListProps {
-  recruitments: Recruitment[];
+  clubs: Club[];
 }
 
-function ClubItemClientList({ recruitments }: ClubItemClientListProps) {
+function ClubItemClientList({ clubs }: ClubItemClientListProps) {
   return (
     <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {recruitments.map((item) => (
-        <Link key={item.id} href={`/club/${item.club.id}`}>
+      {clubs.map((item) => (
+        <Link key={item.id} href={`/club/${item.id}`} className="block">
           <ClubItem
-            title={item.title}
-            name={item.club.name || ''}
-            startDate={item.recruitStart}
-            endDate={item.recruitEnd}
-            description={item.club.description}
-            isFavorite={item.isFavorite}
-            logo={item.club.logo}
-            clubId={String(item.club.id)}
-            status={item.status}
+            name={item.name}
+            startDate={item.recruitmentPreviewResponse?.recruitStart}
+            endDate={item.recruitmentPreviewResponse?.recruitEnd}
+            description={item.description}
+            favorite={item.favorite}
+            logo={item.logo}
+            id={item.id}
+            recruitStatus={item.recruitmentPreviewResponse?.recruitStatus}
             height={150}
           />
         </Link>

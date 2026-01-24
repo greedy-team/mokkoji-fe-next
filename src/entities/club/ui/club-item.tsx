@@ -2,33 +2,31 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { RecruitStatus } from '@/shared/model/type';
+import { RecruitStatus } from '@/widgets/club/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
 import PeriodSection from '../../club-detail/ui/period-section';
 
 interface ClubItemProps {
-  title: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   description: string;
-  isFavorite?: boolean;
+  favorite: boolean;
   logo?: string;
-  clubId: string;
-  status: RecruitStatus;
+  id: number;
+  recruitStatus?: RecruitStatus;
   height?: number;
 }
 
 function ClubItem({
-  title,
   name,
   startDate,
   endDate,
   description,
-  isFavorite,
+  favorite,
   logo,
-  clubId,
-  status,
+  id,
+  recruitStatus,
   height = 150,
 }: ClubItemProps) {
   return (
@@ -50,14 +48,16 @@ function ClubItem({
               </h1>
 
               <FavoriteButton
-                isFavorite={isFavorite || false}
-                clubId={clubId}
+                isFavorite={favorite}
+                clubId={id}
                 customClass="scale-100"
               />
-              <RadiusTag
-                status={status}
-                className="absolute top-8 right-7 shrink-0"
-              />
+              {recruitStatus && (
+                <RadiusTag
+                  recruitStatus={recruitStatus}
+                  className="absolute top-8 right-7 shrink-0"
+                />
+              )}
             </div>
 
             <div className="whitespace-nowrap">

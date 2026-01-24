@@ -32,7 +32,7 @@ function ClubItem({
   return (
     <div
       style={{ height }}
-      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-xl bg-[#F8F8F8] px-7 py-8 text-[#474747] transition-shadow duration-300"
+      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-xl bg-[#F8F8F8] px-5 py-8 text-[#474747] transition-shadow duration-300"
     >
       <div className="flex w-full">
         <div className="flex w-full items-center gap-4">
@@ -55,7 +55,7 @@ function ClubItem({
               {recruitStatus && (
                 <RadiusTag
                   recruitStatus={recruitStatus}
-                  className="absolute top-8 right-7 shrink-0 px-3 py-2 text-xs"
+                  className="absolute top-8 right-5 shrink-0 px-3 py-2 text-xs"
                 />
               )}
             </div>

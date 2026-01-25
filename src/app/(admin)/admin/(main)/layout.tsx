@@ -1,8 +1,11 @@
 import 'react-toastify/dist/ReactToastify.css';
-import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
+import { UserRole } from '@/shared/model/type';
+import AdminHeader from '@/shared/ui/AdminHeader';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리 모집 플랫폼',
@@ -17,15 +20,31 @@ export const metadata: Metadata = {
   },
 };
 
-export default function MainLayout({
+const ALLOWED_ROLES = [
+  UserRole.GREEDY_ADMIN,
+  UserRole.CLUB_ADMIN,
+  UserRole.CLUB_MASTER,
+];
+
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  const role = session?.role;
+
+  if (!role || !ALLOWED_ROLES.includes(role)) {
+    redirect('/');
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-grow">{children}</main>
+      <div className="fixed inset-0 -z-10 bg-black" />
+      <AdminHeader />
+      <main className="scrollbar-hide relative flex w-full flex-grow items-center justify-center px-[23%] pt-[100px] pb-[100px] text-white lg:px-0">
+        {children}
+      </main>
       <Footer />
     </div>
   );

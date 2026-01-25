@@ -27,6 +27,15 @@ interface Props {
 function EditFlowContainer({ clubInfo, clubId }: Props) {
   const router = useRouter();
   const flow = useEditFlow();
+  const initialFormData = {
+    name: clubInfo.name,
+    category: getKeyByValue(ClubCategoryLabel, clubInfo.category) || '',
+    affiliation:
+      getKeyByValue(ClubAffiliationLabel, clubInfo.affiliation) || '',
+    description: clubInfo.description ?? '',
+    instagram: clubInfo.instagram ?? '',
+    logo: clubInfo.logo ?? '',
+  };
   const {
     formData,
     errors,
@@ -35,27 +44,15 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
     isBasicInfoValid,
     isDescriptionValid,
     handleNextStep,
-    setFormData,
-  } = useClubForm({ onNextStep: flow.nextStep });
-
+  } = useClubForm({
+    onNextStep: flow.nextStep,
+    initialData: initialFormData,
+  });
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(clubInfo.logo ?? null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
-
-  useEffect(() => {
-    setFormData({
-      name: clubInfo.name,
-      category: getKeyByValue(ClubCategoryLabel, clubInfo.category) || '',
-      affiliation:
-        getKeyByValue(ClubAffiliationLabel, clubInfo.affiliation) || '',
-      description: clubInfo.description ?? '',
-      instagram: clubInfo.instagram ?? '',
-      logo: clubInfo.logo ?? '',
-    });
-    setPreview(clubInfo.logo ?? null);
-  }, [clubInfo, setFormData]);
 
   useEffect(() => {
     if (flow.currentStep !== displayStep) {

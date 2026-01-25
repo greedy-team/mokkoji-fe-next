@@ -91,7 +91,7 @@ function ImageUploadSection({
           </div>
         </div>
       )}
-      <label htmlFor="image" className="text-base font-semibold">
+      <label htmlFor="image" className="text-base font-medium lg:font-semibold">
         이미지 파일 업로드
       </label>
       <div

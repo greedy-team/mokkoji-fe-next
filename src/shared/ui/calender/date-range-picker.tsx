@@ -56,7 +56,7 @@ function DateRangePicker({
       {label && (
         <label
           htmlFor="recruitPeriod"
-          className="flex gap-2 text-base font-semibold"
+          className="flex gap-2 text-base font-medium lg:font-semibold"
         >
           {label}
           {error && (

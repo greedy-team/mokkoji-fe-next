@@ -40,7 +40,7 @@ function ClubDetailHeader({
         </p>
       </div>
       <div className="mb-2 flex flex-row items-center gap-2 lg:text-xl">
-        <RadiusTag status={status} className="lg:text-[16px]" />
+        <RadiusTag recruitStatus={status} className="lg:text-[16px]" />
         <PeriodSection
           startDate={startDate}
           endDate={endDate}

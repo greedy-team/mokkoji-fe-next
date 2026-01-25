@@ -4,8 +4,8 @@ import getDateUtil, {
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   decoration?: boolean;
   className?: string;
 }
@@ -16,20 +16,29 @@ function PeriodSection({
   decoration = true,
   className,
 }: PeriodSectionProps) {
+  if (!startDate || !endDate) {
+    return (
+      <span className={cn(`text-xs text-[#8B95A1] ${className}`)}>
+        상시모집
+      </span>
+    );
+  }
+
   const isEndOfYear = getDateUtil(endDate);
 
   return isEndOfYear ? (
-    <span className={cn(`text-xs font-semibold ${className}`)}>상시모집</span>
+    <span className={cn(`text-xs text-[#8B95A1] ${className}`)}>상시모집</span>
   ) : (
     <span className={cn(`text-xs leading-none ${className}`)}>
       {decoration ? (
-        <span className="text-[#8B95A1]">모집기한 · </span>
+        <span className="text-[#8B95A1]">
+          모집기한 · {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
+        </span>
       ) : (
-        <span>모집기한 | </span>
+        <span className="text[#0A0A0A]">
+          모집기한 | {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
+        </span>
       )}
-      <span className="text-[#8B95A1]">
-        {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
-      </span>
     </span>
   );
 }

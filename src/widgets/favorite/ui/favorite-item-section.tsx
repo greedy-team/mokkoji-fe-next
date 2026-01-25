@@ -48,7 +48,7 @@ async function FavoriteItemSection() {
               <FavoriteItem
                 title={item.name}
                 description={item.description || ''}
-                clubId={String(item.id)}
+                clubId={item.id}
                 category={item.category}
                 isFavorite={item.isFavorite}
                 logo={item.logo}

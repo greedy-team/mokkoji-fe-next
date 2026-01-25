@@ -1,12 +1,4 @@
-export interface Club {
-  id: number;
-  name: string;
-  description: string;
-  clubCategory: string; // 필요하면 'VOLUNTEER_SOCIAL' | 'CULTURAL_ART' 등으로 좁혀도 됨
-  clubAffiliation: string; // 필요하면 'CENTRAL_CLUB' 등으로 좁힘
-  logo?: string; // 일부 데이터(lgoo)에서 오타가 있으니 선택적으로
-  lgoo?: string; // 데이터에서 오타 키를 반영
-}
+import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 
 export type RecruitmentStatus = 'BEFORE' | 'CLOSED' | 'OPEN'; // OPEN은 예시
 
@@ -31,3 +23,51 @@ export interface RecruitmentResponse {
   recruitments: Recruitment[];
   page: Pagination;
 }
+
+// export interface Club {
+//   id: number;
+//   name: string;
+//   category: ClubCategory;
+//   affiliation: ClubAffiliation;
+//   description: string;
+//   recruitStartDate: string;
+//   recruitEndDate: string;
+//   logo?: string;
+//   isFavorite: boolean;
+// }
+
+export interface RecruitmentPreviewResponse {
+  id: number;
+  recruitStart: string;
+  recruitEnd: string;
+  recruitStatus: RecruitStatus;
+}
+
+export interface Club {
+  id: number;
+  name: string;
+  description: string;
+  logo?: string;
+  favorite: boolean;
+  recruitmentPreviewResponse: RecruitmentPreviewResponse | null;
+}
+
+export interface ClubsResponse {
+  clubs: Club[];
+  page: Pagination;
+}
+
+export type RecruitStatus =
+  | 'BEFORE'
+  | 'CLOSED'
+  | 'OPEN'
+  | 'ALWAYS'
+  | 'IMMINENT';
+
+export const RecruitStatusLabel: Record<RecruitStatus, string> = {
+  OPEN: '모집중',
+  CLOSED: '모집마감',
+  BEFORE: '모집전',
+  IMMINENT: '마감임박',
+  ALWAYS: '상시모집',
+};

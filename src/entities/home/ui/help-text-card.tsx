@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 
 function HelpTextCard() {
@@ -6,7 +5,7 @@ function HelpTextCard() {
     <div className="flex h-full w-full flex-col justify-center lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
         <h4 className="text-primary-500 text-lg font-bold lg:text-2xl">
-          <Link href="/help">고객센터</Link>
+          고객센터
         </h4>
       </AnimateOnView>
       <AnimateOnView animation="reveal">

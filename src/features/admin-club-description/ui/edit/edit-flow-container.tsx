@@ -4,12 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
-import {
-  ClubInfoType,
-  ClubCategoryLabel,
-  ClubAffiliationLabel,
-} from '@/shared/model/type';
-import getKeyByValue from '@/shared/lib/getKeyByValue';
+import { ClubInfoType } from '@/shared/model/type';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useClubForm from '@/features/admin-club-description/util/useClubForm';
@@ -29,9 +24,8 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
   const flow = useEditFlow();
   const initialFormData = {
     name: clubInfo.name,
-    category: getKeyByValue(ClubCategoryLabel, clubInfo.category) || '',
-    affiliation:
-      getKeyByValue(ClubAffiliationLabel, clubInfo.affiliation) || '',
+    category: clubInfo.category,
+    affiliation: clubInfo.affiliation,
     description: clubInfo.description ?? '',
     instagram: clubInfo.instagram ?? '',
     logo: clubInfo.logo ?? '',

@@ -49,6 +49,11 @@ export interface FavoriteList {
   pagination: Pagination;
 }
 
+export interface ClubSearchResponse {
+  clubs: ClubType[];
+  pagination: Pagination;
+}
+
 export const ClubCategoryLabel: Record<ClubCategory, string> = {
   [ClubCategory.CULTURAL_ART]: '문화/예술🎨',
   [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양📚',

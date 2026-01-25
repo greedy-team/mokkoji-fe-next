@@ -19,7 +19,7 @@ function ClubDetailHeaderControl({
         <FavoriteButton
           clubId={clubId}
           isFavorite={isFavorite}
-          customClass="flex items-center justify-center cursor-pointer"
+          customClass="w-[23px] h-[23px] flex items-center justify-center cursor-pointer"
         />
       </div>
       <button

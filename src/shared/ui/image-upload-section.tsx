@@ -42,7 +42,9 @@ function ImageUploadSection({
   const handleDragEnter = (e: React.DragEvent<HTMLFieldSetElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragActive(true);
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDragActive(true);
+    }
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLFieldSetElement>) => {

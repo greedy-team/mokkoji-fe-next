@@ -3,6 +3,7 @@ import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
+import BottomNav from '@/shared/ui/bottom-nav';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리 모집 플랫폼',
@@ -23,10 +24,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen w-full flex-col">
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

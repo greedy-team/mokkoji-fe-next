@@ -148,12 +148,12 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
 
   return (
     <div
-      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
+      className={`transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {displayStep === 'basicInfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="동아리 기본 정보"
             onBack={() => router.push('/admin')}
@@ -182,7 +182,7 @@ function EditFlowContainer({ clubInfo, clubId }: Props) {
       )}
 
       {displayStep === 'description' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="동아리 소개" onBack={() => flow.prevStep()} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />

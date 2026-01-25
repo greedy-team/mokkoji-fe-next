@@ -170,12 +170,12 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   return (
     <div
-      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
+      className={`transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {displayStep === 'basicInfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="모집글 기본 정보"
             onBack={flow.goToSelectPost}
@@ -211,7 +211,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       )}
 
       {displayStep === 'postinfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="모집글" onBack={flow.goToSelectPost} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />

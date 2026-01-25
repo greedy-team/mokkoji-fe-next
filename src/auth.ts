@@ -120,6 +120,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
       }
 
+      // 이미 에러가 있으면 리프레시 시도 스킵 (무한루프 방지)
+      if (token.error) {
+        return token;
+      }
+
       if (Date.now() > (token.expiresAt as number) - 10 * 60 * 1000) {
         try {
           const response = await serverApi.post('users/auth/refresh', {
@@ -130,7 +135,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const data: LoginSuccessResponse = await response.json();
           if (!data.data) {
-            return null;
+            return {
+              ...token,
+              error: 'RefreshTokenExpired',
+            };
           }
           return {
             ...token,
@@ -142,20 +150,24 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             '[refresh error]',
             error instanceof Error ? error.message : 'Unknown error',
           );
-          return null;
+          return {
+            ...token,
+            error: 'RefreshTokenExpired',
+          };
         }
       }
       return token;
     },
-    // TODO: 추후 타입 수정
     session: async ({ session, token }) => {
       return {
-        expiresAt: token.expiresAt,
-        user: token.user,
-        role: token.role,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
-      } as Session;
+        ...session,
+        expiresAt: token.expiresAt as number | undefined,
+        user: token.user as Session['user'],
+        role: token.role as Session['role'],
+        accessToken: token.accessToken as string | undefined,
+        refreshToken: token.refreshToken as string | undefined,
+        error: token.error as string | undefined,
+      };
     },
     redirect: async ({ url, baseUrl }) => {
       if (url.startsWith('/')) return `${baseUrl}${url}`;

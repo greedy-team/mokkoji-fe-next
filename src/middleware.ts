@@ -5,7 +5,9 @@ import { publicRoutes } from '../route';
 
 export default middleware(async (req) => {
   const { nextUrl, auth } = req;
-  const isLoggedIn = !!auth?.user;
+  const session = auth as { user?: unknown; error?: string } | null;
+  const hasSessionError = session?.error === 'RefreshTokenExpired';
+  const isLoggedIn = !!session?.user && !hasSessionError;
 
   const isPublicRoute = publicRoutes.some((route) => {
     if (route.endsWith('/:path*')) {

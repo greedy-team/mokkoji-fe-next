@@ -26,7 +26,7 @@ function RadiusTag({ className, recruitStatus }: RadiusTagProps) {
   return (
     <span
       className={clsx(
-        'flex rounded-full text-center leading-none whitespace-nowrap',
+        'flex rounded-full text-center whitespace-nowrap',
         RecruitStatusColor[recruitStatus],
         className,
       )}

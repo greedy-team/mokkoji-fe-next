@@ -18,7 +18,7 @@ function PeriodSection({
 }: PeriodSectionProps) {
   if (!startDate || !endDate) {
     return (
-      <span className={cn(`text-xs text-[#8B95A1] ${className}`)}>
+      <span className={cn(`text-xs text-[#0A0A0A] ${className}`)}>
         상시모집
       </span>
     );

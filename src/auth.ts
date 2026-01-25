@@ -11,6 +11,7 @@ import UserInfoType from './entities/my/model/type';
 
 // TODO: 추후 루시아로 변경
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  debug: process.env.NODE_ENV === 'development',
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     maxAge: 60 * 60 * 24 * 3,
@@ -53,7 +54,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             user: userData.data.user,
           };
         } catch (error) {
-          console.error('[authorize error]', error);
+          console.error(
+            '[authorize error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
           return null;
         }
       },
@@ -103,7 +107,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             role: rolesData.data.role,
           };
         } catch (error) {
-          console.error('[role fetch error]', error);
+          console.error(
+            '[role fetch error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
           return {
             accessToken: user.accessToken,
             refreshToken: user.refreshToken,
@@ -111,6 +118,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             user: user.user,
           };
         }
+      }
+
+      // 이미 에러가 있으면 리프레시 시도 스킵 (무한루프 방지)
+      if (token.error) {
+        return token;
       }
 
       if (Date.now() > (token.expiresAt as number) - 10 * 60 * 1000) {
@@ -123,7 +135,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const data: LoginSuccessResponse = await response.json();
           if (!data.data) {
-            return null;
+            return {
+              ...token,
+              error: 'RefreshTokenExpired',
+            };
           }
           return {
             ...token,
@@ -131,21 +146,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             expiresAt: getTokenExpiration(data.data.accessToken),
           };
         } catch (error) {
-          console.error('[refresh error]', error);
-          return null;
+          console.error(
+            '[refresh error]',
+            error instanceof Error ? error.message : 'Unknown error',
+          );
+          return {
+            ...token,
+            error: 'RefreshTokenExpired',
+          };
         }
       }
       return token;
     },
-    // TODO: 추후 타입 수정
     session: async ({ session, token }) => {
       return {
-        expiresAt: token.expiresAt,
-        user: token.user,
-        role: token.role,
-        accessToken: token.accessToken,
-        refreshToken: token.refreshToken,
-      } as Session;
+        ...session,
+        expiresAt: token.expiresAt as number | undefined,
+        user: token.user as Session['user'],
+        role: token.role as Session['role'],
+        accessToken: token.accessToken as string | undefined,
+        refreshToken: token.refreshToken as string | undefined,
+        error: token.error as string | undefined,
+      };
     },
     redirect: async ({ url, baseUrl }) => {
       if (url.startsWith('/')) return `${baseUrl}${url}`;

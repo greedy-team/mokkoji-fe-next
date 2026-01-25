@@ -10,6 +10,7 @@ declare module 'next-auth' {
     user?: UserInfoType;
     role?: UserRole;
     manageClubInfo?: ManageClub[];
+    error?: string;
   }
 
   interface User {
@@ -25,5 +26,6 @@ declare module 'next-auth' {
     accessToken?: string;
     refreshToken?: string;
     expiresAt?: number;
+    error?: string;
   }
 }

@@ -32,6 +32,10 @@ on:
         required: false
       NEXT_PUBLIC_S3_DOMAIN_PROD:
         required: false
+      NEXTAUTH_URL_DEV:
+        required: false
+      NEXTAUTH_URL_PROD:
+        required: false
 
 env:
   DOCKER_IMAGE_NAME: mokkoji-fe-next
@@ -42,6 +46,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -49,16 +57,31 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
+      - name: Set lower case owner name
         run: |
-          docker build \
-            --build-arg NODE_ENV=production \
-            -t ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }} \
-            -t ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }}-${{ github.sha }} \
-            .
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
 
-      - name: Save Docker image
-        run: docker save ${{ env.DOCKER_IMAGE_NAME }}:${{ inputs.env }} | gzip > mokkoji-fe-next-${{ inputs.env }}.tar.gz
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          build-args: |
+            NODE_ENV=production
+          tags: |
+            ghcr.io/${{ env.OWNER_LC }}/mokkoji-fe-next:${{ inputs.env }}
+            ghcr.io/${{ env.OWNER_LC }}/mokkoji-fe-next:${{ inputs.env }}-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Prepare deployment files
         run: |
@@ -67,13 +90,12 @@ jobs:
           cp -r nginx deploy_files/
           rm -rf deploy_files/nginx/active
           cp -r scripts deploy_files/
-          cp mokkoji-fe-next-${{ inputs.env }}.tar.gz deploy_files/
 
       - name: Create .env file
         run: |
           cat > deploy_files/.env << EOF
-          DOCKER_IMAGE_PROD=${{ env.DOCKER_IMAGE_NAME }}:prod
-          DOCKER_IMAGE_DEV=${{ env.DOCKER_IMAGE_NAME }}:dev
+          DOCKER_IMAGE_PROD=ghcr.io/${{ env.OWNER_LC }}/mokkoji-fe-next:prod
+          DOCKER_IMAGE_DEV=ghcr.io/${{ env.OWNER_LC }}/mokkoji-fe-next:dev
           NEXT_PUBLIC_API_URL_PROD=${{ secrets.NEXT_PUBLIC_API_URL_PROD }}
           NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
           NEXT_PUBLIC_S3_DOMAIN_PROD=${{ secrets.NEXT_PUBLIC_S3_DOMAIN_PROD }}
@@ -81,6 +103,8 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
           NEXT_PUBLIC_SENTRY_REPLAY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_REPLAY_DSN }}
           NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL_PROD=${{ secrets.NEXTAUTH_URL_PROD }}
+          NEXTAUTH_URL_DEV=${{ secrets.NEXTAUTH_URL_DEV }}
           NEXT_PUBLIC_CLARITY_ID=${{ secrets.NEXT_PUBLIC_CLARITY_ID }}
           DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
           NEXT_PUBLIC_ANALYZE=false
@@ -102,7 +126,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deploy_files/*"
+          source: 'deploy_files/*'
           target: ${{ env.APP_DIR }}
           strip_components: 1
 
@@ -117,9 +141,11 @@ jobs:
             set -e
             cd "$APP_DIR"
 
-            echo "Loading Docker image"
-            docker load < mokkoji-fe-next-${{ inputs.env }}.tar.gz
-            rm mokkoji-fe-next-${{ inputs.env }}.tar.gz
+            echo "Logging into GHCR..."
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "Pulling images for ${{ inputs.env }} environment..."
+            docker-compose pull app-${{ inputs.env }}-blue app-${{ inputs.env }}-green nginx
 
             echo "Ensuring Nginx is running"
             if ! docker ps --filter "name=mokkoji-nginx" --filter "status=running" | grep -q mokkoji-nginx; then
@@ -160,4 +186,3 @@ jobs:
         if: always()
         run: |
           rm -rf deploy_files
-          rm -f mokkoji-fe-next-${{ inputs.env }}.tar.gz

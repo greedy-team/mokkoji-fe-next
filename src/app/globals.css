@@ -463,3 +463,45 @@ html::-webkit-scrollbar {
     max-width: 300px;
   }
 }
+
+.react-calendar__month-view__days__day--weekend {
+  color: #1f2937 !important;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-decoration: none !important;
+  margin-bottom: 15px;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-weight: 400 !important;
+  color: #000000;
+  font-size: 1rem;
+  text-transform: none !important;
+}
+
+.react-calendar__navigation {
+  display: flex !important;
+  align-items: center !important;
+  height: 60px !important;
+  margin-bottom: 10px !important;
+}
+
+.react-calendar__navigation button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 44px !important;
+  background: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+}
+
+.react-calendar__navigation__label {
+  font-size: 1.25rem !important;
+  font-weight: bold !important;
+  flex-grow: 0 !important;
+}

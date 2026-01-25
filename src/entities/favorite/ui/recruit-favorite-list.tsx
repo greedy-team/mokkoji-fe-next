@@ -20,17 +20,15 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
       {sortedData.length > 0 ? (
         <ul className="space-y-1">
           {sortedData.map((club) => (
-            <li key={`${club.clubId}`} className="flex flex-row space-x-2">
+            <li
+              key={`${club.clubId}`}
+              className="flex flex-row space-x-2 text-xl font-medium"
+            >
               <span>
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}
               </span>
               <span>
-                <Link
-                  href={`/club/${club.clubId}`}
-                  className="text-[#00E457] underline"
-                >
-                  {club.clubName}
-                </Link>
+                <Link href={`/club/${club.clubId}`}>{club.clubName}</Link>
               </span>
             </li>
           ))}

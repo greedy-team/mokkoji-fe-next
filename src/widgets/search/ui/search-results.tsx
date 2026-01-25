@@ -1,8 +1,7 @@
 import { ClubCategory } from '@/shared/model/type';
 import ClubSearchItem from '@/entities/search/ui/club-search-item';
-import getClubList from '@/widgets/recruit/api/getClubList';
+import searchClubs from '@/widgets/search/api/searchClubs';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getClubRecruitList from '@/widgets/club/api/getClubRecruitList';
 
 interface SearchResultsProps {
   keyword?: string;
@@ -21,42 +20,27 @@ const CATEGORY_MAP: Record<string, ClubCategory> = {
 async function SearchResults({ keyword, category }: SearchResultsProps) {
   const safeCategory = category ? CATEGORY_MAP[category] : undefined;
 
-  const [clubsRes, recruitmentsRes] = await Promise.all([
-    getClubList({
-      page: 1,
-      size: 200,
-      keyword,
-      ...(safeCategory ? { category: safeCategory } : {}),
-    }),
-    getClubRecruitList({
-      page: 1,
-      size: 500,
-    }),
-  ]);
+  const result = await searchClubs({
+    keyword,
+    category: safeCategory,
+    page: 1,
+    size: 10,
+  });
 
-  if (!clubsRes.ok || !clubsRes.data) return <ErrorBoundaryUi />;
-  if (!recruitmentsRes.ok || !recruitmentsRes.data) return <ErrorBoundaryUi />;
+  if (!result.ok || !result.data) return <ErrorBoundaryUi />;
 
-  const recruitmentClubIds = recruitmentsRes.data.recruitments
-    .map((recruitment) => recruitment.club?.id)
-    .filter((id): id is number => typeof id === 'number');
-
-  const filteredClubs = clubsRes.data.clubs.filter((club) =>
-    recruitmentClubIds.includes(club.id),
-  );
+  const { clubs } = result.data;
 
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-13 mb-4">
-        <span className="text-primary-500 font-bold">
-          {filteredClubs.length}건
-        </span>
+        <span className="text-primary-500 font-bold">{clubs.length}건</span>
         <span className="text-black">의 검색결과</span>
       </section>
 
-      {clubsRes.data?.clubs.length > 0 ? (
+      {clubs.length > 0 ? (
         <section className="space-y-3">
-          {filteredClubs.map((club) => (
+          {clubs.map((club) => (
             <ClubSearchItem key={club.id} club={club} />
           ))}
         </section>

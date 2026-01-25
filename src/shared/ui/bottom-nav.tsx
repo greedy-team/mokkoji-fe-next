@@ -11,7 +11,7 @@ import {
 
 function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 flex h-[85px] bg-white lg:hidden">
+    <nav className="sticky inset-x-0 bottom-0 z-50 flex h-[85px] shrink-0 border-2 bg-white lg:hidden">
       <NavBottomButton label="홈" href="/" icon={HomeIcon} />
       <NavBottomButton label="전체 동아리" href="/club" icon={ClubIcon} />
       <NavBottomButton

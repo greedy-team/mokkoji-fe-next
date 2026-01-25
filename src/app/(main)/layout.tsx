@@ -24,11 +24,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex h-screen w-full flex-col">
       <Header />
-      <main className="flex-grow">{children}</main>
-      <BottomNav />
+      <main className="flex-1">{children}</main>
       <Footer />
+      <BottomNav />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 
 function ClubTextCard() {
@@ -6,7 +5,7 @@ function ClubTextCard() {
     <div className="flex h-[50%] w-full flex-col justify-center lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
         <h1 className="text-primary-500 text-lg font-bold lg:text-2xl">
-          <Link href="/club">전체 동아리</Link>
+          전체 동아리
         </h1>
       </AnimateOnView>
       <AnimateOnView animation="reveal">

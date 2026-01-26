@@ -27,6 +27,18 @@ export default middleware(async (req) => {
   //     return NextResponse.next();
   //   }
 
+  // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
+  if (hasSessionError) {
+    const response = isPublicRoute
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL('/', nextUrl));
+
+    response.cookies.delete('authjs.session-token');
+    response.cookies.delete('__Secure-authjs.session-token');
+
+    return response;
+  }
+
   /**
    * 2) 로그인하지 않았을 때 접근 불가
    */
@@ -34,15 +46,7 @@ export default middleware(async (req) => {
     // 원래 가려던 경로로 돌아오게 하려면 callback 추가:
     // const callback = encodeURIComponent(nextUrl.pathname + nextUrl.search);
     // return NextResponse.redirect(new URL(`/login?callbackUrl=${callback}`, nextUrl));
-    const response = NextResponse.redirect(new URL('/', nextUrl));
-
-    // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
-    if (hasSessionError) {
-      response.cookies.delete('authjs.session-token');
-      response.cookies.delete('__Secure-authjs.session-token');
-    }
-
-    return response;
+    return NextResponse.redirect(new URL('/', nextUrl));
   }
 
   return NextResponse.next();

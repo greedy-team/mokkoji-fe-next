@@ -86,12 +86,12 @@ function FAQList() {
 
   return (
     <div className="mt-10 w-full space-y-6">
-      <h2 className="text-primary-500 text-2xl font-bold">FAQ</h2>
+      <h2 className="text-primary-500 text-xl font-bold lg:text-2xl">FAQ</h2>
       {faqData.map((item, idx) => (
-        <div key={item.question} className="border-b pb-4">
+        <div key={item.question} className="border-b pb-3 lg:pb-4">
           <button
             className={cn(
-              'hover:text-primary-500 w-full cursor-pointer text-left text-lg font-semibold transition',
+              'hover:text-primary-500 w-full cursor-pointer text-left text-sm font-semibold transition lg:text-lg',
               openIndex === idx ? 'text-primary-500' : 'text-text-primary',
             )}
             onClick={() => toggle(idx)}
@@ -99,13 +99,13 @@ function FAQList() {
             <span>Q. {item.question}</span>
           </button>
           {openIndex === idx && item.answerTitle && item.answerBody && (
-            <div className="px-3">
-              <p className="text-md mt-5 leading-relaxed font-semibold whitespace-pre-line text-[000000]">
+            <div className="">
+              <p className="mt-5 text-sm leading-relaxed font-semibold whitespace-pre-line text-[000000] lg:text-lg">
                 <span className="font-bold">A. </span>
                 {item.answerTitle}
               </p>
               <p
-                className="mt-5 text-sm leading-relaxed font-medium whitespace-pre-line text-[000000]"
+                className="mt-5 px-4 text-sm leading-relaxed font-medium whitespace-pre-line text-[000000] lg:px-6"
                 dangerouslySetInnerHTML={formatTextWithLinks(item.answerBody)}
               />
             </div>
@@ -113,7 +113,7 @@ function FAQList() {
         </div>
       ))}
 
-      <span className="text-xl font-bold text-[#20E86C] underline">
+      <span className="text-sm font-bold text-[#20E86C] underline lg:text-xl">
         <a
           id="bottom"
           href="https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header"

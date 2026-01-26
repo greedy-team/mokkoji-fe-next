@@ -2,6 +2,7 @@ import { FavoriteDateItem } from '@/views/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import Image from 'next/image';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
   const sortedData = useMemo(() => {
@@ -15,14 +16,23 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
   }, [data]);
 
   return (
-    <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#FBFBFB] p-10 text-xl font-semibold">
-      <h2 className="text-2xl font-bold">모집 일정 📒</h2>
+    <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#FBFBFB] p-6 text-xl font-semibold lg:p-10">
+      <h2 className="flex items-center gap-2 text-sm font-bold lg:text-2xl">
+        <Image
+          src="/favorite/calendar.svg"
+          alt="모집 일정"
+          width={24}
+          height={24}
+          className="h-[24px] w-[24px] lg:h-[36px] lg:w-[36px]"
+        />
+        모집 일정
+      </h2>
       {sortedData.length > 0 ? (
         <ul className="space-y-1">
           {sortedData.map((club) => (
             <li
               key={`${club.clubId}`}
-              className="flex flex-row space-x-2 text-xl font-medium"
+              className="flex flex-row space-x-2 text-base font-medium lg:text-xl"
             >
               <span>
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}

@@ -41,7 +41,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[574px] rounded-xl !border-none !bg-[#FBFBFB] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
+        className="h-[574px] !w-full rounded-xl !border-none !bg-[#FBFBFB] !p-3 text-gray-800 lg:!w-[700px]"
         nextLabel={
           <div className="flex items-center justify-center">
             <Image
@@ -49,6 +49,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
               alt="다음달"
               width={12}
               height={23}
+              className="h-[12px] w-[6px] lg:h-[23px] lg:w-[12px]"
             />
           </div>
         }
@@ -59,6 +60,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
               alt="저번달"
               width={12}
               height={23}
+              className="h-[12px] w-[6px] lg:h-[23px] lg:w-[12px]"
             />
           </div>
         }
@@ -74,14 +76,14 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
           const isSelected = value.toDateString() === dateKey;
           const isDeadline = deadlineMap.has(dateKey);
 
-          let textClass = '!text-xl';
+          let textClass = '!text-sm lg:!text-xl';
           let selectedClass = '';
 
           if (isSelected) {
-            textClass = '!text-[#00E457] !text-xl';
+            textClass = '!text-[#00E457] lg:!text-xl';
             selectedClass = 'selected-date';
           } else if (isDeadline) {
-            textClass = '!text-[#00E457] !text-xl';
+            textClass = '!text-[#00E457] lg:!text-xl';
           }
 
           return `
@@ -90,7 +92,8 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
             hover:!bg-blue-100
             transition
             !font-bold
-            !mb-3
+            !mb-2
+            lg:!mb-3
             ${selectedClass}
           `;
         }}

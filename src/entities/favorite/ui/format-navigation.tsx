@@ -14,7 +14,7 @@ function formatNavigation({ date }: { date: Date }) {
   const dayOfWeek = weekdaysKorean[date.getDay()];
 
   return (
-    <span className="flex gap-6 text-xl font-bold whitespace-nowrap text-gray-900">
+    <span className="flex gap-6 text-sm font-bold whitespace-nowrap text-gray-900 lg:text-xl">
       <span>{year}</span>
       <span>{`${month}월 ${date.getDate()}일, ${dayOfWeek}`}</span>
     </span>

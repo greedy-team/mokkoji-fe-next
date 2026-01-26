@@ -45,7 +45,9 @@ export interface Pagination {
 }
 
 export interface FavoriteList {
-  clubs: ClubType[];
+  clubs: (ClubType & { isAlwaysRecruiting: boolean } & {
+    status: RecruitStatus;
+  })[];
   pagination: Pagination;
 }
 

@@ -21,7 +21,7 @@ function RecruitDeadlineSoonList({ data }: { data: FavoriteDateItem[] }) {
     );
 
   return (
-    <div className="flex flex-col items-center space-y-2 rounded-xl bg-[var(--color-lightmode-tag)] p-10 text-xl font-medium">
+    <div className="flex flex-col items-center space-y-2 rounded-xl bg-[var(--color-lightmode-tag)] p-5 text-sm font-medium lg:p-10 lg:text-xl">
       {soon.length > 0 ? (
         <ul className="space-y-1">
           {soon.map(({ clubName, daysLeft }) => {

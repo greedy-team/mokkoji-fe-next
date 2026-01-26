@@ -28,8 +28,11 @@ async function FavoriteItemSection() {
 
   return login ? (
     <>
-      <h1 className="mt-10 mb-5 w-full text-2xl font-bold text-[#00E457]">
-        즐겨찾기 한 동아리 {data.data?.pagination.totalElements}개
+      <h1 className="mt-10 mb-5 w-full text-sm font-bold lg:text-2xl">
+        즐겨찾기 한 동아리{' '}
+        <span className="text-[#00E457]">
+          {data.data?.pagination.totalElements}개
+        </span>
       </h1>
       {data.data?.clubs.length === 0 && (
         <p className="text-center font-semibold">
@@ -38,7 +41,7 @@ async function FavoriteItemSection() {
       )}
       <ul
         className={cn(
-          'grid w-auto grid-cols-2 gap-2 sm:h-[480px] sm:grid-cols-2 lg:h-[390px] lg:grid-cols-3 lg:gap-4',
+          'grid w-auto grid-cols-1 gap-3 sm:h-[480px] lg:h-[390px] lg:grid-cols-3 lg:gap-4',
           data.data?.clubs.length === 0 && 'h-auto',
         )}
       >
@@ -52,6 +55,10 @@ async function FavoriteItemSection() {
                 category={item.category}
                 isFavorite={item.isFavorite}
                 logo={item.logo}
+                recruitStartDate={item.recruitStartDate}
+                recruitEndDate={item.recruitEndDate}
+                status={item.status}
+                isAlwaysRecruiting={item.isAlwaysRecruiting}
               />
             </Link>
           </li>

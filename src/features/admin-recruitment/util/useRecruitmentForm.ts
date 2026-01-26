@@ -34,7 +34,10 @@ function useRecruitmentForm({ onNextStep }: UseRecruitmentFormOptions) {
   };
 
   const isBasicInfoValid = () => {
-    return BASIC_FIELDS.every((field) => formData[field] && !errors[field]);
+    const fieldsToValidate = formData.isAlwaysRecruiting
+      ? BASIC_FIELDS.filter((f) => f !== 'recruitStart' && f !== 'recruitEnd')
+      : BASIC_FIELDS;
+    return fieldsToValidate.every((field) => formData[field] && !errors[field]);
   };
 
   const isContentValid = () => {
@@ -42,7 +45,10 @@ function useRecruitmentForm({ onNextStep }: UseRecruitmentFormOptions) {
   };
 
   const handleNextStep = () => {
-    BASIC_FIELDS.forEach(handleBlur);
+    const fieldsToValidate = formData.isAlwaysRecruiting
+      ? BASIC_FIELDS.filter((f) => f !== 'recruitStart' && f !== 'recruitEnd')
+      : BASIC_FIELDS;
+    fieldsToValidate.forEach(handleBlur);
     if (isBasicInfoValid()) {
       onNextStep();
     } else {

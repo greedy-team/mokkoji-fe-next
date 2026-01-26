@@ -9,6 +9,7 @@ export const initialState: StateProp = {
     recruitStart: '',
     recruitEnd: '',
     recruitForm: '',
+    isAlwaysRecruiting: false,
   },
   errors: {},
 };

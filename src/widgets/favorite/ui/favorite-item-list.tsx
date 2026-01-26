@@ -10,7 +10,7 @@ import { ClubType, RecruitStatus } from '@/shared/model/type';
 
 type FavoriteClub = ClubType & {
   isAlwaysRecruiting: boolean;
-  status: RecruitStatus;
+  recruitStatus: RecruitStatus;
 };
 
 interface FavoriteItemListProps {
@@ -74,12 +74,11 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
                 title={item.name}
                 description={item.description || ''}
                 clubId={String(item.id)}
-                category={item.category}
                 isFavorite={item.isFavorite}
                 logo={item.logo}
                 recruitStartDate={item.recruitStartDate}
                 recruitEndDate={item.recruitEndDate}
-                status={item.status}
+                status={item.recruitStatus}
                 isAlwaysRecruiting={item.isAlwaysRecruiting}
               />
             </Link>
@@ -154,12 +153,11 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
                 title={item.name}
                 description={item.description || ''}
                 clubId={String(item.id)}
-                category={item.category}
                 isFavorite={item.isFavorite}
                 logo={item.logo}
                 recruitStartDate={item.recruitStartDate}
                 recruitEndDate={item.recruitEndDate}
-                status={item.status}
+                status={item.recruitStatus}
                 isAlwaysRecruiting={item.isAlwaysRecruiting}
               />
             </Link>

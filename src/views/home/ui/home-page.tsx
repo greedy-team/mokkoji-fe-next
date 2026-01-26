@@ -3,7 +3,7 @@ import DeskTopHomePage from './desktop-home-page';
 import MobileHomePage from './mobile-home-page';
 
 async function HomePage() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const deviceType = cookieStore.get('x-device-type')?.value;
 
   if (deviceType === 'mobile') {

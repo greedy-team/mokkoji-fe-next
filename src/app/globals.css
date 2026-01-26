@@ -478,15 +478,28 @@ html::-webkit-scrollbar {
   text-decoration: none;
   font-weight: 400 !important;
   color: #000000;
-  font-size: 1rem;
+  font-size: 0.875rem;
   text-transform: none !important;
+}
+
+@media (min-width: 1024px) {
+  .react-calendar__month-view__weekdays__weekday abbr {
+    font-size: 1rem;
+  }
 }
 
 .react-calendar__navigation {
   display: flex !important;
   align-items: center !important;
+  justify-content: center !important;
   height: 60px !important;
   margin-bottom: 10px !important;
+}
+
+@media (min-width: 1024px) {
+  .react-calendar__navigation {
+    justify-content: flex-start !important;
+  }
 }
 
 .react-calendar__navigation button {
@@ -501,7 +514,13 @@ html::-webkit-scrollbar {
 }
 
 .react-calendar__navigation__label {
-  font-size: 1.25rem !important;
+  font-size: 0.875rem !important;
   font-weight: bold !important;
   flex-grow: 0 !important;
+}
+
+@media (min-width: 1024px) {
+  .react-calendar__navigation__label {
+    font-size: 1.25rem !important;
+  }
 }

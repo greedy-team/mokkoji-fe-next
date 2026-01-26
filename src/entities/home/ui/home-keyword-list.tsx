@@ -34,7 +34,7 @@ function HomeKeywordList() {
         <Link
           key={keyword.name}
           href={`/search?category=${keyword.category === 'all' ? '' : keyword.category}`}
-          className="text-md w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-3 py-1 font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
+          className="w-fit cursor-pointer rounded-full bg-[#F2F4F6] px-4 py-[10px] text-xs font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
         >
           {keyword.name}
         </Link>

@@ -97,7 +97,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
-        <Button onClick={() => router.push('/recruit')}>모집글 확인하기</Button>
+        <Button onClick={() => router.push('/club')}>모집글 확인하기</Button>
       </div>
     );
   }

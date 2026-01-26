@@ -88,6 +88,7 @@ function ClubItemClientList({
                   logo={item.club.logo}
                   clubId={String(item.club.id)}
                   status={item.status}
+                  isAlwaysRecruiting={item.isAlwaysRecruiting}
                   height={cardHeight}
                 />
               </Link>

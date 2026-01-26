@@ -78,6 +78,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       recruitStart: recruitmentDetailData.recruitStart,
       recruitEnd: recruitmentDetailData.recruitEnd,
       recruitForm: recruitmentDetailData.recruitForm,
+      isAlwaysRecruiting: recruitmentDetailData.isAlwaysRecruiting,
     });
 
     setIsLoadingRecruitmentDetail(false);
@@ -104,13 +105,22 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
     const data = {
       ...formData,
+      recruitStart: formData.isAlwaysRecruiting ? '' : formData.recruitStart,
+      recruitEnd: formData.isAlwaysRecruiting ? '' : formData.recruitEnd,
       imageNames: imageUpload.imageFiles.map((f) => f.imageName),
     };
 
-    const res = await patchRecruitmentForm(data, recruitmentDetail.id);
+    let res;
+    try {
+      res = await patchRecruitmentForm(data, recruitmentDetail.id);
+    } catch {
+      toast.error('모집글 수정에 실패했습니다.');
+      flow.setSubmitting(false);
+      return;
+    }
 
-    if (!res.ok) {
-      toast.error(res.message);
+    if (!res?.ok) {
+      toast.error(res?.message || '모집글 수정에 실패했습니다.');
       flow.setSubmitting(false);
       return;
     }

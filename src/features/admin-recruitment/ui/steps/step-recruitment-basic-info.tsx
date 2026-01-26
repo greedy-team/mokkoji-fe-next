@@ -117,6 +117,10 @@ function StepRecruitmentBasicInfo({
         }}
         label="모집 기간"
         variant="dark"
+        isAlwaysRecruiting={formData.isAlwaysRecruiting}
+        onAlwaysRecruitingChange={(value) =>
+          onChange('isAlwaysRecruiting', value)
+        }
       />
       <ImageUploadSection
         imageFiles={imageFiles}

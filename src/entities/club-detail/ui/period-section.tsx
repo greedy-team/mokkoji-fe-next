@@ -1,6 +1,4 @@
-import getDateUtil, {
-  formatToMonthDay,
-} from '@/entities/club/util/getDateUtil';
+import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {
@@ -8,6 +6,7 @@ interface PeriodSectionProps {
   endDate: string;
   decoration?: boolean;
   className?: string;
+  isAlwaysRecruiting: boolean;
 }
 
 function PeriodSection({
@@ -15,11 +14,10 @@ function PeriodSection({
   endDate,
   decoration = true,
   className,
+  isAlwaysRecruiting,
 }: PeriodSectionProps) {
-  const isEndOfYear = getDateUtil(endDate);
-
-  return isEndOfYear ? (
-    <span className={cn(`text-xs font-semibold ${className}`)}>상시모집</span>
+  return isAlwaysRecruiting ? (
+    <span className={cn(`text-xs leading-none ${className}`)}>상시모집</span>
   ) : (
     <span className={cn(`text-xs leading-none ${className}`)}>
       {decoration ? (

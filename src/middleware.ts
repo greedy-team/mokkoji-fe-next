@@ -34,7 +34,15 @@ export default middleware(async (req) => {
     // 원래 가려던 경로로 돌아오게 하려면 callback 추가:
     // const callback = encodeURIComponent(nextUrl.pathname + nextUrl.search);
     // return NextResponse.redirect(new URL(`/login?callbackUrl=${callback}`, nextUrl));
-    return NextResponse.redirect(new URL('/', nextUrl));
+    const response = NextResponse.redirect(new URL('/', nextUrl));
+
+    // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
+    if (hasSessionError) {
+      response.cookies.delete('authjs.session-token');
+      response.cookies.delete('__Secure-authjs.session-token');
+    }
+
+    return response;
   }
 
   return NextResponse.next();

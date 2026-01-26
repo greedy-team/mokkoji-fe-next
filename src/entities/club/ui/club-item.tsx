@@ -33,7 +33,6 @@ function ClubItem({
   isAlwaysRecruiting,
   height = 150,
 }: ClubItemProps) {
-  console.log(status);
   return (
     <div
       style={{ height }}

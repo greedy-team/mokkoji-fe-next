@@ -53,7 +53,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   if (!selected.ok) return <ErrorBoundaryUi />;
 
   return (
-    <div className="mt-20 mb-10 w-[80%] lg:max-w-[85%] lg:min-w-[75%]">
+    <div className="mt-[50px] w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
       <RecruitDetailHeader
         title={recent.data.clubName}
         category={recent.data.category}
@@ -65,6 +65,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         createdAt={recent.data.createdAt}
         logo={recent.data.logo}
         status={recent.data.status}
+        isAlwaysRecruiting={recent.data.isAlwaysRecruiting}
       />
 
       <ClubDetailTabs

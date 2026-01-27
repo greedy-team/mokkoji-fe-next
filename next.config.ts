@@ -19,6 +19,16 @@ let nextConfig: NextConfig = {
         hostname: 'way-s3.s3.ap-northeast-2.amazonaws.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'mokkoji-app-data.s3.ap-northeast-2.amazonaws.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dev-mokkoji-app-data.s3.ap-northeast-2.amazonaws.com',
+        pathname: '**',
+      },
     ],
   },
   logging: {

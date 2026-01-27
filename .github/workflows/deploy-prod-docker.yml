@@ -7,6 +7,9 @@ on:
 
 jobs:
   deploy-docker:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/deploy-docker.yml
     with:
       env: prod

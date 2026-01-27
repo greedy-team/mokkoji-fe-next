@@ -12,7 +12,7 @@ async function ClubCommentsWidget({ clubId }: ClubCommentsWidgetProps) {
   const commentList = [...comments].reverse();
 
   return (
-    <section className="mt-8 w-full">
+    <section className="w-full pt-12">
       <ClubDetailCommentInput clubId={clubId} count={commentList.length} />
       <ClubDetailComment comments={commentList} clubId={clubId} />
     </section>

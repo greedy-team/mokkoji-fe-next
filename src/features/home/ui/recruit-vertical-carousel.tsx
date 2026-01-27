@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { ClubType } from '@/shared/model/type';
-import isRecruiting from '../util/isRecruiting';
+import { Recruitment } from '@/widgets/club/model/type';
+import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
+import getRecruitmentStatus from '../util/getRecruitmentStatus';
 
 interface CardSliderProps {
-  clubs: ClubType[];
+  clubs: Recruitment[];
 }
 
 const radius = 260;
@@ -75,9 +76,9 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          const status = isRecruiting(
-            item.recruitStartDate,
-            item.recruitEndDate,
+          const status = getRecruitmentStatus(
+            item.recruitStart,
+            item.recruitEnd,
           );
 
           return (
@@ -91,20 +92,20 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/club/${item.id}`}>
+              <Link href={`/club/${item.club.id}`}>
                 <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">
-                      <AvatarImage src={item.logo} loading="lazy" />
-                      <AvatarFallback>{item.name}</AvatarFallback>
+                      <AvatarImage src={item.club.logo} loading="lazy" />
+                      <AvatarFallback>{item.club.name}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-1 flex-col">
                       <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
-                        모집 기간 • {item.recruitStartDate}~
-                        {item.recruitEndDate}
+                        모집 기간 • {formatToMonthDay(item.recruitStart)}~
+                        {formatToMonthDay(item.recruitEnd)}
                       </span>
                       <h1 className="text-xs font-bold lg:text-sm">
-                        {item.name}
+                        {item.club.name}
                       </h1>
                     </div>
                     <div
@@ -119,7 +120,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                     </div>
                   </div>
                   <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
-                    {item.description}
+                    {item.club.description}
                   </p>
                 </div>
               </Link>

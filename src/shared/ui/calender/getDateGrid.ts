@@ -1,13 +1,12 @@
 interface DateProps {
-  currentDate: Date;
   currentMonth: number;
   currentYear: number;
 }
 
-function getDateGrid({ currentDate, currentYear, currentMonth }: DateProps) {
+function getDateGrid({ currentYear, currentMonth }: DateProps) {
   const dateGrid = [];
-  const firstDay = currentDate.getDay();
-  const parsedFirstDay = (firstDay + 6) % 7;
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const parsedFirstDay = (firstDayOfMonth + 6) % 7;
   const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
 
   for (let i = 0; i < parsedFirstDay; i += 1) {

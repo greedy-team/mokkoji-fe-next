@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
+import { UserRole } from '@/shared/model/type';
 import type { AdminClubInfo } from '../model/types';
 import useAdminFlow from '../model/use-admin-flow';
 import StepSelectClub from './steps/step-select-club';
@@ -10,9 +11,10 @@ import StepSelectEditMode from './steps/step-select-edit-mode';
 
 interface AdminFlowContainerProps {
   allowedClubs: AdminClubInfo[];
+  role?: UserRole;
 }
 
-function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
+function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
   const flow = useAdminFlow(allowedClubs);
   const [currentStep, setCurrentStep] = useState(flow.step);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -45,7 +47,11 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
       }}
     >
       {currentStep === 'selectClub' && (
-        <StepSelectClub clubs={allowedClubs} onNext={flow.selectClub} />
+        <StepSelectClub
+          clubs={allowedClubs}
+          role={role}
+          onNext={flow.selectClub}
+        />
       )}
 
       {currentStep === 'postType' && (
@@ -59,6 +65,7 @@ function AdminFlowContainer({ allowedClubs }: AdminFlowContainerProps) {
       {currentStep === 'editMode' && (
         <StepSelectEditMode
           clubName={flow.selectedClubName}
+          contentType={flow.contentType}
           onNext={flow.selectActionType}
           onBack={flow.goBack}
         />

@@ -1,4 +1,4 @@
-export default function isRecruiting(
+export default function getRecruitmentStatus(
   startDate: string,
   endDate: string,
 ): string {

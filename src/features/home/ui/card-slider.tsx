@@ -5,13 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { ClubType } from '@/shared/model/type';
+import { Recruitment } from '@/widgets/club/model/type';
 
 const movePx = 250;
 const mobileMovePx = 100;
 
 interface CardSliderProps {
-  clubs: ClubType[];
+  clubs: Recruitment[];
 }
 
 function CardSlider({ clubs }: CardSliderProps) {
@@ -54,7 +54,7 @@ function CardSlider({ clubs }: CardSliderProps) {
 
           return (
             <NavLink
-              href={`/club/${item.id}`}
+              href={`/club/${item.club.id}`}
               key={item.id}
               isActive={isActive}
               translateX={currentTranslateX}
@@ -65,12 +65,12 @@ function CardSlider({ clubs }: CardSliderProps) {
                   <Avatar
                     className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
-                    <AvatarImage src={item.logo} loading="lazy" />
-                    <AvatarFallback>{item.name}</AvatarFallback>
+                    <AvatarImage src={item.club.logo} loading="lazy" />
+                    <AvatarFallback />
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-[#474747] lg:text-xs">
-                      {item.category}
+                      {item.club.clubCategory}
                     </span>
                     <h1
                       className={cn(
@@ -78,7 +78,7 @@ function CardSlider({ clubs }: CardSliderProps) {
                         'font-bold transition-all duration-500',
                       )}
                     >
-                      {item.name}
+                      {item.club.name}
                     </h1>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ function CardSlider({ clubs }: CardSliderProps) {
                     'line-clamp-2 overflow-hidden text-ellipsis text-gray-600 transition-all duration-500',
                   )}
                 >
-                  {item.description}
+                  {item.club.description}
                 </div>
               </div>
             </NavLink>

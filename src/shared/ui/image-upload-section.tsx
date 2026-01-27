@@ -42,7 +42,9 @@ function ImageUploadSection({
   const handleDragEnter = (e: React.DragEvent<HTMLFieldSetElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragActive(true);
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDragActive(true);
+    }
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLFieldSetElement>) => {
@@ -91,7 +93,7 @@ function ImageUploadSection({
           </div>
         </div>
       )}
-      <label htmlFor="image" className="text-base font-semibold">
+      <label htmlFor="image" className="text-base font-medium lg:font-semibold">
         이미지 파일 업로드
       </label>
       <div
@@ -99,7 +101,11 @@ function ImageUploadSection({
         onDragOver={handleDragOverWithOverlay}
         onDrop={handleDropWithOverlay}
       >
-        <div className="flex gap-5">
+        <button
+          type="button"
+          className="flex cursor-pointer gap-5"
+          onClick={() => inputRef.current?.click()}
+        >
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D9D9D930]">
             <Image
               src="/admin/Image_upload.png"
@@ -116,7 +122,7 @@ function ImageUploadSection({
               PNG, JPG 형식의 이미지를 업로드해주세요!
             </span>
           </div>
-        </div>
+        </button>
         <input
           id="imageInput"
           name="image"

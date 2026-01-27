@@ -5,6 +5,7 @@ import { UserRole } from '@/shared/model/type';
 import { Session } from 'next-auth';
 import { useState } from 'react';
 import HeaderLogin from '@/features/header/ui/header-login';
+import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import MobileHeader from './mobile-header';
 
 function HeaderMenuSection({
@@ -18,9 +19,9 @@ function HeaderMenuSection({
 
   return (
     <>
-      <HeaderSearch showSearch={showSearch} setShowSearch={setShowSearch} />
       {!showSearch && (
         <>
+          <HeaderAdminLink role={role} isLoggedIn={!!session} />
           <MobileHeader
             sessionRole={role}
             manageClubInfo={session?.manageClubInfo || []}
@@ -28,6 +29,7 @@ function HeaderMenuSection({
           <HeaderLogin userName={session?.user?.name || ''} />
         </>
       )}
+      <HeaderSearch showSearch={showSearch} setShowSearch={setShowSearch} />
     </>
   );
 }

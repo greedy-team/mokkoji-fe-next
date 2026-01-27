@@ -1,6 +1,11 @@
 'use client';
 
-import { ClubCategory, ClubCategoryLabel } from '@/shared/model/type';
+import {
+  ClubCategory,
+  ClubCategoryIcon,
+  ClubCategoryLabel,
+} from '@/shared/model/type';
+import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
 import useUrlParams from '@/shared/model/useUrlParams';
@@ -18,7 +23,7 @@ function ClubCategoryButtonSection() {
   const { handleChange, active } = useUrlParams('category');
 
   const base =
-    'shrink-0 rounded border px-3 py-2 text-sm font-semibold transition-colors';
+    'shrink-0 gap-1 rounded border px-3 py-2 text-sm font-semibold transition-colors';
 
   const selected = 'border-[#22CF64] text-[#22CF64] hover:bg-[#EDFDF3]';
   const unselected =
@@ -36,18 +41,24 @@ function ClubCategoryButtonSection() {
         전체
       </Button>
 
-      {categories.map((category) => (
-        <Button
-          key={category}
-          type="button"
-          variant="outline"
-          className={cn(base, active === category ? selected : unselected)}
-          onClick={() => handleChange(category)}
-          aria-pressed={active === category}
-        >
-          {ClubCategoryLabel[category]}
-        </Button>
-      ))}
+      {categories.map((category) => {
+        const icon = ClubCategoryIcon[category];
+        const hasIcon = icon.endsWith('.svg');
+
+        return (
+          <Button
+            key={category}
+            type="button"
+            variant="outline"
+            className={cn(base, active === category ? selected : unselected)}
+            onClick={() => handleChange(category)}
+            aria-pressed={active === category}
+          >
+            {ClubCategoryLabel[category]}
+            {hasIcon && <Image src={icon} alt="" width={14} height={14} />}
+          </Button>
+        );
+      })}
     </div>
   );
 }

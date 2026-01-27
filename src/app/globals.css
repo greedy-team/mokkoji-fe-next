@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+::selection {
+  background-color: #22cf6460;
+  color: white;
+}
+
 @theme {
   /* 메인 페이지 수직 롤링 배너 */
   --animate-rolling: rolling 20s linear infinite;

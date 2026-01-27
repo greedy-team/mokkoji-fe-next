@@ -25,7 +25,7 @@ function ClubCategoryButtonSection() {
     'border-[#D4D4D4] bg-white text-[#4E5968] hover:bg-[#EDFDF3]';
 
   return (
-    <div className="scrollbar-hide flex gap-1 overflow-x-auto sm:gap-2">
+    <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-1 sm:gap-2">
       <Button
         type="button"
         variant="outline"

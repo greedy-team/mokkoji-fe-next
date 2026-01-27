@@ -46,9 +46,9 @@ export default function EmailChangeDialog({
           setOpen(true);
         }}
       >
-        <Button className={cn(triggerClassName)} variant="none">
+        <Button className={cn(triggerClassName)} variant="none" size="none">
           {triggerLabel}
-          <Image src="favorite/next.svg" alt="edit" width={6} height={6} />
+          <Image src="/nextBlack.svg" alt="edit" width={8} height={12} />
         </Button>
       </DialogTrigger>
 

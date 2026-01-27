@@ -1,53 +1,54 @@
 import { auth } from '@/auth';
-import { UserRole, UserRoleLabel } from '@/shared/model/type';
+import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
+import HeaderAdminLink from '@/features/header/ui/header-admin-link';
+import Image from 'next/image';
 import getMyInfo from '../api/getMyInfo';
+import InfoRow from './info-row';
 import EmailChangeDialog from './email-change-dialog';
+import MailNotificationToggle from './mail-notification-toggle';
+import LogoutLink from './logout-link';
 
 async function MyPage() {
   const myInfo = await getMyInfo();
   const session = await auth();
+
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
   }
+
+  const { user } = myInfo.data;
+  const userRole = (session?.user?.role as UserRole) || UserRole.NORMAL;
+  const isAdmin = userRole !== UserRole.NORMAL;
+
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-auto sm:w-[500px] lg:w-[700px]">
-        <h1 className="text-xl font-bold">마이페이지</h1>
-        <div className="mt-5 mb-7 w-full border-3 border-b border-[#F8F8F8]" />
-        <ul className="space-y-4">
-          <li>
-            <span className="mr-2 font-bold">학번</span>{' '}
-            {myInfo.data.user.studentId}
-          </li>
-          <li>
-            <span className="mr-2 font-bold">학과</span>{' '}
-            {myInfo.data.user.department}
-          </li>
-          <li>
-            <span className="mr-2 font-bold">이름</span> {myInfo.data.user.name}
-          </li>
-          <li>
-            <span className="mr-2 font-bold">학년</span>{' '}
-            {myInfo.data.user.grade}
-          </li>
-          <li>
-            <span className="mr-2 font-bold">이메일</span>{' '}
-            {myInfo.data.user.email}
+    <div className="flex flex-col items-center px-4">
+      <div className="w-full max-w-[40%] border">
+        <div>
+          <InfoRow label="학번" value={user.studentId} />
+          <InfoRow label="학과" value={user.department} />
+          <InfoRow label="이름" value={user.name} />
+          <InfoRow label="학년" value={user.grade} />
+          <InfoRow label="이메일" value={user.email}>
             <EmailChangeDialog
-              initialEmail={myInfo.data.user.email}
-              triggerClassName="text-[#00E457] bg-transparent border-none cursor-pointer ml-8"
+              initialEmail={user.email}
+              triggerClassName="text-[#00E457] text-sm"
             />
-          </li>
-          <li>
-            <span className="mr-2 font-bold">역할</span>
-            {
-              UserRoleLabel[
-                (session?.user?.role as UserRole) || UserRole.NORMAL
-              ]
-            }
-          </li>
-        </ul>
+          </InfoRow>
+          <InfoRow label="메일 알림">
+            <MailNotificationToggle />
+          </InfoRow>
+          {isAdmin && (
+            <div className="mt-3 flex items-center gap-2">
+              <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
+              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+            </div>
+          )}
+
+          <div className="py-4 lg:hidden">
+            <LogoutLink />
+          </div>
+        </div>
       </div>
     </div>
   );

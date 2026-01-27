@@ -8,6 +8,9 @@ export default middleware(async (req) => {
   const session = auth as { user?: unknown; error?: string } | null;
   const hasSessionError = session?.error === 'RefreshTokenExpired';
   const isLoggedIn = !!session?.user && !hasSessionError;
+  const userAgent = req.headers.get('user-agent') || '';
+  const isMobile =
+    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
 
   const isPublicRoute = publicRoutes.some((route) => {
     if (route.endsWith('/:path*')) {
@@ -16,6 +19,8 @@ export default middleware(async (req) => {
     }
     return route === nextUrl.pathname;
   });
+
+  let response: NextResponse;
 
   //   /**
   //    * 1) 로그인했을 때 다시 가면 안되는 페이지 (login, signup 등)
@@ -29,27 +34,30 @@ export default middleware(async (req) => {
 
   // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
   if (hasSessionError) {
-    const response = isPublicRoute
+    response = isPublicRoute
       ? NextResponse.next()
       : NextResponse.redirect(new URL('/', nextUrl));
 
     response.cookies.delete('authjs.session-token');
     response.cookies.delete('__Secure-authjs.session-token');
-
-    return response;
+  } else if (!isLoggedIn && !isPublicRoute) {
+    response = NextResponse.redirect(new URL('/', nextUrl));
+  } else {
+    response = NextResponse.next();
   }
 
-  /**
-   * 2) 로그인하지 않았을 때 접근 불가
-   */
-  if (!isLoggedIn && !isPublicRoute) {
-    // 원래 가려던 경로로 돌아오게 하려면 callback 추가:
-    // const callback = encodeURIComponent(nextUrl.pathname + nextUrl.search);
-    // return NextResponse.redirect(new URL(`/login?callbackUrl=${callback}`, nextUrl));
-    return NextResponse.redirect(new URL('/', nextUrl));
+  const currentDeviceCookie = req.cookies.get('x-device-type')?.value;
+  const targetDevice = isMobile ? 'mobile' : 'desktop';
+
+  if (currentDeviceCookie !== targetDevice) {
+    response.cookies.set('x-device-type', targetDevice, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+      sameSite: 'lax',
+    });
   }
 
-  return NextResponse.next();
+  return response;
 });
 
 export const config = {

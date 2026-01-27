@@ -16,5 +16,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="px-6 pt-11 lg:p-25">{children}</main>;
+  return <main className="px-5 pt-11 pb-10 lg:p-25 lg:px-6">{children}</main>;
 }

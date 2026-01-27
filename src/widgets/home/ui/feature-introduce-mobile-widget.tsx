@@ -1,4 +1,3 @@
-import CategoryCard from '@/entities/home/ui/category-card';
 import CategoryTextCard from '@/entities/home/ui/category-text-card';
 import CommentTextCard from '@/entities/home/ui/comment-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
@@ -15,18 +14,17 @@ function FeatureIntroduceMobileWidget() {
             alt="댓글 이미지"
             width={449}
             height={150}
-            className="w-full"
           />
         </AnimateOnView>
       </div>
-      <div className="relative mb-20 flex h-fit w-full flex-col items-center gap-13">
+      <div className="relative mb-20 flex h-fit w-full flex-col items-center gap-13 pb-20">
         <CategoryTextCard />
         <AnimateOnView animation="reveal">
           <Image
             src="/main/sampleCategory.png"
             alt="카테고리 이미지"
             width={341}
-            height={6}
+            height={96}
           />
         </AnimateOnView>
       </div>

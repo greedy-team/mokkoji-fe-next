@@ -40,7 +40,7 @@ function CalenderBody({
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
 
-  const allDate = getDateGrid({ currentDate, currentYear, currentMonth });
+  const allDate = getDateGrid({ currentYear, currentMonth });
 
   const parseDateString = (dateString: string | null): Date | null => {
     if (!dateString) return null;

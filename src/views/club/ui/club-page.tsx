@@ -7,11 +7,13 @@ import ClubItemList from '@/widgets/club/ui/club-item-list';
 function ClubPage() {
   return (
     <>
-      <div className="w-full sm:w-4xl lg:w-6xl">
+      <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
         <ClubHeader />
-        <Suspense fallback={<ItemListSkeletonLoading />}>
-          <ClubItemList />
-        </Suspense>
+        <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
+          <Suspense fallback={<ItemListSkeletonLoading />}>
+            <ClubItemList />
+          </Suspense>
+        </div>
       </div>
       <ScrollTopButton />
     </>

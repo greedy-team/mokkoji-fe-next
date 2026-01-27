@@ -1,4 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
+import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
@@ -17,13 +18,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function MainLayout({
+export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="flex h-screen w-full flex-col">
+      <Header />
       <main className="flex-1">{children}</main>
       <Footer />
       <BottomNav />

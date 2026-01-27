@@ -47,7 +47,11 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
       }}
     >
       {currentStep === 'selectClub' && (
-        <StepSelectClub clubs={allowedClubs} onNext={flow.selectClub} />
+        <StepSelectClub
+          clubs={allowedClubs}
+          role={role}
+          onNext={flow.selectClub}
+        />
       )}
 
       {currentStep === 'postType' && (
@@ -62,7 +66,6 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
         <StepSelectEditMode
           clubName={flow.selectedClubName}
           contentType={flow.contentType}
-          role={role}
           onNext={flow.selectActionType}
           onBack={flow.goBack}
         />

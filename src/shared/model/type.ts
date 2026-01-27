@@ -45,6 +45,13 @@ export interface Pagination {
 }
 
 export interface FavoriteList {
+  clubs: (ClubType & { isAlwaysRecruiting: boolean } & {
+    recruitStatus: RecruitStatus;
+  })[];
+  pagination: Pagination;
+}
+
+export interface ClubSearchResponse {
   clubs: ClubType[];
   pagination: Pagination;
 }
@@ -125,11 +132,17 @@ export interface ClubInfoResponse {
   data: ClubInfoType;
 }
 
-export type RecruitStatus = 'OPEN' | 'CLOSED' | 'BEFORE' | 'IMMINENT';
+export type RecruitStatus =
+  | 'OPEN'
+  | 'CLOSED'
+  | 'BEFORE'
+  | 'IMMINENT'
+  | 'ALWAYS';
 
 export const RecruitStatusLabel: Record<RecruitStatus, string> = {
   OPEN: '모집 중',
   CLOSED: '모집 마감',
   BEFORE: '모집 전',
   IMMINENT: '마감 임박',
+  ALWAYS: '상시 모집',
 };

@@ -7,7 +7,7 @@ import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
-import { PrevButton } from '@/shared/ui/navigation-button';
+import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
@@ -78,6 +78,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       recruitStart: recruitmentDetailData.recruitStart,
       recruitEnd: recruitmentDetailData.recruitEnd,
       recruitForm: recruitmentDetailData.recruitForm,
+      isAlwaysRecruiting: recruitmentDetailData.isAlwaysRecruiting,
     });
 
     setIsLoadingRecruitmentDetail(false);
@@ -104,13 +105,22 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
     const data = {
       ...formData,
+      recruitStart: formData.isAlwaysRecruiting ? '' : formData.recruitStart,
+      recruitEnd: formData.isAlwaysRecruiting ? '' : formData.recruitEnd,
       imageNames: imageUpload.imageFiles.map((f) => f.imageName),
     };
 
-    const res = await patchRecruitmentForm(data, recruitmentDetail.id);
+    let res;
+    try {
+      res = await patchRecruitmentForm(data, recruitmentDetail.id);
+    } catch {
+      toast.error('모집글 수정에 실패했습니다.');
+      flow.setSubmitting(false);
+      return;
+    }
 
-    if (!res.ok) {
-      toast.error(res.message);
+    if (!res?.ok) {
+      toast.error(res?.message || '모집글 수정에 실패했습니다.');
       flow.setSubmitting(false);
       return;
     }
@@ -149,18 +159,12 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   if (displayStep === 'selectPost') {
     return (
-      <>
-        <PrevButton
-          onClick={() => router.push('/admin')}
-          className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-        />
-        <StepSelectPost
-          recruitments={localRecruitments}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          isDeleting={isDeleting}
-        />
-      </>
+      <StepSelectPost
+        recruitments={localRecruitments}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        isDeleting={isDeleting}
+      />
     );
   }
 
@@ -176,17 +180,16 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
 
   return (
     <div
-      className={`px-[35%] transition-opacity duration-300 ${
+      className={`transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <h1 className="text-[28px] font-bold">모집 공고</h1>
-      <PrevButton
-        onClick={flow.goToSelectPost}
-        className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-      />
       {displayStep === 'basicInfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
+          <AdminPageHeader
+            title="모집글 기본 정보"
+            onBack={flow.goToSelectPost}
+          />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -218,30 +221,29 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       )}
 
       {displayStep === 'postinfo' && (
-        <div className="flex flex-col gap-2 py-8">
-          <PrevButton
-            onClick={flow.prevStep}
-            className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-          />
-          <StepRecruitmentPostInfo
-            formData={formData}
-            errors={errors}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
+          <AdminPageHeader title="모집글" onBack={flow.goToSelectPost} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
             <Button
               type="button"
               variant="submit"
+              size="none"
               disabled={!isContentValid()}
               onClick={handleSubmit}
-              className="mt-4 w-full"
+              className="self-end"
             >
               수정하기
             </Button>
           )}
+          <span className="w-full border border-[#71717148]" />
+          <StepRecruitmentPostInfo
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </div>
       )}
     </div>

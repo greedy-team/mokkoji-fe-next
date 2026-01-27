@@ -65,6 +65,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         createdAt={recent.data.createdAt}
         logo={recent.data.logo}
         status={recent.data.status}
+        isAlwaysRecruiting={recent.data.isAlwaysRecruiting}
       />
 
       <ClubDetailTabs

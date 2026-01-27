@@ -6,6 +6,7 @@ export const RecruitStatusLabel: Record<RecruitStatus, string> = {
   CLOSED: '모집마감',
   BEFORE: '모집전',
   IMMINENT: '마감임박',
+  ALWAYS: '상시모집',
 };
 
 export const RecruitStatusColor: Record<RecruitStatus, string> = {
@@ -13,6 +14,7 @@ export const RecruitStatusColor: Record<RecruitStatus, string> = {
   CLOSED: 'bg-[#E9E7E7] text-[#9C9C9C]',
   BEFORE: 'bg-[#D9D9D9] text-[#9C9C9C]',
   IMMINENT: 'bg-[#F9796F] text-[#FCD7D4]',
+  ALWAYS: 'bg-[#00E457] text-black',
 };
 
 interface RadiusTagProps {

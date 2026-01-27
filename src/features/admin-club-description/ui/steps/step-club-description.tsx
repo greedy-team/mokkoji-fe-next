@@ -20,7 +20,6 @@ function StepClubDescription({
         htmlFor="description"
         className="flex gap-2 text-base font-semibold"
       >
-        동아리 소개
         {errors.description && (
           <p className="pb-1 text-sm font-medium text-red-500">
             {errors.description}

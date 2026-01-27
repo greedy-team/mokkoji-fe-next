@@ -8,6 +8,7 @@ import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useClubRegisterForm from '@/features/admin-club-description/util/useClubRegisterForm';
 import { postClubRegister } from '@/features/admin-club-description/api/postClubRegister';
+import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useCreateFlow from './use-create-flow';
 import StepClubRegisterInfo from '../steps/step-club-register-info';
 
@@ -80,17 +81,16 @@ function CreateFlowContainer() {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <PrevButton
-        onClick={() => router.push('/admin')}
-        className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-      />
-
       {displayStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
+          <AdminPageHeader
+            title="동아리 기본 정보"
+            onBack={() => router.push('/admin')}
+          />
           <StepClubRegisterInfo
             formData={formData}
             errors={errors}
@@ -102,7 +102,8 @@ function CreateFlowContainer() {
           ) : (
             <Button
               type="button"
-              variant="submit"
+              variant="next"
+              size="none"
               disabled={!isRegisterInfoValid()}
               onClick={handleSubmit}
               className="mt-13 w-full"

@@ -13,7 +13,7 @@ function CommentTextCard() {
             width={26}
             height={24}
           />
-          <Link href="/club/1">상세 페이지 댓글</Link>
+          상세 페이지 댓글
         </h1>
       </AnimateOnView>
       <AnimateOnView animation="reveal flex justify-center">

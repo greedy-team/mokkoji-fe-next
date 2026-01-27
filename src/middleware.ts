@@ -5,7 +5,9 @@ import { publicRoutes } from '../route';
 
 export default middleware(async (req) => {
   const { nextUrl, auth } = req;
-  const isLoggedIn = !!auth?.user;
+  const session = auth as { user?: unknown; error?: string } | null;
+  const hasSessionError = session?.error === 'RefreshTokenExpired';
+  const isLoggedIn = !!session?.user && !hasSessionError;
 
   const isPublicRoute = publicRoutes.some((route) => {
     if (route.endsWith('/:path*')) {
@@ -24,6 +26,18 @@ export default middleware(async (req) => {
   //     }
   //     return NextResponse.next();
   //   }
+
+  // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
+  if (hasSessionError) {
+    const response = isPublicRoute
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL('/', nextUrl));
+
+    response.cookies.delete('authjs.session-token');
+    response.cookies.delete('__Secure-authjs.session-token');
+
+    return response;
+  }
 
   /**
    * 2) 로그인하지 않았을 때 접근 불가

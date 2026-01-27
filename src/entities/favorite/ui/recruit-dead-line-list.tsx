@@ -21,20 +21,20 @@ function RecruitDeadlineSoonList({ data }: { data: FavoriteDateItem[] }) {
     );
 
   return (
-    <div className="flex flex-col space-y-2 rounded-xl bg-[#F8F8F8] p-6 text-xl font-semibold">
+    <div className="flex flex-col items-center space-y-2 rounded-xl bg-[var(--color-lightmode-tag)] p-5 text-sm font-medium lg:p-10 lg:text-xl">
       {soon.length > 0 ? (
         <ul className="space-y-1">
-          {soon.map(({ clubName, daysLeft }) => (
-            <li key={`${clubName}-${daysLeft}`}>
-              <span className="font-bold">{clubName} </span>
-              모집 마감까지
-              <span className="font-bold text-[#00E457]">
-                {' '}
-                {remainingText(daysLeft)}{' '}
-              </span>
-              {remainingText(daysLeft) === '오늘' ? '까지에요!' : '남았어요!'}
-            </li>
-          ))}
+          {soon.map(({ clubName, daysLeft }) => {
+            const remaining = remainingText(daysLeft);
+            return (
+              <li key={`${clubName}-${daysLeft}`}>
+                <span className="font-bold">{clubName} </span>
+                모집 마감까지
+                <span className="font-bold"> {remaining} </span>
+                {remaining === '오늘' ? '까지에요!' : '남았어요!'}
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <span>3일 이내 마감 예정 동아리가 없습니다.</span>

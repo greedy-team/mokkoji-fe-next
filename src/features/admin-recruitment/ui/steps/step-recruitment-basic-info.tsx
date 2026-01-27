@@ -53,15 +53,21 @@ function StepRecruitmentBasicInfo({
   onDrop,
 }: StepRecruitmentBasicInfoProps) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-7 lg:gap-10">
       <fieldset>
-        <label htmlFor="name" className="text-base font-semibold">
+        <label
+          htmlFor="name"
+          className="text-base font-medium lg:font-semibold"
+        >
           동아리 이름
         </label>
         <Input id="name" name="name" value={clubInfo?.name} disabled />
       </fieldset>
       <fieldset>
-        <label htmlFor="title" className="flex gap-2 text-base font-semibold">
+        <label
+          htmlFor="title"
+          className="flex gap-2 text-base font-medium lg:font-semibold"
+        >
           모집글 제목
           {errors.title && (
             <p className="pt-1 text-xs font-medium text-red-500">
@@ -81,7 +87,7 @@ function StepRecruitmentBasicInfo({
       <fieldset>
         <label
           htmlFor="recruitForm"
-          className="flex gap-2 text-base font-semibold"
+          className="flex gap-2 text-base font-medium lg:font-semibold"
         >
           모집폼 링크
           {errors.recruitForm && (
@@ -111,6 +117,10 @@ function StepRecruitmentBasicInfo({
         }}
         label="모집 기간"
         variant="dark"
+        isAlwaysRecruiting={formData.isAlwaysRecruiting}
+        onAlwaysRecruitingChange={(value) =>
+          onChange('isAlwaysRecruiting', value)
+        }
       />
       <ImageUploadSection
         imageFiles={imageFiles}

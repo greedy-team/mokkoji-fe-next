@@ -11,7 +11,7 @@ function HeaderMobile({ pageTitle }: HeaderMobileProps) {
   const router = useRouter();
 
   return (
-    <header className="flex items-center gap-2 px-5 py-5">
+    <header className="flex items-center gap-2 px-5 py-5 lg:hidden">
       <button onClick={() => router.back()} className="p-1">
         <Image
           src="/mobile-prev.svg"

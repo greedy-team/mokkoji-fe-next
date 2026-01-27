@@ -5,6 +5,7 @@ import {
   ClubCategoryToLabel,
   RecruitStatus,
   ClubCategoryToStringLabel,
+  ClubCategory,
 } from '@/shared/model/type';
 import ClickLogo from '@/shared/ui/click-logo';
 import PeriodSection from '@/entities/club-detail/ui/period-section';
@@ -47,7 +48,7 @@ function RecruitDetailHeader({
         </h1>
         <p className="text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
           <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
-            {ClubCategoryToStringLabel[category]} 동아리
+            {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
           </Link>
         </p>
       </div>

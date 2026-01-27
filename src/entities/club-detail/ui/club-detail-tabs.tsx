@@ -84,7 +84,7 @@ function ClubDetailTabs({
 
   return (
     <div className="mt-8 lg:mt-16">
-      <div className="flex justify-center border-b border-b-[#D6D6D6] pb-3">
+      <div className="mb-8 flex justify-center border-b border-b-[#D6D6D6] pb-3 lg:mb-12">
         {TABS.map((tab) => {
           const isSelected = tab.key === activeTab;
 

@@ -47,12 +47,29 @@ function RecruitHistorySection({
 
   return (
     <>
-      <div className="mt-10 flex items-center gap-2 lg:gap-3">
-        <img src="/pin.svg" alt="pin" className="w-8" />
-        <span className="text-xl font-bold lg:text-2xl">전체 모집 공고</span>
+      <div className="mt-8 flex items-center gap-2 lg:gap-3">
+        <img src="/pin.svg" alt="pin" className="w-4 lg:w-8" />
+        <span className="font-bold lg:text-2xl lg:text-xl">전체 모집 공고</span>
       </div>
 
-      <div className="mt-5 overflow-hidden pt-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 pt-2 sm:hidden">
+        {list.map((r) => {
+          const queryString = new URLSearchParams();
+          queryString.set('rid', String(r.id));
+          const href = `/club/${clubId}?${queryString.toString()}`;
+
+          return (
+            <Link key={r.id} href={href}>
+              <RecruitHistoryCard
+                recruitHistories={r}
+                isSelected={selectedRid === r.id}
+              />
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 hidden overflow-hidden pt-2 sm:block lg:mt-5">
         <div
           className="flex transition-transform duration-300 ease-out"
           style={{

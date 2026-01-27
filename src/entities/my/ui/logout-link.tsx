@@ -12,10 +12,10 @@ export default function LogoutLink() {
     <button
       type="button"
       onClick={handleLogout}
-      className="flex items-center gap-1 text-[#00E457] hover:underline"
+      className="mt-2 flex items-center gap-2 font-semibold text-[#FF383C] hover:underline"
     >
       로그아웃
-      <Image src="/favorite/next.svg" alt="arrow" width={6} height={6} />
+      <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
     </button>
   );
 }

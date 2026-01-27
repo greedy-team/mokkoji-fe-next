@@ -23,7 +23,7 @@ async function MyPage() {
 
   return (
     <div className="flex flex-col items-center px-4">
-      <div className="w-full max-w-[40%] border">
+      <div className="w-full">
         <div>
           <InfoRow label="학번" value={user.studentId} />
           <InfoRow label="학과" value={user.department} />
@@ -39,7 +39,7 @@ async function MyPage() {
             <MailNotificationToggle />
           </InfoRow>
           {isAdmin && (
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-6 flex items-center gap-2">
               <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
               <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </div>

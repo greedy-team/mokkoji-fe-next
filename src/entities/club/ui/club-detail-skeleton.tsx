@@ -2,23 +2,25 @@ const dummyTabs = [1, 2, 3];
 
 function ClubDetailSkeleton() {
   return (
-    <div className="mt-25 mb-10 w-[60%] animate-pulse lg:max-w-[60%] lg:min-w-[60%]">
-      <header className="w-full cursor-default">
-        <div className="mb-8 flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-gray-300 lg:h-14 lg:w-14" />
+    <div className="mt-5 px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
+      <header className="w-full">
+        <div className="mb-4 flex flex-row items-center gap-3.5 lg:mb-8 lg:gap-4">
+          <div className="hidden rounded-full bg-gray-300 sm:block lg:h-18 lg:w-18" />
           <div className="h-7 w-40 rounded bg-gray-300 lg:h-10 lg:w-60" />
           <div className="h-7 w-32 rounded bg-gray-200 lg:h-10 lg:w-48" />
         </div>
 
-        <div className="flex items-center gap-6 lg:text-xl">
+        <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
           <div className="h-6 w-16 shrink-0 rounded-full bg-gray-300 lg:h-7 lg:w-20" />
 
-          <div className="flex flex-col gap-2 pt-4">
+          <div className="flex flex-col gap-1 lg:gap-2">
             <div className="h-5 w-56 rounded bg-gray-200 lg:h-6 lg:w-72" />
-            <div className="h-4 w-40 rounded bg-gray-200 lg:h-5 lg:w-52" />
+            <div className="mr-auto shrink-0">
+              <div className="mt-1 h-4 w-40 rounded bg-gray-200 lg:h-5 lg:w-52" />
+            </div>
           </div>
 
-          <div className="ml-auto flex shrink-0 items-center gap-3">
+          <div className="shrink-0 lg:mt-0 lg:ml-auto">
             <div className="h-9 w-9 rounded-full bg-gray-300 lg:h-10 lg:w-10" />
             <div className="h-9 w-9 rounded-full bg-gray-300 lg:h-10 lg:w-10" />
           </div>

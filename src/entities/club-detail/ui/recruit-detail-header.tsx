@@ -52,12 +52,12 @@ function RecruitDetailHeader({
           </Link>
         </p>
       </div>
-      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:text-xl">
+      <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
         <RadiusTag
           recruitStatus={status}
-          className="shrink-0 px-3 py-2 text-sm whitespace-nowrap lg:px-4 lg:py-3 lg:text-[14px]"
+          className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-3 lg:text-[14px]"
         />
-        <div className="flex flex-col gap-1 pt-4 lg:gap-2">
+        <div className="flex flex-col gap-1 lg:gap-2">
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
@@ -72,7 +72,7 @@ function RecruitDetailHeader({
             )}
           </div>
         </div>
-        <div className="mt-2 shrink-0 lg:mt-0 lg:ml-auto">
+        <div className="shrink-0 lg:mt-0 lg:ml-auto">
           <RecruitDetailHeaderControl
             instagram={instagram}
             clubId={clubId}

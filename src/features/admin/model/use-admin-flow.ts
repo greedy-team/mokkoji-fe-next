@@ -10,10 +10,13 @@ import type {
 } from './types';
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
+  const isSingleClub = allowedClubs.length === 1;
+  const initialClub = isSingleClub ? allowedClubs[0] : undefined;
+
   const [state, setState] = useState<AdminFlowState>({
-    step: 'selectClub',
-    selectedClubId: undefined,
-    selectedClubName: undefined,
+    step: isSingleClub ? 'postType' : 'selectClub',
+    selectedClubId: initialClub?.clubId,
+    selectedClubName: initialClub?.clubName,
     contentType: undefined,
     actionType: undefined,
   });

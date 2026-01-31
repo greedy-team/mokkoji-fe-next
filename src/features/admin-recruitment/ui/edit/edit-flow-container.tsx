@@ -48,6 +48,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [localRecruitments, setLocalRecruitments] =
     useState<ClubRecruitments[]>(recruitments);
+  const [editRecruitmentId, setEditRecruitmentId] = useState<number>();
 
   useEffect(() => {
     if (flow.currentStep !== displayStep) {
@@ -119,7 +120,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       return;
     }
 
-    if (!res?.ok) {
+    if (!res?.ok || !res.data) {
       toast.error(res?.message || '모집글 수정에 실패했습니다.');
       flow.setSubmitting(false);
       return;
@@ -144,6 +145,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       return;
     }
 
+    setEditRecruitmentId(res.data.data.id);
     flow.setSubmitting(false);
     flow.complete();
     toast.success('모집 공고가 수정되었습니다!');
@@ -173,7 +175,13 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">수정 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
-        <Button onClick={() => router.push('/club')}>모집글 확인하기</Button>
+        <Button
+          onClick={() =>
+            router.push(`/club/${clubInfo.id}?rid=${editRecruitmentId}`)
+          }
+        >
+          모집글 확인하기
+        </Button>
       </div>
     );
   }

@@ -104,12 +104,12 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
   return (
     <div
-      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
+      className={`transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {displayStep === 'basicInfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="모집글 기본 정보"
             onBack={() => router.push('/admin')}
@@ -145,11 +145,8 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       )}
 
       {displayStep === 'postinfo' && (
-        <div className="flex flex-col gap-2 py-8">
-          <PrevButton
-            onClick={flow.prevStep}
-            className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-          />
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
+          <AdminPageHeader title="모집공고" onBack={flow.prevStep} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (

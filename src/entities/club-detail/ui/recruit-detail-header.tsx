@@ -43,14 +43,16 @@ function RecruitDetailHeader({
     <header className="w-full cursor-default">
       <div className="mb-4 flex flex-row items-center gap-3.5 lg:mb-8 lg:gap-4">
         <ClickLogo logo={logo} title={title} />
-        <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">
-          {title}
-        </h1>
-        <p className="text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
-          <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
-            {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
-          </Link>
-        </p>
+        <div className="flex min-w-0 items-center gap-2">
+          <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">
+            {title}
+          </h1>
+          <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
+            <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
+              {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
+            </Link>
+          </p>
+        </div>
       </div>
       <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
         <RadiusTag

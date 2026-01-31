@@ -42,6 +42,7 @@ export interface RecruitmentPreviewResponse {
   recruitStart: string;
   recruitEnd: string;
   recruitStatus: RecruitStatus;
+  isAlwaysRecruiting: boolean;
 }
 
 export interface Club {

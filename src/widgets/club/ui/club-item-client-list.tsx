@@ -25,7 +25,7 @@ function ClubItemClientList({ clubs }: ClubItemClientListProps) {
             id={item.id}
             recruitStatus={item.recruitmentPreviewResponse?.recruitStatus}
             isAlwaysRecruiting={
-              item.recruitmentPreviewResponse?.recruitStatus === 'ALWAYS'
+              item.recruitmentPreviewResponse?.isAlwaysRecruiting ?? false
             }
             height={150}
           />

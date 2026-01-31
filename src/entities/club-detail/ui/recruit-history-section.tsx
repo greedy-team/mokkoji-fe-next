@@ -1,6 +1,6 @@
 import { ClubRecruitments } from '@/views/club/model/type';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -10,15 +10,15 @@ interface RecruitHistorySectionProps {
 }
 
 function useRecruitHistoryVisibleCardCount() {
-  const [cardCount, setCardCount] = useState(1);
+  const [cardCount, setCardCount] = useState(3);
 
   useEffect(() => {
     const update = () => {
-      const w = window.innerWidth;
+      const width = window.innerWidth;
 
-      if (w >= 1024) setCardCount(3);
-      else if (w >= 640) setCardCount(2);
-      else setCardCount(1);
+      if (width >= 1024) setCardCount(3);
+      else if (width >= 640) setCardCount(2);
+      else setCardCount(3);
     };
 
     update();
@@ -29,54 +29,124 @@ function useRecruitHistoryVisibleCardCount() {
   return cardCount;
 }
 
+const MOBILE_PAGE_SIZE = 3;
+
 function RecruitHistorySection({
   clubId,
   recruitHistories,
   selectedRid,
 }: RecruitHistorySectionProps) {
-  const list = Array.isArray(recruitHistories) ? recruitHistories : [];
+  const recruitHistoryList = Array.isArray(recruitHistories)
+    ? recruitHistories
+    : [];
+
   const visibleCardCount = useRecruitHistoryVisibleCardCount();
 
-  const [index, setIndex] = useState(0);
-  const maxIndex = Math.max(0, list.length - visibleCardCount);
+  const [desktopIndex, setDesktopIndex] = useState(0);
+  const desktopMaxIndex = Math.max(
+    0,
+    recruitHistoryList.length - visibleCardCount,
+  );
+  const canDesktopPrev = desktopIndex > 0;
+  const canDesktopNext = desktopIndex < desktopMaxIndex;
+  const desktopItemWidth = `${100 / visibleCardCount}%`;
 
-  const canPrev = index > 0;
-  const canNext = index < maxIndex;
+  const [mobilePageIndex, setMobilePageIndex] = useState(0);
+  const mobileMaxPageIndex = Math.max(
+    0,
+    Math.ceil(recruitHistoryList.length / MOBILE_PAGE_SIZE) - 1,
+  );
+  const canMobilePrev = mobilePageIndex > 0;
+  const canMobileNext = mobilePageIndex < mobileMaxPageIndex;
 
-  const itemWidth = `${100 / visibleCardCount}%`;
+  useEffect(() => {
+    setDesktopIndex((prev) => Math.min(prev, desktopMaxIndex));
+  }, [desktopMaxIndex]);
+
+  useEffect(() => {
+    setMobilePageIndex((prev) => Math.min(prev, mobileMaxPageIndex));
+  }, [mobileMaxPageIndex]);
 
   return (
     <div className="mb-11">
       <div className="mt-8 flex items-center gap-2 lg:gap-3">
-        <img src="/pin.svg" alt="pin" className="w-4 lg:w-8" />
-        <span className="font-bold lg:text-2xl lg:text-xl">전체 모집 공고</span>
+        <img src="/pin.svg" alt="pin" className="w-8" />
+        <span className="font-bold lg:text-xl">전체 모집 공고</span>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 pt-2 sm:hidden">
-        {list.map((r) => {
-          const queryString = new URLSearchParams();
-          queryString.set('rid', String(r.id));
-          const href = `/club/${clubId}?${queryString.toString()}`;
+      <div className="mt-4 overflow-hidden pt-2 sm:hidden">
+        <div
+          className="flex transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${mobilePageIndex * 100}%)` }}
+        >
+          {Array.from({ length: mobileMaxPageIndex + 1 }).map(
+            (_, pageIndex) => {
+              const start = pageIndex * MOBILE_PAGE_SIZE;
+              const pageItems = recruitHistoryList.slice(
+                start,
+                start + MOBILE_PAGE_SIZE,
+              );
 
-          return (
-            <Link key={r.id} href={href}>
-              <RecruitHistoryCard
-                recruitHistories={r}
-                isSelected={selectedRid === r.id}
-              />
-            </Link>
-          );
-        })}
+              const pageKey =
+                pageItems[0]?.id != null
+                  ? `page-${pageItems[0].id}`
+                  : `page-${start}`;
+
+              return (
+                <div key={pageKey} className="w-full shrink-0">
+                  <div className="m-1 grid grid-cols-1 gap-4">
+                    {pageItems.map((recruitment) => {
+                      const queryString = new URLSearchParams();
+                      queryString.set('rid', String(recruitment.id));
+                      const href = `/club/${clubId}?${queryString.toString()}`;
+
+                      return (
+                        <Link key={recruitment.id} href={href}>
+                          <RecruitHistoryCard
+                            recruitHistories={recruitment}
+                            isSelected={selectedRid === recruitment.id}
+                          />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            },
+          )}
+        </div>
+
+        <div className="mt-6 flex justify-center gap-6 text-sm">
+          <button
+            type="button"
+            onClick={() => setMobilePageIndex((v) => Math.max(0, v - 1))}
+            disabled={!canMobilePrev}
+            className="disabled:opacity-40"
+          >
+            &lt; 이전
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              setMobilePageIndex((v) => Math.min(mobileMaxPageIndex, v + 1))
+            }
+            disabled={!canMobileNext}
+            className="disabled:opacity-40"
+          >
+            다음 &gt;
+          </button>
+        </div>
       </div>
 
       <div className="mt-4 hidden overflow-hidden pt-2 sm:block lg:mt-5">
         <div
           className="flex transition-transform duration-300 ease-out"
           style={{
-            transform: `translateX(-${index * (100 / visibleCardCount)}%)`,
+            transform: `translateX(-${desktopIndex * (100 / visibleCardCount)}%)`,
           }}
         >
-          {list.map((recruitment) => {
+          {recruitHistoryList.map((recruitment) => {
             const queryString = new URLSearchParams();
             queryString.set('rid', String(recruitment.id));
             const href = `/club/${clubId}?${queryString.toString()}`;
@@ -84,7 +154,7 @@ function RecruitHistorySection({
             return (
               <div
                 key={recruitment.id}
-                style={{ width: itemWidth }}
+                style={{ width: desktopItemWidth }}
                 className="shrink-0 px-2"
               >
                 <Link href={href}>
@@ -100,16 +170,20 @@ function RecruitHistorySection({
 
         <div className="mt-6 flex justify-center gap-6 text-sm">
           <button
-            onClick={() => setIndex((v) => Math.max(0, v - 1))}
-            disabled={!canPrev}
+            type="button"
+            onClick={() => setDesktopIndex((v) => Math.max(0, v - 1))}
+            disabled={!canDesktopPrev}
             className="disabled:opacity-40"
           >
             &lt; 이전
           </button>
 
           <button
-            onClick={() => setIndex((v) => Math.min(maxIndex, v + 1))}
-            disabled={!canNext}
+            type="button"
+            onClick={() =>
+              setDesktopIndex((v) => Math.min(desktopMaxIndex, v + 1))
+            }
+            disabled={!canDesktopNext}
             className="disabled:opacity-40"
           >
             다음 &gt;

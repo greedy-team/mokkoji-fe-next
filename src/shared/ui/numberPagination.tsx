@@ -4,62 +4,62 @@ import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import cn from '@/shared/lib/utils';
 
-type Item = number | 'ellipsis';
+type PaginationPage = number | 'ellipsis';
 
-function getPaginationItems(
-  current: number,
-  total: number,
-  windowSize = 5,
-): Item[] {
-  const items: Item[] = [];
-  if (total <= windowSize) {
-    for (let i = 1; i <= total; i += 1) items.push(i);
-    return items;
+function getPaginationPages(
+  currentPage: number,
+  totalPages: number,
+  pageRange = 5,
+): PaginationPage[] {
+  const pages: PaginationPage[] = [];
+  if (totalPages <= pageRange) {
+    for (let page = 1; page <= totalPages; page += 1) pages.push(page);
+    return pages;
   }
 
-  const half = Math.floor(windowSize / 2);
-  let start = current - half;
-  let end = current + half;
+  const halfRange = Math.floor(pageRange / 2);
+  let startPage = currentPage - halfRange;
+  let endPage = currentPage + halfRange;
 
-  if (start < 1) {
-    start = 1;
-    end = windowSize;
+  if (startPage < 1) {
+    startPage = 1;
+    endPage = pageRange;
   }
-  if (end > total) {
-    end = total;
-    start = total - windowSize + 1;
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = totalPages - pageRange + 1;
   }
 
-  if (start > 1) items.push(1);
-  if (start > 2) items.push('ellipsis');
+  if (startPage > 1) pages.push(1);
+  if (startPage > 2) pages.push('ellipsis');
 
-  for (let p = start; p <= end; p += 1) items.push(p);
+  for (let page = startPage; page <= endPage; page += 1) pages.push(page);
 
-  if (end < total - 1) items.push('ellipsis');
-  if (end < total) items.push(total);
+  if (endPage < totalPages - 1) pages.push('ellipsis');
+  if (endPage < totalPages) pages.push(totalPages);
 
-  return items;
+  return pages;
 }
 
 type Props = {
   page: number;
   totalPages: number;
-  windowSize?: number;
+  pageRange?: number;
 };
 
 export default function NumberPagination({
   page,
   totalPages,
-  windowSize = 5,
+  pageRange = 5,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   if (totalPages <= 1) return null;
 
-  const items = getPaginationItems(page, totalPages, windowSize);
+  const pages = getPaginationPages(page, totalPages, pageRange);
 
-  const go = (nextPage: number) => {
+  const moveToPage = (nextPage: number) => {
     const params = new URLSearchParams(searchParams);
 
     params.delete('page');
@@ -67,10 +67,10 @@ export default function NumberPagination({
     router.push(`?${params.toString()}`, { scroll: true });
   };
 
-  const canPrev = page > 1;
-  const canNext = page < totalPages;
+  const canGoPrev = page > 1;
+  const canGoNext = page < totalPages;
 
-  let ellipsisCount = 0;
+  let ellipsisIndex = 0;
 
   return (
     <nav
@@ -80,42 +80,45 @@ export default function NumberPagination({
     >
       <button
         type="button"
-        onClick={() => canPrev && go(page - 1)}
-        disabled={!canPrev}
+        onClick={() => canGoPrev && moveToPage(page - 1)}
+        disabled={!canGoPrev}
         aria-label="이전 페이지"
-        className={cn('text-3xl', !canPrev && 'cursor-not-allowed opacity-30')}
+        className={cn(
+          'text-3xl',
+          !canGoPrev && 'cursor-not-allowed opacity-30',
+        )}
       >
         <img src="/pagination/prev.svg" alt="이전페이지" />
       </button>
 
       <div className="flex items-center gap-4 text-3xl">
-        {items.map((item) => {
-          if (item === 'ellipsis') {
-            ellipsisCount += 1;
+        {pages.map((pageItem) => {
+          if (pageItem === 'ellipsis') {
+            ellipsisIndex += 1;
             return (
               <span
-                key={`ellipsis-${ellipsisCount}`}
+                key={`ellipsis-${ellipsisIndex}`}
                 className="text-base text-[#BDBDBD]"
               >
-                <img src="/pagination/ellipses.svg" />
+                <img src="/pagination/ellipses.svg" alt="말줄임" />
               </span>
             );
           }
 
-          const isActive = item === page;
+          const isActive = pageItem === page;
 
           return (
             <button
-              key={item}
+              key={pageItem}
               type="button"
-              onClick={() => go(item)}
+              onClick={() => moveToPage(pageItem)}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'transition-colors, text-base sm:text-lg',
+                'text-base transition-colors sm:text-lg',
                 isActive ? 'text-black' : 'text-[#BDBDBD] hover:text-black',
               )}
             >
-              {item}
+              {pageItem}
             </button>
           );
         })}
@@ -123,10 +126,13 @@ export default function NumberPagination({
 
       <button
         type="button"
-        onClick={() => canNext && go(page + 1)}
-        disabled={!canNext}
+        onClick={() => canGoNext && moveToPage(page + 1)}
+        disabled={!canGoNext}
         aria-label="다음 페이지"
-        className={cn('text-3xl', !canNext && 'cursor-not-allowed opacity-30')}
+        className={cn(
+          'text-3xl',
+          !canGoNext && 'cursor-not-allowed opacity-30',
+        )}
       >
         <img src="/pagination/next.svg" alt="다음페이지" />
       </button>

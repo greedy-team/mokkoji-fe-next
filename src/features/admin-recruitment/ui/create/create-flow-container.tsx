@@ -37,6 +37,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
+  const [createRecruitmentId, setCreateRecruitmentId] = useState<number>();
 
   const imageUpload = useImageUpload([]);
 
@@ -62,7 +63,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
     const res = await postRecruitmentForm(data, clubId);
 
-    if (!res.ok) {
+    if (!res.ok || !res.data) {
       toast.error(res.message);
       flow.setIsSubmitting(false);
       return;
@@ -87,6 +88,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       return;
     }
 
+    setCreateRecruitmentId(res.data.data.id);
     flow.setIsSubmitting(false);
     flow.complete();
     toast.success('모집 공고가 등록되었습니다!');
@@ -97,7 +99,13 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
-        <Button onClick={() => router.push('/club')}>모집글 확인하기</Button>
+        <Button
+          onClick={() =>
+            router.push(`/club/${clubInfo.id}?rid=${createRecruitmentId}`)
+          }
+        >
+          모집글 확인하기
+        </Button>
       </div>
     );
   }

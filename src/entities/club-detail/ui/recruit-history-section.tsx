@@ -46,7 +46,7 @@ function RecruitHistorySection({
   const itemWidth = `${100 / visibleCardCount}%`;
 
   return (
-    <>
+    <div className="mb-11">
       <div className="mt-8 flex items-center gap-2 lg:gap-3">
         <img src="/pin.svg" alt="pin" className="w-4 lg:w-8" />
         <span className="font-bold lg:text-2xl lg:text-xl">전체 모집 공고</span>
@@ -116,7 +116,7 @@ function RecruitHistorySection({
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -2,10 +2,12 @@
 
 import React from 'react';
 import { ClubAffiliation, ClubAffiliationLabel } from '@/shared/model/type';
-import useUrlParams from '../model/useUrlParams';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function AffiliationNavSelect() {
-  const { handleChange, active } = useUrlParams('affiliation');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const active = searchParams.get('affiliation') ?? '';
 
   const affiliations = [
     ClubAffiliation.CENTRAL_CLUB,
@@ -13,10 +15,24 @@ function AffiliationNavSelect() {
     ClubAffiliation.SMALL_GROUP,
   ];
 
+  const changeAffiliation = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value === '') {
+      params.delete('affiliation');
+    } else {
+      params.set('affiliation', value);
+    }
+
+    params.set('page', '1');
+
+    router.push(`?${params.toString()}`);
+  };
+
   return (
     <div className="mb-5 flex gap-3 text-xs sm:mb-12 sm:gap-4 sm:text-base">
       <button
-        onClick={() => handleChange('ALL')}
+        onClick={() => changeAffiliation('')}
         data-selected={active === ''}
         className="cursor-pointer data-[selected=false]:text-[#9F9F9F] data-[selected=true]:text-black"
       >
@@ -29,7 +45,7 @@ function AffiliationNavSelect() {
         return (
           <button
             key={affiliation}
-            onClick={() => handleChange(affiliation)}
+            onClick={() => changeAffiliation(affiliation)}
             data-selected={isActive}
             className="cursor-pointer data-[selected=false]:text-[#9F9F9F] data-[selected=true]:text-black"
           >

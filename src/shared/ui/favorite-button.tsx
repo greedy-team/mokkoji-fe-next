@@ -10,7 +10,7 @@ import deleteFavorite from '../api/delete-favorite';
 
 interface FavoriteButtonProps {
   isFavorite: boolean;
-  clubId: string;
+  clubId: number;
   customClass?: string;
 }
 

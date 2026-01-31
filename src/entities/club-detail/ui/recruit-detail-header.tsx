@@ -51,8 +51,8 @@ function RecruitDetailHeader({
       </div>
       <div className="flex items-center gap-6 lg:text-xl">
         <RadiusTag
-          status={status}
-          className="shrink-0 whitespace-nowrap lg:text-[14px]"
+          recruitStatus={status}
+          className="shrink-0 px-4 py-3 whitespace-nowrap lg:text-[14px]"
         />
         <div className="flex flex-col gap-2 pt-4">
           <PeriodSection

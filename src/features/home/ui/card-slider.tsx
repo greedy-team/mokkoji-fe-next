@@ -5,13 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { Recruitment } from '@/widgets/club/model/type';
+import { Club } from '@/widgets/club/model/type';
 
 const movePx = 250;
 const mobileMovePx = 100;
 
 interface CardSliderProps {
-  clubs: Recruitment[];
+  clubs: Club[];
 }
 
 function CardSlider({ clubs }: CardSliderProps) {
@@ -54,7 +54,7 @@ function CardSlider({ clubs }: CardSliderProps) {
 
           return (
             <NavLink
-              href={`/club/${item.club.id}`}
+              href={`/club/${item.id}`}
               key={item.id}
               isActive={isActive}
               translateX={currentTranslateX}
@@ -65,20 +65,20 @@ function CardSlider({ clubs }: CardSliderProps) {
                   <Avatar
                     className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
-                    <AvatarImage src={item.club.logo} loading="lazy" />
+                    <AvatarImage src={item.logo} loading="lazy" />
                     <AvatarFallback />
                   </Avatar>
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-[#474747] lg:text-xs">
-                      {item.club.clubCategory}
-                    </span>
+                    {/* <span className="text-[10px] font-bold text-[#474747] lg:text-xs">
+                      {item.clubCategory}
+                    </span> */}
                     <h1
                       className={cn(
                         isActive ? 'text-md lg:text-lg' : 'text-xs lg:text-sm',
                         'font-bold transition-all duration-500',
                       )}
                     >
-                      {item.club.name}
+                      {item.name}
                     </h1>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ function CardSlider({ clubs }: CardSliderProps) {
                     'line-clamp-2 overflow-hidden text-ellipsis text-gray-600 transition-all duration-500',
                   )}
                 >
-                  {item.club.description}
+                  {item.description}
                 </div>
               </div>
             </NavLink>

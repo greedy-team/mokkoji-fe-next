@@ -2,8 +2,8 @@ import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   decoration?: boolean;
   className?: string;
   isAlwaysRecruiting: boolean;
@@ -21,13 +21,14 @@ function PeriodSection({
   ) : (
     <span className={cn(`text-xs leading-none ${className}`)}>
       {decoration ? (
-        <span className="text-[#8B95A1]">모집기한 · </span>
+        <span className="text-[#8B95A1]">
+          모집기한 · {formatToMonthDay(startDate!)}~{formatToMonthDay(endDate!)}
+        </span>
       ) : (
-        <span>모집기한 | </span>
+        <span className="text[#0A0A0A]">
+          모집기한 | {formatToMonthDay(startDate!)}~{formatToMonthDay(endDate!)}
+        </span>
       )}
-      <span className="text-[#8B95A1]">
-        {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
-      </span>
     </span>
   );
 }

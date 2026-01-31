@@ -24,6 +24,9 @@ function ClubItemClientList({ clubs }: ClubItemClientListProps) {
             logo={item.logo}
             id={item.id}
             recruitStatus={item.recruitmentPreviewResponse?.recruitStatus}
+            isAlwaysRecruiting={
+              item.recruitmentPreviewResponse?.recruitStatus === 'ALWAYS'
+            }
             height={150}
           />
         </Link>

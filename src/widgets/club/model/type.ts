@@ -10,6 +10,7 @@ export interface Recruitment {
   recruitEnd: string;
   status: RecruitmentStatus;
   isFavorite: boolean;
+  isAlwaysRecruiting: boolean;
 }
 
 export interface Pagination {

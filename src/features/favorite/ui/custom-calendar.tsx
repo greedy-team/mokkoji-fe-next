@@ -6,7 +6,7 @@ import { FavoriteDateItem } from '@/views/favorite/model/type';
 import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
 import formatNavigation from '@/entities/favorite/ui/format-navigation';
 import SharedLoading from '@/shared/ui/loading';
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import getWeekdays from '../util/get-week-days';
 import useCalendarDeadline from '../model/useCalendarDeadline';
 
@@ -30,20 +30,6 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
     deadlineMap,
   } = useCalendarDeadline(data, setValue);
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
   return (
     <>
       <Calendar
@@ -55,11 +41,31 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[450px] !w-full rounded-xl border !border-[#F8F8F8] !bg-[#F8F8F8] !p-3 !text-xl text-gray-800 lg:!w-[700px]"
-        nextLabel=">"
-        prevLabel="<"
+        className="h-[574px] !w-full rounded-xl !border-none !bg-[#FBFBFB] !p-3 text-gray-800 lg:!w-[700px]"
+        nextLabel={
+          <div className="flex items-center justify-center">
+            <Image
+              src="/favorite/next.svg"
+              alt="다음달"
+              width={12}
+              height={23}
+              className="h-[12px] w-[6px] lg:h-[23px] lg:w-[12px]"
+            />
+          </div>
+        }
+        prevLabel={
+          <div className="flex items-center justify-center">
+            <Image
+              src="/favorite/prev.svg"
+              alt="저번달"
+              width={12}
+              height={23}
+              className="h-[12px] w-[6px] lg:h-[23px] lg:w-[12px]"
+            />
+          </div>
+        }
         navigationLabel={formatNavigation}
-        formatShortWeekday={(locale, date) => getWeekdays(date, isMobile)}
+        formatShortWeekday={(locale, date) => getWeekdays(date)}
         formatDay={(locale, date) => date.getDate().toString()}
         next2Label={null}
         prev2Label={null}
@@ -70,26 +76,25 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
           const isSelected = value.toDateString() === dateKey;
           const isDeadline = deadlineMap.has(dateKey);
 
-          let borderClass = '!border-transparent';
-          let textClass = '!text-xl';
-          let fontClass = '!font-bold !text-xl';
+          let textClass = '!text-sm lg:!text-xl';
+          let selectedClass = '';
 
           if (isSelected) {
-            borderClass = '!border-[#00E457]';
-            textClass = '!text-[#00E457] !text-xl';
-            fontClass = '!font-semibold !text-xl';
+            textClass = '!text-[#00E457] lg:!text-xl';
+            selectedClass = 'selected-date';
           } else if (isDeadline) {
-            textClass = '!text-[#00E457] !text-xl';
+            textClass = '!text-[#00E457] lg:!text-xl';
           }
 
           return `
-            !border-b-2
-            ${borderClass}
             ${textClass}
             !bg-transparent
             hover:!bg-blue-100
             transition
-            ${fontClass}
+            !font-bold
+            !mb-2
+            lg:!mb-3
+            ${selectedClass}
           `;
         }}
       />

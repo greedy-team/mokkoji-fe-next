@@ -15,6 +15,7 @@ export interface RecruitmentFormData {
   recruitStart: string;
   recruitEnd: string;
   recruitForm: string;
+  isAlwaysRecruiting: boolean;
 }
 
 export interface FormField {
@@ -32,7 +33,7 @@ export type Action =
   | {
       type: 'UPDATE_FIELD';
       name: keyof RecruitmentFormData;
-      value: string | string[];
+      value: string | string[] | boolean;
     }
   | { type: 'VALIDATE_FIELD'; name: keyof RecruitmentFormData }
   | { type: 'UPDATE_IMAGE'; file: File }

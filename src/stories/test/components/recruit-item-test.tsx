@@ -17,6 +17,7 @@ interface RecruitItemProps {
   clubId: number;
   status: RecruitStatus;
   height?: number;
+  isAlwaysRecruiting: boolean;
 }
 
 function RecruitItemTest({
@@ -30,6 +31,7 @@ function RecruitItemTest({
   clubId,
   status,
   height = 198,
+  isAlwaysRecruiting,
 }: RecruitItemProps) {
   return (
     <div
@@ -43,7 +45,11 @@ function RecruitItemTest({
             <AvatarFallback />
           </Avatar>
           <div>
-            <PeriodSection startDate={startDate} endDate={endDate} />
+            <PeriodSection
+              startDate={startDate}
+              endDate={endDate}
+              isAlwaysRecruiting={isAlwaysRecruiting}
+            />
             <h1 className="text-text-primary text-base font-bold lg:text-xl">
               {name}
             </h1>

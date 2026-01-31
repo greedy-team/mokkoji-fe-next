@@ -1,17 +1,23 @@
-import getWeekdays from '@/features/favorite/util/get-week-days';
-
 function formatNavigation({ date }: { date: Date }) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const day = date.getDate();
+
+  const weekdaysKorean = [
+    '일요일',
+    '월요일',
+    '화요일',
+    '수요일',
+    '목요일',
+    '금요일',
+    '토요일',
+  ];
+  const dayOfWeek = weekdaysKorean[date.getDay()];
 
   return (
-    <div className="flex flex-row items-center gap-2 pl-2">
-      <span className="text-xl font-bold text-gray-900">{`${year} ${month}월 ${day}일, `}</span>
-      <span className="text-xl font-normal text-gray-600">
-        {getWeekdays(date, true)}
-      </span>
-    </div>
+    <span className="flex gap-6 text-sm font-bold whitespace-nowrap text-gray-900 lg:text-xl">
+      <span>{year}</span>
+      <span>{`${month}월 ${date.getDate()}일, ${dayOfWeek}`}</span>
+    </span>
   );
 }
 

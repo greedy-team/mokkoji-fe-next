@@ -15,6 +15,7 @@ interface ClubDetailHeaderProps {
   isFavorite?: boolean;
   logo: string;
   status: RecruitStatus;
+  isAlwaysRecruiting: boolean;
 }
 
 function ClubDetailHeader({
@@ -27,6 +28,7 @@ function ClubDetailHeader({
   logo,
   isFavorite,
   status,
+  isAlwaysRecruiting,
 }: ClubDetailHeaderProps) {
   return (
     <header className="mb-5 w-full cursor-default pb-4">
@@ -46,6 +48,7 @@ function ClubDetailHeader({
           endDate={endDate}
           decoration={false}
           className="lg:text-lg"
+          isAlwaysRecruiting={isAlwaysRecruiting}
         />
       </div>
       <ClubDetailHeaderControl

@@ -1,6 +1,4 @@
-import getDateUtil, {
-  formatToMonthDay,
-} from '@/entities/club/util/getDateUtil';
+import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {
@@ -8,6 +6,7 @@ interface PeriodSectionProps {
   endDate?: string;
   decoration?: boolean;
   className?: string;
+  isAlwaysRecruiting: boolean;
 }
 
 function PeriodSection({
@@ -15,28 +14,19 @@ function PeriodSection({
   endDate,
   decoration = true,
   className,
+  isAlwaysRecruiting,
 }: PeriodSectionProps) {
-  if (!startDate || !endDate) {
-    return (
-      <span className={cn(`text-xs text-[#8B95A1] ${className}`)}>
-        상시모집
-      </span>
-    );
-  }
-
-  const isEndOfYear = getDateUtil(endDate);
-
-  return isEndOfYear ? (
-    <span className={cn(`text-xs text-[#8B95A1] ${className}`)}>상시모집</span>
+  return isAlwaysRecruiting ? (
+    <span className={cn(`text-xs leading-none ${className}`)}>상시모집</span>
   ) : (
     <span className={cn(`text-xs leading-none ${className}`)}>
       {decoration ? (
         <span className="text-[#8B95A1]">
-          모집기한 · {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
+          모집기한 · {formatToMonthDay(startDate!)}~{formatToMonthDay(endDate!)}
         </span>
       ) : (
         <span className="text[#0A0A0A]">
-          모집기한 | {formatToMonthDay(startDate)}~{formatToMonthDay(endDate)}
+          모집기한 | {formatToMonthDay(startDate!)}~{formatToMonthDay(endDate!)}
         </span>
       )}
     </span>

@@ -15,6 +15,7 @@ interface ClubItemProps {
   logo?: string;
   id: number;
   recruitStatus?: RecruitStatus;
+  isAlwaysRecruiting: boolean;
   height?: number;
 }
 
@@ -27,6 +28,7 @@ function ClubItem({
   logo,
   id,
   recruitStatus,
+  isAlwaysRecruiting,
   height = 150,
 }: ClubItemProps) {
   return (
@@ -61,7 +63,11 @@ function ClubItem({
             </div>
 
             <div className="whitespace-nowrap">
-              <PeriodSection startDate={startDate} endDate={endDate} />
+              <PeriodSection
+                startDate={startDate}
+                endDate={endDate}
+                isAlwaysRecruiting={isAlwaysRecruiting}
+              />
             </div>
           </div>
         </div>

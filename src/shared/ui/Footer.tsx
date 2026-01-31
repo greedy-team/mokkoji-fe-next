@@ -2,7 +2,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="flex h-[74px] w-full items-center justify-center gap-4 text-[10px] text-[#545454] lg:gap-10 lg:text-sm">
+    <footer className="flex h-[74px] w-full shrink-0 items-center justify-center gap-4 text-[10px] text-[#545454] lg:gap-10 lg:text-sm">
       <p className="cursor-default">
         COPYRIGHT @ {currentYear} 모꼬지. ALL RIGHT RESERVED.
       </p>

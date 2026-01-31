@@ -76,21 +76,21 @@ function RecruitHistorySection({
             transform: `translateX(-${index * (100 / visibleCardCount)}%)`,
           }}
         >
-          {list.map((r) => {
+          {list.map((recruitment) => {
             const queryString = new URLSearchParams();
-            queryString.set('rid', String(r.id));
+            queryString.set('rid', String(recruitment.id));
             const href = `/club/${clubId}?${queryString.toString()}`;
 
             return (
               <div
-                key={r.id}
+                key={recruitment.id}
                 style={{ width: itemWidth }}
                 className="shrink-0 px-2"
               >
                 <Link href={href}>
                   <RecruitHistoryCard
-                    recruitHistories={r}
-                    isSelected={selectedRid === r.id}
+                    recruitHistories={recruitment}
+                    isSelected={selectedRid === recruitment.id}
                   />
                 </Link>
               </div>

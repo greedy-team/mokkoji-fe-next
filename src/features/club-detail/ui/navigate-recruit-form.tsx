@@ -13,7 +13,7 @@ function NavigateRecruitForm({ recruitForm }: NavigateRecruitFormProps) {
       asChild
       variant="none"
       size="navi"
-      className="flex h-[120px] w-[120px] scale-60 cursor-pointer flex-col items-center gap-1.5 rounded-full bg-gradient-to-r from-[#4AF38A] to-[#32E2D0] px-8 text-center text-[17px] text-black transition hover:brightness-105 lg:scale-100"
+      className="mb-21 flex h-[120px] w-[120px] scale-60 cursor-pointer flex-col items-center gap-1.5 rounded-full bg-gradient-to-r from-[#4AF38A] to-[#32E2D0] px-8 text-center text-[17px] text-black transition hover:brightness-105 lg:mb-0 lg:scale-100"
     >
       <Link
         href={recruitForm}

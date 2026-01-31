@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
+import {
+  ClubCategoryToLabel,
+  RecruitStatus,
+  ClubCategoryToStringLabel,
+  ClubCategory,
+} from '@/shared/model/type';
 import ClickLogo from '@/shared/ui/click-logo';
 import PeriodSection from '@/entities/club-detail/ui/period-section';
 
@@ -38,28 +43,30 @@ function RecruitDetailHeader({
 
   return (
     <header className="w-full cursor-default">
-      <div className="mb-8 flex flex-row items-center gap-4">
+      <div className="mb-4 flex flex-row items-center gap-3.5 lg:mb-8 lg:gap-4">
         <ClickLogo logo={logo} title={title} />
-        <h1 className="text-xl font-bold whitespace-nowrap lg:text-4xl">
-          {title}
-        </h1>
-        <p className="text-lg font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
-          <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
-            {category} 동아리
-          </Link>
-        </p>
+        <div className="flex min-w-0 items-center gap-2">
+          <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">
+            {title}
+          </h1>
+          <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
+            <Link href={`/recruit?category=${ClubCategoryToLabel[category]}`}>
+              {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
+            </Link>
+          </p>
+        </div>
       </div>
-      <div className="flex items-center gap-6 lg:text-xl">
+      <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
         <RadiusTag
           recruitStatus={status}
-          className="shrink-0 px-4 py-3 whitespace-nowrap lg:text-[14px]"
+          className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-3 lg:text-[14px]"
         />
-        <div className="flex flex-col gap-2 pt-4">
+        <div className="flex flex-col gap-1 lg:gap-2">
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
             decoration={false}
-            className="whitespace-nowrap lg:text-lg"
+            className="text-sm whitespace-nowrap lg:text-lg"
             isAlwaysRecruiting={isAlwaysRecruiting}
           />
           <div className="mr-auto shrink-0">
@@ -70,7 +77,7 @@ function RecruitDetailHeader({
             )}
           </div>
         </div>
-        <div className="ml-auto shrink-0">
+        <div className="shrink-0 lg:mt-0 lg:ml-auto">
           <RecruitDetailHeaderControl
             instagram={instagram}
             clubId={clubId}

@@ -30,10 +30,10 @@ async function ClubItemList() {
   }
 
   return (
-    <>
+    <div className="mb-8">
       <ClubItemClientList clubs={res.data.clubs} />
       <NumberPagination page={page} totalPages={res.data.page.totalPages} />
-    </>
+    </div>
   );
 }
 

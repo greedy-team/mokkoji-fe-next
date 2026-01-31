@@ -1,3 +1,4 @@
+import HeaderMobile from '@/shared/ui/header-mobile';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,8 +18,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex flex-col items-center justify-center pt-10">
-      {children}
-    </main>
+    <div className="flex flex-col">
+      <HeaderMobile pageTitle="마이페이지" />
+      <main className="flex flex-col justify-center px-2 pt-10 lg:items-center lg:px-0">
+        {children}
+      </main>
+    </div>
   );
 }

@@ -9,13 +9,17 @@
   --color-text-tertiary: #9f9f9f; /* 텍스트 placeholder */
   --color-alert-500: #ff383c;
   --color-disabled: #cccccc;
+
+  --color-darkmode-line: #43E780; /* 다크모드 시 LINE */
+  --color-darkmode-tag: #1AE166; /* 다크모드 시 TAG */
+  --color-lightmode-tag: #4AF38A; /* 라이트모드 시 TAG */
 }
 
 @utility bg-gradient-primary {
   background-image: linear-gradient(
     to right,
     #00e804 0%,
-    #3ae2eb 73%,
+    #3ae2eb 33%,
     #3aa1eb 100%
   );
 }

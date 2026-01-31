@@ -15,10 +15,14 @@ const DESCRIPTION_FIELDS: (keyof ClubFormData)[] = ['description'];
 
 interface UseClubFormOptions {
   onNextStep: () => void;
+  initialData?: Partial<ClubFormData>;
 }
 
-function useClubForm({ onNextStep }: UseClubFormOptions) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+function useClubForm({ onNextStep, initialData }: UseClubFormOptions) {
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    formData: { ...initialState.formData, ...initialData },
+  });
   const { formData, errors } = state;
 
   const handleChange = (name: keyof ClubFormData, value: string) => {

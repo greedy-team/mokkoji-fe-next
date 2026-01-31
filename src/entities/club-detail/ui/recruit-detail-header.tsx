@@ -21,6 +21,7 @@ interface RecruitDetailHeaderProps {
   createdAt: string;
   logo: string;
   status: RecruitStatus;
+  isAlwaysRecruiting: boolean;
 }
 
 function RecruitDetailHeader({
@@ -34,6 +35,7 @@ function RecruitDetailHeader({
   logo,
   createdAt,
   status,
+  isAlwaysRecruiting,
 }: RecruitDetailHeaderProps) {
   const [date] = (createdAt || '').split('T');
   const [year, month, day] = date.split('-');
@@ -65,6 +67,7 @@ function RecruitDetailHeader({
             endDate={endDate}
             decoration={false}
             className="text-sm whitespace-nowrap lg:text-lg"
+            isAlwaysRecruiting={isAlwaysRecruiting}
           />
           <div className="mr-auto shrink-0">
             {date && (

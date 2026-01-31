@@ -45,16 +45,32 @@ export interface Pagination {
 }
 
 export interface FavoriteList {
+  clubs: (ClubType & { isAlwaysRecruiting: boolean } & {
+    recruitStatus: RecruitStatus;
+  })[];
+  pagination: Pagination;
+}
+
+export interface ClubSearchResponse {
   clubs: ClubType[];
   pagination: Pagination;
 }
 
 export const ClubCategoryLabel: Record<ClubCategory, string> = {
-  [ClubCategory.CULTURAL_ART]: '문화/예술🎨',
-  [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양📚',
-  [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회🫶',
-  [ClubCategory.SPORTS]: '체육🎾',
-  [ClubCategory.RELIGIOUS]: '종교🙏',
+  [ClubCategory.CULTURAL_ART]: '문화/예술',
+  [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양',
+  [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
+  [ClubCategory.SPORTS]: '체육',
+  [ClubCategory.RELIGIOUS]: '종교',
+  [ClubCategory.OTHER]: '기타',
+};
+
+export const ClubCategoryIcon: Record<ClubCategory, string> = {
+  [ClubCategory.CULTURAL_ART]: '/category/문화예술.svg',
+  [ClubCategory.ACADEMIC_CULTURAL]: '/category/학술교양.svg',
+  [ClubCategory.VOLUNTEER_SOCIAL]: '/category/봉사사회.svg',
+  [ClubCategory.SPORTS]: '/category/체육.svg',
+  [ClubCategory.RELIGIOUS]: '/category/종교.svg',
   [ClubCategory.OTHER]: '기타',
 };
 
@@ -134,11 +150,17 @@ export interface ClubInfoResponse {
   data: ClubInfoType;
 }
 
-export type RecruitStatus = 'OPEN' | 'CLOSED' | 'BEFORE' | 'IMMINENT';
+export type RecruitStatus =
+  | 'OPEN'
+  | 'CLOSED'
+  | 'BEFORE'
+  | 'IMMINENT'
+  | 'ALWAYS';
 
 export const RecruitStatusLabel: Record<RecruitStatus, string> = {
   OPEN: '모집 중',
   CLOSED: '모집 마감',
   BEFORE: '모집 전',
   IMMINENT: '마감 임박',
+  ALWAYS: '상시 모집',
 };

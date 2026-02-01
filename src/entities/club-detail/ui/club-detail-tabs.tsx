@@ -19,7 +19,6 @@ interface RecruitDetailViewProps {
 
 interface ClubDetailTabsProps {
   activeTab: string;
-  isManageClub: boolean;
   recruitData: RecruitDetailViewProps;
   recruitHistories: ClubRecruitments[];
   id: number;
@@ -34,7 +33,6 @@ const TABS = [
 
 function ClubDetailTabs({
   activeTab,
-  isManageClub,
   recruitData,
   recruitHistories,
   id,
@@ -53,7 +51,6 @@ function ClubDetailTabs({
 
       return (
         <ClubRecruitWidget
-          isManageClub={isManageClub}
           clubId={Number(id)}
           recruitHistories={recruitHistories}
           rid={rid}

@@ -1,6 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
 import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
-import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
@@ -20,19 +19,13 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const session = await auth();
   const role = session?.role;
 
-  const [getClubManageInfoRes, recent, recruitHistories] = await Promise.all([
-    getClubManageInfo({ role }),
+  const [recent, recruitHistories] = await Promise.all([
     getRecentRecruitDetail(Number(id)),
     getClubRecruitments(Number(id)),
   ]);
 
   if (recent?.status === 404 || !recent.data) notFound();
   if (!recent.ok) return <ErrorBoundaryUi />;
-
-  const isManageClub =
-    getClubManageInfoRes?.data?.clubs.some(
-      (club) => club.clubId === recent.data?.clubId,
-    ) || false;
 
   const historiesArray = recruitHistories.ok
     ? (recruitHistories.data?.recruitments ?? [])
@@ -70,7 +63,6 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
 
       <ClubDetailTabs
         activeTab={tab}
-        isManageClub={isManageClub}
         recruitData={selected.data}
         recruitHistories={historiesArray}
         id={Number(id)}

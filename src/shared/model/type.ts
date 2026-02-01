@@ -35,6 +35,8 @@ export interface ClubType {
   recruitEndDate: string;
   logo: string;
   isFavorite: boolean | undefined;
+  isAlwaysRecruiting: boolean;
+  recruitStatus: RecruitStatus;
 }
 
 export interface Pagination {
@@ -45,10 +47,13 @@ export interface Pagination {
 }
 
 export interface FavoriteList {
-  clubs: (ClubType & { isAlwaysRecruiting: boolean } & {
-    recruitStatus: RecruitStatus;
-  })[];
+  clubs: ClubType[];
   pagination: Pagination;
+}
+
+export interface FavoriteItemListProps {
+  clubs: FavoriteList[];
+  totalElements: number;
 }
 
 export interface ClubSearchResponse {

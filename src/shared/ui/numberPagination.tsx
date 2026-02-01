@@ -55,20 +55,20 @@ export default function NumberPagination({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  if (totalPages <= 1) return null;
-
-  const pages = getPaginationPages(page, totalPages, pageRange);
+  const safeTotalPages = Math.max(1, totalPages);
+  const safePage = Math.min(Math.max(1, page), safeTotalPages);
+  const pages = getPaginationPages(safePage, safeTotalPages, pageRange);
 
   const moveToPage = (nextPage: number) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
     params.delete('page');
     params.set('page', String(nextPage));
     router.push(`?${params.toString()}`, { scroll: true });
   };
 
-  const canGoPrev = page > 1;
-  const canGoNext = page < totalPages;
+  const canGoPrev = safePage > 1;
+  const canGoNext = safePage < safeTotalPages;
 
   let ellipsisIndex = 0;
 
@@ -80,7 +80,7 @@ export default function NumberPagination({
     >
       <button
         type="button"
-        onClick={() => canGoPrev && moveToPage(page - 1)}
+        onClick={() => canGoPrev && moveToPage(safePage - 1)}
         disabled={!canGoPrev}
         aria-label="이전 페이지"
         className={cn(
@@ -105,7 +105,7 @@ export default function NumberPagination({
             );
           }
 
-          const isActive = pageItem === page;
+          const isActive = pageItem === safePage;
 
           return (
             <button
@@ -126,7 +126,7 @@ export default function NumberPagination({
 
       <button
         type="button"
-        onClick={() => canGoNext && moveToPage(page + 1)}
+        onClick={() => canGoNext && moveToPage(safePage + 1)}
         disabled={!canGoNext}
         aria-label="다음 페이지"
         className={cn(

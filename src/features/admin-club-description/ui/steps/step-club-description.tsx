@@ -34,7 +34,7 @@ function StepClubDescription({
         variant={errors.description ? 'blackError' : 'blackDefault'}
         maxLength={5000}
         placeholder="5000자 이내로 작성해주세요!"
-        className="transition-colors duration-300"
+        className="min-h-[55vh] transition-colors duration-300"
         onBlur={() => onBlur('description')}
       />
       <p className="text-end text-xs text-[#474747]">

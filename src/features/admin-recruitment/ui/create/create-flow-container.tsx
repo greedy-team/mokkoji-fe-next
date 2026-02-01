@@ -37,6 +37,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayStep, setDisplayStep] = useState(flow.currentStep);
+  const [createRecruitmentId, setCreateRecruitmentId] = useState<number>();
 
   const imageUpload = useImageUpload([]);
 
@@ -62,7 +63,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
 
     const res = await postRecruitmentForm(data, clubId);
 
-    if (!res.ok) {
+    if (!res.ok || !res.data) {
       toast.error(res.message);
       flow.setIsSubmitting(false);
       return;
@@ -87,6 +88,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       return;
     }
 
+    setCreateRecruitmentId(res.data.data.id);
     flow.setIsSubmitting(false);
     flow.complete();
     toast.success('모집 공고가 등록되었습니다!');
@@ -97,19 +99,25 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
-        <Button onClick={() => router.push('/club')}>모집글 확인하기</Button>
+        <Button
+          onClick={() =>
+            router.push(`/club/${clubInfo.id}?rid=${createRecruitmentId}`)
+          }
+        >
+          모집글 확인하기
+        </Button>
       </div>
     );
   }
 
   return (
     <div
-      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
+      className={`transition-opacity duration-300 ${
         isTransitioning ? 'opacity-0' : 'opacity-100'
       }`}
     >
       {displayStep === 'basicInfo' && (
-        <div className="flex flex-col gap-2 py-8">
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="모집글 기본 정보"
             onBack={() => router.push('/admin')}
@@ -145,11 +153,8 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       )}
 
       {displayStep === 'postinfo' && (
-        <div className="flex flex-col gap-2 py-8">
-          <PrevButton
-            onClick={flow.prevStep}
-            className="fixed top-16 left-4 z-50 sm:left-8 lg:left-[150px]"
-          />
+        <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
+          <AdminPageHeader title="모집공고" onBack={flow.prevStep} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (

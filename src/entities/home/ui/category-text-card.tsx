@@ -17,7 +17,7 @@ function CategoryTextCard() {
       <AnimateOnView animation="reveal-rightToleft">
         <span className="text-text-tertiary my-1 block w-full text-base leading-[1.5] font-medium lg:my-3 lg:w-[90%] lg:text-2xl lg:font-semibold">
           관심있는 분야의 동아리를 필터링으로
-          <br className="lg:hidden" />
+          <br />
           빠르게 찾아볼 수 있어요.
         </span>
       </AnimateOnView>

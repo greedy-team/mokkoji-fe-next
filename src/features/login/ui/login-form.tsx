@@ -26,8 +26,19 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
     password?: string;
   }>({});
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
+
+    // FormData에서 직접 값을 읽어옴 (state 동기화 문제 방지)
+    const formData = e ? new FormData(e.currentTarget) : null;
+    const currentStudentId =
+      formData?.get('studentId')?.toString() || studentId;
+    const currentPassword = formData?.get('password')?.toString() || password;
+
+    // 빈 값이면 submit 막기
+    if (currentStudentId === '' || currentPassword === '') {
+      return;
+    }
 
     if (!confirmed) {
       setOpen(true);
@@ -37,8 +48,8 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
     setIsSubmitting(true);
     const result: any = await signIn('credentials', {
       redirect: false,
-      studentId,
-      password,
+      studentId: currentStudentId,
+      password: currentPassword,
     });
     setIsSubmitting(false);
     if (result?.error) {
@@ -75,6 +86,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         )}
       </label>
       <Input
+        name="studentId"
         type="text"
         placeholder="학번"
         value={studentId}
@@ -101,6 +113,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
       </label>
       <div className="relative">
         <Input
+          name="password"
           type={showPassword ? 'text' : 'password'}
           placeholder="비밀번호"
           value={password}

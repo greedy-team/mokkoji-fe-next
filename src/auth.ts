@@ -1,6 +1,6 @@
 import NextAuth, { Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import KakaoProvider from 'next-auth/providers/kakao';
+// import KakaoProvider from 'next-auth/providers/kakao';
 import getTokenExpiration from './shared/lib/getTokenExpiration';
 import serverApi from './shared/api/server-api';
 import {
@@ -21,10 +21,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     error: '/login?callbackUrl=/',
   },
   providers: [
-    KakaoProvider({
-      clientId: process.env.KAKAO_CLIENT_ID as string,
-      clientSecret: process.env.KAKAO_SECRET_KEY as string,
-    }),
+    // KakaoProvider({
+    //   clientId: process.env.KAKAO_CLIENT_ID as string,
+    //   clientSecret: process.env.KAKAO_SECRET_KEY as string,
+    // }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -65,14 +65,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt: async ({ token, account, user }) => {
-      // 소셜 로그인
-      if (account?.provider === 'kakao') {
-        return {
-          ...token,
-          accessToken: account.access_token,
-          refreshToken: account.refresh_token,
-        };
-      }
+      // 소셜 로그인 (현재 미사용)
+      // if (account?.provider === 'kakao') {
+      //   return {
+      //     ...token,
+      //     accessToken: account.access_token,
+      //     refreshToken: account.refresh_token,
+      //   };
+      // }
 
       if (user && account?.provider === 'credentials') {
         const expiredTime = getTokenExpiration(user.accessToken as string);
@@ -125,7 +125,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return token;
       }
 
-      if (Date.now() > (token.expiresAt as number) - 10 * 60 * 1000) {
+      // expiresAt이 없거나 만료 10분 전이면 리프레시 시도
+      if (
+        token.expiresAt &&
+        Date.now() > (token.expiresAt as number) - 10 * 60 * 1000
+      ) {
         try {
           const response = await serverApi.post('users/auth/refresh', {
             headers: {

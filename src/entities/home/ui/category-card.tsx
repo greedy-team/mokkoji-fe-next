@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 function CategoryCard() {
   return (
-    <div className="absolute top-[60%] left-[10%] lg:top-[39%] lg:left-[25%]">
+    <div className="absolute top-[60%] left-[10%] lg:top-[35%] lg:left-[28%]">
       <div className="relative">
         <AnimateOnView animation="animate-fade-left-2">
           <Image

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import deleteRecruitmentForm from '@/widgets/club-detail/api/deleteRecruitment';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 import { ClubRecruitments } from '@/views/club/model/type';
+import NavigateRecruitForm from '@/features/club-detail/ui/navigate-recruit-form';
 
 interface RecruitDetail {
   title: string;
@@ -92,6 +93,9 @@ function ClubRecruitWidget({
             recruitHistories={recruitHistories}
             selectedRid={rid}
           />
+          <div className="fixed right-2 bottom-5 z-50 lg:right-[calc((100vw-60vw)/2+24px)] lg:bottom-8 lg:bottom-14">
+            <NavigateRecruitForm recruitForm={recruitDetail.recruitForm} />
+          </div>
         </>
       ) : (
         <ClubDetailRecruitmentEdit

@@ -35,6 +35,8 @@ export interface ClubType {
   recruitEndDate: string;
   logo: string;
   isFavorite: boolean | undefined;
+  isAlwaysRecruiting: boolean;
+  recruitStatus: RecruitStatus;
 }
 
 export interface Pagination {
@@ -45,10 +47,13 @@ export interface Pagination {
 }
 
 export interface FavoriteList {
-  clubs: (ClubType & { isAlwaysRecruiting: boolean } & {
-    recruitStatus: RecruitStatus;
-  })[];
+  clubs: ClubType[];
   pagination: Pagination;
+}
+
+export interface FavoriteItemListProps {
+  clubs: FavoriteList[];
+  totalElements: number;
 }
 
 export interface ClubSearchResponse {
@@ -81,6 +86,15 @@ export const ClubCategoryToLabel: Record<string, ClubCategory> = {
   SPORTS: ClubCategory.SPORTS,
   RELIGIOUS: ClubCategory.RELIGIOUS,
   OTHER: ClubCategory.OTHER,
+};
+
+export const ClubCategoryToStringLabel: Record<ClubCategory, string> = {
+  [ClubCategory.CULTURAL_ART]: '문화/예술',
+  [ClubCategory.ACADEMIC_CULTURAL]: '학술/교양',
+  [ClubCategory.VOLUNTEER_SOCIAL]: '봉사/사회',
+  [ClubCategory.SPORTS]: '체육',
+  [ClubCategory.RELIGIOUS]: '종교',
+  [ClubCategory.OTHER]: '기타',
 };
 
 export const ClubAffiliationLabel: Record<ClubAffiliation, string> = {

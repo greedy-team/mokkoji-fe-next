@@ -46,12 +46,9 @@ function ClubDetailCommentInput({
   };
 
   return (
-    <form
-      onSubmit={handleAddComment}
-      className="my-4 mb-15 flex flex-col gap-2"
-    >
+    <form onSubmit={handleAddComment} className="mb-15 flex flex-col gap-2">
       <div className="mb-4 flex flex-col gap-1">
-        <p className="font-semibold">이 동아리 어때요?</p>
+        <p className="lg:font-semibold">이 동아리 어때요?</p>
         <StarRating
           value={rating}
           size="large"
@@ -59,7 +56,7 @@ function ClubDetailCommentInput({
           disabled={!session}
         />
       </div>
-      <p className="cursor-default text-base font-semibold">댓글 {count}</p>
+      <p className="cursor-default text-base lg:font-semibold">댓글 {count}</p>
 
       <Textarea
         value={value}

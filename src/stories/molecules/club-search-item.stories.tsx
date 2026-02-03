@@ -25,6 +25,8 @@ export const Default: Story = {
       recruitEndDate: '',
       logo: '',
       isFavorite: undefined,
+      isAlwaysRecruiting: false,
+      recruitStatus: 'ALWAYS',
     },
   },
 };
@@ -43,6 +45,8 @@ export const LongDescription: Story = {
       recruitEndDate: '',
       logo: '',
       isFavorite: undefined,
+      isAlwaysRecruiting: false,
+      recruitStatus: 'ALWAYS',
     },
   },
 };

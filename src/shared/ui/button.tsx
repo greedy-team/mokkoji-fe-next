@@ -24,6 +24,10 @@ const buttonVariants = cva(
         none: '',
         optionsBlackGround:
           'rounded-full py-4 px-5 w-fit font-bold text-sm text-[#A9A9A9] bg-[#2C2E2C] hover:bg-[#1AE166] hover:text-black transition-colors duration-300 lg:py-5 lg:px-6 lg:text-base',
+        dropdownItem:
+          'w-full justify-start gap-3 rounded-none px-4 py-2.5 text-sm text-black hover:bg-[#1AE166] hover:text-white transition-colors',
+        dropdownItemDanger:
+          'w-full justify-start gap-3 rounded-none px-4 py-2.5 text-sm text-black hover:bg-[#1AE166] hover:text-red-500 transition-colors',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

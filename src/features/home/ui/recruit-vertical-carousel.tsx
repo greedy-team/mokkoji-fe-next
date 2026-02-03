@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { Recruitment } from '@/widgets/club/model/type';
+import { Club } from '@/widgets/club/model/type';
 import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
-import getRecruitmentStatus from '../util/getRecruitmentStatus';
+import RadiusTag from '@/shared/ui/radius-tag';
 
 interface CardSliderProps {
-  clubs: Recruitment[];
+  clubs?: Club[];
 }
 
 const radius = 260;
@@ -72,14 +72,11 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
           transition: 'transform 0.1s ease-out',
         }}
       >
-        {clubs.map((item, idx) => {
+        {(clubs ?? []).map((item, idx) => {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          const status = getRecruitmentStatus(
-            item.recruitStart,
-            item.recruitEnd,
-          );
+          const recruitStatus = item.recruitmentPreviewResponse?.recruitStatus;
 
           return (
             <div
@@ -92,35 +89,37 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/club/${item.club.id}`}>
-                <div className="mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
+              <Link href={`/club/${item.id}`}>
+                <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">
-                      <AvatarImage src={item.club.logo} loading="lazy" />
-                      <AvatarFallback>{item.club.name}</AvatarFallback>
+                      <AvatarImage src={item.logo} loading="lazy" />
+                      <AvatarFallback>{item.name}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-1 flex-col">
                       <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
-                        모집 기간 • {formatToMonthDay(item.recruitStart)}~
-                        {formatToMonthDay(item.recruitEnd)}
+                        모집 기간 •{' '}
+                        {formatToMonthDay(
+                          item.recruitmentPreviewResponse?.recruitStart ?? '',
+                        )}
+                        ~
+                        {formatToMonthDay(
+                          item.recruitmentPreviewResponse?.recruitEnd ?? '',
+                        )}
                       </span>
                       <h1 className="text-xs font-bold lg:text-sm">
-                        {item.club.name}
+                        {item.name}
                       </h1>
                     </div>
-                    <div
-                      className={cn(
-                        status === '모집 중'
-                          ? 'bg-[#00E457] text-white'
-                          : 'bg-[#E9E7E7] text-[#9C9C9C]',
-                        'rounded-full px-2 py-1 text-[6px] lg:text-[10px]',
-                      )}
-                    >
-                      {status}
-                    </div>
+                    {recruitStatus && (
+                      <RadiusTag
+                        recruitStatus={recruitStatus}
+                        className="rounded-full px-2 py-1 text-[6px] lg:text-[10px]"
+                      />
+                    )}
                   </div>
                   <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
-                    {item.club.description}
+                    {item.description}
                   </p>
                 </div>
               </Link>

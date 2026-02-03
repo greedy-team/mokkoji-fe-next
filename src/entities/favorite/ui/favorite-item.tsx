@@ -45,12 +45,12 @@ function FavoriteItem({
 
               <FavoriteButton
                 isFavorite={isFavorite || false}
-                clubId={clubId}
+                clubId={Number(clubId)}
                 customClass="scale-100 "
               />
 
               <RadiusTag
-                status={status}
+                recruitStatus={status}
                 className="absolute top-8 right-7 shrink-0"
               />
             </div>

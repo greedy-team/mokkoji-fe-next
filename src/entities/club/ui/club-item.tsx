@@ -2,41 +2,39 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { RecruitStatus } from '@/shared/model/type';
+import { RecruitStatus } from '@/widgets/club/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
 import PeriodSection from '../../club-detail/ui/period-section';
 
 interface ClubItemProps {
-  title: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   description: string;
-  isFavorite?: boolean;
+  favorite: boolean;
   logo?: string;
-  clubId: string;
-  status: RecruitStatus;
+  id: number;
+  recruitStatus?: RecruitStatus;
   isAlwaysRecruiting: boolean;
   height?: number;
 }
 
 function ClubItem({
-  title,
   name,
   startDate,
   endDate,
   description,
-  isFavorite,
+  favorite,
   logo,
-  clubId,
-  status,
+  id,
+  recruitStatus,
   isAlwaysRecruiting,
   height = 150,
 }: ClubItemProps) {
   return (
     <div
       style={{ height }}
-      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-xl bg-[#F8F8F8] px-7 py-8 text-[#474747] transition-shadow duration-300"
+      className="hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2) relative flex w-[100%] flex-col gap-3 rounded-xl bg-[#F8F8F8] px-5 py-8 text-[#474747] transition-shadow duration-300"
     >
       <div className="flex w-full">
         <div className="flex w-full items-center gap-4">
@@ -45,22 +43,23 @@ function ClubItem({
             <AvatarFallback />
           </Avatar>
 
-          <div className="flex flex-1 flex-col">
+          <div className="mt-1 flex flex-1 flex-col gap-1">
             <div className="flex items-center gap-1">
               <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {name}
               </h1>
 
               <FavoriteButton
-                isFavorite={isFavorite || false}
-                clubId={clubId}
-                customClass="scale-100 "
+                isFavorite={favorite}
+                clubId={id}
+                customClass="scale-100"
               />
-
-              <RadiusTag
-                status={status}
-                className="absolute top-8 right-7 shrink-0"
-              />
+              {recruitStatus && (
+                <RadiusTag
+                  recruitStatus={recruitStatus}
+                  className="absolute top-8 right-5 shrink-0 px-3 py-2 text-xs"
+                />
+              )}
             </div>
 
             <div className="whitespace-nowrap">

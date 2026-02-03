@@ -22,24 +22,43 @@ const api = ky.create({
       async (request, options, response) => {
         if (response.status !== 401) return response;
 
+        // 이미 재시도한 요청이면 무한 루프 방지
+        if (request.headers.get('X-Retry-After-Refresh')) {
+          return response;
+        }
+
         const session = await auth();
-        if (!session?.refreshToken) return response;
 
-        const refreshResponse = await serverApi.post('users/auth/refresh', {
-          headers: {
-            Authorization: `Bearer ${session.refreshToken}`,
-          },
-        });
+        // 리프레시 토큰 만료됐으면 시도하지 않음
+        if (!session?.refreshToken || session.error === 'RefreshTokenExpired') {
+          return response;
+        }
 
-        const refreshData: { data: { accessToken: string } } =
-          await refreshResponse.json();
+        try {
+          const refreshResponse = await serverApi.post('users/auth/refresh', {
+            headers: {
+              Authorization: `Bearer ${session.refreshToken}`,
+            },
+          });
 
-        request.headers.set(
-          'Authorization',
-          `Bearer ${refreshData.data.accessToken}`,
-        );
+          const refreshData: { data: { accessToken: string } } =
+            await refreshResponse.json();
 
-        return ky(request, options);
+          if (!refreshData.data?.accessToken) {
+            return response;
+          }
+
+          request.headers.set(
+            'Authorization',
+            `Bearer ${refreshData.data.accessToken}`,
+          );
+          request.headers.set('X-Retry-After-Refresh', 'true');
+
+          return await ky(request, options);
+        } catch {
+          // 리프레시 실패 시 원래 401 응답 반환
+          return response;
+        }
       },
     ],
   },

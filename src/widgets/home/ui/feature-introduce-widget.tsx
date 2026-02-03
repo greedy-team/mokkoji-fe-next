@@ -15,7 +15,7 @@ function FeatureIntroduceWidget() {
           className="pointer-events-none absolute top-[50%] left-[-10%] z-10 mt-[15%] h-[30%] w-full lg:top-0 lg:left-0 lg:h-[50%]"
           style={{
             backgroundImage:
-              'linear-gradient(to right, #F8FAFB 25%, transparent 60%)',
+              'linear-gradient(to right, #F8FAFB 32%, transparent 60%)',
           }}
         />
         <CategoryTextCard />

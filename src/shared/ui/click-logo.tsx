@@ -20,7 +20,7 @@ export default function ClickLogo({ logo, title }: ClickLogoProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Avatar className="h-[72px] w-[72px] cursor-pointer">
+        <Avatar className="hidden h-[72px] w-[72px] cursor-pointer sm:block">
           <AvatarImage src={logo} alt={title} />
           <AvatarFallback>{title[0]}</AvatarFallback>
         </Avatar>

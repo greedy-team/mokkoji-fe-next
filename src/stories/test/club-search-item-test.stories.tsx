@@ -29,6 +29,8 @@ const sampleClub: ClubType = {
   recruitStartDate: '',
   recruitEndDate: '',
   isFavorite: undefined,
+  isAlwaysRecruiting: false,
+  recruitStatus: 'ALWAYS',
 };
 
 export const Default: Story = {

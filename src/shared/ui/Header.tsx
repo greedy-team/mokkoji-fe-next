@@ -35,23 +35,6 @@ async function Header() {
         <NavButton label="전체 동아리" href="/club" />
         <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
         <NavButton label="고객센터" href="/support" />
-        {role &&
-          role !== UserRole.NORMAL &&
-          (role === UserRole.GREEDY_ADMIN || role === UserRole.CLUB_ADMIN ? (
-            <NavButton label="동아리 등록" href="/club-register" />
-          ) : (
-            <HeaderManageModal
-              manageClubInfo={getClubManageInfoRes.data?.clubs || []}
-              menu="register"
-            />
-          ))}
-        {role &&
-          (role === UserRole.CLUB_MASTER || role === UserRole.GREEDY_ADMIN) && (
-            <HeaderManageModal
-              manageClubInfo={getClubManageInfoRes.data?.clubs || []}
-              menu="recruitment"
-            />
-          )}
       </nav>
       <div className="ml-auto hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
         <HeaderMenuSection role={role} session={session} />

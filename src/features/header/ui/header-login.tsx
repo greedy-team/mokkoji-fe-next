@@ -6,6 +6,12 @@ import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
+import useClickOutside from '@/shared/model/useClickOutside';
+import {
+  ChevronIcon,
+  UserIcon,
+  LogoutIcon,
+} from '@/shared/ui/icons/header-icons';
 
 interface HeaderLoginProps {
   userName: string;
@@ -14,60 +20,49 @@ interface HeaderLoginProps {
 function HeaderLogin({ userName }: HeaderLoginProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter = () => {
-    if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current);
-    }
-    setShowDropdown(true);
-  };
-
-  const handleMouseLeave = () => {
-    hideTimerRef.current = setTimeout(() => {
-      setShowDropdown(false);
-    }, 3000);
-  };
+  useClickOutside(dropdownRef, () => setShowDropdown(false));
 
   return (
     <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
       {userName ? (
-        <div
-          className="relative flex flex-col gap-1 font-semibold whitespace-nowrap"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <Image
-            src="/header/profile.svg"
-            alt="프로필"
-            width={21}
-            height={22}
-            className="cursor-pointer"
-          />
+        <div className="relative" ref={dropdownRef}>
+          <Button
+            variant="none"
+            size="none"
+            onClick={() => setShowDropdown((prev) => !prev)}
+            className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-all hover:bg-[#e6e6e6]"
+          >
+            <Image
+              src="/header/profile.svg"
+              alt="프로필"
+              width={21}
+              height={22}
+            />
+            <ChevronIcon isOpen={showDropdown} />
+          </Button>
+
           {showDropdown && (
-            <>
-              <Link
-                href="/my"
-                className="absolute top-full left-0 z-50 mt-4 h-[35px] w-full min-w-[120px] rounded-lg bg-white pt-2.5 text-center text-xs text-[#9C9C9C] shadow-md hover:bg-[#00c94c] hover:text-black"
-              >
-                <span className="ml-2">마이페이지</span>
-              </Link>
-              <Button
-                onClick={() => {
-                  signOut({ callbackUrl: '/' });
-                }}
-                variant="submit"
-                className="absolute top-16 left-0 z-50 mt-4 w-full min-w-[120px] rounded-lg bg-white p-1 text-xs text-[#9C9C9C] shadow-md hover:text-black"
-              >
-                <Image
-                  src="/header/logout.svg"
-                  alt="로그아웃"
-                  width={12}
-                  height={12}
-                />
-                <span className="ml-1">로그아웃</span>
+            <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
+              <Button variant="dropdownItem" size="none" asChild>
+                <Link href="/my">
+                  <UserIcon />
+                  마이페이지
+                </Link>
               </Button>
-            </>
+
+              <div className="mx-3 my-1 border-t border-[#d9d9d9]" />
+
+              <Button
+                variant="dropdownItemDanger"
+                size="none"
+                onClick={() => signOut({ callbackUrl: '/' })}
+              >
+                <LogoutIcon />
+                로그아웃
+              </Button>
+            </div>
           )}
         </div>
       ) : (

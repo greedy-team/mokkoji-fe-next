@@ -125,10 +125,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return token;
       }
 
-      // expiresAt이 없거나 만료 59분 전이면 리프레시 시도 (테스트용)
+      // expiresAt이 없거나 만료 10분 전이면 리프레시 시도
       if (
         token.expiresAt &&
-        Date.now() > (token.expiresAt as number) - 59 * 60 * 1000
+        Date.now() > (token.expiresAt as number) - 10 * 60 * 1000
       ) {
         try {
           const response = await serverApi.post('users/auth/refresh', {

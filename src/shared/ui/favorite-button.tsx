@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -21,6 +22,7 @@ function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleToggle = useMemo(
     () =>

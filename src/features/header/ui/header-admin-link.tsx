@@ -28,7 +28,11 @@ function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
   };
 
   return (
-    <Link href="/admin" className="font-semibold" onClick={handleClick}>
+    <Link
+      href="/admin"
+      className="flex items-center font-semibold"
+      onClick={handleClick}
+    >
       동아리 관리
       <span className="ml-2 rounded-[40px] border border-[#22CF64] px-[10px] py-[7px] text-[11px] font-extrabold text-[#22CF64]">
         관리자용

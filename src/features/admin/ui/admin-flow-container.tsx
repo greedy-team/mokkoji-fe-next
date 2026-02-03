@@ -30,6 +30,7 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
       const timer = setTimeout(() => {
         setCurrentStep(flow.step);
         setIsTransitioning(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 500);
 
       return () => clearTimeout(timer);

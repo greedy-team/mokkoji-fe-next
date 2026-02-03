@@ -33,6 +33,7 @@ function CreateFlowContainer() {
       const timer = setTimeout(() => {
         setDisplayStep(flow.currentStep);
         setIsTransitioning(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 300);
       return () => clearTimeout(timer);
     }

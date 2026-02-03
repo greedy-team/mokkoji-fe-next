@@ -34,10 +34,8 @@ function FavoriteButton({
         try {
           if (!favorite) {
             await postFavorite(Number(clubId));
-            router.refresh();
           } else {
             await deleteFavorite(Number(clubId));
-            router.refresh();
           }
           setFavorite((prev) => !prev);
         } catch (error) {

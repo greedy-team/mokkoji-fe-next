@@ -39,7 +39,6 @@ function ClubDetailCommentInput({
       toast.error(response.message);
       return;
     }
-    toast.success(response.message);
     setValue('');
     setRating(0);
     setIsSubmitting(false);

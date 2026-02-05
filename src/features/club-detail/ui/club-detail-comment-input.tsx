@@ -46,7 +46,10 @@ function ClubDetailCommentInput({
   };
 
   return (
-    <form onSubmit={handleAddComment} className="mb-15 flex flex-col gap-2">
+    <form
+      onSubmit={handleAddComment}
+      className="mb-15 flex w-full flex-col gap-2"
+    >
       <div className="mb-4 flex flex-col gap-1">
         <p className="lg:font-semibold">이 동아리 어때요?</p>
         <StarRating

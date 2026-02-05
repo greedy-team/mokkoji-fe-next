@@ -62,7 +62,9 @@ export default function CommentItem({
           </div>
         )}
       </div>
-      <p className="text-sm font-medium">{comment.content}</p>
+      <p className="text-sm font-medium break-all whitespace-pre-wrap">
+        {comment.content}
+      </p>
     </div>
   );
 }

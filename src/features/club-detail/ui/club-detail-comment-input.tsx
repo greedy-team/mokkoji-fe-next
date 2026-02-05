@@ -76,7 +76,7 @@ function ClubDetailCommentInput({
       )}
       <div className="flex justify-end">
         <Button
-          variant="submit"
+          variant="submit-default"
           type="submit"
           className="h-[43px] w-[113px]"
           disabled={!value || rating === 0 || isSubmitting}

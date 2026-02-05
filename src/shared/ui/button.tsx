@@ -16,6 +16,8 @@ const buttonVariants = cva(
         disabled: 'rounded-md py-5 bg-[#D5D5D5] text-white text-base mt-6',
         submit:
           'rounded-[4px] px-4 lg:px-[70px] py-[10px] lg:py-[14px] bg-[var(--color-blackmode-tag)] text-black text-xs lg:text-base font-bold bg-[#1AE166] hover:bg-[#00c94c] transition-colors duration-200',
+        'submit-default':
+          'w-full rounded-[8px] py-4 bg-[#1AE166] text-white text-sm font-bold hover:bg-[#00c94c] transition-colors duration-200 disabled:bg-[#93F3B8] disabled:pointer-events-auto disabled:cursor-not-allowed',
         next: 'rounded-md py-3.5 bg-[var(--color-darkmode-tag)] text-black text-base font-bold mt-6 hover:bg-[#FFFFFF80] transition-colors duration-200 disabled:bg-[#FFFFFF80] disabled:text-black',
         optionsSelected:
           'rounded-full py-3 w-fit px-8 text-sm border-2 text-black font-semibold border-primary bg-[#FFFFFF] transition-colors duration-300',

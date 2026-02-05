@@ -75,7 +75,7 @@ function ClubDetailCommentEdit({
           취소
         </Button>
         <Button
-          variant="submit"
+          variant="submit-default"
           type="submit"
           className="px-5 py-2"
           disabled={!value || rating === 0 || isSubmitting}

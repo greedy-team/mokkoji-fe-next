@@ -62,22 +62,27 @@ function ClubDetailCommentEdit({
         onChange={setRating}
         disabled={!session}
       />
-      <div className="flex w-full items-end gap-2">
-        <Textarea
-          value={value}
-          onChange={handleChange}
-          variant="comment"
-          className="flex flex-1"
-          placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
-          disabled={!session}
-        />
-        <Button variant="disabled" onClick={onCancel} className="px-5 py-2">
+      <Textarea
+        value={value}
+        onChange={handleChange}
+        variant="comment"
+        className="flex flex-1"
+        placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
+        disabled={!session}
+      />
+      <div className="flex w-[90%] items-end gap-2 lg:w-[20%]">
+        <Button
+          variant="disabled"
+          onClick={onCancel}
+          className="w-[50%] px-5 py-2"
+        >
           취소
         </Button>
         <Button
           variant="submit-default"
           type="submit"
-          className="px-5 py-2"
+          size="none"
+          className="w-[50%] px-5 py-2"
           disabled={!value || rating === 0 || isSubmitting}
         >
           수정

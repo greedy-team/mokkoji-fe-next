@@ -1,25 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import type {
-  AdminClubInfo,
-  ContentType,
-  ActionType,
-  AdminFlowState,
-} from './types';
+import type { AdminClubInfo, ContentType, ActionType, Step } from './types';
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const isSingleClub = allowedClubs.length === 1;
   const initialClub = isSingleClub ? allowedClubs[0] : undefined;
 
-  const [state, setState] = useState<AdminFlowState>({
-    step: isSingleClub ? 'actionMode' : 'selectClub',
-    selectedClubId: initialClub?.clubId,
-    selectedClubName: initialClub?.clubName,
-    contentType: undefined,
-    actionType: undefined,
-  });
+  const step = (searchParams.get('step') as Step) || 'selectClub';
+  const selectedClubId = searchParams.get('clubId')
+    ? Number(searchParams.get('clubId'))
+    : initialClub?.clubId;
+  const selectedClubName =
+    searchParams.get('clubName') || initialClub?.clubName;
+
+  useEffect(() => {
+    if (isSingleClub && step === 'selectClub' && initialClub) {
+      const params = new URLSearchParams();
+      params.set('step', 'actionMode');
+      params.set('clubId', String(initialClub.clubId));
+      params.set('clubName', initialClub.clubName);
+      router.replace(`/admin?${params.toString()}`);
+    }
+  }, [isSingleClub, step, initialClub, router]);
 
   const validateClubAccess = (clubId: number) => {
     return allowedClubs.some((club) => club.clubId === clubId);
@@ -31,64 +39,27 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
       return;
     }
 
-    setState({
-      step: 'actionMode',
-      selectedClubId: clubId,
-      selectedClubName: clubName,
-      contentType: undefined,
-      actionType: undefined,
-    });
+    const params = new URLSearchParams();
+    params.set('step', 'actionMode');
+    params.set('clubId', String(clubId));
+    params.set('clubName', clubName);
+    router.push(`/admin?${params.toString()}`);
   };
 
   const selectAction = (contentType: ContentType, actionType: ActionType) => {
-    setState((prev) => ({
-      ...prev,
-      contentType,
-      actionType,
-      isReadyToRedirect: true,
-    }));
-  };
-
-  const goBack = () => {
-    setState((prev) => {
-      if (prev.step === 'actionMode') {
-        return {
-          ...prev,
-          step: 'selectClub',
-          contentType: undefined,
-          actionType: undefined,
-        };
-      }
-
-      return prev;
-    });
-  };
-
-  const reset = () => {
-    setState({
-      step: 'selectClub',
-      selectedClubId: undefined,
-      selectedClubName: undefined,
-      contentType: undefined,
-      actionType: undefined,
-    });
-  };
-
-  const getRedirectUrl = () => {
-    if (
-      state.isReadyToRedirect &&
-      state.selectedClubId &&
-      state.contentType &&
-      state.actionType
-    ) {
-      return `/admin/${state.contentType}/${state.actionType}/${state.selectedClubId}`;
+    if (selectedClubId) {
+      router.push(`/admin/${contentType}/${actionType}/${selectedClubId}`);
     }
-    return null;
   };
+
+  const goBack = () => router.back();
+
+  const reset = () => router.push('/admin');
 
   return {
-    ...state,
-    redirectUrl: getRedirectUrl(),
+    step: isSingleClub && step === 'selectClub' ? 'actionMode' : step,
+    selectedClubId,
+    selectedClubName,
     selectClub,
     selectAction,
     goBack,

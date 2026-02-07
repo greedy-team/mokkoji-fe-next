@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { UserRole } from '@/shared/model/type';
+import SharedLoading from '@/shared/ui/loading';
 import type { AdminClubInfo } from '../model/types';
 import useAdminFlow from '../model/use-admin-flow';
 import StepSelectClub from './steps/step-select-club';
@@ -13,40 +13,12 @@ interface AdminFlowContainerProps {
   role?: UserRole;
 }
 
-function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
+function AdminFlowContent({ allowedClubs, role }: AdminFlowContainerProps) {
   const flow = useAdminFlow(allowedClubs);
-  const [currentStep, setCurrentStep] = useState(flow.step);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  useEffect(() => {
-    if (flow.redirectUrl) {
-      redirect(flow.redirectUrl);
-    }
-
-    if (flow.step !== currentStep) {
-      setIsTransitioning(true);
-
-      const timer = setTimeout(() => {
-        setCurrentStep(flow.step);
-        setIsTransitioning(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 500);
-
-      return () => clearTimeout(timer);
-    }
-
-    return undefined;
-  }, [flow.redirectUrl, flow.step, currentStep]);
 
   return (
-    <div
-      style={{
-        animation: isTransitioning
-          ? 'var(--animate-fadeout)'
-          : 'var(--animate-reveal)',
-      }}
-    >
-      {currentStep === 'selectClub' && (
+    <div style={{ animation: 'var(--animate-reveal)' }}>
+      {flow.step === 'selectClub' && (
         <StepSelectClub
           clubs={allowedClubs}
           role={role}
@@ -54,7 +26,7 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
         />
       )}
 
-      {currentStep === 'actionMode' && (
+      {flow.step === 'actionMode' && (
         <StepSelectActionMode
           clubName={flow.selectedClubName}
           onNext={flow.selectAction}
@@ -62,6 +34,14 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
         />
       )}
     </div>
+  );
+}
+
+function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
+  return (
+    <Suspense fallback={<SharedLoading />}>
+      <AdminFlowContent allowedClubs={allowedClubs} role={role} />
+    </Suspense>
   );
 }
 

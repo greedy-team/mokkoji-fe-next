@@ -14,7 +14,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const initialClub = isSingleClub ? allowedClubs[0] : undefined;
 
   const [state, setState] = useState<AdminFlowState>({
-    step: isSingleClub ? 'postType' : 'selectClub',
+    step: isSingleClub ? 'actionMode' : 'selectClub',
     selectedClubId: initialClub?.clubId,
     selectedClubName: initialClub?.clubName,
     contentType: undefined,
@@ -32,7 +32,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     }
 
     setState({
-      step: 'postType',
+      step: 'actionMode',
       selectedClubId: clubId,
       selectedClubName: clubName,
       contentType: undefined,
@@ -40,17 +40,10 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     });
   };
 
-  const selectContentType = (contentType: ContentType) => {
+  const selectAction = (contentType: ContentType, actionType: ActionType) => {
     setState((prev) => ({
       ...prev,
-      step: 'editMode',
       contentType,
-    }));
-  };
-
-  const selectActionType = (actionType: ActionType) => {
-    setState((prev) => ({
-      ...prev,
       actionType,
       isReadyToRedirect: true,
     }));
@@ -58,18 +51,11 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
 
   const goBack = () => {
     setState((prev) => {
-      if (prev.step === 'postType') {
+      if (prev.step === 'actionMode') {
         return {
           ...prev,
           step: 'selectClub',
           contentType: undefined,
-          actionType: undefined,
-        };
-      }
-      if (prev.step === 'editMode') {
-        return {
-          ...prev,
-          step: 'postType',
           actionType: undefined,
         };
       }
@@ -104,8 +90,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     ...state,
     redirectUrl: getRedirectUrl(),
     selectClub,
-    selectContentType,
-    selectActionType,
+    selectAction,
     goBack,
     reset,
     validateClubAccess,

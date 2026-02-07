@@ -6,8 +6,7 @@ import { UserRole } from '@/shared/model/type';
 import type { AdminClubInfo } from '../model/types';
 import useAdminFlow from '../model/use-admin-flow';
 import StepSelectClub from './steps/step-select-club';
-import StepSelectPostType from './steps/step-select-post-type';
-import StepSelectEditMode from './steps/step-select-edit-mode';
+import StepSelectActionMode from './steps/step-select-action-mode';
 
 interface AdminFlowContainerProps {
   allowedClubs: AdminClubInfo[];
@@ -55,19 +54,10 @@ function AdminFlowContainer({ allowedClubs, role }: AdminFlowContainerProps) {
         />
       )}
 
-      {currentStep === 'postType' && (
-        <StepSelectPostType
+      {currentStep === 'actionMode' && (
+        <StepSelectActionMode
           clubName={flow.selectedClubName}
-          onNext={flow.selectContentType}
-          onBack={flow.goBack}
-        />
-      )}
-
-      {currentStep === 'editMode' && (
-        <StepSelectEditMode
-          clubName={flow.selectedClubName}
-          contentType={flow.contentType}
-          onNext={flow.selectActionType}
+          onNext={flow.selectAction}
           onBack={flow.goBack}
         />
       )}

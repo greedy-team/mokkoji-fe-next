@@ -26,7 +26,7 @@ function StepSelectEditMode({
       onBack={onBack}
     >
       {isDescription ? (
-        <MenuButton label="소개글 수정" onClick={() => onNext('edit')} />
+        <MenuButton label="동아리 정보 수정" onClick={() => onNext('edit')} />
       ) : (
         <>
           <MenuButton label="모집글 생성" onClick={() => onNext('create')} />

@@ -28,19 +28,17 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
     ? (recruitHistories.data?.recruitments ?? [])
     : [];
 
-  if (!(await searchParams).rid) {
-    const queryString = new URLSearchParams();
-    queryString.set('rid', String(recent.data.id));
-    if (tab !== 'recruit') queryString.set('tab', tab);
-    redirect(`/club/${id}?${queryString.toString()}`);
+  if (historiesArray.length > 0) {
+    if (!(await searchParams).rid) {
+      const queryString = new URLSearchParams();
+      queryString.set('rid', String(recent.data.id));
+      if (tab !== 'recruit') queryString.set('tab', tab);
+      redirect(`/club/${id}?${queryString.toString()}`);
+    }
   }
 
   const recruitmentId = Number(rid) || recent.data.id;
-  //   if (!rid) notFound();
-
   const selected = await getRecruitDetail(recruitmentId);
-  //   if (selected?.status === 404 || !selected.data) notFound();
-  //   if (!selected.ok) return <ErrorBoundaryUi />;
 
   return (
     <div className="mt-5 px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
@@ -58,13 +56,17 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         isAlwaysRecruiting={recent.data.isAlwaysRecruiting}
       />
 
-      <ClubDetailTabs
-        activeTab={tab}
-        recruitData={selected.data}
-        recruitHistories={historiesArray}
-        id={Number(id)}
-        rid={recruitmentId}
-      />
+      {historiesArray.length > 0 ? (
+        <ClubDetailTabs
+          activeTab={tab}
+          recruitData={selected.data}
+          recruitHistories={historiesArray}
+          id={Number(id)}
+          rid={recruitmentId}
+        />
+      ) : (
+        <ClubDetailTabs activeTab={tab} id={Number(id)} />
+      )}
     </div>
   );
 }

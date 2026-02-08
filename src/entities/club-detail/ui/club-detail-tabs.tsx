@@ -20,9 +20,9 @@ interface RecruitDetailViewProps {
 interface ClubDetailTabsProps {
   activeTab: string;
   recruitData?: RecruitDetailViewProps;
-  recruitHistories: ClubRecruitments[];
+  recruitHistories?: ClubRecruitments[];
   id: number;
-  rid: number;
+  rid?: number;
 }
 
 const TABS = [
@@ -47,7 +47,18 @@ function ClubDetailTabs({
 
   const renderContent = () => {
     if (activeTab === 'recruit') {
-      if (!recruitData) return null;
+      if (
+        !recruitData ||
+        !recruitHistories ||
+        recruitHistories.length < 0 ||
+        !rid
+      ) {
+        return (
+          <p className="text-primary-500 py-20 text-center">
+            모집공고가 없습니다.
+          </p>
+        );
+      }
 
       return (
         <ClubRecruitWidget
@@ -61,8 +72,8 @@ function ClubDetailTabs({
             content: recruitData.content,
             recruitForm: recruitData.recruitForm,
             imageUrls: recruitData.imageUrls,
-            recruitStart: recruitData.recruitStart || '',
-            recruitEnd: recruitData.recruitEnd || '',
+            recruitStart: recruitData.recruitStart,
+            recruitEnd: recruitData.recruitEnd,
           }}
         />
       );

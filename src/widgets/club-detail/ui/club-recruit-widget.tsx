@@ -12,8 +12,8 @@ interface RecruitDetail {
   content: string;
   recruitForm: string;
   imageUrls: string[];
-  recruitStart: string;
-  recruitEnd: string;
+  recruitStart?: string;
+  recruitEnd?: string;
 }
 interface ClubRecruitWidgetProps {
   clubId: number;

@@ -38,21 +38,15 @@ function ClubCategoryButtonSection() {
     router.push(`?${params.toString()}`);
   };
 
-  const base =
-    'shrink-0 gap-1 rounded border px-3 py-2 text-sm font-semibold transition-colors';
-
-  const selected = 'border-[#22CF64] text-[#22CF64] hover:bg-[#EDFDF3]';
-  const unselected =
-    'border-[#D4D4D4] bg-white text-[#4E5968] hover:bg-[#EDFDF3]';
-
   return (
     <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-1 sm:gap-2">
       <Button
         type="button"
         variant="outline"
         className={cn(
-          'mr-2 mb-2',
-          active === '' && 'bg-primary-500 text-white',
+          'rounded shadow-none',
+          'text-[#4E5968]',
+          active === '' && 'border-[#22CF64] text-[#22CF64]',
         )}
         onClick={() => changeCategory('')}
         aria-pressed={active === ''}
@@ -65,8 +59,9 @@ function ClubCategoryButtonSection() {
           key={category}
           variant="outline"
           className={cn(
-            'mr-2 mb-2',
-            active === category && 'bg-primary-500 text-white',
+            'rounded shadow-none',
+            'text-[#4E5968]',
+            active === category && 'border-[#22CF64] text-[#22CF64]',
           )}
           onClick={() => changeCategory(category)}
           aria-pressed={active === category}

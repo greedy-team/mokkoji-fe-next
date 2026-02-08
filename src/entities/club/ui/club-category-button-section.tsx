@@ -66,7 +66,12 @@ function ClubCategoryButtonSection() {
           onClick={() => changeCategory(category)}
           aria-pressed={active === category}
         >
-          {ClubCategoryLabel[category]}
+          <div className="flex gap-[2px]">
+            <span> {ClubCategoryLabel[category]}</span>
+            {ClubCategoryIcon[category] && (
+              <img src={ClubCategoryIcon[category]} alt="카테고리 아이콘" />
+            )}
+          </div>
         </Button>
       ))}
     </div>

@@ -5,7 +5,7 @@ const serverApi = ky.create({
   fetch: (input, init) =>
     fetch(input, {
       ...init,
-      cache: 'force-cache',
+      cache: 'no-store',
       next: { revalidate: 3000 },
     }),
 });

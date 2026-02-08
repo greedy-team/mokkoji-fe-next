@@ -19,7 +19,7 @@ interface RecruitDetailViewProps {
 
 interface ClubDetailTabsProps {
   activeTab: string;
-  recruitData: RecruitDetailViewProps;
+  recruitData?: RecruitDetailViewProps;
   recruitHistories: ClubRecruitments[];
   id: number;
   rid: number;

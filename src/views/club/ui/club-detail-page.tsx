@@ -16,9 +16,6 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
   const { tab = 'recruit', rid } = await searchParams;
 
-  const session = await auth();
-  const role = session?.role;
-
   const [recent, recruitHistories] = await Promise.all([
     getRecentRecruitDetail(Number(id)),
     getClubRecruitments(Number(id)),
@@ -39,11 +36,11 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   }
 
   const recruitmentId = Number(rid) || recent.data.id;
-  if (!rid) notFound();
+  //   if (!rid) notFound();
 
   const selected = await getRecruitDetail(recruitmentId);
-  if (selected?.status === 404 || !selected.data) notFound();
-  if (!selected.ok) return <ErrorBoundaryUi />;
+  //   if (selected?.status === 404 || !selected.data) notFound();
+  //   if (!selected.ok) return <ErrorBoundaryUi />;
 
   return (
     <div className="mt-5 px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">

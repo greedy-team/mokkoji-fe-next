@@ -16,6 +16,11 @@ function PeriodSection({
   className,
   isAlwaysRecruiting,
 }: PeriodSectionProps) {
+  const hasDate = startDate && endDate;
+  if (!hasDate) {
+    return <span className="invisible">placeholder</span>;
+  }
+
   return isAlwaysRecruiting ? (
     <span className={cn(`text-xs leading-none ${className}`)}>상시모집</span>
   ) : (

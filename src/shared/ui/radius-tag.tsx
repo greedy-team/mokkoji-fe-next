@@ -19,10 +19,12 @@ export const RecruitStatusColor: Record<RecruitStatus, string> = {
 
 interface RadiusTagProps {
   className?: string;
-  recruitStatus: RecruitStatus;
+  recruitStatus?: RecruitStatus;
 }
 
 function RadiusTag({ className, recruitStatus }: RadiusTagProps) {
+  if (!recruitStatus) return null;
+
   return (
     <span
       className={clsx(

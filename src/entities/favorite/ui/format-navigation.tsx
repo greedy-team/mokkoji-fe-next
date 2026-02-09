@@ -15,7 +15,7 @@ function formatNavigation({ date }: { date: Date }) {
 
   return (
     <span className="flex gap-6 text-sm font-bold whitespace-nowrap text-gray-900 lg:text-xl">
-      <span>{year}</span>
+      <span>{year}년</span>
       <span>{`${month}월 ${date.getDate()}일, ${dayOfWeek}`}</span>
     </span>
   );

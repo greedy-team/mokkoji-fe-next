@@ -32,11 +32,11 @@ function ClubDetailCommentInput({
     e.preventDefault();
 
     if (rating === 0) {
-      toast.warn('별점을 입력해주세요.');
+      toast.warn('별점을 입력해주세요!');
       return;
     }
     if (!value.trim()) {
-      toast.warn('리뷰를 작성해주세요.');
+      toast.warn('댓글을 작성해주세요!');
       return;
     }
     setIsSubmitting(true);

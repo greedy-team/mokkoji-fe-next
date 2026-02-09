@@ -78,6 +78,16 @@ function RecruitDetailView({
             <DialogContent
               className="fixed flex h-[80vh] w-[900px] items-center justify-center border-0 bg-transparent p-0 shadow-none"
               showCloseButton={false}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') {
+                  e.preventDefault();
+                  handlePrev();
+                }
+                if (e.key === 'ArrowRight') {
+                  e.preventDefault();
+                  handleNext();
+                }
+              }}
             >
               <div className="relative">
                 <Image

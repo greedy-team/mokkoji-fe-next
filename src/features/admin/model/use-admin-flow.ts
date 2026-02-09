@@ -16,15 +16,15 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const selectedClubId = searchParams.get('clubId')
     ? Number(searchParams.get('clubId'))
     : initialClub?.clubId;
-  const selectedClubName =
-    searchParams.get('clubName') || initialClub?.clubName;
+  const selectedClubName = allowedClubs.find(
+    (club) => club.clubId === selectedClubId,
+  )?.clubName;
 
   useEffect(() => {
     if (isSingleClub && step === 'selectClub' && initialClub) {
       const params = new URLSearchParams();
       params.set('step', 'actionMode');
       params.set('clubId', String(initialClub.clubId));
-      params.set('clubName', initialClub.clubName);
       router.replace(`/admin?${params.toString()}`);
     }
   }, [isSingleClub, step, initialClub, router]);
@@ -33,7 +33,7 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     return allowedClubs.some((club) => club.clubId === clubId);
   };
 
-  const selectClub = (clubId: number, clubName: string) => {
+  const selectClub = (clubId: number) => {
     if (!validateClubAccess(clubId)) {
       toast.error('접근 권한이 없는 동아리입니다.');
       return;
@@ -42,7 +42,6 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     const params = new URLSearchParams();
     params.set('step', 'actionMode');
     params.set('clubId', String(clubId));
-    params.set('clubName', clubName);
     router.push(`/admin?${params.toString()}`);
   };
 

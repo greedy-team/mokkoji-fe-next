@@ -9,7 +9,7 @@ import type { AdminClubInfo } from '../../model/types';
 interface StepSelectClubProps {
   clubs: AdminClubInfo[];
   role?: UserRole;
-  onNext: (clubId: number, clubName: string) => void;
+  onNext: (clubId: number) => void;
 }
 
 function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
@@ -50,7 +50,7 @@ function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
             key={club.clubId}
             variant="optionsBlackGround"
             size="none"
-            onClick={() => onNext(club.clubId, club.clubName)}
+            onClick={() => onNext(club.clubId)}
           >
             {club.clubName}
           </Button>

@@ -1,5 +1,4 @@
 import { Button } from '@/shared/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
 
 interface NavigateRecruitFormProps {

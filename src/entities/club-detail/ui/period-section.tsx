@@ -18,7 +18,7 @@ function PeriodSection({
 }: PeriodSectionProps) {
   const hasDate = startDate && endDate;
   if (!hasDate) {
-    return <span className="invisible">placeholder</span>;
+    return <span className="block min-h-[1lh] text-xs" />;
   }
 
   return isAlwaysRecruiting ? (

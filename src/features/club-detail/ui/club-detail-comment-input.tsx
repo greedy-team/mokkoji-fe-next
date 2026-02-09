@@ -31,8 +31,12 @@ function ClubDetailCommentInput({
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!value || rating === 0) {
-      toast.warn('내용과 별점을 모두 입력해주세요.');
+    if (rating === 0) {
+      toast.warn('별점을 입력해주세요.');
+      return;
+    }
+    if (!value.trim()) {
+      toast.warn('리뷰를 작성해주세요.');
       return;
     }
     setIsSubmitting(true);
@@ -88,7 +92,7 @@ function ClubDetailCommentInput({
           variant="submit-default"
           type="submit"
           className="h-[43px] w-[113px]"
-          disabled={!value || rating === 0 || isSubmitting}
+          disabled={(!value.trim() && rating === 0) || isSubmitting}
         >
           댓글 남기기
         </Button>

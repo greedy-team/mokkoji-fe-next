@@ -25,12 +25,6 @@ function NavigateRecruitForm({ recruitForm }: NavigateRecruitFormProps) {
           <span className="font-extrabold">동아리</span>
           <span className="font-semibold">지원하기</span>
         </div>
-        <Image
-          src="/detail/downArrow.svg"
-          alt="동아리 지원하기 화살표"
-          width={14}
-          height={14}
-        />
       </Link>
     </Button>
   );

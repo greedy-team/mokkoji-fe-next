@@ -13,14 +13,14 @@ import PeriodSection from '@/entities/club-detail/ui/period-section';
 interface RecruitDetailHeaderProps {
   title: string;
   category: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   instagram: string;
   clubId: number;
   isFavorite?: boolean;
-  createdAt: string;
+  createdAt?: string;
   logo: string;
-  status: RecruitStatus;
+  status?: RecruitStatus;
   isAlwaysRecruiting: boolean;
 }
 

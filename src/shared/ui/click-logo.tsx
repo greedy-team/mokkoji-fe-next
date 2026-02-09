@@ -12,17 +12,30 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
 import { DialogTitle } from '@radix-ui/react-dialog';
 
 interface ClickLogoProps {
-  logo: string;
-  title: string;
+  logo?: string;
+  title?: string;
 }
 
 export default function ClickLogo({ logo, title }: ClickLogoProps) {
+  const altText = title ?? '동아리 로고';
+
+  const avatar = (
+    <Avatar className="hidden h-[72px] w-[72px] sm:block">
+      <AvatarImage src={logo} alt={altText} />
+      <AvatarFallback />
+    </Avatar>
+  );
+
+  if (!logo) {
+    return avatar;
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Avatar className="hidden h-[72px] w-[72px] cursor-pointer sm:block">
-          <AvatarImage src={logo} alt={title} />
-          <AvatarFallback>{title[0]}</AvatarFallback>
+          <AvatarImage src={logo} alt={altText} />
+          <AvatarFallback>{title?.[0]}</AvatarFallback>
         </Avatar>
       </DialogTrigger>
 
@@ -34,7 +47,7 @@ export default function ClickLogo({ logo, title }: ClickLogoProps) {
       >
         <Image
           src={logo}
-          alt={title}
+          alt={altText}
           width={600}
           height={600}
           className="max-h-[80vh] max-w-[90vw] rounded-lg shadow-lg"

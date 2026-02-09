@@ -12,12 +12,14 @@ interface FavoriteButtonProps {
   isFavorite: boolean;
   clubId: number;
   customClass?: string;
+  wrapperClass?: string;
 }
 
 function FavoriteButton({
   isFavorite,
   clubId,
   customClass,
+  wrapperClass,
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { data: session } = useSession();
@@ -43,11 +45,28 @@ function FavoriteButton({
     [favorite, session, clubId],
   );
   return (
-    <FavoriteThread
-      favorite={favorite}
-      setFavoriteAction={handleToggle}
-      customClass={customClass}
-    />
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest('button')) return;
+        handleToggle();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleToggle();
+        }
+      }}
+      className={wrapperClass}
+      aria-label={favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+    >
+      <FavoriteThread
+        favorite={favorite}
+        setFavoriteAction={handleToggle}
+        customClass={customClass}
+      />
+    </div>
   );
 }
 

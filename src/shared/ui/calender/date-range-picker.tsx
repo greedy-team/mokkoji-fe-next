@@ -44,6 +44,10 @@ function DateRangePicker({
   const [endInputValue, setEndInputValue] = useState('');
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
+  const startDateRef = useRef(startDate);
+  const endDateRef = useRef(endDate);
+  startDateRef.current = startDate;
+  endDateRef.current = endDate;
 
   const {
     isCalenderOpen,
@@ -142,11 +146,17 @@ function DateRangePicker({
 
   const handleInputBlur = (field: FocusedField) => {
     setTimeout(() => {
-      if (field === 'start' && !isValidDateFormat(startInputValue)) {
-        setStartInputValue(extractDateOnly(startDate));
+      if (field === 'start') {
+        setStartInputValue((prev) =>
+          isValidDateFormat(prev)
+            ? prev
+            : extractDateOnly(startDateRef.current),
+        );
       }
-      if (field === 'end' && !isValidDateFormat(endInputValue)) {
-        setEndInputValue(extractDateOnly(endDate));
+      if (field === 'end') {
+        setEndInputValue((prev) =>
+          isValidDateFormat(prev) ? prev : extractDateOnly(endDateRef.current),
+        );
       }
     }, 100);
   };

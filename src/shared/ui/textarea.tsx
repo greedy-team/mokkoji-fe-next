@@ -20,7 +20,8 @@ function Textarea({
       'border border-[#71717148] p-4 focus:border-[#00E457] lg:text-lg',
     error: 'border-[#FF383C] bg-[#FFF4F4]',
     blackError: 'border-[#FF383C] lg:text-lg',
-    comment: 'bg-[#F4F4F4] min-h-[71px] border-none p-4 text-sm lg:text-base',
+    comment:
+      'bg-[#F4F4F4] min-h-[71px] max-h-[200px] overflow-y-auto border-none p-4 text-sm lg:text-base [field-sizing:content]',
   };
 
   return (

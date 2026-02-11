@@ -1,111 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import type {
-  AdminClubInfo,
-  ContentType,
-  ActionType,
-  AdminFlowState,
-} from './types';
+import type { AdminClubInfo, ContentType, ActionType, Step } from './types';
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const isSingleClub = allowedClubs.length === 1;
   const initialClub = isSingleClub ? allowedClubs[0] : undefined;
 
-  const [state, setState] = useState<AdminFlowState>({
-    step: isSingleClub ? 'postType' : 'selectClub',
-    selectedClubId: initialClub?.clubId,
-    selectedClubName: initialClub?.clubName,
-    contentType: undefined,
-    actionType: undefined,
-  });
+  const step = (searchParams.get('step') as Step) || 'selectClub';
+  const selectedClubId = searchParams.get('clubId')
+    ? Number(searchParams.get('clubId'))
+    : initialClub?.clubId;
+  const selectedClubName = allowedClubs.find(
+    (club) => club.clubId === selectedClubId,
+  )?.clubName;
+
+  useEffect(() => {
+    if (isSingleClub && step === 'selectClub' && initialClub) {
+      const params = new URLSearchParams();
+      params.set('step', 'actionMode');
+      params.set('clubId', String(initialClub.clubId));
+      router.replace(`/admin?${params.toString()}`);
+    }
+  }, [isSingleClub, step, initialClub, router]);
 
   const validateClubAccess = (clubId: number) => {
     return allowedClubs.some((club) => club.clubId === clubId);
   };
 
-  const selectClub = (clubId: number, clubName: string) => {
+  const selectClub = (clubId: number) => {
     if (!validateClubAccess(clubId)) {
       toast.error('접근 권한이 없는 동아리입니다.');
       return;
     }
 
-    setState({
-      step: 'postType',
-      selectedClubId: clubId,
-      selectedClubName: clubName,
-      contentType: undefined,
-      actionType: undefined,
-    });
+    const params = new URLSearchParams();
+    params.set('step', 'actionMode');
+    params.set('clubId', String(clubId));
+    router.push(`/admin?${params.toString()}`);
   };
 
-  const selectContentType = (contentType: ContentType) => {
-    setState((prev) => ({
-      ...prev,
-      step: 'editMode',
-      contentType,
-    }));
-  };
-
-  const selectActionType = (actionType: ActionType) => {
-    setState((prev) => ({
-      ...prev,
-      actionType,
-      isReadyToRedirect: true,
-    }));
-  };
-
-  const goBack = () => {
-    setState((prev) => {
-      if (prev.step === 'postType') {
-        return {
-          ...prev,
-          step: 'selectClub',
-          contentType: undefined,
-          actionType: undefined,
-        };
-      }
-      if (prev.step === 'editMode') {
-        return {
-          ...prev,
-          step: 'postType',
-          actionType: undefined,
-        };
-      }
-
-      return prev;
-    });
-  };
-
-  const reset = () => {
-    setState({
-      step: 'selectClub',
-      selectedClubId: undefined,
-      selectedClubName: undefined,
-      contentType: undefined,
-      actionType: undefined,
-    });
-  };
-
-  const getRedirectUrl = () => {
-    if (
-      state.isReadyToRedirect &&
-      state.selectedClubId &&
-      state.contentType &&
-      state.actionType
-    ) {
-      return `/admin/${state.contentType}/${state.actionType}/${state.selectedClubId}`;
+  const selectAction = (contentType: ContentType, actionType: ActionType) => {
+    if (selectedClubId) {
+      router.push(`/admin/${contentType}/${actionType}/${selectedClubId}`);
     }
-    return null;
   };
+
+  const goBack = () => router.back();
+
+  const reset = () => router.push('/admin');
 
   return {
-    ...state,
-    redirectUrl: getRedirectUrl(),
+    step: isSingleClub && step === 'selectClub' ? 'actionMode' : step,
+    selectedClubId,
+    selectedClubName,
     selectClub,
-    selectContentType,
-    selectActionType,
+    selectAction,
     goBack,
     reset,
     validateClubAccess,

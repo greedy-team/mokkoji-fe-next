@@ -149,14 +149,14 @@ function CalenderBody({
                 className={cn(
                   'mb-4 flex items-center justify-center',
                   inRange &&
-                    (variant === 'dark' ? 'bg-gray-900' : 'bg-gray-100'),
+                    (variant === 'dark' ? 'bg-[#3b7551]' : 'bg-gray-100'),
                   isStart &&
                     (variant === 'dark'
-                      ? 'rounded-l-full bg-gray-900'
+                      ? 'rounded-l-full bg-[#3b7551]'
                       : 'rounded-l-full bg-gray-100'),
                   isEnd &&
                     (variant === 'dark'
-                      ? 'rounded-r-full bg-gray-900'
+                      ? 'rounded-r-full bg-[#3b7551]'
                       : 'rounded-r-full bg-gray-100'),
                 )}
               >

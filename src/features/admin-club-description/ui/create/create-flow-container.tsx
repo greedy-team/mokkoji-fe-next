@@ -90,7 +90,7 @@ function CreateFlowContainer() {
         <div className="flex flex-col gap-2 py-8">
           <AdminPageHeader
             title="동아리 기본 정보"
-            onBack={() => router.push('/admin')}
+            onBack={() => router.back()}
           />
           <StepClubRegisterInfo
             formData={formData}

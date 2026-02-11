@@ -120,7 +120,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="모집글 기본 정보"
-            onBack={() => router.push('/admin')}
+            onBack={() => router.back()}
           />
           <StepRecruitmentBasicInfo
             formData={formData}

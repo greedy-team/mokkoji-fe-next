@@ -16,7 +16,7 @@ function HelpTextCard() {
       </AnimateOnView>
       <AnimateOnView animation="reveal-rightToleft">
         <span className="text-text-tertiary my-1 block text-base leading-[1.5] font-medium lg:my-3 lg:text-2xl lg:font-semibold">
-          자주 하는 질문은 검색 페이지에서 바로 답변을
+          자주 하는 질문은 검색 페이지에서 바로 답변을{' '}
           <br className="lg:hidden" /> 확인할 수 있어요.
         </span>
       </AnimateOnView>

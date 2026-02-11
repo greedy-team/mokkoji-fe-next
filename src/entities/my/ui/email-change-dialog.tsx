@@ -93,7 +93,7 @@ export default function EmailChangeDialog({
             <Button
               className="h-[50px] w-full"
               type="submit"
-              variant="submit"
+              variant="submit-default"
               disabled={submitting || !email || !isValidEmail}
             >
               {submitting ? '저장 중…' : '확인'}

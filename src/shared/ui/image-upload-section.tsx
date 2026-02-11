@@ -2,7 +2,7 @@
 
 import { X, Upload } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import cn from '../lib/utils';
 
 interface ImageItem {
@@ -38,6 +38,41 @@ function ImageUploadSection({
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }) {
   const [isDragActive, setIsDragActive] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const stopAutoScroll = () => {
+    if (scrollIntervalRef.current) {
+      clearInterval(scrollIntervalRef.current);
+      scrollIntervalRef.current = null;
+    }
+  };
+
+  const handleAutoScroll = (e: React.DragEvent<HTMLDivElement>) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX;
+    const edgeSize = 60;
+    const scrollSpeed = 8;
+
+    stopAutoScroll();
+
+    if (x < rect.left + edgeSize) {
+      scrollIntervalRef.current = setInterval(() => {
+        container.scrollLeft -= scrollSpeed;
+      }, 16);
+    } else if (x > rect.right - edgeSize) {
+      scrollIntervalRef.current = setInterval(() => {
+        container.scrollLeft += scrollSpeed;
+      }, 16);
+    }
+  };
+
+  useEffect(() => {
+    return () => stopAutoScroll();
+  }, []);
 
   const handleDragEnter = (e: React.DragEvent<HTMLFieldSetElement>) => {
     e.preventDefault();
@@ -75,7 +110,7 @@ function ImageUploadSection({
 
   return (
     <fieldset
-      className="relative"
+      className="relative w-full min-w-0"
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
     >
@@ -134,14 +169,23 @@ function ImageUploadSection({
           className="hidden"
         />
         {imageFiles.length > 0 && (
-          <div className="scrollbar-hide mt-4 flex gap-3 overflow-x-auto">
+          <div
+            ref={scrollContainerRef}
+            className="scrollbar-hide mt-4 flex w-full max-w-full gap-3 overflow-x-auto"
+          >
             {imageFiles.map((item) => (
               <div
                 key={item.id}
                 draggable
                 onDragStart={() => handleDragStart(item.id)}
-                onDragOver={(e) => handleDragOver(e, item.id)}
-                onDragEnd={handleDragEnd}
+                onDragOver={(e) => {
+                  handleDragOver(e, item.id);
+                  handleAutoScroll(e);
+                }}
+                onDragEnd={() => {
+                  handleDragEnd();
+                  stopAutoScroll();
+                }}
                 className={cn(
                   'relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md border transition-all sm:h-40 sm:w-40',
                   draggingId === item.id && 'scale-95 opacity-50',

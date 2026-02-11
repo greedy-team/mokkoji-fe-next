@@ -38,9 +38,9 @@ export default function CommentItem({
         <span className="text-xs text-[#A4A4A4]">{timeAgo(comment.time)}</span>
         <StarRating rate={comment.rate} />
         {comment.isWriter && (
-          <div className="flex h-5 w-fit items-center justify-center rounded-sm border border-[#D6D6D6] p-1">
+          <div className="flex h-8 w-16 items-center justify-center rounded-sm border border-[#D6D6D6]">
             <button
-              className="cursor-pointer px-1"
+              className="box-border flex w-[50%] cursor-pointer justify-center border-r"
               onClick={() => {
                 onEdit(comment.id);
               }}
@@ -48,13 +48,12 @@ export default function CommentItem({
               <Image
                 src="/detail/comment/correction.svg"
                 alt="수정 이미지"
-                width={10}
-                height={10}
+                width={12}
+                height={12}
               />
             </button>
-            <span className="mx-1 h-full border-l" />
             <button
-              className="cursor-pointer px-1 text-[12px]"
+              className="w-[50%] cursor-pointer text-[14px]"
               onClick={(e) => handleDeleteComment(e, comment.id)}
             >
               X
@@ -62,7 +61,9 @@ export default function CommentItem({
           </div>
         )}
       </div>
-      <p className="text-sm font-medium">{comment.content}</p>
+      <p className="text-sm font-medium break-all whitespace-pre-wrap">
+        {comment.content}
+      </p>
     </div>
   );
 }

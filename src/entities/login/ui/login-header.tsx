@@ -80,7 +80,7 @@ function LoginHeader({
             </div>
             <Button
               onClick={() => setOpen(false)}
-              variant="submit"
+              variant="submit-default"
               className="mt-3 w-full rounded bg-[#00E457] px-3 py-1 text-xs font-medium text-white"
             >
               닫기

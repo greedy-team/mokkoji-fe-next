@@ -7,7 +7,6 @@ import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
-import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import postRecruitmentForm from '@/features/admin-recruitment/api/postRecruitmentForm';
@@ -47,6 +46,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
       const timer = setTimeout(() => {
         setDisplayStep(flow.currentStep);
         setIsTransitioning(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 300);
       return () => clearTimeout(timer);
     }
@@ -120,7 +120,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="모집글 기본 정보"
-            onBack={() => router.push('/admin')}
+            onBack={() => router.back()}
           />
           <StepRecruitmentBasicInfo
             formData={formData}

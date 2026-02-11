@@ -1,6 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
 import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
-import getClubManageInfo from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { auth } from '@/auth';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
@@ -17,11 +16,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
   const { tab = 'recruit', rid } = await searchParams;
 
-  const session = await auth();
-  const role = session?.role;
-
-  const [getClubManageInfoRes, recent, recruitHistories] = await Promise.all([
-    getClubManageInfo({ role }),
+  const [recent, recruitHistories] = await Promise.all([
     getRecentRecruitDetail(Number(id)),
     getClubRecruitments(Number(id)),
   ]);
@@ -29,31 +24,24 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   if (recent?.status === 404 || !recent.data) notFound();
   if (!recent.ok) return <ErrorBoundaryUi />;
 
-  const isManageClub =
-    getClubManageInfoRes?.data?.clubs.some(
-      (club) => club.clubId === recent.data?.clubId,
-    ) || false;
-
   const historiesArray = recruitHistories.ok
     ? (recruitHistories.data?.recruitments ?? [])
     : [];
 
-  if (!(await searchParams).rid) {
-    const queryString = new URLSearchParams();
-    queryString.set('rid', String(recent.data.id));
-    if (tab !== 'recruit') queryString.set('tab', tab);
-    redirect(`/club/${id}?${queryString.toString()}`);
+  if (historiesArray.length > 0) {
+    if (!(await searchParams).rid) {
+      const queryString = new URLSearchParams();
+      queryString.set('rid', String(recent.data.id));
+      if (tab !== 'recruit') queryString.set('tab', tab);
+      redirect(`/club/${id}?${queryString.toString()}`);
+    }
   }
 
   const recruitmentId = Number(rid) || recent.data.id;
-  if (!rid) notFound();
-
   const selected = await getRecruitDetail(recruitmentId);
-  if (selected?.status === 404 || !selected.data) notFound();
-  if (!selected.ok) return <ErrorBoundaryUi />;
 
   return (
-    <div className="mt-5 px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
+    <div className="mt-5 w-full px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
       <RecruitDetailHeader
         title={recent.data.clubName}
         category={recent.data.category}
@@ -68,14 +56,17 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
         isAlwaysRecruiting={recent.data.isAlwaysRecruiting}
       />
 
-      <ClubDetailTabs
-        activeTab={tab}
-        isManageClub={isManageClub}
-        recruitData={selected.data}
-        recruitHistories={historiesArray}
-        id={Number(id)}
-        rid={recruitmentId}
-      />
+      {historiesArray.length > 0 ? (
+        <ClubDetailTabs
+          activeTab={tab}
+          recruitData={selected.data}
+          recruitHistories={historiesArray}
+          id={Number(id)}
+          rid={recruitmentId}
+        />
+      ) : (
+        <ClubDetailTabs activeTab={tab} id={Number(id)} />
+      )}
     </div>
   );
 }

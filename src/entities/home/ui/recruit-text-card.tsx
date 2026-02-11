@@ -10,8 +10,7 @@ function RecruitTextCard() {
       </AnimateOnView>
       <AnimateOnView animation="reveal">
         <p className="my-1 w-full text-2xl leading-[1.5] font-semibold lg:my-3 lg:w-[90%] lg:text-3xl lg:font-bold">
-          동아리의 최신 모집 공고를
-          <br className="lg:hidden" />
+          동아리의 최신 모집 공고를 <br className="lg:hidden" />
           빠르게 확인할 수 있어요.
         </p>
       </AnimateOnView>

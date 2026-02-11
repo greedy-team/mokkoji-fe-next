@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 function DeskTopHomePage() {
   return (
     <>
-      <section className="mt-4 px-[25%]">
+      <section className="mx-auto mt-4 flex min-h-[calc(100vh-200px)] w-fit flex-col justify-center">
         <HomeHeader />
         <HomeSearchWidget />
       </section>

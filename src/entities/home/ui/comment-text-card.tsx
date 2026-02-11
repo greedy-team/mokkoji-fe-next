@@ -18,9 +18,10 @@ function CommentTextCard() {
         </h1>
       </AnimateOnView>
       <AnimateOnView animation="reveal flex justify-center">
-        <p className="my-3 w-full text-center text-2xl leading-[1.5] font-semibold lg:w-[65%] lg:w-[80%] lg:text-3xl lg:font-bold">
+        <p className="my-3 w-full text-center text-2xl leading-[1.5] font-semibold lg:text-3xl lg:font-bold">
           동아리에 대한 의견이나, 궁금한 점을
           <br className="lg:hidden" /> 댓글로 남기고{' '}
+          <br className="hidden lg:block" />
           <span className="text-[#00E457]">소통할 수 있어요.</span>
         </p>
       </AnimateOnView>

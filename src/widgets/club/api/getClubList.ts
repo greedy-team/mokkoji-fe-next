@@ -20,7 +20,7 @@ async function getClubList({
   size: number;
   category?: ClubCategory;
   affiliation?: ClubAffiliation;
-  keyword: string;
+  keyword?: string;
 }) {
   const session = await auth();
 

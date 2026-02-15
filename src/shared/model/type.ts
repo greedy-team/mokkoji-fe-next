@@ -76,7 +76,7 @@ export const ClubCategoryIcon: Record<ClubCategory, string> = {
   [ClubCategory.VOLUNTEER_SOCIAL]: '/category/봉사사회.svg',
   [ClubCategory.SPORTS]: '/category/체육.svg',
   [ClubCategory.RELIGIOUS]: '/category/종교.svg',
-  [ClubCategory.OTHER]: '기타',
+  [ClubCategory.OTHER]: '',
 };
 
 export const ClubCategoryToLabel: Record<string, ClubCategory> = {

@@ -84,7 +84,7 @@ export default function NumberPagination({
         disabled={!canGoPrev}
         aria-label="이전 페이지"
         className={cn(
-          'text-3xl',
+          'cursor-pointer text-3xl',
           !canGoPrev && 'cursor-not-allowed opacity-30',
         )}
       >
@@ -114,7 +114,7 @@ export default function NumberPagination({
               onClick={() => moveToPage(pageItem)}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'text-base transition-colors sm:text-lg',
+                'cursor-pointer text-base transition-colors sm:text-lg',
                 isActive ? 'text-black' : 'text-[#BDBDBD] hover:text-black',
               )}
             >
@@ -130,7 +130,7 @@ export default function NumberPagination({
         disabled={!canGoNext}
         aria-label="다음 페이지"
         className={cn(
-          'text-3xl',
+          'cursor-pointer text-3xl',
           !canGoNext && 'cursor-not-allowed opacity-30',
         )}
       >

@@ -14,11 +14,13 @@ async function getClubList({
   size,
   category,
   affiliation,
+  keyword,
 }: {
   page: number;
   size: number;
   category?: ClubCategory;
   affiliation?: ClubAffiliation;
+  keyword?: string;
 }) {
   const session = await auth();
 
@@ -27,6 +29,7 @@ async function getClubList({
     size: String(size),
     category: category ? String(category) : undefined,
     affiliation: affiliation ? String(affiliation) : undefined,
+    keyword: String(keyword),
   };
 
   const searchParams = new URLSearchParams();

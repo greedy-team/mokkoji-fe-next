@@ -10,11 +10,13 @@ async function ClubItemList() {
   const size = 15;
   const category = searchParamsCache.get('category');
   const affiliation = searchParamsCache.get('affiliation');
+  const keyword = searchParamsCache.get('keyword');
   const res = await getClubList({
     page,
     size,
     category: category as ClubCategory,
     affiliation: affiliation as ClubAffiliation,
+    keyword,
   });
 
   if (!res.ok || !res.data) {

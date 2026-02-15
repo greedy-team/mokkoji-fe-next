@@ -3,6 +3,7 @@ import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
 import { ClubRecruitments } from '@/views/club/model/type';
+import { RecruitStatus } from '@/shared/model/type';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -15,6 +16,7 @@ interface RecruitDetailViewProps {
   recruitEnd?: string;
   clubId: number;
   id: number;
+  status: RecruitStatus;
 }
 
 interface ClubDetailTabsProps {
@@ -74,6 +76,7 @@ function ClubDetailTabs({
             imageUrls: recruitData.imageUrls,
             recruitStart: recruitData.recruitStart,
             recruitEnd: recruitData.recruitEnd,
+            status: recruitData.status,
           }}
         />
       );

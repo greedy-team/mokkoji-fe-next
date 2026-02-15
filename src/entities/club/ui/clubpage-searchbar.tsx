@@ -1,12 +1,16 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function ClubPageSearchbar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [keyword, setKeyword] = useState(searchParams.get('keyword') ?? '');
+  const [keyword, setKeyword] = useState('');
+
+  useEffect(() => {
+    setKeyword(searchParams.get('keyword') ?? '');
+  }, [searchParams]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();

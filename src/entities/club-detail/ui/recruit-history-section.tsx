@@ -121,7 +121,7 @@ function RecruitHistorySection({
             type="button"
             onClick={() => setMobilePageIndex((v) => Math.max(0, v - 1))}
             disabled={!canMobilePrev}
-            className="disabled:opacity-40"
+            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
             &lt; 이전
           </button>
@@ -132,7 +132,7 @@ function RecruitHistorySection({
               setMobilePageIndex((v) => Math.min(mobileMaxPageIndex, v + 1))
             }
             disabled={!canMobileNext}
-            className="disabled:opacity-40"
+            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
             다음 &gt;
           </button>
@@ -173,7 +173,7 @@ function RecruitHistorySection({
             type="button"
             onClick={() => setDesktopIndex((v) => Math.max(0, v - 1))}
             disabled={!canDesktopPrev}
-            className="disabled:opacity-40"
+            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
             &lt; 이전
           </button>
@@ -184,7 +184,7 @@ function RecruitHistorySection({
               setDesktopIndex((v) => Math.min(desktopMaxIndex, v + 1))
             }
             disabled={!canDesktopNext}
-            className="disabled:opacity-40"
+            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
             다음 &gt;
           </button>

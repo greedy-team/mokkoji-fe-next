@@ -15,13 +15,13 @@ function ClubDetailHeaderControl({
 }: ClubDetailHeaderControlProps) {
   return (
     <div className="flex w-full flex-row items-center gap-2 lg:gap-3.5">
-      <div className="scale-80 rounded-full border-1 border-black p-2 lg:scale-100">
-        <FavoriteButton
-          clubId={clubId}
-          isFavorite={isFavorite}
-          customClass="w-[23px] h-[23px] flex items-center justify-center cursor-pointer"
-        />
-      </div>
+      <FavoriteButton
+        clubId={clubId}
+        isFavorite={isFavorite}
+        customClass="w-[23px] h-[23px] flex items-center justify-center cursor-pointer"
+        wrapperClass="scale-80 rounded-full border-1 border-black p-2 lg:scale-100 cursor-pointer"
+      />
+
       <button
         className="scale-80 cursor-pointer rounded-full border-1 border-black p-2 lg:scale-100"
         onClick={() => window.open(instagram, '_blank')}

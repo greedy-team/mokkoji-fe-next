@@ -4,6 +4,7 @@ import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 import { ClubRecruitments } from '@/views/club/model/type';
 import NavigateRecruitForm from '@/features/club-detail/ui/navigate-recruit-form';
+import { RecruitStatus } from '@/shared/model/type';
 
 interface RecruitDetail {
   title: string;
@@ -14,6 +15,7 @@ interface RecruitDetail {
   imageUrls: string[];
   recruitStart?: string;
   recruitEnd?: string;
+  status: RecruitStatus;
 }
 interface ClubRecruitWidgetProps {
   clubId: number;
@@ -35,6 +37,7 @@ function ClubRecruitWidget({
         content={recruitDetail.content}
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
+        recentRid={recruitHistories[0]?.id ?? rid}
       />
       <RecruitHistorySection
         clubId={clubId}
@@ -42,7 +45,10 @@ function ClubRecruitWidget({
         selectedRid={rid}
       />
       <div className="fixed right-2 bottom-5 z-50 lg:right-[calc((100vw-60vw)/2+24px)] lg:bottom-8 lg:bottom-14">
-        <NavigateRecruitForm recruitForm={recruitDetail.recruitForm} />
+        <NavigateRecruitForm
+          recruitForm={recruitDetail.recruitForm}
+          recruitStatus={recruitDetail.status}
+        />
       </div>
     </>
   );

@@ -1,37 +1,49 @@
+import { RecruitStatus } from '@/shared/model/type';
 import { Button } from '@/shared/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
+import cn from '@/shared/lib/utils';
 
 interface NavigateRecruitFormProps {
   recruitForm: string;
+  recruitStatus: RecruitStatus;
 }
 
-function NavigateRecruitForm({ recruitForm }: NavigateRecruitFormProps) {
+function NavigateRecruitForm({
+  recruitForm,
+  recruitStatus,
+}: NavigateRecruitFormProps) {
   if (!recruitForm) return null;
+
+  const isDisabled = recruitStatus === 'BEFORE' || recruitStatus === 'CLOSED';
+
   return (
     <Button
-      asChild
+      asChild={!isDisabled}
       variant="none"
       size="navi"
-      className="mb-21 flex h-[120px] w-[120px] scale-60 cursor-pointer flex-col items-center gap-1.5 rounded-full bg-gradient-to-r from-[#4AF38A] to-[#32E2D0] px-8 text-center text-[17px] text-black transition hover:brightness-105 lg:mb-0 lg:scale-100"
+      className={cn(
+        'mb-21 flex h-[120px] w-[120px] scale-60 flex-col items-center justify-center gap-1.5 rounded-full text-[17px] lg:mb-0 lg:scale-100',
+        isDisabled
+          ? 'cursor-not-allowed bg-[#AAF9C8] text-white'
+          : 'cursor-pointer bg-gradient-to-r from-[#4AF38A] to-[#32E2D0] text-black transition hover:brightness-105',
+      )}
     >
-      <Link
-        href={recruitForm}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex flex-col items-center justify-center gap-2"
-      >
-        <div className="flex flex-col">
+      {!isDisabled ? (
+        <Link
+          href={recruitForm}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center justify-center"
+        >
+          <span className="font-extrabold">동아리</span>
+          <span className="font-semibold">지원하기</span>
+        </Link>
+      ) : (
+        <div className="flex flex-col items-center justify-center">
           <span className="font-extrabold">동아리</span>
           <span className="font-semibold">지원하기</span>
         </div>
-        <Image
-          src="/detail/downArrow.svg"
-          alt="동아리 지원하기 화살표"
-          width={14}
-          height={14}
-        />
-      </Link>
+      )}
     </Button>
   );
 }

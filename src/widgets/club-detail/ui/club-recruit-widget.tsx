@@ -37,6 +37,7 @@ function ClubRecruitWidget({
         content={recruitDetail.content}
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
+        recentRid={recruitHistories[0]?.id ?? rid}
       />
       <RecruitHistorySection
         clubId={clubId}

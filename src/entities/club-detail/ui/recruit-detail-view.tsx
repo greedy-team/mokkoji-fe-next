@@ -10,12 +10,14 @@ import {
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import convertLinkText from '@/entities/club-detail/util/convetLinkText';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 interface RecruitDetailViewProps {
   title: string;
   content: string;
   recruitForm: string;
   imageUrls: string[];
+  recentRid: number;
 }
 
 function RecruitDetailView({
@@ -23,8 +25,14 @@ function RecruitDetailView({
   content,
   recruitForm,
   imageUrls,
+  recentRid,
 }: RecruitDetailViewProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const currentRid = Number(searchParams.get('rid'));
+  const isRecentRecruitment = currentRid === recentRid;
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);
@@ -48,8 +56,23 @@ function RecruitDetailView({
     );
   }
 
+  const goLatest = () => {
+    const clubId = params.id;
+    router.push(`/club/${clubId}`);
+  };
+
   return (
     <div className="flex flex-col">
+      {!isRecentRecruitment && (
+        <button
+          onClick={goLatest}
+          className="text-primary-500 border-primary-500 -mt-7 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm"
+        >
+          <img src="/detail/speaker.svg" alt="알림" className="h-4 w-4" />
+          <span>최신 모집 공고 바로가기</span>
+          <img src="/detail/link.svg" alt="링크" className="h-4 w-4" />
+        </button>
+      )}
       <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}

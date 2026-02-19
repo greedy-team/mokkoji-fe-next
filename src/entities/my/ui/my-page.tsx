@@ -8,10 +8,16 @@ import InfoRow from './info-row';
 import EmailChangeDialog from './email-change-dialog';
 import MailNotificationToggle from './mail-notification-toggle';
 import LogoutLink from './logout-link';
+import LoginRequired from './login-required';
 
 async function MyPage() {
-  const myInfo = await getMyInfo();
   const session = await auth();
+
+  if (!session) {
+    return <LoginRequired />;
+  }
+
+  const myInfo = await getMyInfo();
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;

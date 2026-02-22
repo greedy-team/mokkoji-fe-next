@@ -14,16 +14,17 @@ function ClubDetailHeaderControl({
   clubId,
 }: ClubDetailHeaderControlProps) {
   return (
-    <div className="flex w-full flex-row items-center gap-2 lg:gap-3.5">
+    <div className="flex w-full origin-left scale-90 flex-row items-center gap-4 lg:scale-100">
       <FavoriteButton
         clubId={clubId}
         isFavorite={isFavorite}
         customClass="w-[23px] h-[23px] flex items-center justify-center cursor-pointer"
-        wrapperClass="scale-80 rounded-full border-1 border-black p-2 lg:scale-100 cursor-pointer"
       />
 
+      <Image src="/detail/border.svg" alt="경계선" width={1} height={24} />
+
       <button
-        className="scale-80 cursor-pointer rounded-full bg-[#F7F7F7] px-5 py-4 lg:scale-100"
+        className="cursor-pointer rounded-full bg-[#F7F7F7] px-5 py-2"
         onClick={() => window.open(instagram, '_blank')}
       >
         <div className="flex items-center gap-3">
@@ -33,7 +34,7 @@ function ClubDetailHeaderControl({
             width={20}
             height={20}
           />
-          <span>instagram</span>
+          <span className="text-xs">Instagram</span>
           <Image
             className="ml-2"
             src="/detail/linkGray.svg"

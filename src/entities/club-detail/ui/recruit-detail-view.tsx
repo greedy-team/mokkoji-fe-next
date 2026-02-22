@@ -66,11 +66,11 @@ function RecruitDetailView({
       {!isRecentRecruitment && (
         <button
           onClick={goLatest}
-          className="text-primary-500 border-primary-500 -mt-7 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm"
+          className="text-primary-500 border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm"
         >
-          <img src="/detail/speaker.svg" alt="알림" className="h-4 w-4" />
+          <Image src="/detail/speaker.svg" alt="알림" width={16} height={16} />
           <span>최신 모집 공고 바로가기</span>
-          <img src="/detail/link.svg" alt="링크" className="h-4 w-4" />
+          <Image src="/detail/link.svg" alt="링크" width={16} height={16} />
         </button>
       )}
       <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>

@@ -3,12 +3,12 @@ import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
+import LoginRequired from '@/shared/ui/login-required';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from './email-change-dialog';
 import MailNotificationToggle from './mail-notification-toggle';
 import LogoutLink from './logout-link';
-import LoginRequired from './login-required';
 
 async function MyPage() {
   const session = await auth();

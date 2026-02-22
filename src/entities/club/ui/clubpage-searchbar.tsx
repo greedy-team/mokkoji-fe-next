@@ -21,7 +21,7 @@ function ClubPageSearchbar() {
     if (!q) {
       params.delete('keyword');
     } else {
-      params.set('keyword', keyword);
+      params.set('keyword', q);
     }
 
     params.set('page', '1');

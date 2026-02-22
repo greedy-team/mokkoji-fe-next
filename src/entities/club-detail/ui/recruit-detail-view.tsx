@@ -99,7 +99,7 @@ function RecruitDetailView({
 
             <DialogTitle className="sr-only">이미지 크게 보기</DialogTitle>
             <DialogContent
-              className="fixed flex h-[80vh] w-[900px] items-center justify-center border-0 bg-transparent p-0 shadow-none"
+              className="fixed flex items-center justify-center border-0 bg-transparent p-0 shadow-none"
               showCloseButton={false}
               onKeyDown={(e) => {
                 if (e.key === 'ArrowLeft') {

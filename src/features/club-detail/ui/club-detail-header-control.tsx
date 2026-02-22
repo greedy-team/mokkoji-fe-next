@@ -23,15 +23,25 @@ function ClubDetailHeaderControl({
       />
 
       <button
-        className="scale-80 cursor-pointer rounded-full border-1 border-black p-2 lg:scale-100"
+        className="scale-80 cursor-pointer rounded-full bg-[#F7F7F7] px-5 py-4 lg:scale-100"
         onClick={() => window.open(instagram, '_blank')}
       >
-        <Image
-          src="/detail/instaIcon.svg"
-          alt="인스타그램"
-          width={23}
-          height={23}
-        />
+        <div className="flex items-center gap-3">
+          <Image
+            src="/detail/instaIcon.svg"
+            alt="인스타그램"
+            width={20}
+            height={20}
+          />
+          <span>instagram</span>
+          <Image
+            className="ml-2"
+            src="/detail/linkGray.svg"
+            alt="링크"
+            width={16}
+            height={14}
+          />
+        </div>
       </button>
     </div>
   );

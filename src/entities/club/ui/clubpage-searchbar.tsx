@@ -45,7 +45,10 @@ function ClubPageSearchbar() {
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] text-xs placeholder-gray-300 outline-none sm:text-base"
           />
-          <button type="submit" className="mr-5 pb-3">
+          <button
+            type="submit"
+            className="mr-5 flex items-center justify-center"
+          >
             <img
               src="/club/search.svg"
               alt="검색"

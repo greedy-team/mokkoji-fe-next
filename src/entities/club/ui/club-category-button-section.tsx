@@ -69,7 +69,12 @@ function ClubCategoryButtonSection() {
           <div className="flex gap-[2px]">
             <span> {ClubCategoryLabel[category]}</span>
             {ClubCategoryIcon[category] && (
-              <img src={ClubCategoryIcon[category]} alt="카테고리 아이콘" />
+              <Image
+                src={ClubCategoryIcon[category]}
+                width={14}
+                height={14}
+                alt="카테고리 아이콘"
+              />
             )}
           </div>
         </Button>

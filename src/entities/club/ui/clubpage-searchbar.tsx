@@ -40,7 +40,6 @@ function ClubPageSearchbar() {
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            required
             name="keyword"
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] text-xs placeholder-gray-300 outline-none sm:text-base"

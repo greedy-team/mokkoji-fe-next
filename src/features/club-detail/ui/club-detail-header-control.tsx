@@ -14,7 +14,7 @@ function ClubDetailHeaderControl({
   clubId,
 }: ClubDetailHeaderControlProps) {
   return (
-    <div className="flex w-full origin-left scale-90 flex-row items-center gap-4 lg:scale-100">
+    <div className="flex w-full origin-left scale-90 flex-row items-center gap-4 lg:scale-100 lg:flex-row-reverse">
       <FavoriteButton
         clubId={clubId}
         isFavorite={isFavorite}

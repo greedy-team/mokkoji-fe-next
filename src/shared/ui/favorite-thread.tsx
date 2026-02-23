@@ -2,6 +2,7 @@
 
 import { useOptimistic, startTransition } from 'react';
 import { StarIcon, Star } from 'lucide-react';
+import Image from 'next/image';
 
 function FavoriteThread({
   favorite,
@@ -35,9 +36,19 @@ function FavoriteThread({
       }
     >
       {optimisticFavorite ? (
-        <img src="/favorite/starFill.svg" alt="채워진별" />
+        <Image
+          src="/favorite/heartFill.svg"
+          alt="채워진하트"
+          width={20}
+          height={19}
+        />
       ) : (
-        <img src="/favorite/star.svg" alt="비워진별" />
+        <Image
+          src="/favorite/heart.svg"
+          alt="비워진하트"
+          width={20}
+          height={19}
+        />
       )}
     </button>
   );

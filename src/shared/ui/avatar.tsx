@@ -28,7 +28,7 @@ function AvatarImage({
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
-      className={cn('aspect-square size-full', className)}
+      className={cn('aspect-square size-full object-cover', className)}
       {...props}
     />
   );
@@ -47,7 +47,7 @@ function AvatarFallback({
       )}
       {...props}
     >
-      <Image src="/altClubIcon.svg" alt="기본 로고" width={60} height={60} />
+      <Image src="/altClubIcon.svg" alt="기본 로고" width={74} height={74} />
     </AvatarPrimitive.Fallback>
   );
 }

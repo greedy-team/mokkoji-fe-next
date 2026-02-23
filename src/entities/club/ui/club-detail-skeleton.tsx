@@ -20,9 +20,14 @@ function ClubDetailSkeleton() {
             </div>
           </div>
 
-          <div className="flex shrink-0 gap-2 lg:mt-0 lg:ml-auto">
+          <div className="flex shrink-0 items-center gap-3 lg:ml-auto lg:flex-row-reverse">
             <div className="h-9 w-9 rounded-full bg-gray-300 lg:h-10 lg:w-10" />
-            <div className="h-9 w-9 rounded-full bg-gray-300 lg:h-10 lg:w-10" />
+            <div className="h-6 w-[1px] bg-gray-200" />
+            <div className="flex h-9 w-[140px] items-center gap-3 rounded-full bg-gray-200 px-4 lg:h-10 lg:w-[170px]">
+              <div className="h-5 w-5 rounded bg-gray-300" />
+              <div className="h-4 w-16 rounded bg-gray-300" />
+              <div className="ml-auto h-4 w-4 rounded bg-gray-300" />
+            </div>
           </div>
         </div>
       </header>

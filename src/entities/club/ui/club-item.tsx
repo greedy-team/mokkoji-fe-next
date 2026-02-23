@@ -43,7 +43,7 @@ function ClubItem({
             <AvatarFallback />
           </Avatar>
 
-          <div className="mt-1 flex flex-1 flex-col gap-1">
+          <div className="flex flex-1 flex-col gap-1">
             <div className="flex items-center gap-1">
               <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {name}
@@ -52,7 +52,7 @@ function ClubItem({
               <FavoriteButton
                 isFavorite={favorite}
                 clubId={id}
-                customClass="scale-100"
+                customClass="scale-100 mt-1"
               />
               {recruitStatus && (
                 <RadiusTag

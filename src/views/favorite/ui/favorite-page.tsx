@@ -2,7 +2,7 @@ import FavoriteDateSection from '@/widgets/favorite/ui/favorite-date-section';
 import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { auth } from '@/auth';
-import LoginRequired from './login-required';
+import LoginRequired from '@/shared/ui/login-required';
 
 async function FavoritePage() {
   const session = await auth();

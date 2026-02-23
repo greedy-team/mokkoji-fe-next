@@ -29,7 +29,7 @@ async function getClubList({
     size: String(size),
     category: category ? String(category) : undefined,
     affiliation: affiliation ? String(affiliation) : undefined,
-    keyword: String(keyword),
+    keyword: keyword?.trim() ? String(keyword?.trim()) : undefined,
   };
 
   const searchParams = new URLSearchParams();

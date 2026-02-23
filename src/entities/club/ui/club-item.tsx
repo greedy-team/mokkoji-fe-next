@@ -44,7 +44,7 @@ function ClubItem({
           </Avatar>
 
           <div className="flex flex-1 flex-col gap-1">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {name}
               </h1>

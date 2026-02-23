@@ -6,7 +6,7 @@ import {
   ClubCategoryLabel,
 } from '@/shared/model/type';
 
-const KEYWORDS = [
+const KEYWORDS: ClubCategory[] = [
   ClubCategory.CULTURAL_ART,
   ClubCategory.ACADEMIC_CULTURAL,
   ClubCategory.VOLUNTEER_SOCIAL,
@@ -26,7 +26,7 @@ function HomeKeywordList() {
             className="flex w-fit items-center gap-1 rounded-full bg-[#F2F4F6] px-4 py-[10px] text-xs font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
           >
             {ClubCategoryLabel[category]}
-            {ClubCategoryIcon[category] !== '기타' && (
+            {ClubCategoryIcon[category] && (
               <Image
                 src={ClubCategoryIcon[category]}
                 alt={ClubCategoryLabel[category]}
@@ -45,7 +45,7 @@ function HomeKeywordList() {
             className="flex w-fit items-center gap-1 rounded-full bg-[#F2F4F6] px-4 py-[10px] text-xs font-semibold transition-colors hover:bg-[#dadddf] lg:px-5 lg:py-2 lg:text-xl"
           >
             {ClubCategoryLabel[category]}
-            {ClubCategoryIcon[category] !== '기타' && (
+            {ClubCategoryIcon[category] && (
               <Image
                 src={ClubCategoryIcon[category]}
                 alt={ClubCategoryLabel[category]}

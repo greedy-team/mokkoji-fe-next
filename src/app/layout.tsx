@@ -3,6 +3,7 @@ import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import localFont from 'next/font/local';
 import WebVitalProvider from '@/_providers/webvital-provider';
+import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
 import { SessionProvider } from 'next-auth/react';
@@ -56,6 +57,7 @@ export default function RootLayout({
     gtag('config', 'G-85PSBEJKQ2');
   `}
         </Script>
+        <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>
         <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>

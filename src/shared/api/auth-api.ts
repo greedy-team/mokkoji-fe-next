@@ -12,9 +12,43 @@ const api = ky.create({
       async (req) => {
         if (!req.headers.get('Authorization')) {
           const session = await auth();
-          if (session?.accessToken) {
-            req.headers.set('Authorization', `Bearer ${session.accessToken}`);
+
+          if (!session?.accessToken) return;
+
+          const isExpired = session.expiresAt
+            ? Date.now() >= (session.expiresAt as number)
+            : false;
+
+          if (
+            isExpired &&
+            session.refreshToken &&
+            session.error !== 'RefreshTokenExpired'
+          ) {
+            try {
+              const refreshResponse = await serverApi.post(
+                'users/auth/refresh',
+                {
+                  headers: {
+                    Authorization: `Bearer ${session.refreshToken}`,
+                  },
+                },
+              );
+              const refreshData: { data: { accessToken: string } } =
+                await refreshResponse.json();
+
+              if (refreshData.data?.accessToken) {
+                req.headers.set(
+                  'Authorization',
+                  `Bearer ${refreshData.data.accessToken}`,
+                );
+                return;
+              }
+            } catch {
+              // 갱신 실패 시 afterResponse에서 처리
+            }
           }
+
+          req.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
       },
     ],

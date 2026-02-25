@@ -261,10 +261,10 @@ function PrivacyPolicyPage() {
           <li>
             <strong>이메일</strong>:{' '}
             <a
-              href="mailto:shin378378@gmail.com"
+              href="mailto:sejongmokkojidev@gmail.com"
               className="text-primary-500 underline"
             >
-              shin378378@gmail.com
+              sejongmokkojidev@gmail.com
             </a>
           </li>
         </ul>

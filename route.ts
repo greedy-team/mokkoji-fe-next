@@ -18,4 +18,5 @@ export const publicRoutes = [
   '/logs',
   '/my',
   '/my/:path*',
+  '/privacy-policy',
 ];

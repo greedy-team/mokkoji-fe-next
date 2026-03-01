@@ -1,38 +1,40 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-interface KakaoAdFitProps {
-  adUnit: string;
-  adWidth: number;
-  adHeight: number;
+declare global {
+  interface Window {
+    adfit?: { run(): void };
+  }
 }
 
-export default function KakaoAdFit({
-  adUnit,
-  adWidth,
-  adHeight,
-}: KakaoAdFitProps) {
-  const adRef = useRef<HTMLModElement>(null);
-
+export default function KakaoAdFit() {
   useEffect(() => {
-    if (!adRef.current || adRef.current.children.length > 0) return;
-
-    const script = document.createElement('script');
-    script.async = true;
-    script.type = 'text/javascript';
-    script.src = '//t1.daumcdn.net/kas/static/ba.min.js';
-    adRef.current.insertAdjacentElement('afterend', script);
+    if (window.adfit) {
+      window.adfit.run();
+    }
   }, []);
 
   return (
-    <ins
-      ref={adRef}
-      className="kakao_ad_area"
-      style={{ display: 'none' }}
-      data-ad-unit={adUnit}
-      data-ad-width={String(adWidth)}
-      data-ad-height={String(adHeight)}
-    />
+    <>
+      <div className="flex justify-center py-2 sm:hidden">
+        <ins
+          className="kakao_ad_area"
+          style={{ display: 'none' }}
+          data-ad-unit="DAN-2sw9T3IKvhASVoPI"
+          data-ad-width="320"
+          data-ad-height="100"
+        />
+      </div>
+      <div className="hidden justify-center py-2 sm:flex">
+        <ins
+          className="kakao_ad_area"
+          style={{ display: 'none' }}
+          data-ad-unit="DAN-WlqWMW33uI6dquqv"
+          data-ad-width="728"
+          data-ad-height="90"
+        />
+      </div>
+    </>
   );
 }

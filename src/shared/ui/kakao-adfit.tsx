@@ -1,20 +1,4 @@
-'use client';
-
-import { useEffect } from 'react';
-
-declare global {
-  interface Window {
-    adfit?: { run(): void };
-  }
-}
-
 export default function KakaoAdFit() {
-  useEffect(() => {
-    if (window.adfit) {
-      window.adfit.run();
-    }
-  }, []);
-
   return (
     <>
       <div className="flex justify-center py-2 sm:hidden">

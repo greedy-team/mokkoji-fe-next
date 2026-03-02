@@ -43,7 +43,7 @@ function RecruitDetailHeader({
 
   return (
     <header className="w-full cursor-default">
-      <div className="mb-4 flex flex-row items-center gap-3.5 lg:mb-8 lg:gap-4">
+      <div className="flex flex-row items-center gap-3.5 lg:mb-5 lg:gap-4">
         <ClickLogo logo={logo} title={title} />
         <div className="flex min-w-0 items-center gap-2">
           <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">
@@ -59,14 +59,14 @@ function RecruitDetailHeader({
       <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
         <RadiusTag
           recruitStatus={status}
-          className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-3 lg:text-[14px]"
+          className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-2.5 lg:text-[14px]"
         />
-        <div className="flex flex-col gap-1 lg:gap-2">
+        <div className="flex flex-col">
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
             decoration={false}
-            className="text-sm whitespace-nowrap lg:text-lg"
+            className="mt-1 text-sm whitespace-nowrap lg:text-lg"
             isAlwaysRecruiting={isAlwaysRecruiting}
           />
           <div className="mr-auto shrink-0">

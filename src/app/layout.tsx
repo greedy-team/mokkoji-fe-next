@@ -57,10 +57,6 @@ export default function RootLayout({
     gtag('config', 'G-85PSBEJKQ2');
   `}
         </Script>
-        <Script
-          src="//t1.daumcdn.net/kas/static/ba.min.js"
-          strategy="afterInteractive"
-        />
         <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>

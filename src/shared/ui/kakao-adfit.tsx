@@ -1,4 +1,19 @@
+'use client';
+
+import { useEffect } from 'react';
+
 export default function KakaoAdFit() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/kas/static/ba.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <>
       <div className="flex justify-center py-2 sm:hidden">

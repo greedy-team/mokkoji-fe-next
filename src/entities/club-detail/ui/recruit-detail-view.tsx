@@ -66,7 +66,7 @@ function RecruitDetailView({
       {!isRecentRecruitment && (
         <button
           onClick={goLatest}
-          className="text-primary-500 border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm"
+          className="border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm text-[#22CF64]"
         >
           <Image src="/detail/speaker.svg" alt="알림" width={16} height={16} />
           <span>최신 모집 공고 바로가기</span>

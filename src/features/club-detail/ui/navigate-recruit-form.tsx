@@ -24,7 +24,7 @@ function NavigateRecruitForm({
       className={cn(
         'mb-21 flex h-[120px] w-[120px] scale-60 flex-col items-center justify-center gap-1.5 rounded-full text-[17px] lg:mb-0 lg:scale-100',
         isDisabled
-          ? 'cursor-not-allowed bg-[#AAF9C8] text-white'
+          ? 'cursor-not-allowed bg-[#D8F6E3] text-white'
           : 'cursor-pointer bg-gradient-to-r from-[#4AF38A] to-[#32E2D0] text-black transition hover:brightness-105',
       )}
     >

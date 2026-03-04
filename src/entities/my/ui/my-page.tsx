@@ -6,9 +6,9 @@ import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
-import EmailChangeDialog from './email-change-dialog';
-import MailNotificationToggle from './mail-notification-toggle';
-import LogoutLink from './logout-link';
+import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
+import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
+import LogoutLink from '../../../features/my/ui/logout-link';
 
 async function MyPage() {
   const session = await auth();
@@ -38,11 +38,15 @@ async function MyPage() {
           <InfoRow label="이메일" value={user.email}>
             <EmailChangeDialog
               initialEmail={user.email}
+              isEmailOn={user.emailOn}
               triggerClassName="text-[#00E457] text-sm"
             />
           </InfoRow>
           <InfoRow label="메일 알림">
-            <MailNotificationToggle />
+            <MailNotificationToggle
+              email={user.email}
+              isEmailOn={user.emailOn}
+            />
           </InfoRow>
           {isAdmin && (
             <div className="mt-6 flex items-center gap-2">

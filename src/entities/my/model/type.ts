@@ -5,6 +5,8 @@ interface UserInfoType {
     name: string;
     grade: string;
     email: string;
+    role: string;
+    emailOn: boolean;
   };
 }
 

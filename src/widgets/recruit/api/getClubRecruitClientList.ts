@@ -2,7 +2,6 @@
 import { ApiResponse, ClubCategory } from '@/shared/model/type';
 import ky from 'ky';
 import { RecruitmentResponse } from '@/widgets/recruit/model/type';
-import { Session } from 'next-auth';
 
 async function getClubRecruitClientList({
   page,
@@ -13,7 +12,7 @@ async function getClubRecruitClientList({
   page: number;
   size: number;
   category?: ClubCategory;
-  session: Session | null;
+  session: { accessToken?: string } | null;
 }) {
   const params = new URLSearchParams();
 

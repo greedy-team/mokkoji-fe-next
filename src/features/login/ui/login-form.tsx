@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
@@ -46,18 +45,26 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
     }
 
     setIsSubmitting(true);
-    const result: any = await signIn('credentials', {
-      redirect: false,
-      studentId: currentStudentId,
-      password: currentPassword,
-    });
-    setIsSubmitting(false);
-    if (result?.error) {
-      toast.error('학번 또는 비밀번호를 확인해주세요.');
-      return;
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentId: currentStudentId,
+          password: currentPassword,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        toast.error('학번 또는 비밀번호를 확인해주세요.');
+        return;
+      }
+      router.refresh();
+    } catch {
+      toast.error('로그인 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    router.refresh();
   };
 
   const handleBlur = (field: 'studentId' | 'password', value: string) => {

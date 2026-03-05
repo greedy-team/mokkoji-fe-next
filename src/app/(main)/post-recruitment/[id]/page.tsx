@@ -1,11 +1,11 @@
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import { DetailParams, UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import PostRecruitmentPage from '@/views/post-recruitment/post-recruitment-page';
 import { redirect } from 'next/navigation';
 
 async function Page({ params }: DetailParams) {
-  const session = await auth();
+  const session = await getSession();
   const role = session?.role;
 
   if (!session || !session.user) {

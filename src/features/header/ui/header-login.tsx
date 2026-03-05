@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
@@ -18,11 +18,18 @@ interface HeaderLoginProps {
 }
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
+  const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setShowDropdown(false));
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
@@ -57,7 +64,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               <Button
                 variant="dropdownItemDanger"
                 size="none"
-                onClick={() => signOut({ callbackUrl: '/' })}
+                onClick={handleSignOut}
               >
                 <LogoutIcon />
                 로그아웃

@@ -2,7 +2,7 @@
 
 import 'server-only';
 import ky from 'ky';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from './server-api';
 
 const api = ky.create({
@@ -11,7 +11,7 @@ const api = ky.create({
     beforeRequest: [
       async (req) => {
         if (!req.headers.get('Authorization')) {
-          const session = await auth();
+          const session = await getSession();
 
           if (!session?.accessToken) return;
 
@@ -19,11 +19,7 @@ const api = ky.create({
             ? Date.now() >= (session.expiresAt as number)
             : false;
 
-          if (
-            isExpired &&
-            session.refreshToken &&
-            session.error !== 'RefreshTokenExpired'
-          ) {
+          if (isExpired && session.refreshToken) {
             try {
               const refreshResponse = await serverApi.post(
                 'users/auth/refresh',
@@ -61,10 +57,10 @@ const api = ky.create({
           return response;
         }
 
-        const session = await auth();
+        const session = await getSession();
 
         // 리프레시 토큰 만료됐으면 시도하지 않음
-        if (!session?.refreshToken || session.error === 'RefreshTokenExpired') {
+        if (!session?.refreshToken) {
           return response;
         }
 

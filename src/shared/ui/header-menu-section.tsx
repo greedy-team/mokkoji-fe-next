@@ -1,18 +1,19 @@
 'use client';
 
-import { UserRole } from '@/shared/model/type';
-import { Session } from 'next-auth';
+import { UserRole, ManageClub } from '@/shared/model/type';
 import HeaderLogin from '@/features/header/ui/header-login';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import MobileHeader from './mobile-header';
 
-function HeaderMenuSection({
-  role,
-  session,
-}: {
+interface HeaderMenuSectionProps {
   role?: UserRole;
-  session: Session | null;
-}) {
+  session: {
+    user?: { name?: string };
+    manageClubInfo?: ManageClub[];
+  } | null;
+}
+
+function HeaderMenuSection({ role, session }: HeaderMenuSectionProps) {
   return (
     <>
       <HeaderAdminLink role={role} isLoggedIn={!!session} />

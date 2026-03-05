@@ -1,12 +1,12 @@
 import ErrorHandler from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import { RecruitmentDetail } from '../model/type';
 
 async function getRecruitDetail(recruitmentId: number) {
-  const session = await auth();
+  const session = await getSession();
   try {
     let response: ApiResponse<RecruitmentDetail>;
     if (session?.accessToken) {

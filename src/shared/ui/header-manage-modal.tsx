@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/shared/lib/session-context';
 import { usePathname } from 'next/navigation';
 import ManageModal from './manage-modal';
 import { ManageClub } from '../model/type';
@@ -19,6 +19,7 @@ function HeaderManageModal({
   onItemClick,
 }: HeaderManageModalProps) {
   const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
 
@@ -31,7 +32,7 @@ function HeaderManageModal({
 
   return (
     <div className="h-full">
-      {status === 'authenticated' && session.user ? (
+      {isAuthenticated && session?.user ? (
         <>
           <button
             onClick={() => {

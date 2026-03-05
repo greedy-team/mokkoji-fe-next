@@ -1,7 +1,7 @@
 'use server';
 
 import api from '@/shared/api/auth-api';
-import { RecruitmentDetail } from '@/views/club/model/type';
+import { RecruitmentDetail } from '@/entities/club-detail/model/type';
 import { ApiResponse } from '@/shared/model/type';
 
 async function getRecruitmentDetail(

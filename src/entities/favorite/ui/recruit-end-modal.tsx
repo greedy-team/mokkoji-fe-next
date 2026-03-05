@@ -1,6 +1,6 @@
 'use client';
 
-import { FavoriteDeadLineItem } from '@/features/favorite/model/type';
+import { FavoriteDeadLineItem } from '@/entities/favorite/model/type';
 import formatKoreanDate from '@/features/favorite/util/formatKoreanDate';
 import {
   Dialog,

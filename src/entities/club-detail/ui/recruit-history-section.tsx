@@ -1,4 +1,4 @@
-import { ClubRecruitments } from '@/views/club/model/type';
+import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import RecruitHistoryCard from './recruit-history-card';

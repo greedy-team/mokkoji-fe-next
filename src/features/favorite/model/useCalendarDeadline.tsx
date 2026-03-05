@@ -1,6 +1,6 @@
 'use client';
 
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import { useState, useMemo } from 'react';
 import { FavoriteDeadLineItem } from './type';
 

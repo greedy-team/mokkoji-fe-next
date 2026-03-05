@@ -1,7 +1,7 @@
 import { getClubInfo } from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import EditFlowContainer from '@/features/admin-recruitment/ui/edit/edit-flow-container';
-import getClubRecruitments from '@/views/club/api/getClubRecruitments';
+import getClubRecruitments from '@/entities/club-detail/api/getClubRecruitments';
 
 interface Props {
   clubId: number;

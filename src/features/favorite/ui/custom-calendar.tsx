@@ -2,7 +2,7 @@
 
 import 'react-calendar/dist/Calendar.css';
 import dynamic from 'next/dynamic';
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
 import formatNavigation from '@/entities/favorite/ui/format-navigation';
 import SharedLoading from '@/shared/ui/loading';

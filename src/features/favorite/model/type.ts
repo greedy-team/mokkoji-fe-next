@@ -1,4 +1,1 @@
-export interface FavoriteDeadLineItem {
-  clubName: string;
-  clubId: number;
-}
+export type { FavoriteDeadLineItem } from '@/entities/favorite/model/type'; // eslint-disable-line import/prefer-default-export

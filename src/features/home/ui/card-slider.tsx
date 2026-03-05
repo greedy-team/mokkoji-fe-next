@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { Club } from '@/widgets/club/model/type';
+import { Club } from '@/entities/club/model/type';
 
 const movePx = 250;
 const mobileMovePx = 100;

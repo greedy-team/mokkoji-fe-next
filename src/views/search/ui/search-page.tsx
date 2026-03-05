@@ -3,7 +3,7 @@ import SearchResults from '@/widgets/search/ui/search-results';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import SearchListSkeletonLoading from '@/entities/search/ui/search-list-skeleton-loading';
-import { searchParamsCache } from '@/app/(main)/search/search-params';
+import { searchParamsCache } from '@/shared/lib/search-search-params';
 
 async function SearchPage() {
   const q = searchParamsCache.get('q');

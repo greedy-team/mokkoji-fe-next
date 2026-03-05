@@ -1,5 +1,5 @@
 import convertLinkText from '@/entities/club-detail/util/convetLinkText';
-import getClubDetail from '@/views/club/api/getClubDetail';
+import getClubDetail from '@/entities/club-detail/api/getClubDetail';
 
 interface ClubDescriptionWidgetProps {
   clubId: number;

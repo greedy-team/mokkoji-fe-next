@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { UserRole } from '@/shared/model/type';
-import UserInfoType from '@/entities/my/model/type';
+import UserInfoType from '@/shared/model/user';
 
 export interface CookieSession {
   accessToken: string;

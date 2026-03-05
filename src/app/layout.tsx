@@ -6,7 +6,7 @@ import WebVitalProvider from '@/_providers/webvital-provider';
 import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
-import { SessionProvider } from 'next-auth/react';
+import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({
@@ -60,7 +60,7 @@ export default function RootLayout({
         <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>
-        <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
+        <AppSessionProvider>
           <ToDoPinProvider>
             <WebVitalProvider />
             <ToastContainer
@@ -73,7 +73,7 @@ export default function RootLayout({
             />
             {children}
           </ToDoPinProvider>
-        </SessionProvider>
+        </AppSessionProvider>
       </body>
     </html>
   );

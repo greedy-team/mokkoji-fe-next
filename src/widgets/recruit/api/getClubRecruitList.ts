@@ -1,7 +1,7 @@
 import { ApiResponse, ClubCategory } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import { RecruitmentResponse } from '../model/type';
 
@@ -14,7 +14,7 @@ async function getClubRecruitList({
   size: number;
   category?: ClubCategory;
 }) {
-  const session = await auth();
+  const session = await getSession();
 
   const rawParams = {
     page,

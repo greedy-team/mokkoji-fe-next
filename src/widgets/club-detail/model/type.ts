@@ -1,8 +1,1 @@
-export interface CommentType {
-  id: number;
-  content: string;
-  rate: number;
-  isModified: boolean;
-  time: string;
-  isWriter: boolean;
-}
+export type { CommentType } from '@/entities/club-detail/model/type'; // eslint-disable-line import/prefer-default-export

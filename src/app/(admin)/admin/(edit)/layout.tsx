@@ -3,7 +3,7 @@ import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
 import AdminHeader from '@/shared/ui/AdminHeader';
 
@@ -31,7 +31,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const session = await getSession();
   const role = session?.role;
 
   if (!role || !ALLOWED_ROLES.includes(role)) {

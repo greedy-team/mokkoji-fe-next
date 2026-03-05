@@ -1,6 +1,6 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import { searchParamsCache } from '@/app/(main)/club/search-params';
+import { searchParamsCache } from '@/shared/lib/club-search-params';
 import NumberPagination from '@/shared/ui/numberPagination';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';

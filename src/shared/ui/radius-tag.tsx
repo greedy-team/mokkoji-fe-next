@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { RecruitStatus } from '@/widgets/club/model/type';
+import { RecruitStatus } from '@/shared/model/type';
 
 export const RecruitStatusLabel: Record<RecruitStatus, string> = {
   OPEN: '모집중',

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/shared/lib/session-context';
 import StarRating from './rating-component';
 import { patchComment } from '../api/postComment';
 

@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
@@ -11,7 +11,7 @@ import MailNotificationToggle from './mail-notification-toggle';
 import LogoutLink from './logout-link';
 
 async function MyPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) {
     return <LoginRequired />;
@@ -24,7 +24,7 @@ async function MyPage() {
   }
 
   const { user } = myInfo.data;
-  const userRole = (session?.user?.role as UserRole) || UserRole.NORMAL;
+  const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
   return (

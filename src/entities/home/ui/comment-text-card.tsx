@@ -1,4 +1,4 @@
-import AnimateOnView from '@/features/home/util/animate-viewport';
+import AnimateOnView from '@/shared/ui/animate-on-view';
 import Image from 'next/image';
 import Link from 'next/link';
 

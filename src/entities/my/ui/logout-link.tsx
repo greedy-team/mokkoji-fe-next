@@ -1,11 +1,15 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function LogoutLink() {
-  const handleLogout = () => {
-    signOut({ callbackUrl: '/' });
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/');
+    router.refresh();
   };
 
   return (

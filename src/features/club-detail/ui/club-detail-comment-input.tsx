@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import LoginModal from '@/widgets/login/ui/login-modal';

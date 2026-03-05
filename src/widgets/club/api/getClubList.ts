@@ -5,7 +5,7 @@ import {
 } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import { ClubsResponse } from '../model/type';
 
@@ -22,7 +22,7 @@ async function getClubList({
   affiliation?: ClubAffiliation;
   keyword?: string;
 }) {
-  const session = await auth();
+  const session = await getSession();
 
   const rawParams: Record<string, string | undefined> = {
     page: String(page),

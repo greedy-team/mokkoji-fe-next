@@ -2,11 +2,7 @@
 
 import 'server-only';
 import ky from 'ky';
-import {
-  getSession,
-  updateSessionToken,
-  deleteSession,
-} from '@/shared/lib/cookie-session';
+import { getSession, updateSessionToken } from '@/shared/lib/cookie-session';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import serverApi from './server-api';
 
@@ -25,32 +21,10 @@ const api = ky.create({
     beforeRequest: [
       async (req) => {
         if (req.headers.get('Authorization')) return;
-
         const session = await getSession();
-        if (!session?.accessToken) return;
-
-        const isExpired = session.expiresAt
-          ? Date.now() >= session.expiresAt
-          : false;
-
-        if (isExpired && session.refreshToken) {
-          try {
-            const newToken = await refreshAccessToken(session.refreshToken);
-            if (newToken) {
-              await updateSessionToken(
-                newToken,
-                getTokenExpiration(newToken) ?? undefined,
-              );
-              req.headers.set('Authorization', `Bearer ${newToken}`);
-              return;
-            }
-          } catch {
-            await deleteSession();
-            return;
-          }
+        if (session?.accessToken) {
+          req.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
-
-        req.headers.set('Authorization', `Bearer ${session.accessToken}`);
       },
     ],
     afterResponse: [
@@ -63,22 +37,21 @@ const api = ky.create({
 
         try {
           const newToken = await refreshAccessToken(session.refreshToken);
-          if (!newToken) {
-            await deleteSession();
-            return response;
-          }
+          if (!newToken) return response;
 
-          await updateSessionToken(
-            newToken,
-            getTokenExpiration(newToken) ?? undefined,
-          );
+          try {
+            await updateSessionToken(
+              newToken,
+              getTokenExpiration(newToken) ?? undefined,
+            );
+          } catch {
+            // RSC에서는 쿠키 수정 불가 — 헤더에만 토큰 사용
+          }
 
           request.headers.set('Authorization', `Bearer ${newToken}`);
           request.headers.set('X-Retry-After-Refresh', 'true');
-
           return await ky(request, options);
         } catch {
-          await deleteSession();
           return response;
         }
       },

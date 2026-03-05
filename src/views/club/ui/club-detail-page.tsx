@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
@@ -26,15 +26,6 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const historiesArray = recruitHistories.ok
     ? (recruitHistories.data?.recruitments ?? [])
     : [];
-
-  if (historiesArray.length > 0) {
-    if (!(await searchParams).rid) {
-      const queryString = new URLSearchParams();
-      queryString.set('rid', String(recent.data.id));
-      if (tab !== 'recruit') queryString.set('tab', tab);
-      redirect(`/club/${id}?${queryString.toString()}`);
-    }
-  }
 
   const recruitmentId = Number(rid) || recent.data.id;
   const selected = await getRecruitDetail(recruitmentId);

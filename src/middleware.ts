@@ -1,51 +1,129 @@
-// middleware.ts
-import { auth as middleware } from '@/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { publicRoutes } from '../route';
 
-export default middleware(async (req) => {
-  const { nextUrl, auth } = req;
-  const session = auth as { user?: unknown; error?: string } | null;
-  const hasSessionError = session?.error === 'RefreshTokenExpired';
-  const isLoggedIn = !!session?.user && !hasSessionError;
-  const userAgent = req.headers.get('user-agent') || '';
-  const isMobile =
-    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+const SESSION_COOKIE_NAME = 'app-session';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const isPublicRoute = publicRoutes.some((route) => {
+const SESSION_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax' as const,
+  path: '/',
+  maxAge: 60 * 60 * 24 * 3,
+};
+
+interface SessionPayload {
+  accessToken?: string;
+  refreshToken?: string;
+  expiresAt?: number;
+  [key: string]: unknown;
+}
+
+function parseSession(raw: string | undefined): SessionPayload | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(decodeURIComponent(raw));
+  } catch {
+    return null;
+  }
+}
+
+function getTokenExpiration(token: string): number | null {
+  try {
+    const [, payload] = token.split('.');
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = JSON.parse(atob(base64));
+    return decoded.exp ? decoded.exp * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
+async function refreshAccessToken(
+  refreshToken: string,
+): Promise<string | null> {
+  try {
+    const baseUrl = API_URL?.endsWith('/') ? API_URL : `${API_URL}/`;
+    const res = await fetch(`${baseUrl}users/auth/refresh`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${refreshToken}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.data?.accessToken ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function isPublicPath(pathname: string) {
+  return publicRoutes.some((route) => {
     if (route.endsWith('/:path*')) {
-      const base = route.replace('/:path*', '');
-      return nextUrl.pathname.startsWith(base);
+      return pathname.startsWith(route.replace('/:path*', ''));
     }
-    return route === nextUrl.pathname;
+    return route === pathname;
   });
+}
+
+export default async function middleware(req: NextRequest) {
+  const { nextUrl } = req;
+  const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)?.value;
+  let session = parseSession(sessionCookie);
+  let sessionUpdated = false;
+
+  const isExpired = session?.expiresAt
+    ? Date.now() >= session.expiresAt
+    : false;
+
+  // 토큰 만료 + refreshToken 존재 → 미들웨어에서 갱신
+  if (session && isExpired && session.refreshToken) {
+    const newToken = await refreshAccessToken(session.refreshToken);
+    if (newToken) {
+      session = {
+        ...session,
+        accessToken: newToken,
+        expiresAt: getTokenExpiration(newToken) ?? undefined,
+      };
+      sessionUpdated = true;
+    } else {
+      session = null;
+      sessionUpdated = true;
+    }
+  }
+
+  const isNowLoggedIn = !!session?.accessToken;
+  const isPublic = isPublicPath(nextUrl.pathname);
 
   let response: NextResponse;
 
-  //   /**
-  //    * 1) 로그인했을 때 다시 가면 안되는 페이지 (login, signup 등)
-  //    */
-  //   if (isAuthRoute) {
-  //     if (isLoggedIn) {
-  //       return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  //     }
-  //     return NextResponse.next();
-  //   }
-
-  // 리프레시 토큰 만료 시 세션 쿠키 삭제 (자동 로그아웃)
-  if (hasSessionError) {
-    response = isPublicRoute
+  if (session && isExpired && !session.refreshToken && !sessionUpdated) {
+    response = isPublic
       ? NextResponse.next()
       : NextResponse.redirect(new URL('/', nextUrl));
-
-    response.cookies.delete('authjs.session-token');
-    response.cookies.delete('__Secure-authjs.session-token');
-  } else if (!isLoggedIn && !isPublicRoute) {
+    response.cookies.delete(SESSION_COOKIE_NAME);
+  } else if (!isNowLoggedIn && !isPublic) {
     response = NextResponse.redirect(new URL('/', nextUrl));
   } else {
     response = NextResponse.next();
   }
 
+  // 갱신된 세션 쿠키 저장 (response → 브라우저, request 전파 → RSC)
+  if (sessionUpdated) {
+    if (session) {
+      const cookieValue = encodeURIComponent(JSON.stringify(session));
+      response.cookies.set(
+        SESSION_COOKIE_NAME,
+        cookieValue,
+        SESSION_COOKIE_OPTIONS,
+      );
+    } else {
+      response.cookies.delete(SESSION_COOKIE_NAME);
+    }
+  }
+
+  const userAgent = req.headers.get('user-agent') || '';
+  const isMobile =
+    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
   const currentDeviceCookie = req.cookies.get('x-device-type')?.value;
   const targetDevice = isMobile ? 'mobile' : 'desktop';
 
@@ -58,7 +136,7 @@ export default middleware(async (req) => {
   }
 
   return response;
-});
+}
 
 export const config = {
   matcher: [

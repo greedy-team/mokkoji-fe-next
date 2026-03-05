@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import FavoriteItem from '@/entities/favorite/ui/favorite-item';
-import { SessionProvider } from 'next-auth/react';
+import { AppSessionProvider } from '@/shared/lib/session-context';
 
 const meta: Meta<typeof FavoriteItem> = {
   title: 'molecules/FavoriteItem',
@@ -8,17 +8,9 @@ const meta: Meta<typeof FavoriteItem> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <SessionProvider
-        session={{
-          user: {
-            name: '홍길동',
-            email: 'test@example.com',
-          },
-          expires: '2099-01-01T00:00:00.000Z',
-        }}
-      >
+      <AppSessionProvider>
         <Story />
-      </SessionProvider>
+      </AppSessionProvider>
     ),
   ],
   args: {

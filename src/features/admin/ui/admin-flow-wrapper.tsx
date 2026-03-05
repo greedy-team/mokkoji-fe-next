@@ -1,9 +1,9 @@
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import getClubManageInfo from '@/shared/api/manage-api';
 import AdminFlowContainer from './admin-flow-container';
 
 async function AdminFlowWrapper() {
-  const session = await auth();
+  const session = await getSession();
   const role = session?.role;
   const response = await getClubManageInfo({ role });
   const allowedClubs = response.data?.clubs || [];

@@ -3,10 +3,29 @@ import { publicRoutes } from '../route';
 
 const SESSION_COOKIE_NAME = 'app-session';
 
+function parseSession(raw: string | undefined) {
+  if (!raw) return null;
+  try {
+    return JSON.parse(decodeURIComponent(raw)) as {
+      accessToken?: string;
+      refreshToken?: string;
+      expiresAt?: number;
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)?.value;
-  const isLoggedIn = !!sessionCookie;
+  const session = parseSession(sessionCookie);
+
+  const isExpired = session?.expiresAt
+    ? Date.now() >= session.expiresAt
+    : false;
+  const isLoggedIn = !!session?.accessToken && !isExpired;
+
   const userAgent = req.headers.get('user-agent') || '';
   const isMobile =
     /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
@@ -21,7 +40,12 @@ export default function middleware(req: NextRequest) {
 
   let response: NextResponse;
 
-  if (!isLoggedIn && !isPublicRoute) {
+  if (session && isExpired && !session.refreshToken) {
+    response = isPublicRoute
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL('/', nextUrl));
+    response.cookies.delete(SESSION_COOKIE_NAME);
+  } else if (!isLoggedIn && !isPublicRoute) {
     response = NextResponse.redirect(new URL('/', nextUrl));
   } else {
     response = NextResponse.next();

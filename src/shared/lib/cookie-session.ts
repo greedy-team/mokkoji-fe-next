@@ -36,4 +36,32 @@ export function buildSessionCookie(session: CookieSession) {
   };
 }
 
+export async function updateSessionToken(
+  newAccessToken: string,
+  newExpiresAt?: number,
+) {
+  const session = await getSession();
+  if (!session) return;
+
+  const cookieStore = await cookies();
+  const updated: CookieSession = {
+    ...session,
+    accessToken: newAccessToken,
+    expiresAt: newExpiresAt,
+  };
+  const cookie = buildSessionCookie(updated);
+  cookieStore.set(cookie.name, cookie.value, {
+    httpOnly: cookie.httpOnly,
+    secure: cookie.secure,
+    sameSite: cookie.sameSite,
+    path: cookie.path,
+    maxAge: cookie.maxAge,
+  });
+}
+
+export async function deleteSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
+}
+
 export { SESSION_COOKIE_NAME };

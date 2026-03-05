@@ -2,91 +2,83 @@
 
 import 'server-only';
 import ky from 'ky';
-import { getSession } from '@/shared/lib/cookie-session';
+import {
+  getSession,
+  updateSessionToken,
+  deleteSession,
+} from '@/shared/lib/cookie-session';
+import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import serverApi from './server-api';
+
+async function refreshAccessToken(refreshToken: string) {
+  const refreshResponse = await serverApi.post('users/auth/refresh', {
+    headers: { Authorization: `Bearer ${refreshToken}` },
+  });
+  const refreshData: { data: { accessToken: string } } =
+    await refreshResponse.json();
+  return refreshData.data?.accessToken ?? null;
+}
 
 const api = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   hooks: {
     beforeRequest: [
       async (req) => {
-        if (!req.headers.get('Authorization')) {
-          const session = await getSession();
+        if (req.headers.get('Authorization')) return;
 
-          if (!session?.accessToken) return;
+        const session = await getSession();
+        if (!session?.accessToken) return;
 
-          const isExpired = session.expiresAt
-            ? Date.now() >= (session.expiresAt as number)
-            : false;
+        const isExpired = session.expiresAt
+          ? Date.now() >= session.expiresAt
+          : false;
 
-          if (isExpired && session.refreshToken) {
-            try {
-              const refreshResponse = await serverApi.post(
-                'users/auth/refresh',
-                {
-                  headers: {
-                    Authorization: `Bearer ${session.refreshToken}`,
-                  },
-                },
+        if (isExpired && session.refreshToken) {
+          try {
+            const newToken = await refreshAccessToken(session.refreshToken);
+            if (newToken) {
+              await updateSessionToken(
+                newToken,
+                getTokenExpiration(newToken) ?? undefined,
               );
-              const refreshData: { data: { accessToken: string } } =
-                await refreshResponse.json();
-
-              if (refreshData.data?.accessToken) {
-                req.headers.set(
-                  'Authorization',
-                  `Bearer ${refreshData.data.accessToken}`,
-                );
-                return;
-              }
-            } catch {
-              // 갱신 실패 시 afterResponse에서 처리
+              req.headers.set('Authorization', `Bearer ${newToken}`);
+              return;
             }
+          } catch {
+            await deleteSession();
+            return;
           }
-
-          req.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
+
+        req.headers.set('Authorization', `Bearer ${session.accessToken}`);
       },
     ],
     afterResponse: [
       async (request, options, response) => {
         if (response.status !== 401) return response;
-
-        // 이미 재시도한 요청이면 무한 루프 방지
-        if (request.headers.get('X-Retry-After-Refresh')) {
-          return response;
-        }
+        if (request.headers.get('X-Retry-After-Refresh')) return response;
 
         const session = await getSession();
-
-        // 리프레시 토큰 만료됐으면 시도하지 않음
-        if (!session?.refreshToken) {
-          return response;
-        }
+        if (!session?.refreshToken) return response;
 
         try {
-          const refreshResponse = await serverApi.post('users/auth/refresh', {
-            headers: {
-              Authorization: `Bearer ${session.refreshToken}`,
-            },
-          });
-
-          const refreshData: { data: { accessToken: string } } =
-            await refreshResponse.json();
-
-          if (!refreshData.data?.accessToken) {
+          const newToken = await refreshAccessToken(session.refreshToken);
+          if (!newToken) {
+            await deleteSession();
             return response;
           }
 
-          request.headers.set(
-            'Authorization',
-            `Bearer ${refreshData.data.accessToken}`,
+          await updateSessionToken(
+            newToken,
+            getTokenExpiration(newToken) ?? undefined,
           );
+
+          request.headers.set('Authorization', `Bearer ${newToken}`);
           request.headers.set('X-Retry-After-Refresh', 'true');
 
           return await ky(request, options);
         } catch {
-          // 리프레시 실패 시 원래 401 응답 반환
+          await deleteSession();
           return response;
         }
       },

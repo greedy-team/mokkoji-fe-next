@@ -75,20 +75,23 @@ export default async function middleware(req: NextRequest) {
     ? Date.now() >= session.expiresAt
     : false;
 
-  // 토큰 만료 + refreshToken 존재 → 미들웨어에서 갱신
-  if (session && isExpired && session.refreshToken) {
-    const newToken = await refreshAccessToken(session.refreshToken);
-    if (newToken) {
-      session = {
-        ...session,
-        accessToken: newToken,
-        expiresAt: getTokenExpiration(newToken) ?? undefined,
-      };
-      sessionUpdated = true;
+  // 만료된 세션 처리: refresh 시도 또는 세션 제거
+  if (session && isExpired) {
+    if (session.refreshToken) {
+      const newToken = await refreshAccessToken(session.refreshToken);
+      if (newToken) {
+        session = {
+          ...session,
+          accessToken: newToken,
+          expiresAt: getTokenExpiration(newToken) ?? undefined,
+        };
+      } else {
+        session = null;
+      }
     } else {
       session = null;
-      sessionUpdated = true;
     }
+    sessionUpdated = true;
   }
 
   const isNowLoggedIn = !!session?.accessToken;
@@ -96,12 +99,7 @@ export default async function middleware(req: NextRequest) {
 
   let response: NextResponse;
 
-  if (session && isExpired && !session.refreshToken && !sessionUpdated) {
-    response = isPublic
-      ? NextResponse.next()
-      : NextResponse.redirect(new URL('/', nextUrl));
-    response.cookies.delete(SESSION_COOKIE_NAME);
-  } else if (!isNowLoggedIn && !isPublic) {
+  if (!isNowLoggedIn && !isPublic) {
     response = NextResponse.redirect(new URL('/', nextUrl));
   } else {
     response = NextResponse.next();

@@ -3,7 +3,7 @@ import { ApiResponse } from '@/shared/model/type';
 import { ClubsResponse } from '@/widgets/club/model/type';
 import serverApi from '@/shared/api/server-api';
 
-const BASE_URL = 'https://www.mokkoji.site';
+const BASE_URL = 'https://mokkoji.site';
 
 async function getAllClubIds(): Promise<number[]> {
   try {

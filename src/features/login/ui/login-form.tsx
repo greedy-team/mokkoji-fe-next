@@ -59,7 +59,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         toast.error('학번 또는 비밀번호를 확인해주세요.');
         return;
       }
-      router.refresh();
+      window.location.reload();
     } catch {
       toast.error('로그인 중 오류가 발생했습니다.');
     } finally {

@@ -28,7 +28,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/');
-    router.refresh();
+    window.location.reload();
   };
 
   return (

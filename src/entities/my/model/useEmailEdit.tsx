@@ -3,9 +3,9 @@ import { toast } from 'react-toastify';
 import putEmail from '../api/putEmail';
 
 function useEmailEdit(initialEmail?: string) {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -18,7 +18,7 @@ function useEmailEdit(initialEmail?: string) {
 
   const resetState = () => {
     setEmail(initialEmail ?? '');
-    setSubmitting(false);
+    setIsSubmitting(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -29,24 +29,24 @@ function useEmailEdit(initialEmail?: string) {
     if (!isValidEmail) {
       return;
     }
-    setSubmitting(true);
+    setIsSubmitting(true);
     const response = await putEmail(email);
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
     toast.success(response.message);
-    setOpen(false);
+    setIsDialogOpen(false);
 
-    setSubmitting(false);
+    setIsSubmitting(false);
   };
 
   return {
-    open,
-    setOpen,
+    isDialogOpen,
+    setIsDialogOpen,
     email,
     setEmail,
-    submitting,
+    isSubmitting,
     isValidEmail,
     helperText,
     resetState,

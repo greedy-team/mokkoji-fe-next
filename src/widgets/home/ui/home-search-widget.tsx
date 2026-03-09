@@ -1,10 +1,10 @@
-import HomeBody from '@/entities/home/ui/home-body';
+import HomeSearchBar from '@/entities/home/ui/home-body';
 import HomeKeywordList from '@/entities/home/ui/home-keyword-list';
 
 function HomeSearchWidget() {
   return (
     <>
-      <HomeBody />
+      <HomeSearchBar />
       <HomeKeywordList />
     </>
   );

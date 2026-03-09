@@ -2,11 +2,10 @@
 
 import Link from 'next/link';
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
-import LoginModal from '@/widgets/login/ui/login-modal';
 import useClickOutside from '@/shared/model/useClickOutside';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 import {
   ChevronIcon,
   UserIcon,
@@ -18,17 +17,15 @@ interface HeaderLoginProps {
 }
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
-  const router = useRouter();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(dropdownRef, () => setShowDropdown(false));
+  useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/');
-    window.location.reload();
+    window.location.href = '/';
   };
 
   return (
@@ -38,7 +35,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
           <Button
             variant="none"
             size="none"
-            onClick={() => setShowDropdown((prev) => !prev)}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
             className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-all hover:bg-[#e6e6e6]"
           >
             <Image
@@ -47,10 +44,10 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               width={21}
               height={22}
             />
-            <ChevronIcon isOpen={showDropdown} />
+            <ChevronIcon isOpen={isDropdownOpen} />
           </Button>
 
-          {showDropdown && (
+          {isDropdownOpen && (
             <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
               <Button variant="dropdownItem" size="none" asChild>
                 <Link href="/my">
@@ -75,15 +72,11 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
           <button
-            onClick={() => setIsLoginOpen(true)}
+            onClick={openLoginModal}
             className="cursor-pointer whitespace-nowrap"
           >
             로그인
           </button>
-          <LoginModal
-            open={isLoginOpen}
-            onClose={() => setIsLoginOpen(false)}
-          />
         </div>
       )}
     </span>

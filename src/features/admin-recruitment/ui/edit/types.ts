@@ -1,6 +1,6 @@
-import { ClubRecruitments } from '@/views/club/model/type';
+import { ClubRecruitments } from '@/entities/club-detail/model/type';
 
-export type EditStep = 'selectPost' | 'basicInfo' | 'postinfo' | 'complete';
+export type EditStep = 'selectPost' | 'basicInfo' | 'postInfo' | 'complete';
 
 export interface EditFlowState {
   currentStep: EditStep;

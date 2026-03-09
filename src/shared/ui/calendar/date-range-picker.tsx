@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import cn from '@/shared/lib/utils';
-import CalenderBody from './calender-body';
-import useCalender from './useCalender';
+import CalendarBody from './calendar-body';
+import useCalendar from './useCalendar';
 import {
   formatDateWithTime,
   formatDateInput,
@@ -50,18 +50,18 @@ function DateRangePicker({
   endDateRef.current = endDate;
 
   const {
-    isCalenderOpen,
-    isCalenderClosing,
+    isCalendarOpen,
+    isCalendarClosing,
     calendarRef,
-    closeCalender,
-    openCalender,
+    closeCalendar,
+    openCalendar,
     timeEnabled,
     setTimeEnabled,
     startTime,
     endTime,
     setStartTime,
     setEndTime,
-  } = useCalender({
+  } = useCalendar({
     startDate,
     endDate,
     onStartDateChange,
@@ -108,7 +108,7 @@ function DateRangePicker({
 
   const handleEndInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && isValidDateFormat(endInputValue)) {
-      closeCalender();
+      closeCalendar();
       endInputRef.current?.blur();
       onRangeComplete?.();
     }
@@ -116,12 +116,12 @@ function DateRangePicker({
 
   const handleStartInputFocus = () => {
     setFocusedField('start');
-    openCalender();
+    openCalendar();
   };
 
   const handleEndInputFocus = () => {
     setFocusedField('end');
-    openCalender();
+    openCalendar();
   };
 
   const handleDateSelect = (selectedDate: Date) => {
@@ -255,21 +255,21 @@ function DateRangePicker({
         </div>
       )}
 
-      {isCalenderOpen && (
+      {isCalendarOpen && (
         <div
           className={cn(
             'absolute z-50 mt-1 min-w-full origin-top rounded-lg border bg-white p-4 text-center shadow-2xl',
-            isCalenderClosing ? 'animate-scale-out' : 'animate-scale-in',
+            isCalendarClosing ? 'animate-scale-out' : 'animate-scale-in',
             variant === 'light'
               ? 'bg-white text-black'
               : 'bg-[#1B1B1B] text-white',
           )}
         >
-          <CalenderBody
+          <CalendarBody
             onDateSelect={handleDateSelect}
             startDate={startDate}
             endDate={endDate}
-            onClose={closeCalender}
+            onClose={closeCalendar}
             timeEnabled={timeEnabled}
             onTimeEnabledChange={setTimeEnabled}
             startTime={startTime}

@@ -1,9 +1,9 @@
 'use server';
 
 import api from '@/shared/api/auth-api';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
-import { EditResponse } from '../model/type';
+import { ClubEditResponse } from '../model/type';
 
 interface ClubRegisterRequest {
   name: string;
@@ -30,20 +30,20 @@ export async function postClubRegister(data: ClubRegisterRequest) {
 
     return { ok: true, message: '등록이 완료되었습니다.', status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 
 export async function patchClubInfo(
   clubId: number,
   data: ClubUpdateRequest,
-): Promise<EditResponse> {
+): Promise<ClubEditResponse> {
   try {
     const response = await api.patch(`clubs/manage/${clubId}`, {
       json: data,
     });
 
-    const payload = await response.json<EditResponse['data']>();
+    const payload = await response.json<ClubEditResponse['data']>();
 
     revalidateTag('clubs');
 
@@ -54,6 +54,6 @@ export async function patchClubInfo(
       status: 200,
     };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }

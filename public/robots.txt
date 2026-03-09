@@ -3,4 +3,4 @@ Disallow: /search
 Disallow: /club-register
 Disallow: /post-recruitment
 
-Sitemap: https://www.mokkoji.site/sitemap.xml
+Sitemap: https://mokkoji.site/sitemap.xml

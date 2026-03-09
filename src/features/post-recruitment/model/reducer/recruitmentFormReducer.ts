@@ -1,7 +1,7 @@
 import validateField from '../../util/validateField';
-import { Action, StateProp } from '../type';
+import { RecruitmentFormAction, RecruitmentFormState } from '../type';
 
-export const initialState: StateProp = {
+export const initialState: RecruitmentFormState = {
   formData: {
     title: '',
     imageNames: [],
@@ -13,7 +13,10 @@ export const initialState: StateProp = {
   errors: {},
 };
 
-export default function reducer(state: StateProp, action: Action): StateProp {
+export default function recruitmentFormReducer(
+  state: RecruitmentFormState,
+  action: RecruitmentFormAction,
+): RecruitmentFormState {
   switch (action.type) {
     case 'UPDATE_FIELD': {
       const { name, value } = action;

@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { WEEKDAYS } from './constants';
 import getDateGrid from './getDateGrid';
 import TimePicker from './time-picker';
-import type { TimeValue } from './useCalender';
+import type { TimeValue } from './useCalendar';
 
-interface CalenderBodyProps {
+interface CalendarBodyProps {
   onDateSelect: (date: Date) => void;
   startDate: string | null;
   endDate: string | null;
@@ -22,7 +22,7 @@ interface CalenderBodyProps {
   variant?: 'dark' | 'light';
 }
 
-function CalenderBody({
+function CalendarBody({
   onDateSelect,
   startDate,
   endDate,
@@ -34,7 +34,7 @@ function CalenderBody({
   onStartTimeChange,
   onEndTimeChange,
   variant = 'light',
-}: CalenderBodyProps) {
+}: CalendarBodyProps) {
   const [currentDate, setCurrentDateState] = useState(new Date());
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   const currentYear = currentDate.getFullYear();
@@ -187,8 +187,8 @@ function CalenderBody({
         endTime={endTime}
         onStartTimeChange={onStartTimeChange}
         onEndTimeChange={onEndTimeChange}
-        hasStartDate={!!startDate}
-        hasEndDate={!!endDate}
+        isStartDateSelected={!!startDate}
+        isEndDateSelected={!!endDate}
         variant={variant}
       />
       <button
@@ -202,4 +202,4 @@ function CalenderBody({
   );
 }
 
-export default CalenderBody;
+export default CalendarBody;

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-function HomeBody() {
+function HomeSearchBar() {
   return (
     <div className="mb-5 flex flex-col items-center py-5 lg:mb-[15px]">
       <div className="group relative w-[65%] lg:w-[80%]">
@@ -33,4 +33,4 @@ function HomeBody() {
   );
 }
 
-export default HomeBody;
+export default HomeSearchBar;

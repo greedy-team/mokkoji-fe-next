@@ -1,6 +1,6 @@
 import { HTTPError } from 'ky';
 
-function ErrorMessage(error: Error) {
+function getHttpErrorMessage(error: Error) {
   if (error instanceof HTTPError) {
     switch (error.response.status) {
       case 400:
@@ -22,12 +22,15 @@ function ErrorMessage(error: Error) {
   return '알 수 없는 오류가 발생했습니다. 다시 시도해주세요.';
 }
 
-interface ErrorHandlerArray {
+interface CustomErrorMapping {
   status: number;
   message: string;
 }
 
-function ErrorHandler(error: Error, customErrArray?: ErrorHandlerArray[]) {
+function createErrorResponse(
+  error: Error,
+  customErrArray?: CustomErrorMapping[],
+) {
   if (error instanceof HTTPError) {
     if (customErrArray) {
       const customMessage = customErrArray.find(
@@ -35,14 +38,14 @@ function ErrorHandler(error: Error, customErrArray?: ErrorHandlerArray[]) {
       );
       return {
         ok: false,
-        message: customMessage?.message || ErrorMessage(error),
+        message: customMessage?.message || getHttpErrorMessage(error),
         data: undefined,
         status: error.response.status,
       };
     }
     return {
       ok: false,
-      message: ErrorMessage(error),
+      message: getHttpErrorMessage(error),
       data: undefined,
       status: error.response.status,
     };
@@ -55,4 +58,4 @@ function ErrorHandler(error: Error, customErrArray?: ErrorHandlerArray[]) {
   };
 }
 
-export default ErrorHandler;
+export default createErrorResponse;

@@ -8,7 +8,7 @@ import {
   GetClubManageInfoResponse,
   UserRole,
 } from '../model/type';
-import ErrorHandler from '../lib/error-message';
+import createErrorResponse from '../lib/error-message';
 
 interface ClubManageInfoProps {
   role: UserRole | undefined;
@@ -43,8 +43,8 @@ export default async function getClubManageInfo({ role }: ClubManageInfoProps) {
       .json<ApiResponse<GetClubManageInfoResponse>>();
 
     return { ok: true, message: '성공', data: response.data, status: 200 };
-  } catch (err) {
-    return ErrorHandler(err as Error);
+  } catch (error) {
+    return createErrorResponse(error as Error);
   }
 }
 
@@ -53,7 +53,7 @@ export async function getClubInfo(clubId: number) {
     const response = await api.get(`clubs/${clubId}`).json<ClubInfoResponse>();
 
     return { ok: true, message: '성공', data: response.data };
-  } catch (err) {
-    return ErrorHandler(err as Error);
+  } catch (error) {
+    return createErrorResponse(error as Error);
   }
 }

@@ -1,4 +1,4 @@
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import getDaysLeftFromToday from '@/entities/favorite/util/get-days-left-from-today';
 
 function remainingText(daysLeft: number) {

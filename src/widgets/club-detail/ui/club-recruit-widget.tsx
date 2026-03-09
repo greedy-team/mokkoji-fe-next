@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
-import { ClubRecruitments } from '@/views/club/model/type';
+import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import NavigateRecruitForm from '@/features/club-detail/ui/navigate-recruit-form';
 import { RecruitStatus } from '@/shared/model/type';
 
@@ -21,14 +21,14 @@ interface RecruitDetail {
 interface ClubRecruitWidgetProps {
   clubId: number;
   recruitHistories: ClubRecruitments[];
-  rid: number;
+  selectedRecruitmentId: number;
   recruitDetail: RecruitDetail;
 }
 
 function ClubRecruitWidget({
   clubId,
   recruitHistories,
-  rid,
+  selectedRecruitmentId,
   recruitDetail,
 }: ClubRecruitWidgetProps) {
   const recruitHistoryRef = useRef<HTMLDivElement>(null);
@@ -69,13 +69,13 @@ function ClubRecruitWidget({
         content={recruitDetail.content}
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
-        recentRid={recruitHistories[0]?.id ?? rid}
+        recentRecruitId={recruitHistories[0]?.id ?? selectedRecruitmentId}
       />
       <div ref={recruitHistoryRef}>
         <RecruitHistorySection
           clubId={clubId}
           recruitHistories={recruitHistories}
-          selectedRid={rid}
+          selectedRecruitId={selectedRecruitmentId}
         />
       </div>
       {mounted && (

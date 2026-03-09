@@ -30,7 +30,7 @@ function LoginWidget() {
         open={open}
         setOpen={setOpen}
       />
-      <LoginForm confirmed={confirmed} setOpen={setOpen} />
+      <LoginForm isTermsConfirmed={confirmed} onTermsModalOpen={setOpen} />
     </>
   );
 }

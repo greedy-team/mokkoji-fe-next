@@ -23,8 +23,8 @@ interface TimePickerProps {
     minute: number;
     second: number;
   }) => void;
-  hasStartDate: boolean;
-  hasEndDate: boolean;
+  isStartDateSelected: boolean;
+  isEndDateSelected: boolean;
   variant?: 'dark' | 'light';
 }
 
@@ -35,8 +35,8 @@ function TimePicker({
   endTime,
   onStartTimeChange,
   onEndTimeChange,
-  hasStartDate,
-  hasEndDate,
+  isStartDateSelected,
+  isEndDateSelected,
   variant = 'light',
 }: TimePickerProps) {
   const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -46,14 +46,14 @@ function TimePicker({
   const timeConfigs = [
     {
       label: '시작 시간',
-      show: hasStartDate,
+      show: isStartDateSelected,
       time: startTime,
       onChange: onStartTimeChange,
       defaults: { hour: 0, minute: 0, second: 0 },
     },
     {
       label: '마감 시간',
-      show: hasEndDate,
+      show: isEndDateSelected,
       time: endTime,
       onChange: onEndTimeChange,
       defaults: { hour: 23, minute: 59, second: 59 },

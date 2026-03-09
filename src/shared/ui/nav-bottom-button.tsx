@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 
 interface NavBottomButtonProps {
   label: string;
-  navProps?: string;
+  className?: string;
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   onItemClick?: MouseEventHandler<HTMLAnchorElement>;
@@ -15,7 +15,7 @@ interface NavBottomButtonProps {
 
 function NavBottomButton({
   label,
-  navProps,
+  className,
   href,
   icon: Icon,
   onItemClick,
@@ -32,7 +32,7 @@ function NavBottomButton({
       onClick={onItemClick}
       className={clsx(
         'relative z-[70] flex h-full flex-1 flex-col items-center justify-center gap-[10px] text-[10px] font-medium no-underline transition-colors duration-500',
-        navProps,
+        className,
         active ? 'text-[#29D66B]' : 'text-[#A6A6A6]',
       )}
     >

@@ -1,8 +1,7 @@
 'use server';
 
 import api from '@/shared/api/auth-api';
-import ErrorHandler from '@/shared/lib/error-message';
-import { revalidateTag } from 'next/cache';
+import createErrorResponse from '@/shared/lib/error-message';
 
 export async function postComment(
   clubId: number,
@@ -15,10 +14,9 @@ export async function postComment(
         json: { content, rate },
       })
       .json();
-    revalidateTag(`comments/${clubId}`);
     return { ok: true, message: '댓글이 등록되었습니다.', status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error, [
+    return createErrorResponse(e as Error, [
       { status: 403, message: '댓글은 1개만 등록할 수 있습니다.' },
     ]);
   }
@@ -39,19 +37,17 @@ export async function patchComment(
         },
       })
       .json();
-    revalidateTag(`comments/${clubId}`);
     return { ok: true, message: '댓글이 수정되었습니다.', status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 
 export async function deleteComment(clubId: number, commentId: number) {
   try {
     await api.delete(`comments/${commentId}`);
-    revalidateTag(`comments/${clubId}`);
     return { ok: true, message: '댓글이 삭제되었습니다.', status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }

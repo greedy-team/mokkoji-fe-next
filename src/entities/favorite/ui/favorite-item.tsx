@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FavoriteButton from '@/shared/ui/favorite-button';
 import RadiusTag from '@/shared/ui/radius-tag';
 
-interface ClubItemProps {
+interface FavoriteItemProps {
   title: string;
   description?: string;
   isFavorite?: boolean;
@@ -28,7 +28,7 @@ function FavoriteItem({
   recruitEndDate,
   status,
   isAlwaysRecruiting,
-}: ClubItemProps) {
+}: FavoriteItemProps) {
   return (
     <div className="relative flex min-h-[140px] w-[100%] flex-col gap-2 rounded-lg bg-[#F8F8F8] px-5 py-8 text-[#474747] transition-shadow duration-300 hover:shadow-[0_0_20px_1px_rgba(0,0,0,0.2)] lg:min-h-[198px] lg:w-auto lg:p-5">
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">

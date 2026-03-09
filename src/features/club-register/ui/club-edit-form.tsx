@@ -13,12 +13,14 @@ import getKeyByValue from '@/shared/lib/getKeyByValue';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
-import { ClubFormData, FormField } from '../model/type';
+import { ClubFormData, ClubRegisterFormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
 import isFormValid from '../util/isFormValid';
-import reducer, { initialState } from '../model/reducer/clubFormReducer';
+import clubRegisterFormReducer, {
+  initialState,
+} from '../model/reducer/clubFormReducer';
 
-const fields: FormField[] = [
+const fields: ClubRegisterFormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
   { label: '카테고리', name: 'category', type: 'options' },
   { label: '소속', name: 'affiliation', type: 'options' },
@@ -34,7 +36,7 @@ interface ClubInfoProp {
 function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(clubRegisterFormReducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const router = useRouter();
@@ -134,7 +136,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   return (
     <SafeForm
       onSubmit={onSubmit}
-      title="등록하기"
+      submitLabel="등록하기"
       disabled={!isValid}
       formClassName="flex flex-col gap-4"
     >

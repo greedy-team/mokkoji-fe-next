@@ -7,7 +7,7 @@ import { Button } from './button';
 interface SafeFormProps {
   children: React.ReactNode;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  title: string;
+  submitLabel: string;
   disabled?: boolean;
   buttonClassName?: string;
   formClassName?: string;
@@ -16,13 +16,13 @@ interface SafeFormProps {
 function SafeForm({
   children,
   onSubmit,
-  title,
+  submitLabel,
   disabled,
   buttonClassName,
   formClassName,
 }: SafeFormProps) {
   const isLoadingRef = useRef(false);
-  const [reRender, setReRender] = useState(false);
+  const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
 
   return (
     <form
@@ -33,10 +33,10 @@ function SafeForm({
           return;
         }
         isLoadingRef.current = true;
-        setReRender((prev) => !prev);
+        setForceUpdateToggle((prev) => !prev);
         await onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
         isLoadingRef.current = false;
-        setReRender((prev) => !prev);
+        setForceUpdateToggle((prev) => !prev);
       }}
     >
       {children}
@@ -48,7 +48,7 @@ function SafeForm({
           disabled={isLoadingRef.current || disabled}
           className={buttonClassName}
         >
-          {title}
+          {submitLabel}
         </Button>
       )}
     </form>

@@ -20,16 +20,16 @@ const CATEGORY_MAP: Record<string, ClubCategory> = {
 async function SearchResults({ keyword, category }: SearchResultsProps) {
   const safeCategory = category ? CATEGORY_MAP[category] : undefined;
 
-  const result = await searchClubs({
+  const searchResponse = await searchClubs({
     keyword,
     category: safeCategory,
     page: 1,
     size: 10,
   });
 
-  if (!result.ok || !result.data) return <ErrorBoundaryUi />;
+  if (!searchResponse.ok || !searchResponse.data) return <ErrorBoundaryUi />;
 
-  const { clubs } = result.data;
+  const { clubs } = searchResponse.data;
 
   return (
     <main className="flex w-[85%] flex-col lg:w-[43%]">

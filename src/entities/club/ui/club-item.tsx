@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
-import { RecruitStatus } from '@/widgets/club/model/type';
+import { RecruitStatus } from '@/shared/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
 import PeriodSection from '../../club-detail/ui/period-section';
 
@@ -11,7 +11,7 @@ interface ClubItemProps {
   startDate?: string;
   endDate?: string;
   description: string;
-  favorite: boolean;
+  isFavorite: boolean;
   logo?: string;
   id: number;
   recruitStatus?: RecruitStatus;
@@ -24,7 +24,7 @@ function ClubItem({
   startDate,
   endDate,
   description,
-  favorite,
+  isFavorite,
   logo,
   id,
   recruitStatus,
@@ -50,7 +50,7 @@ function ClubItem({
               </h1>
 
               <FavoriteButton
-                isFavorite={favorite}
+                isFavorite={isFavorite}
                 clubId={id}
                 customClass="scale-100 mt-1"
               />

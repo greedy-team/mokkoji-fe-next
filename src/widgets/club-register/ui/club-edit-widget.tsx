@@ -5,13 +5,13 @@ import { DetailParams } from '@/shared/model/type';
 
 async function ClubEditWidget({ params }: DetailParams) {
   const { id } = await params;
-  const res = await getClubInfo(Number(id));
+  const clubInfoResponse = await getClubInfo(Number(id));
 
-  if (!res.ok) {
+  if (!clubInfoResponse.ok) {
     return <ErrorBoundaryUi />;
   }
 
-  return <ClubEditForm clubInfo={res.data} clubId={Number(id)} />;
+  return <ClubEditForm clubInfo={clubInfoResponse.data} clubId={Number(id)} />;
 }
 
 export default ClubEditWidget;

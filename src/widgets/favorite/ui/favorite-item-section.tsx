@@ -5,16 +5,19 @@ import FavoriteItemList from './favorite-item-list';
 const MAX_FAVORITE_SIZE = 100;
 
 async function FavoriteItemSection() {
-  const data = await getFavoriteList({ page: 1, size: MAX_FAVORITE_SIZE });
+  const favoriteListResponse = await getFavoriteList({
+    page: 1,
+    size: MAX_FAVORITE_SIZE,
+  });
 
-  if (!data.ok || !data.data) {
+  if (!favoriteListResponse.ok || !favoriteListResponse.data) {
     return <ErrorBoundaryUi />;
   }
 
   return (
     <FavoriteItemList
-      clubs={data.data.clubs}
-      totalElements={data.data.pagination.totalElements}
+      clubs={favoriteListResponse.data.clubs}
+      totalElements={favoriteListResponse.data.pagination.totalElements}
     />
   );
 }

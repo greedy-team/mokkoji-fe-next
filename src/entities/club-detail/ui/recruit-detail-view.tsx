@@ -42,13 +42,13 @@ function RecruitDetailView({
     setCurrentIndex((prev) => (prev + 1) % imageUrls.length);
   };
 
-  const hasRecruitContent =
+  const isRecruitContentAvailable =
     Boolean(title?.trim()) ||
     Boolean(content?.trim()) ||
     Boolean(recruitForm?.trim()) ||
     imageUrls.length > 0;
 
-  if (!hasRecruitContent) {
+  if (!isRecruitContentAvailable) {
     return (
       <p className="py-30 text-center text-gray-500">
         동아리 모집 기간이 아닙니다.

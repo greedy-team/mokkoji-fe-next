@@ -4,7 +4,7 @@ import cn from '@/shared/lib/utils';
 interface PeriodSectionProps {
   startDate?: string;
   endDate?: string;
-  hasDecoration?: boolean;
+  isDecorated?: boolean;
   className?: string;
   isAlwaysRecruiting: boolean;
 }
@@ -12,12 +12,12 @@ interface PeriodSectionProps {
 function PeriodSection({
   startDate,
   endDate,
-  hasDecoration = true,
+  isDecorated = true,
   className,
   isAlwaysRecruiting,
 }: PeriodSectionProps) {
-  const hasDate = startDate && endDate;
-  if (!hasDate) {
+  const isDateAvailable = startDate && endDate;
+  if (!isDateAvailable) {
     return <span className="block min-h-[1lh] text-xs" />;
   }
 
@@ -25,7 +25,7 @@ function PeriodSection({
     <span className={cn(`text-xs leading-none ${className}`)}>상시모집</span>
   ) : (
     <span className={cn(`text-xs leading-none ${className}`)}>
-      {hasDecoration ? (
+      {isDecorated ? (
         <span className="text-[#8B95A1]">
           모집기한 · {formatDateDotted(startDate!)}~{formatDateDotted(endDate!)}
         </span>

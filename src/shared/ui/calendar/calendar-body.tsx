@@ -187,8 +187,8 @@ function CalendarBody({
         endTime={endTime}
         onStartTimeChange={onStartTimeChange}
         onEndTimeChange={onEndTimeChange}
-        hasStartDate={!!startDate}
-        hasEndDate={!!endDate}
+        isStartDateSelected={!!startDate}
+        isEndDateSelected={!!endDate}
         variant={variant}
       />
       <button

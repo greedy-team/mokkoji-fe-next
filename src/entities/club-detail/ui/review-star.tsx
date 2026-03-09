@@ -6,8 +6,8 @@ interface StarRatingProps {
 
 function StarRating({ rate }: StarRatingProps) {
   const fullStars = Math.floor(rate);
-  const hasHalfStar = rate - fullStars >= 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  const isHalfStar = rate - fullStars >= 0.5;
+  const emptyStars = 5 - fullStars - (isHalfStar ? 1 : 0);
 
   return (
     <div className="flex flex-1 gap-1">
@@ -22,7 +22,7 @@ function StarRating({ rate }: StarRatingProps) {
             height={14}
           />
         ))}
-      {hasHalfStar && (
+      {isHalfStar && (
         <Image
           src="/detail/comment/starHalf.svg"
           alt="반 별"

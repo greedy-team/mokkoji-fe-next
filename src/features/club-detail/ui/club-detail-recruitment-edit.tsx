@@ -3,12 +3,12 @@
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import DateRangePicker from '@/shared/ui/calender/date-range-picker';
-import reducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
+import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
+import recruitmentFormReducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
 import { useReducer } from 'react';
 import {
   RecruitmentFormData,
-  StateProp,
+  RecruitmentFormState,
 } from '@/features/post-recruitment/model/type';
 import { toast } from 'react-toastify';
 import ky from 'ky';
@@ -41,7 +41,7 @@ function ClubDetailRecruitmentEdit({
   imageUrls,
   setIsEditing,
 }: RecruitDetailEditProps) {
-  const initialState: StateProp = {
+  const initialState: RecruitmentFormState = {
     formData: {
       title,
       content,
@@ -53,7 +53,7 @@ function ClubDetailRecruitmentEdit({
     errors: {},
   };
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(recruitmentFormReducer, initialState);
 
   const { formData } = state;
   const {
@@ -117,7 +117,7 @@ function ClubDetailRecruitmentEdit({
     <SafeForm
       onSubmit={handleSubmit}
       buttonClassName="mt-2"
-      title="수정하기"
+      submitLabel="수정하기"
       formClassName="flex flex-col gap-2 my-1 max-w-[600px]"
     >
       <label htmlFor="title" className="indent-1 text-xl font-bold">

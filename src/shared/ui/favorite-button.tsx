@@ -22,7 +22,7 @@ function FavoriteButton({
   wrapperClass,
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
-  const { data: session } = useSession();
+  const { session } = useSession();
 
   const handleToggle = useMemo(
     () =>

@@ -5,14 +5,16 @@ import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
-import DateRangePicker from '@/shared/ui/calender/date-range-picker';
+import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
-import { FormField, RecruitmentFormData } from '../model/type';
-import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
+import { RecruitmentFormField, RecruitmentFormData } from '../model/type';
+import recruitmentFormReducer, {
+  initialState,
+} from '../model/reducer/recruitmentFormReducer';
 import isFormValid from '../util/isFormValid';
 import postRecruitmentForm from '../api/postRecruitmentForm';
 
@@ -21,7 +23,7 @@ interface ClubInfoProp {
   clubId?: number;
 }
 
-const fields: FormField[] = [
+const fields: RecruitmentFormField[] = [
   { label: '제목', name: 'title', type: 'input' },
   { label: '모집 공고', name: 'content', type: 'textarea' },
   { label: '모집 시작일', name: 'recruitStart', type: 'date' },
@@ -30,7 +32,7 @@ const fields: FormField[] = [
 ];
 
 function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(recruitmentFormReducer, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     imageFiles,
@@ -103,7 +105,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   return (
     <SafeForm
       onSubmit={handleSubmit}
-      title="등록하기"
+      submitLabel="등록하기"
       disabled={!isValid}
       formClassName="flex flex-col gap-2 py-8"
     >

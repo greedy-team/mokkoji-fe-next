@@ -9,7 +9,9 @@ import getFavoriteByDate from '../api/getFavoriteByDate';
 
 function FavoriteDynamicSection() {
   const [value, setValue] = useState<Date>(new Date());
-  const [data, setData] = useState<FavoriteDateItem[]>([]);
+  const [favoriteRecruitments, setFavoriteRecruitments] = useState<
+    FavoriteDateItem[]
+  >([]);
 
   const yearMonth = useMemo(() => {
     const year = value.getFullYear();
@@ -27,17 +29,21 @@ function FavoriteDynamicSection() {
         return;
       }
 
-      setData(response.data || []);
+      setFavoriteRecruitments(response.data || []);
     };
     fetchData();
   }, [value, yearMonth]);
 
   return (
     <div className="flex flex-col-reverse gap-2 lg:flex-row">
-      <CustomCalendar value={value} setValue={setValue} data={data} />
+      <CustomCalendar
+        value={value}
+        setValue={setValue}
+        data={favoriteRecruitments}
+      />
       <div className="flex flex-col gap-4 lg:ml-4 lg:w-[400px]">
-        <RecruitFavoriteList data={data} />
-        <RecruitDeadlineSoonList data={data} />
+        <RecruitFavoriteList data={favoriteRecruitments} />
+        <RecruitDeadlineSoonList data={favoriteRecruitments} />
       </div>
     </div>
   );

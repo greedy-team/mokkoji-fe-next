@@ -2,7 +2,7 @@ import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 
 interface GetRecruitListParams {
   page: number;
@@ -48,7 +48,7 @@ async function getClubList(params: GetRecruitListParams) {
     }
     return { ok: true, message: '성공', data: response.data, status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

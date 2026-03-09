@@ -1,4 +1,4 @@
-import convertLinkText from '@/entities/club-detail/util/convetLinkText';
+import convertLinkText from '@/entities/club-detail/util/convertLinkText';
 import getClubDetail from '@/entities/club-detail/api/getClubDetail';
 
 interface ClubDescriptionWidgetProps {
@@ -6,8 +6,8 @@ interface ClubDescriptionWidgetProps {
 }
 
 async function ClubDescriptionWidget({ clubId }: ClubDescriptionWidgetProps) {
-  const data = await getClubDetail(clubId);
-  const description = data.data?.description;
+  const clubDetailResponse = await getClubDetail(clubId);
+  const description = clubDetailResponse.data?.description;
 
   return (
     <div className="min-h-[300px] w-full">

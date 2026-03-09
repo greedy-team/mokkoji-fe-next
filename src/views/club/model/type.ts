@@ -1,5 +1,5 @@
 export type {
-  ClubDetailType,
+  ClubDetail,
   ClubDetailData,
   RecruitmentDetail,
   RecruitmentDetailResponse,

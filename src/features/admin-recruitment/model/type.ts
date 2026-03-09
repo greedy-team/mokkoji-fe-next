@@ -18,18 +18,18 @@ export interface RecruitmentFormData {
   isAlwaysRecruiting: boolean;
 }
 
-export interface FormField {
+export interface AdminRecruitmentFormField {
   label: string;
   name: keyof RecruitmentFormData;
   type: string;
 }
 
-export interface StateProp {
+export interface AdminRecruitmentFormState {
   formData: RecruitmentFormData;
   errors: Partial<Record<keyof RecruitmentFormData, string>>;
 }
 
-export type Action =
+export type AdminRecruitmentFormAction =
   | {
       type: 'UPDATE_FIELD';
       name: keyof RecruitmentFormData;

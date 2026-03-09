@@ -1,8 +1,8 @@
 function getKeyByValue(
-  obj: Record<string, string>,
-  value: string,
+  record: Record<string, string>,
+  targetValue: string,
 ): string | undefined {
-  return Object.keys(obj).find((key) => obj[key].includes(value));
+  return Object.keys(record).find((key) => record[key].includes(targetValue));
 }
 
 export default getKeyByValue;

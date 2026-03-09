@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Club } from '@/entities/club/model/type';
-import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
+import { formatDateDotted } from '@/entities/club/util/getDateUtil';
 import RadiusTag from '@/shared/ui/radius-tag';
 
 interface CardSliderProps {
@@ -72,15 +72,15 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
           transition: 'transform 0.1s ease-out',
         }}
       >
-        {(clubs ?? []).map((item, idx) => {
+        {(clubs ?? []).map((club, idx) => {
           const rotateX = idx * angleStep;
           const relativeAngle = (rotateX - scrollAngle + 360) % 360;
           const isVisible = relativeAngle <= 90 || relativeAngle >= 270;
-          const recruitStatus = item.recruitmentPreviewResponse?.recruitStatus;
+          const recruitStatus = club.recruitmentPreviewResponse?.recruitStatus;
 
           return (
             <div
-              key={item.id}
+              key={club.id}
               className={cn(
                 isVisible ? 'opacity-100' : 'opacity-0',
                 'absolute top-1/2 left-0 w-full -translate-y-1/2 transform-3d',
@@ -89,26 +89,26 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/club/${item.id}`}>
+              <Link href={`/club/${club.id}`}>
                 <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">
-                      <AvatarImage src={item.logo} loading="lazy" />
-                      <AvatarFallback>{item.name}</AvatarFallback>
+                      <AvatarImage src={club.logo} loading="lazy" />
+                      <AvatarFallback>{club.name}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-1 flex-col">
                       <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
                         모집 기간 •{' '}
-                        {formatToMonthDay(
-                          item.recruitmentPreviewResponse?.recruitStart ?? '',
+                        {formatDateDotted(
+                          club.recruitmentPreviewResponse?.recruitStart ?? '',
                         )}
                         ~
-                        {formatToMonthDay(
-                          item.recruitmentPreviewResponse?.recruitEnd ?? '',
+                        {formatDateDotted(
+                          club.recruitmentPreviewResponse?.recruitEnd ?? '',
                         )}
                       </span>
                       <h1 className="text-xs font-bold lg:text-sm">
-                        {item.name}
+                        {club.name}
                       </h1>
                     </div>
                     {recruitStatus && (
@@ -119,7 +119,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                     )}
                   </div>
                   <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
-                    {item.description}
+                    {club.description}
                   </p>
                 </div>
               </Link>

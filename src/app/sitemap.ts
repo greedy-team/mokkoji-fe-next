@@ -7,16 +7,16 @@ const BASE_URL = 'https://mokkoji.site';
 
 async function getAllClubIds(): Promise<number[]> {
   try {
-    const firstResponse = await serverApi
+    const firstPageResponse = await serverApi
       .get('clubs', {
         searchParams: { page: '0', size: '100' },
         next: { revalidate: 3600 },
       } as Parameters<typeof serverApi.get>[1])
       .json<ApiResponse<ClubsResponse>>();
 
-    if (!firstResponse.data) return [];
+    if (!firstPageResponse.data) return [];
 
-    const { clubs, page } = firstResponse.data;
+    const { clubs, page } = firstPageResponse.data;
     const allIds = clubs.map((club) => club.id);
 
     const remainingPages = Array.from(
@@ -24,7 +24,7 @@ async function getAllClubIds(): Promise<number[]> {
       (_, i) => i + 1,
     );
 
-    const results = await Promise.all(
+    const remainingPageResponses = await Promise.all(
       remainingPages.map((pageNum) =>
         serverApi
           .get('clubs', {
@@ -35,8 +35,8 @@ async function getAllClubIds(): Promise<number[]> {
       ),
     );
 
-    results.forEach((res) => {
-      res.data?.clubs.forEach((club) => allIds.push(club.id));
+    remainingPageResponses.forEach((pageResponse) => {
+      pageResponse.data?.clubs.forEach((club) => allIds.push(club.id));
     });
 
     return allIds;

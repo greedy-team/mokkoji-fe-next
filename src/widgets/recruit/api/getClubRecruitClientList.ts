@@ -21,13 +21,13 @@ async function getClubRecruitClientList({
 
   if (category) params.set('category', category);
 
-  let res;
+  let recruitmentResponse;
   if (!session?.accessToken) {
-    res = await ky.get(
+    recruitmentResponse = await ky.get(
       `${process.env.NEXT_PUBLIC_API_URL}/recruitments?${params.toString()}`,
     );
   } else {
-    res = await ky.get(
+    recruitmentResponse = await ky.get(
       `${process.env.NEXT_PUBLIC_API_URL}/recruitments?${params.toString()}`,
       {
         headers: {
@@ -37,11 +37,12 @@ async function getClubRecruitClientList({
     );
   }
 
-  if (!res.ok) {
+  if (!recruitmentResponse.ok) {
     throw new Error('Failed to fetch recruitments');
   }
 
-  const data: ApiResponse<RecruitmentResponse> = await res.json();
+  const data: ApiResponse<RecruitmentResponse> =
+    await recruitmentResponse.json();
   return data.data;
 }
 

@@ -8,12 +8,12 @@ import getRecruitDetail from '../api/getRecruitDetail';
 
 interface ClubDetailPageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ tab?: string; rid?: string }>;
+  searchParams: Promise<{ tab?: string; recruit?: string }>;
 }
 
 async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const { id } = await params;
-  const { tab = 'recruit', rid } = await searchParams;
+  const { tab = 'recruit', recruit } = await searchParams;
 
   const [recent, recruitHistories] = await Promise.all([
     getRecentRecruitDetail(Number(id)),
@@ -27,7 +27,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
     ? (recruitHistories.data?.recruitments ?? [])
     : [];
 
-  const recruitmentId = Number(rid) || recent.data.id;
+  const recruitmentId = Number(recruit) || recent.data.id;
   const selected = await getRecruitDetail(recruitmentId);
 
   return (
@@ -51,11 +51,11 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
           activeTab={tab}
           recruitData={selected.data}
           recruitHistories={historiesArray}
-          id={Number(id)}
-          rid={recruitmentId}
+          clubId={Number(id)}
+          selectedRecruitmentId={recruitmentId}
         />
       ) : (
-        <ClubDetailTabs activeTab={tab} id={Number(id)} />
+        <ClubDetailTabs activeTab={tab} clubId={Number(id)} />
       )}
     </div>
   );

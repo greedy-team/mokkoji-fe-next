@@ -1,7 +1,7 @@
 'use server';
 
 import api from '@/shared/api/auth-api';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
 
 async function putEmail(email: string) {
@@ -19,7 +19,7 @@ async function putEmail(email: string) {
       status: 200,
     };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

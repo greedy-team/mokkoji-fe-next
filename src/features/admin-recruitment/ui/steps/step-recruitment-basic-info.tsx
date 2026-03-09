@@ -1,4 +1,4 @@
-import DateRangePicker from '@/shared/ui/calender/date-range-picker';
+import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 import Input from '@/shared/ui/input';
 import { ClubInfoType } from '@/shared/model/type';
 import ImageUploadSection from '@/shared/ui/image-upload-section';

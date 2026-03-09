@@ -1,8 +1,8 @@
-import { FormField, StateProp } from '../model/type';
+import { ClubRegisterFormField, ClubRegisterFormState } from '../model/type';
 
 export default function isFormValid(
-  { formData, errors }: StateProp,
-  fields: FormField[],
+  { formData, errors }: ClubRegisterFormState,
+  fields: ClubRegisterFormField[],
 ) {
   const allFilled = fields
     .filter((field) => field.name !== 'instagram')

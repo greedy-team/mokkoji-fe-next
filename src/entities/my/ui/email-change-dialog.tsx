@@ -27,23 +27,23 @@ export default function EmailChangeDialog({
   triggerLabel = '이메일 수정하기',
 }: EmailChangeDialogProps) {
   const {
-    open,
-    setOpen,
+    isDialogOpen,
+    setIsDialogOpen,
     email,
     setEmail,
-    submitting,
+    isSubmitting,
     isValidEmail,
     helperText,
     resetState,
     handleSubmit,
   } = useEmailEdit(initialEmail);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger
         asChild
         onClick={() => {
           resetState();
-          setOpen(true);
+          setIsDialogOpen(true);
         }}
       >
         <Button className={cn(triggerClassName)} variant="none" size="none">
@@ -78,7 +78,7 @@ export default function EmailChangeDialog({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="example@domain.com"
-            disabled={submitting}
+            disabled={isSubmitting}
             aria-describedby="email-helper"
           />
           <p
@@ -94,9 +94,9 @@ export default function EmailChangeDialog({
               className="h-[50px] w-full"
               type="submit"
               variant="submit-default"
-              disabled={submitting || !email || !isValidEmail}
+              disabled={isSubmitting || !email || !isValidEmail}
             >
-              {submitting ? '저장 중…' : '확인'}
+              {isSubmitting ? '저장 중…' : '확인'}
             </Button>
           </DialogFooter>
         </form>

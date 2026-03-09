@@ -1,4 +1,4 @@
-function getDateUtil(recruitEndDate: string | undefined) {
+function isRecruitEndDateEndOfYear(recruitEndDate: string | undefined) {
   if (recruitEndDate === undefined) {
     return false;
   }
@@ -14,7 +14,7 @@ function getDateUtil(recruitEndDate: string | undefined) {
   return isEndOfYear;
 }
 
-export function formatToMonthDay(dateStr: string | Date): string {
+export function formatDateDotted(dateStr: string | Date): string {
   const date = new Date(dateStr);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -22,4 +22,4 @@ export function formatToMonthDay(dateStr: string | Date): string {
   return `${year}.${month}.${day}`;
 }
 
-export default getDateUtil;
+export default isRecruitEndDateEndOfYear;

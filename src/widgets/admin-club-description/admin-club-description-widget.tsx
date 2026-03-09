@@ -12,13 +12,13 @@ async function AdminClubDescriptionWidget({ params }: RecruitmentActionParams) {
   }
 
   const clubId = Number(id);
-  const res = await getClubInfo(clubId);
+  const clubInfoResponse = await getClubInfo(clubId);
 
-  if (!res.ok || !res.data) {
+  if (!clubInfoResponse.ok || !clubInfoResponse.data) {
     return <ErrorBoundaryUi />;
   }
 
-  return <EditFlowContainer clubInfo={res.data} clubId={clubId} />;
+  return <EditFlowContainer clubInfo={clubInfoResponse.data} clubId={clubId} />;
 }
 
 export default AdminClubDescriptionWidget;

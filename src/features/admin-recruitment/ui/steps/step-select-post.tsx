@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 
-interface Props {
+interface StepSelectPostProps {
   recruitments: ClubRecruitments[];
   onEdit: (post: ClubRecruitments) => void;
   onDelete: (post: ClubRecruitments) => Promise<void>;
@@ -20,27 +20,27 @@ function StepSelectPost({
   onDelete,
   isDeleting = false,
   title = '전체 모집 공고',
-}: Props) {
+}: StepSelectPostProps) {
   const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<ClubRecruitments>();
-  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleSelect = (post: ClubRecruitments) => {
     setSelectedPost(post);
   };
 
   const handleDeleteClick = () => {
-    setIsShowDeleteModal(true);
+    setIsDeleteModalOpen(true);
   };
 
   const handleCancelDelete = () => {
-    setIsShowDeleteModal(false);
+    setIsDeleteModalOpen(false);
   };
 
   const handleConfirmDelete = async () => {
     if (selectedPost) {
       await onDelete(selectedPost);
-      setIsShowDeleteModal(false);
+      setIsDeleteModalOpen(false);
       setSelectedPost(undefined);
     }
   };
@@ -54,19 +54,23 @@ function StepSelectPost({
           <p className="mt-4 text-gray-400">등록된 모집글이 없습니다.</p>
         ) : (
           <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {recruitments.map((item) => (
-              <li key={item.id}>
+            {recruitments.map((recruitment) => (
+              <li key={recruitment.id}>
                 <button
                   type="button"
-                  onClick={() => handleSelect(item)}
+                  onClick={() => handleSelect(recruitment)}
                   className={`flex h-[121px] w-full cursor-pointer flex-col gap-2 rounded-[16px] border bg-[#141414] p-6 text-left transition-colors ${
-                    selectedPost?.id === item.id
+                    selectedPost?.id === recruitment.id
                       ? 'border-[var(--color-darkmode-line)] bg-[#1F1F1F]'
                       : 'border-[#141414]'
                   }`}
                 >
-                  <p className="text-sm text-[#717171]">{item.recruitStart}</p>
-                  <p className="line-clamp-2 font-medium">{item.title}</p>
+                  <p className="text-sm text-[#717171]">
+                    {recruitment.recruitStart}
+                  </p>
+                  <p className="line-clamp-2 font-medium">
+                    {recruitment.title}
+                  </p>
                 </button>
               </li>
             ))}
@@ -96,7 +100,7 @@ function StepSelectPost({
         </Button>
       </div>
 
-      {isShowDeleteModal && (
+      {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="flex h-[158px] w-[320px] flex-col justify-center rounded-[20px] bg-[#1A1A1A] p-5 lg:h-[168px] lg:w-[442px]">
             <p className="text-center text-[#FBFBFB]">

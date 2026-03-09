@@ -2,12 +2,12 @@
 
 import { useInView } from 'react-intersection-observer';
 
-interface Props {
+interface AnimateOnViewProps {
   children: React.ReactNode;
   animation?: string;
 }
 
-function AnimateOnView({ children, animation }: Props) {
+function AnimateOnView({ children, animation }: AnimateOnViewProps) {
   const { ref, inView } = useInView({
     triggerOnce: false,
     threshold: 0,

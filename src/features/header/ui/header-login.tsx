@@ -17,11 +17,11 @@ interface HeaderLoginProps {
 }
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(dropdownRef, () => setShowDropdown(false));
+  useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -35,7 +35,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
           <Button
             variant="none"
             size="none"
-            onClick={() => setShowDropdown((prev) => !prev)}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
             className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-all hover:bg-[#e6e6e6]"
           >
             <Image
@@ -44,10 +44,10 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               width={21}
               height={22}
             />
-            <ChevronIcon isOpen={showDropdown} />
+            <ChevronIcon isOpen={isDropdownOpen} />
           </Button>
 
-          {showDropdown && (
+          {isDropdownOpen && (
             <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
               <Button variant="dropdownItem" size="none" asChild>
                 <Link href="/my">

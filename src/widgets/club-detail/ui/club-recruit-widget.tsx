@@ -21,14 +21,14 @@ interface RecruitDetail {
 interface ClubRecruitWidgetProps {
   clubId: number;
   recruitHistories: ClubRecruitments[];
-  rid: number;
+  selectedRecruitmentId: number;
   recruitDetail: RecruitDetail;
 }
 
 function ClubRecruitWidget({
   clubId,
   recruitHistories,
-  rid,
+  selectedRecruitmentId,
   recruitDetail,
 }: ClubRecruitWidgetProps) {
   const recruitHistoryRef = useRef<HTMLDivElement>(null);
@@ -69,13 +69,13 @@ function ClubRecruitWidget({
         content={recruitDetail.content}
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
-        recentRid={recruitHistories[0]?.id ?? rid}
+        recentRecruitId={recruitHistories[0]?.id ?? selectedRecruitmentId}
       />
       <div ref={recruitHistoryRef}>
         <RecruitHistorySection
           clubId={clubId}
           recruitHistories={recruitHistories}
-          selectedRid={rid}
+          selectedRecruitId={selectedRecruitmentId}
         />
       </div>
       {mounted && (

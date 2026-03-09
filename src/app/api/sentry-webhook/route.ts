@@ -3,13 +3,13 @@ export const runtime = 'nodejs';
 
 const { DISCORD_WEBHOOK_URL } = process.env;
 
-const recentCache = new Map<string, number>();
+const recentAlertCache = new Map<string, number>();
 const DUPLICATE_INTERVAL = 5 * 60 * 1000; // 5분
 
 /** 🔹 긴 문자열 줄이기 */
-function ellipsis(s: unknown, max = 300) {
-  const str = String(s ?? '');
-  return str.length > max ? `${str.slice(0, max - 1)}…` : str;
+function ellipsis(text: unknown, maxLength = 300) {
+  const str = String(text ?? '');
+  return str.length > maxLength ? `${str.slice(0, maxLength - 1)}…` : str;
 }
 
 /** 🔹 레벨별 색상/이모지 */
@@ -33,60 +33,60 @@ const emojiByLevel = (level?: string) =>
     default: '🟩',
   })[level?.toLowerCase() || 'default'];
 
-function compactDate(d?: string) {
-  return d
-    ? new Date(d).toISOString().replace('T', ' ').replace('Z', 'Z')
+function compactDate(dateString?: string) {
+  return dateString
+    ? new Date(dateString).toISOString().replace('T', ' ').replace('Z', 'Z')
     : undefined;
 }
 
 function safeTagList(event: any, limit = 6) {
   const tags: Array<[string, string]> = event?.tags ?? [];
-  const arr = Array.isArray(tags) ? tags : Object.entries(tags || {});
-  return arr
+  const tagEntries = Array.isArray(tags) ? tags : Object.entries(tags || {});
+  return tagEntries
     .slice(0, limit)
-    .map(([k, v]) => `\`${k}:${v}\``)
+    .map(([tagKey, tagValue]) => `\`${tagKey}:${tagValue}\``)
     .join(' · ');
 }
 
 function pickTopFrame(event: any) {
-  const entry = (event?.entries || []).find(
-    (e: any) => e?.type === 'exception',
+  const exceptionEntry = (event?.entries || []).find(
+    (entry: any) => entry?.type === 'exception',
   );
-  const values = entry?.data?.values || event?.exception?.values || [];
-  const ex = values[values.length - 1] || values[0];
-  const frames = ex?.stacktrace?.frames || [];
+  const values = exceptionEntry?.data?.values || event?.exception?.values || [];
+  const exception = values[values.length - 1] || values[0];
+  const frames = exception?.stacktrace?.frames || [];
   if (!frames.length) return undefined;
 
-  const frame =
+  const topFrame =
     [...frames].reverse().find((f) => f?.in_app) || frames[frames.length - 1];
   const location = [
-    frame?.filename || frame?.abs_path || '?',
-    frame?.lineno ?? '?',
+    topFrame?.filename || topFrame?.abs_path || '?',
+    topFrame?.lineno ?? '?',
   ]
     .filter(Boolean)
     .join(':');
-  const func = frame?.function || '(anonymous)';
+  const func = topFrame?.function || '(anonymous)';
   return { location, func };
 }
 
 async function postToDiscord(payload: any) {
   if (!DISCORD_WEBHOOK_URL) throw new Error('DISCORD_WEBHOOK_URL not set');
-  if (process.env.NODE_ENV === 'development') return; // 개발환경은 전송안함
+  if (process.env.NODE_ENV === 'development') return;
 
-  const res = await fetch(DISCORD_WEBHOOK_URL, {
+  const discordResponse = await fetch(DISCORD_WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
   console.log(DISCORD_WEBHOOK_URL, '전송됨!!!');
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('❌ Discord 전송 실패:', res.status, text);
+  if (!discordResponse.ok) {
+    const errorText = await discordResponse.text().catch(() => '');
+    console.error('❌ Discord 전송 실패:', discordResponse.status, errorText);
   }
 }
 
-function extract(body: any) {
+function extractSentryAlertData(body: any) {
   const issue = body?.data?.issue ?? body?.issue;
   const event = body?.data?.event ?? body?.event;
 
@@ -120,7 +120,7 @@ function extract(body: any) {
     lastSeen: compactDate(issue?.lastSeen),
   };
 
-  const top = pickTopFrame(event);
+  const topStackFrame = pickTopFrame(event);
   const tags = safeTagList(event, 8);
 
   return {
@@ -134,7 +134,7 @@ function extract(body: any) {
     culprit,
     message,
     counts,
-    top,
+    topStackFrame,
     tags,
   };
 }
@@ -153,11 +153,11 @@ export async function POST(req: Request) {
 
     // 중복 방지
     const now = Date.now();
-    const last = recentCache.get(issueId);
+    const last = recentAlertCache.get(issueId);
     if (last && now - last < DUPLICATE_INTERVAL) {
       return Response.json({ ok: true, skip: 'duplicate alert' });
     }
-    recentCache.set(issueId, now);
+    recentAlertCache.set(issueId, now);
 
     // ✅ 3️⃣ 데이터 추출 및 Discord 전송
     const {
@@ -171,9 +171,9 @@ export async function POST(req: Request) {
       culprit,
       message,
       counts,
-      top,
+      topStackFrame,
       tags,
-    } = extract(body);
+    } = extractSentryAlertData(body);
 
     const levelEmoji = emojiByLevel(level);
     const title = shortId
@@ -182,9 +182,9 @@ export async function POST(req: Request) {
 
     const lines: string[] = [];
     if (culprit) lines.push(`**Culprit**: \`${ellipsis(culprit, 180)}\``);
-    if (top)
+    if (topStackFrame)
       lines.push(
-        `**Top Frame**: \`${ellipsis(`${top.location} · ${top.func}`, 220)}\``,
+        `**Top Frame**: \`${ellipsis(`${topStackFrame.location} · ${topStackFrame.func}`, 220)}\``,
       );
     if (tags) lines.push(`**Tags**: ${ellipsis(tags, 900)}`);
 

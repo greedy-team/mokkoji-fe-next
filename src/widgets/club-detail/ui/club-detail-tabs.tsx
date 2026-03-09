@@ -5,7 +5,7 @@ import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { RecruitStatus } from '@/shared/model/type';
 
-interface RecruitDetailViewProps {
+interface ActiveRecruitmentData {
   title: string;
   clubName: string;
   category: string;
@@ -21,10 +21,10 @@ interface RecruitDetailViewProps {
 
 interface ClubDetailTabsProps {
   activeTab: string;
-  recruitData?: RecruitDetailViewProps;
+  recruitData?: ActiveRecruitmentData;
   recruitHistories?: ClubRecruitments[];
-  id: number;
-  rid?: number;
+  clubId: number;
+  selectedRecruitmentId?: number;
 }
 
 const TABS = [
@@ -37,14 +37,14 @@ function ClubDetailTabs({
   activeTab,
   recruitData,
   recruitHistories,
-  id,
-  rid,
+  clubId,
+  selectedRecruitmentId,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
     const queryString = new URLSearchParams();
-    queryString.set('rid', String(rid));
+    queryString.set('recruit', String(selectedRecruitmentId));
     if (key !== 'recruit') queryString.set('tab', key);
-    return `/club/${id}?${queryString.toString()}`;
+    return `/club/${clubId}?${queryString.toString()}`;
   };
 
   const renderContent = () => {
@@ -53,7 +53,7 @@ function ClubDetailTabs({
         !recruitData ||
         !recruitHistories ||
         recruitHistories.length < 0 ||
-        !rid
+        !selectedRecruitmentId
       ) {
         return (
           <p className="text-primary-500 py-20 text-center">
@@ -64,9 +64,9 @@ function ClubDetailTabs({
 
       return (
         <ClubRecruitWidget
-          clubId={Number(id)}
+          clubId={clubId}
           recruitHistories={recruitHistories}
-          rid={rid}
+          selectedRecruitmentId={selectedRecruitmentId}
           recruitDetail={{
             title: recruitData.title,
             clubName: recruitData.clubName,
@@ -83,11 +83,11 @@ function ClubDetailTabs({
     }
 
     if (activeTab === 'about') {
-      return <ClubDescriptionWidget clubId={id} />;
+      return <ClubDescriptionWidget clubId={clubId} />;
     }
 
     if (activeTab === 'comments') {
-      return <ClubCommentsWidget clubId={id} />;
+      return <ClubCommentsWidget clubId={clubId} />;
     }
 
     return null;

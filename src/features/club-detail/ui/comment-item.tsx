@@ -1,20 +1,22 @@
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import timeAgo from '@/entities/club-detail/util/timeAgo';
-import { CommentType } from '@/entities/club-detail/model/type';
+import { ClubComment } from '@/entities/club-detail/model/type';
 import StarRating from '@/entities/club-detail/ui/review-star';
-import { deleteComment } from '@/features/club-detail/api/postComment';
+import { deleteComment } from '@/features/club-detail/api/comment-api';
 
 interface CommentItemProps {
   clubId: number;
-  comment: CommentType;
+  comment: ClubComment;
   onEdit: (commentId: number) => void;
+  onCommentChange: () => Promise<void>;
 }
 
 export default function CommentItem({
   clubId,
   comment,
   onEdit,
+  onCommentChange,
 }: CommentItemProps) {
   const handleDeleteComment = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -30,6 +32,7 @@ export default function CommentItem({
       return;
     }
     toast.success(response.message);
+    await onCommentChange();
   };
 
   return (

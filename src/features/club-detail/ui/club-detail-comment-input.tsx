@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import LoginModal from '@/widgets/login/ui/login-modal';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 import { postComment } from '../api/postComment';
 import StarRating from './rating-component';
 
@@ -22,7 +22,7 @@ function ClubDetailCommentInput({
   const [rating, setRating] = useState(0);
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { openLoginModal } = useLoginModal();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -57,15 +57,11 @@ function ClubDetailCommentInput({
           <p className="text-sm font-bold">로그인이 필요한 서비스에요!</p>
           <button
             type="button"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openLoginModal}
             className="cursor-pointer font-semibold text-[#00E457] underline"
           >
             로그인하기
           </button>
-          <LoginModal
-            open={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          />
         </div>
       </div>
     );

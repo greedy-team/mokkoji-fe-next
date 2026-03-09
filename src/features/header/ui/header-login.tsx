@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
-import LoginModal from '@/widgets/login/ui/login-modal';
 import useClickOutside from '@/shared/model/useClickOutside';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 import {
   ChevronIcon,
   UserIcon,
@@ -18,7 +18,7 @@ interface HeaderLoginProps {
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setShowDropdown(false));
@@ -72,15 +72,11 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
           <button
-            onClick={() => setIsLoginOpen(true)}
+            onClick={openLoginModal}
             className="cursor-pointer whitespace-nowrap"
           >
             로그인
           </button>
-          <LoginModal
-            open={isLoginOpen}
-            onClose={() => setIsLoginOpen(false)}
-          />
         </div>
       )}
     </span>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 
 interface LoginFormProps {
   confirmed: boolean;
@@ -15,6 +16,7 @@ interface LoginFormProps {
 
 function LoginForm({ confirmed, setOpen }: LoginFormProps) {
   const router = useRouter();
+  const { closeLoginModal } = useLoginModal();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +61,8 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         toast.error('학번 또는 비밀번호를 확인해주세요.');
         return;
       }
-      window.location.reload();
+      closeLoginModal();
+      router.refresh();
     } catch {
       toast.error('로그인 중 오류가 발생했습니다.');
     } finally {

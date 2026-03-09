@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import LoginModal from '@/widgets/login/ui/login-modal';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 
 function LoginRequired() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { openLoginModal } = useLoginModal();
 
   return (
     <div className="flex h-full min-h-[50vh] flex-col items-center justify-center gap-[10px]">
@@ -13,12 +12,11 @@ function LoginRequired() {
       </h1>
       <button
         type="button"
-        onClick={() => setIsModalOpen(true)}
+        onClick={openLoginModal}
         className="font-semibold text-[#00E457] underline"
       >
         로그인하기
       </button>
-      <LoginModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

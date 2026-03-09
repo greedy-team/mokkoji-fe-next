@@ -32,10 +32,15 @@ function FavoriteButton({
           return;
         }
         try {
+          let result;
           if (!favorite) {
-            await postFavorite(Number(clubId));
+            result = await postFavorite(Number(clubId));
           } else {
-            await deleteFavorite(Number(clubId));
+            result = await deleteFavorite(Number(clubId));
+          }
+          if (!result.ok) {
+            toast.error(result.message);
+            return;
           }
           setFavorite((prev) => !prev);
         } catch (error) {

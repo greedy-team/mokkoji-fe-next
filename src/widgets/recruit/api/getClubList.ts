@@ -1,4 +1,9 @@
-import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
+import {
+  ApiResponse,
+  ClubCategory,
+  ClubListRaw,
+  mapClubType,
+} from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
@@ -30,23 +35,25 @@ async function getClubList(params: GetRecruitListParams) {
     }
   });
   try {
-    let response: ApiResponse<ClubList>;
-    if (session?.accessToken) {
-      response = await api
-        .get('clubs', {
-          searchParams,
-          next: { tags: ['clubs'] },
-        })
-        .json<ApiResponse<ClubList>>();
-    } else {
-      response = await serverApi
-        .get('clubs', {
-          searchParams,
-          next: { tags: ['clubs'] },
-        })
-        .json<ApiResponse<ClubList>>();
-    }
-    return { ok: true, message: '성공', data: response.data, status: 200 };
+    const isAuthenticated = !!session?.accessToken;
+    const client = isAuthenticated ? api : serverApi;
+    const fetchOptions = isAuthenticated
+      ? { searchParams, cache: 'no-store' as const }
+      : { searchParams, next: { tags: ['clubs'] } };
+
+    const response = await client
+      .get('clubs', fetchOptions)
+      .json<ApiResponse<ClubListRaw>>();
+
+    const responseData = response.data;
+    if (!responseData) return { ok: false, message: '데이터 없음' };
+
+    const data = {
+      ...responseData,
+      clubs: responseData.clubs.map(mapClubType),
+    };
+
+    return { ok: true, message: '성공', data, status: 200 };
   } catch (e) {
     return createErrorResponse(e as Error);
   }

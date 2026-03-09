@@ -8,6 +8,7 @@ import Input from '@/shared/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import { useLoginModal } from '@/shared/lib/login-modal-context';
+import { useSession } from '@/shared/lib/session-context';
 
 interface LoginFormProps {
   confirmed: boolean;
@@ -17,6 +18,7 @@ interface LoginFormProps {
 function LoginForm({ confirmed, setOpen }: LoginFormProps) {
   const router = useRouter();
   const { closeLoginModal } = useLoginModal();
+  const { refresh: refreshSession } = useSession();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -62,6 +64,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         return;
       }
       closeLoginModal();
+      refreshSession();
       router.refresh();
     } catch {
       toast.error('로그인 중 오류가 발생했습니다.');

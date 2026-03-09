@@ -6,7 +6,7 @@ import RecruitHistoryCard from './recruit-history-card';
 interface RecruitHistorySectionProps {
   clubId: number;
   recruitHistories: ClubRecruitments[];
-  selectedRid: number;
+  selectedRecruitId: number;
 }
 
 function useRecruitHistoryVisibleCardCount() {
@@ -34,7 +34,7 @@ const MOBILE_PAGE_SIZE = 3;
 function RecruitHistorySection({
   clubId,
   recruitHistories,
-  selectedRid,
+  selectedRecruitId,
 }: RecruitHistorySectionProps) {
   const recruitHistoryList = Array.isArray(recruitHistories)
     ? recruitHistories
@@ -97,14 +97,14 @@ function RecruitHistorySection({
                   <div className="m-1 grid grid-cols-1 gap-4">
                     {pageItems.map((recruitment) => {
                       const queryString = new URLSearchParams();
-                      queryString.set('rid', String(recruitment.id));
+                      queryString.set('recruit', String(recruitment.id));
                       const href = `/club/${clubId}?${queryString.toString()}`;
 
                       return (
                         <Link key={recruitment.id} href={href}>
                           <RecruitHistoryCard
                             recruitHistories={recruitment}
-                            isSelected={selectedRid === recruitment.id}
+                            isSelected={selectedRecruitId === recruitment.id}
                           />
                         </Link>
                       );
@@ -148,7 +148,7 @@ function RecruitHistorySection({
         >
           {recruitHistoryList.map((recruitment) => {
             const queryString = new URLSearchParams();
-            queryString.set('rid', String(recruitment.id));
+            queryString.set('recruit', String(recruitment.id));
             const href = `/club/${clubId}?${queryString.toString()}`;
 
             return (
@@ -160,7 +160,7 @@ function RecruitHistorySection({
                 <Link href={href}>
                   <RecruitHistoryCard
                     recruitHistories={recruitment}
-                    isSelected={selectedRid === recruitment.id}
+                    isSelected={selectedRecruitId === recruitment.id}
                   />
                 </Link>
               </div>

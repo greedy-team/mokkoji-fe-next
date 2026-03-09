@@ -17,7 +17,7 @@ interface RecruitDetailViewProps {
   content: string;
   recruitForm: string;
   imageUrls: string[];
-  recentRid: number;
+  recentRecruitId: number;
 }
 
 function RecruitDetailView({
@@ -25,14 +25,14 @@ function RecruitDetailView({
   content,
   recruitForm,
   imageUrls,
-  recentRid,
+  recentRecruitId,
 }: RecruitDetailViewProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const currentRid = Number(searchParams.get('rid'));
-  const isRecentRecruitment = currentRid === recentRid;
+  const currentRecruitId = Number(searchParams.get('recruit'));
+  const isRecentRecruitment = currentRecruitId === recentRecruitId;
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);

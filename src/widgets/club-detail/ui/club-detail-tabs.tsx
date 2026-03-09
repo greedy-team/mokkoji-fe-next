@@ -24,7 +24,7 @@ interface ClubDetailTabsProps {
   recruitData?: RecruitDetailViewProps;
   recruitHistories?: ClubRecruitments[];
   id: number;
-  rid?: number;
+  recruit?: number;
 }
 
 const TABS = [
@@ -38,11 +38,11 @@ function ClubDetailTabs({
   recruitData,
   recruitHistories,
   id,
-  rid,
+  recruit,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
     const queryString = new URLSearchParams();
-    queryString.set('rid', String(rid));
+    queryString.set('recruit', String(recruit));
     if (key !== 'recruit') queryString.set('tab', key);
     return `/club/${id}?${queryString.toString()}`;
   };
@@ -53,7 +53,7 @@ function ClubDetailTabs({
         !recruitData ||
         !recruitHistories ||
         recruitHistories.length < 0 ||
-        !rid
+        !recruit
       ) {
         return (
           <p className="text-primary-500 py-20 text-center">
@@ -66,7 +66,7 @@ function ClubDetailTabs({
         <ClubRecruitWidget
           clubId={Number(id)}
           recruitHistories={recruitHistories}
-          rid={rid}
+          recruit={recruit}
           recruitDetail={{
             title: recruitData.title,
             clubName: recruitData.clubName,

@@ -101,7 +101,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?rid=${createRecruitmentId}`)
+            router.push(`/club/${clubInfo.id}?recruit=${createRecruitmentId}`)
           }
         >
           모집글 확인하기

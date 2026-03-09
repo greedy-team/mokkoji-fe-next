@@ -181,7 +181,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?rid=${editRecruitmentId}`)
+            router.push(`/club/${clubInfo.id}?recruit=${editRecruitmentId}`)
           }
         >
           모집글 확인하기

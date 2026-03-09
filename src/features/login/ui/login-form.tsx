@@ -155,7 +155,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         <Button
           type="submit"
           disabled={studentId === '' || password === ''}
-          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white"
+          className="mt-5 h-10 w-full gap-2 bg-black font-medium text-white disabled:bg-[#D9D9D9] disabled:text-[#9C9C9C]"
         >
           확인
         </Button>

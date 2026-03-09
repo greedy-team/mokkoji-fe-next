@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import LoginModal from '@/widgets/login/ui/login-modal';
@@ -18,7 +17,6 @@ interface HeaderLoginProps {
 }
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
-  const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -27,8 +25,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
 
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/');
-    window.location.reload();
+    window.location.href = '/';
   };
 
   return (

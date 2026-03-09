@@ -53,3 +53,7 @@ logs
 nginx/active/
 
 .claude
+.mcp.json
+.omc/
+.serena/
+scripts/token-now.py

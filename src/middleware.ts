@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  ResponseCookies,
+  RequestCookies,
+} from 'next/dist/compiled/@edge-runtime/cookies';
+import {
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_OPTIONS,
   parseSessionCookie,
@@ -37,6 +41,35 @@ async function refreshAccessToken(
 }
 
 /**
+ * 미들웨어에서 response에 설정한 Set-Cookie를 request 헤더에도 반영한다.
+ * 이렇게 해야 같은 요청 내 RSC에서 cookies().get()으로 갱신된 값을 읽을 수 있다.
+ *
+ * 배경: 미들웨어의 response.cookies.set()은 브라우저로 보내는 Set-Cookie 헤더만 설정하고,
+ * 원래 요청의 Cookie 헤더는 변경하지 않는다. Next.js는 x-middleware-request-* 헤더를 통해
+ * 요청 헤더를 오버라이드할 수 있으므로, 이를 활용하여 RSC에 갱신된 쿠키를 전달한다.
+ *
+ * @see https://github.com/vercel/next.js/issues/49442
+ */
+function applySetCookie(req: NextRequest, res: NextResponse): void {
+  const setCookies = new ResponseCookies(res.headers);
+  const newReqHeaders = new Headers(req.headers);
+  const newReqCookies = new RequestCookies(newReqHeaders);
+
+  setCookies.getAll().forEach((cookie) => newReqCookies.set(cookie));
+
+  NextResponse.next({
+    request: { headers: newReqHeaders },
+  }).headers.forEach((value, key) => {
+    if (
+      key === 'x-middleware-override-headers' ||
+      key.startsWith('x-middleware-request-')
+    ) {
+      res.headers.set(key, value);
+    }
+  });
+}
+
+/**
  * route.ts에 정의된 publicRoutes와 대조하여 인증 없이 접근 가능한 경로인지 판별한다.
  * '/:path*'로 끝나는 패턴은 하위 경로까지 포함한다.
  */
@@ -58,6 +91,7 @@ function isPublicPath(pathname: string) {
  *   3. 인증 상태 + 경로 공개 여부에 따라 라우팅(통과/리다이렉트)
  *   4. 갱신된 세션이 있으면 응답 쿠키에 반영
  *   5. User-Agent 기반 디바이스 타입 쿠키 설정
+ *   6. applySetCookie로 요청 헤더 오버라이드 → RSC에서 갱신된 쿠키 즉시 사용 가능
  * ──────────────────────────────────────────── */
 
 export default async function middleware(req: NextRequest) {
@@ -112,8 +146,8 @@ export default async function middleware(req: NextRequest) {
   }
 
   // ── 4) 갱신된 세션 쿠키 반영 ──
-  // response.cookies.set()으로 설정하면 브라우저(Set-Cookie 헤더)와
-  // 이후 실행될 RSC(request cookies 전파) 양쪽에 모두 반영된다.
+  // response.cookies.set()은 브라우저에 Set-Cookie 헤더를 전달한다.
+  // RSC로의 전파는 6단계 applySetCookie에서 처리한다.
   if (sessionUpdated) {
     if (session) {
       const cookieValue = encodeURIComponent(JSON.stringify(session));
@@ -143,6 +177,11 @@ export default async function middleware(req: NextRequest) {
       sameSite: 'lax',
     });
   }
+
+  // ── 6) 요청 쿠키 오버라이드 ──
+  // response에 설정한 Set-Cookie를 request 헤더에도 반영하여
+  // 이후 RSC에서 cookies().get()으로 갱신된 값을 읽을 수 있게 한다.
+  applySetCookie(req, response);
 
   return response;
 }

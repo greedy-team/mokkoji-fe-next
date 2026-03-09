@@ -9,12 +9,14 @@ interface CommentItemProps {
   clubId: number;
   comment: CommentType;
   onEdit: (commentId: number) => void;
+  onCommentChange: () => Promise<void>;
 }
 
 export default function CommentItem({
   clubId,
   comment,
   onEdit,
+  onCommentChange,
 }: CommentItemProps) {
   const handleDeleteComment = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -30,6 +32,7 @@ export default function CommentItem({
       return;
     }
     toast.success(response.message);
+    await onCommentChange();
   };
 
   return (

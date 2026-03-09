@@ -27,8 +27,7 @@ async function refreshAccessToken(
   refreshToken: string,
 ): Promise<string | null> {
   try {
-    const baseUrl = API_URL?.endsWith('/') ? API_URL : `${API_URL}/`;
-    const res = await fetch(`${baseUrl}users/auth/refresh`, {
+    const res = await fetch(`${API_URL}/users/auth/refresh`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${refreshToken}` },
     });

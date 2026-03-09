@@ -14,6 +14,7 @@ interface ClubDetailCommentEditProps {
   content: string;
   rate: number;
   onCancel: () => void;
+  onCommentChange: () => Promise<void>;
 }
 
 function ClubDetailCommentEdit({
@@ -22,6 +23,7 @@ function ClubDetailCommentEdit({
   content,
   rate,
   onCancel,
+  onCommentChange,
 }: ClubDetailCommentEditProps) {
   const [value, setValue] = useState(content);
   const [rating, setRating] = useState(rate);
@@ -52,6 +54,7 @@ function ClubDetailCommentEdit({
     setRating(0);
     onCancel();
     setIsSubmitting(false);
+    await onCommentChange();
   };
 
   return (

@@ -9,11 +9,13 @@ import CommentItem from './comment-item';
 interface ClubDetailCommentProps {
   clubId: number;
   comments: CommentType[];
+  onCommentChange: () => Promise<void>;
 }
 
 export default function ClubDetailComment({
   clubId,
   comments,
+  onCommentChange,
 }: ClubDetailCommentProps) {
   const [edit, setEdit] = useState<number | null>(null);
 
@@ -42,9 +44,15 @@ export default function ClubDetailComment({
                 content={comment.content}
                 rate={comment.rate}
                 onCancel={() => setEdit(null)}
+                onCommentChange={onCommentChange}
               />
             ) : (
-              <CommentItem clubId={clubId} comment={comment} onEdit={setEdit} />
+              <CommentItem
+                clubId={clubId}
+                comment={comment}
+                onEdit={setEdit}
+                onCommentChange={onCommentChange}
+              />
             )}
           </div>
         );

@@ -12,11 +12,13 @@ import StarRating from './rating-component';
 interface ClubDetailCommentInputProps {
   clubId: number;
   count: number;
+  onCommentChange: () => Promise<void>;
 }
 
 function ClubDetailCommentInput({
   clubId,
   count,
+  onCommentChange,
 }: ClubDetailCommentInputProps) {
   const [value, setValue] = useState('');
   const [rating, setRating] = useState(0);
@@ -48,6 +50,7 @@ function ClubDetailCommentInput({
     setValue('');
     setRating(0);
     setIsSubmitting(false);
+    await onCommentChange();
   };
 
   if (!session) {

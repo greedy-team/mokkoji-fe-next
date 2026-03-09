@@ -15,7 +15,7 @@ export interface Club {
   name: string;
   description: string;
   logo?: string;
-  favorite: boolean;
+  isFavorite: boolean;
   recruitmentPreviewResponse: RecruitmentPreviewResponse | null;
 }
 

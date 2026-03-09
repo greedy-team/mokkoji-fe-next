@@ -13,32 +13,32 @@ export async function POST(req: NextRequest) {
   try {
     const { studentId, password } = await req.json();
 
-    const loginRes = await serverApi.post('users/auth/login', {
+    const loginResponse = await serverApi.post('users/auth/login', {
       json: { studentId, password },
     });
-    const loginData: LoginSuccessResponse = await loginRes.json();
+    const loginResponseBody: LoginSuccessResponse = await loginResponse.json();
 
-    if (!loginData.data) {
+    if (!loginResponseBody.data) {
       return NextResponse.json(
         { ok: false, message: '로그인 실패' },
         { status: 401 },
       );
     }
 
-    const { accessToken, refreshToken } = loginData.data;
+    const { accessToken, refreshToken } = loginResponseBody.data;
 
-    const userRes = await serverApi.get('users', {
+    const userResponse = await serverApi.get('users', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    const userData: { data: UserInfoType } = await userRes.json();
+    const userResponseBody: { data: UserInfoType } = await userResponse.json();
 
     let role: string | undefined;
     try {
-      const rolesRes = await serverApi.get('users/roles', {
+      const rolesResponse = await serverApi.get('users/roles', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      const rolesData: RoleResponse = await rolesRes.json();
-      role = rolesData.data?.role;
+      const rolesResponseBody: RoleResponse = await rolesResponse.json();
+      role = rolesResponseBody.data?.role;
     } catch {
       // role 조회 실패해도 로그인은 성공 처리
     }
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const session: CookieSession = {
       accessToken,
       refreshToken,
-      user: userData.data.user,
+      user: userResponseBody.data.user,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
     };

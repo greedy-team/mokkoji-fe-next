@@ -51,11 +51,11 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
           activeTab={tab}
           recruitData={selected.data}
           recruitHistories={historiesArray}
-          id={Number(id)}
-          recruit={recruitmentId}
+          clubId={Number(id)}
+          selectedRecruitmentId={recruitmentId}
         />
       ) : (
-        <ClubDetailTabs activeTab={tab} id={Number(id)} />
+        <ClubDetailTabs activeTab={tab} clubId={Number(id)} />
       )}
     </div>
   );

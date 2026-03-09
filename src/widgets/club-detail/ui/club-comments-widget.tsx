@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useSession } from '@/shared/lib/session-context';
-import { CommentType } from '@/entities/club-detail/model/type';
+import { ClubComment } from '@/entities/club-detail/model/type';
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
 import fetchComments from '@/widgets/club-detail/api/fetchComments';
@@ -12,8 +12,8 @@ interface ClubCommentsWidgetProps {
 }
 
 function ClubCommentsWidget({ clubId }: ClubCommentsWidgetProps) {
-  const { data: session, status } = useSession();
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const { session, status } = useSession();
+  const [comments, setComments] = useState<ClubComment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadComments = useCallback(async () => {

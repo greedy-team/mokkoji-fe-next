@@ -46,7 +46,7 @@ function ClubDetailHeader({
         <PeriodSection
           startDate={startDate}
           endDate={endDate}
-          decoration={false}
+          hasDecoration={false}
           className="lg:text-lg"
           isAlwaysRecruiting={isAlwaysRecruiting}
         />

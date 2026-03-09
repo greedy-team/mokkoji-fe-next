@@ -1,6 +1,6 @@
 import { RecruitStatus } from '@/shared/model/type';
 
-export interface ClubDetailType {
+export interface ClubDetail {
   id: number;
   name: string;
   category: string;
@@ -16,7 +16,7 @@ export interface ClubDetailType {
 }
 
 export interface ClubDetailData {
-  data: ClubDetailType;
+  data: ClubDetail;
 }
 
 export interface RecruitmentDetail {
@@ -58,7 +58,7 @@ export interface ClubRecruitmentsResponse {
   recruitments: ClubRecruitments[];
 }
 
-export interface CommentType {
+export interface ClubComment {
   id: number;
   content: string;
   rate: number;

@@ -2,7 +2,7 @@
 
 import api from '@/shared/api/auth-api';
 import { ApiResponse } from '@/shared/model/type';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { FavoriteDateItem } from '@/entities/favorite/model/type';
 
 interface GetFavoriteByDateParams {
@@ -20,7 +20,7 @@ async function getFavoriteByDate({ yearMonth }: GetFavoriteByDateParams) {
       data: response.data || [],
     };
   } catch (error) {
-    return ErrorHandler(error as Error);
+    return createErrorResponse(error as Error);
   }
 }
 

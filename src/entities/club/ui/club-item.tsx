@@ -11,7 +11,7 @@ interface ClubItemProps {
   startDate?: string;
   endDate?: string;
   description: string;
-  favorite: boolean;
+  isFavorite: boolean;
   logo?: string;
   id: number;
   recruitStatus?: RecruitStatus;
@@ -24,7 +24,7 @@ function ClubItem({
   startDate,
   endDate,
   description,
-  favorite,
+  isFavorite,
   logo,
   id,
   recruitStatus,
@@ -50,7 +50,7 @@ function ClubItem({
               </h1>
 
               <FavoriteButton
-                isFavorite={favorite}
+                isFavorite={isFavorite}
                 clubId={id}
                 customClass="scale-100 mt-1"
               />

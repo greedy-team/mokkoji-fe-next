@@ -5,9 +5,9 @@ import Link from 'next/link';
 import useScrollUp from '../model/useScrollUp';
 
 export default function ScrollTopButton() {
-  const { visible } = useScrollUp();
+  const { isVisible } = useScrollUp();
 
-  return visible ? (
+  return isVisible ? (
     <Link
       href="#top"
       className="fixed right-6 bottom-10 z-50 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full bg-white shadow-lg"

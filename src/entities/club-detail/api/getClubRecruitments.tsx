@@ -1,4 +1,4 @@
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import { getSession } from '@/shared/lib/cookie-session';
@@ -21,7 +21,7 @@ async function getClubRecruitments(clubId: number) {
     }
     return { ok: true, data: response.data, status: 200 };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import convertLinkText from '@/entities/club-detail/util/convetLinkText';
+import convertLinkText from '@/entities/club-detail/util/convertLinkText';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 interface RecruitDetailViewProps {
@@ -42,13 +42,13 @@ function RecruitDetailView({
     setCurrentIndex((prev) => (prev + 1) % imageUrls.length);
   };
 
-  const isRecruitPeriod =
+  const hasRecruitContent =
     Boolean(title?.trim()) ||
     Boolean(content?.trim()) ||
     Boolean(recruitForm?.trim()) ||
     imageUrls.length > 0;
 
-  if (!isRecruitPeriod) {
+  if (!hasRecruitContent) {
     return (
       <p className="py-30 text-center text-gray-500">
         동아리 모집 기간이 아닙니다.

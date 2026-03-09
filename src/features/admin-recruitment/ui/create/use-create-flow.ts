@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CreateStep, CreateFlowState } from './types';
 
-const STEPS: CreateStep[] = ['basicInfo', 'postinfo', 'complete'];
+const STEPS: CreateStep[] = ['basicInfo', 'postInfo', 'complete'];
 
 function useCreateFlow() {
   const [state, setState] = useState<CreateFlowState>({

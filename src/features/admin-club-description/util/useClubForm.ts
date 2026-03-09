@@ -2,7 +2,9 @@
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
-import reducer, { initialState } from '../model/reducer/clubFormReducer';
+import clubDescriptionFormReducer, {
+  initialState,
+} from '../model/reducer/clubFormReducer';
 import { ClubFormData } from '../model/type';
 
 const BASIC_FIELDS: (keyof ClubFormData)[] = [
@@ -19,7 +21,7 @@ interface UseClubFormOptions {
 }
 
 function useClubForm({ onNextStep, initialData }: UseClubFormOptions) {
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(clubDescriptionFormReducer, {
     ...initialState,
     formData: { ...initialState.formData, ...initialData },
   });

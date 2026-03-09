@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 
-interface Props {
+interface SentryFallbackProps {
   error: unknown;
   resetError: () => void;
 }
 
-export default function SentryFallback({ error, resetError }: Props) {
+export default function SentryFallback({
+  error,
+  resetError,
+}: SentryFallbackProps) {
   const [message, setMessage] = useState('예기치 못한 오류가 발생했습니다.');
 
   useEffect(() => {

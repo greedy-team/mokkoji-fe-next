@@ -19,33 +19,33 @@ export interface ClubFormData {
   logo?: string;
 }
 
-export interface FormField {
+export interface ClubDescriptionFormField {
   label: string;
   name: keyof ClubFormData;
   type: string;
 }
 
-export interface StateProp {
+export interface ClubDescriptionFormState {
   formData: ClubFormData;
   errors: Partial<Record<keyof ClubFormData, string>>;
 }
 
-export type Action =
+export type ClubDescriptionFormAction =
   | { type: 'UPDATE_FIELD'; name: keyof ClubFormData; value: string }
   | { type: 'VALIDATE_FIELD'; name: keyof ClubFormData }
   | { type: 'RESET_FORM' }
   | { type: 'UPDATE_MULTIPLE_FIELDS'; payload: Partial<ClubFormData> };
 
-export interface EditResponseField {
+export interface ClubEditLogoUrls {
   data?: {
     updateLogo: string;
     deleteLogo: string;
   };
 }
 
-export interface EditResponse {
+export interface ClubEditResponse {
   ok: boolean;
   message: string;
-  data?: EditResponseField;
+  data?: ClubEditLogoUrls;
   status: number;
 }

@@ -1,12 +1,12 @@
 import { ClubType } from '@/shared/model/type';
 import { useState } from 'react';
 
-interface FavoriteItemsProps {
+interface UseFavoriteItemsParams {
   clubs: ClubType[];
   viewSize: number;
 }
 
-function useFavoriteItems({ clubs, viewSize }: FavoriteItemsProps) {
+function useFavoriteItems({ clubs, viewSize }: UseFavoriteItemsParams) {
   const [currentPage, setCurrentPage] = useState(0);
 
   const viewTotalPages = Math.ceil(clubs.length / viewSize);

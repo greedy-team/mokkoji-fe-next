@@ -11,17 +11,17 @@ import { useLoginModal } from '@/shared/lib/login-modal-context';
 import { useSession } from '@/shared/lib/session-context';
 
 interface LoginFormProps {
-  confirmed: boolean;
-  setOpen: (confirmed: boolean) => void;
+  isTermsConfirmed: boolean;
+  onTermsModalOpen: (confirmed: boolean) => void;
 }
 
-function LoginForm({ confirmed, setOpen }: LoginFormProps) {
+function LoginForm({ isTermsConfirmed, onTermsModalOpen }: LoginFormProps) {
   const router = useRouter();
   const { closeLoginModal } = useLoginModal();
   const { refresh: refreshSession } = useSession();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [errors, setErrors] = useState<{
@@ -43,8 +43,8 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
       return;
     }
 
-    if (!confirmed) {
-      setOpen(true);
+    if (!isTermsConfirmed) {
+      onTermsModalOpen(true);
       return;
     }
 
@@ -127,7 +127,7 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
       <div className="relative">
         <Input
           name="password"
-          type={showPassword ? 'text' : 'password'}
+          type={isPasswordVisible ? 'text' : 'password'}
           placeholder="비밀번호"
           value={password}
           onChange={(e) => {
@@ -140,11 +140,11 @@ function LoginForm({ confirmed, setOpen }: LoginFormProps) {
         />
         <button
           type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
+          onClick={() => setIsPasswordVisible((prev) => !prev)}
           className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-500"
           aria-label="비밀번호 보기 토글"
         >
-          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </div>
       {isSubmitting ? (

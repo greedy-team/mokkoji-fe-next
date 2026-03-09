@@ -11,7 +11,7 @@ async function ClubItemList() {
   const category = searchParamsCache.get('category');
   const affiliation = searchParamsCache.get('affiliation');
   const keyword = searchParamsCache.get('keyword');
-  const res = await getClubList({
+  const clubListResponse = await getClubList({
     page,
     size,
     category: category as ClubCategory,
@@ -19,11 +19,11 @@ async function ClubItemList() {
     keyword,
   });
 
-  if (!res.ok || !res.data) {
+  if (!clubListResponse.ok || !clubListResponse.data) {
     return <ErrorBoundaryUi />;
   }
 
-  if (res.data.clubs.length === 0) {
+  if (clubListResponse.data.clubs.length === 0) {
     return (
       <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
         동아리가 없습니다.
@@ -33,8 +33,11 @@ async function ClubItemList() {
 
   return (
     <div className="mb-8">
-      <ClubItemClientList clubs={res.data.clubs} />
-      <NumberPagination page={page} totalPages={res.data.page.totalPages} />
+      <ClubItemClientList clubs={clubListResponse.data.clubs} />
+      <NumberPagination
+        page={page}
+        totalPages={clubListResponse.data.page.totalPages}
+      />
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { ApiResponse } from '@/shared/model/type';
 
-interface LoginRes {
+interface LoginTokenData {
   accessToken: string;
   refreshToken: string;
 }
 
-export interface LoginSuccessResponse extends ApiResponse<LoginRes> {}
+export interface LoginSuccessResponse extends ApiResponse<LoginTokenData> {}
 
 export interface ManageClub {
   clubId: number;

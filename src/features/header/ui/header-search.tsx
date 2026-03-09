@@ -4,11 +4,14 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
 interface HeaderSearchProps {
-  showSearch: boolean;
-  setShowSearch: (showSearch: boolean) => void;
+  isSearchVisible: boolean;
+  setIsSearchVisible: (isSearchVisible: boolean) => void;
 }
 
-function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
+function HeaderSearch({
+  isSearchVisible,
+  setIsSearchVisible,
+}: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -16,7 +19,7 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
         wrapperRef.current &&
         !wrapperRef.current.contains(event.target as Node)
       ) {
-        setShowSearch(false);
+        setIsSearchVisible(false);
       }
     }
 
@@ -25,10 +28,10 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
   }, []);
 
   useEffect(() => {
-    if (!showSearch) {
+    if (!isSearchVisible) {
       wrapperRef.current?.reset();
     }
-  }, [showSearch]);
+  }, [isSearchVisible]);
 
   return (
     <form
@@ -42,15 +45,15 @@ function HeaderSearch({ showSearch, setShowSearch }: HeaderSearchProps) {
         name="q"
         placeholder="검색어를 입력해주세요"
         required
-        className={`border- focus-within:border-primary-500 z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none lg:text-sm ${showSearch ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
+        className={`border- focus-within:border-primary-500 z-10 border-b-2 bg-white px-2 py-2 text-xs transition-all duration-300 ease-in-out outline-none lg:text-sm ${isSearchVisible ? 'mr-2 w-40 opacity-100 lg:w-52' : 'w-0 overflow-hidden opacity-0'}`}
         autoComplete="off"
       />
       <button
-        type={showSearch ? 'submit' : 'button'}
+        type={isSearchVisible ? 'submit' : 'button'}
         onClick={(e) => {
-          if (!showSearch) {
+          if (!isSearchVisible) {
             e.preventDefault();
-            setShowSearch(true);
+            setIsSearchVisible(true);
           }
         }}
         className="flex items-center justify-center"

@@ -5,7 +5,7 @@ import { EditStep, EditFlowState } from './types';
 const EDIT_STEPS: EditStep[] = [
   'selectPost',
   'basicInfo',
-  'postinfo',
+  'postInfo',
   'complete',
 ];
 

@@ -6,7 +6,7 @@ export interface TimeValue {
   second: number;
 }
 
-interface UseCalenderProps {
+interface UseCalendarProps {
   startDate?: string | null;
   endDate?: string | null;
   onStartDateChange?: (date: string) => void;
@@ -14,13 +14,13 @@ interface UseCalenderProps {
   onRangeComplete?: (start: string, end: string) => void;
 }
 
-interface UseCalenderReturn {
-  isCalenderOpen: boolean;
-  isCalenderClosing: boolean;
+interface UseCalendarReturn {
+  isCalendarOpen: boolean;
+  isCalendarClosing: boolean;
   calendarRef: React.RefObject<HTMLFieldSetElement | null>;
-  openCalender: () => void;
-  closeCalender: () => void;
-  toggleCalender: () => void;
+  openCalendar: () => void;
+  closeCalendar: () => void;
+  toggleCalendar: () => void;
   handleDateSelect: (
     selectedDate: Date,
     currentStart: string | null,
@@ -35,40 +35,40 @@ interface UseCalenderReturn {
   setEndTime: (time: TimeValue) => void;
 }
 
-export default function useCalender({
+export default function useCalendar({
   startDate,
   endDate,
   onStartDateChange,
   onEndDateChange,
   onRangeComplete,
-}: UseCalenderProps = {}): UseCalenderReturn {
-  const [isCalenderOpen, setIsCalenderOpen] = useState(false);
-  const [isCalenderClosing, setIsCalenderClosing] = useState(false);
+}: UseCalendarProps = {}): UseCalendarReturn {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isCalendarClosing, setIsCalendarClosing] = useState(false);
   const [timeEnabled, setTimeEnabled] = useState(false);
   const [startTime, setStartTime] = useState<TimeValue | null>(null);
   const [endTime, setEndTime] = useState<TimeValue | null>(null);
   const calendarRef = useRef<HTMLFieldSetElement | null>(null);
 
-  const closeCalender = () => {
-    setIsCalenderClosing(true);
+  const closeCalendar = () => {
+    setIsCalendarClosing(true);
     setTimeout(() => {
-      setIsCalenderOpen(false);
-      setIsCalenderClosing(false);
+      setIsCalendarOpen(false);
+      setIsCalendarClosing(false);
     }, 150);
   };
 
-  const openCalender = () => {
-    setIsCalenderOpen(true);
+  const openCalendar = () => {
+    setIsCalendarOpen(true);
   };
 
-  const toggleCalender = () => {
-    setIsCalenderOpen((prev) => !prev);
+  const toggleCalendar = () => {
+    setIsCalendarOpen((prev) => !prev);
   };
 
   useEffect(() => {
     const isClickOutside = (event: MouseEvent) => {
       return (
-        isCalenderOpen &&
+        isCalendarOpen &&
         calendarRef.current &&
         !calendarRef.current.contains(event.target as Node)
       );
@@ -76,7 +76,7 @@ export default function useCalender({
 
     const handleClickOutside = (event: MouseEvent) => {
       if (isClickOutside(event)) {
-        closeCalender();
+        closeCalendar();
       }
     };
 
@@ -85,7 +85,7 @@ export default function useCalender({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isCalenderOpen]);
+  }, [isCalendarOpen]);
 
   const getFormattedDateTime = (
     date: string | null,
@@ -185,12 +185,12 @@ export default function useCalender({
   };
 
   return {
-    isCalenderOpen,
-    isCalenderClosing,
+    isCalendarOpen,
+    isCalendarClosing,
     calendarRef,
-    openCalender,
-    closeCalender,
-    toggleCalender,
+    openCalendar,
+    closeCalendar,
+    toggleCalendar,
     handleDateSelect,
     formatDateRange,
     timeEnabled,

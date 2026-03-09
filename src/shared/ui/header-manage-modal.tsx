@@ -9,16 +9,16 @@ import cn from '../lib/utils';
 
 interface HeaderManageModalProps {
   manageClubInfo: ManageClub[];
-  menu: string;
+  manageAction: 'register' | 'recruitment';
   onItemClick?: () => void;
 }
 
 function HeaderManageModal({
   manageClubInfo,
-  menu,
+  manageAction,
   onItemClick,
 }: HeaderManageModalProps) {
-  const { data: session, status } = useSession();
+  const { session, status } = useSession();
   const isAuthenticated = status === 'authenticated';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
@@ -27,8 +27,8 @@ function HeaderManageModal({
   const isRecruitmentActive = pathname.startsWith('/post-recruitment');
 
   const isActive =
-    (menu === 'register' && isRegisterActive) ||
-    (menu === 'recruitment' && isRecruitmentActive);
+    (manageAction === 'register' && isRegisterActive) ||
+    (manageAction === 'recruitment' && isRecruitmentActive);
 
   return (
     <div className="h-full">
@@ -49,13 +49,15 @@ function HeaderManageModal({
               },
             )}
           >
-            {menu === 'register' ? '동아리 정보 수정' : '모집 공고 작성'}
+            {manageAction === 'register'
+              ? '동아리 정보 수정'
+              : '모집 공고 작성'}
           </button>
           <ManageModal
             open={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             manageClubInfo={manageClubInfo}
-            menu={menu}
+            manageAction={manageAction}
           />
         </>
       ) : null}

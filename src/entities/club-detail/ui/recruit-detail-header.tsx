@@ -65,7 +65,7 @@ function RecruitDetailHeader({
           <PeriodSection
             startDate={startDate}
             endDate={endDate}
-            decoration={false}
+            hasDecoration={false}
             className="mt-1 text-sm whitespace-nowrap lg:text-lg"
             isAlwaysRecruiting={isAlwaysRecruiting}
           />

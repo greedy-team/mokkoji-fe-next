@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import { useSession } from '@/shared/lib/session-context';
 import StarRating from './rating-component';
-import { patchComment } from '../api/postComment';
+import { patchComment } from '../api/comment-api';
 
 interface ClubDetailCommentEditProps {
   clubId: number;
@@ -25,32 +25,39 @@ function ClubDetailCommentEdit({
   onCancel,
   onCommentChange,
 }: ClubDetailCommentEditProps) {
-  const [value, setValue] = useState(content);
+  const [commentContent, setCommentContent] = useState(content);
   const [rating, setRating] = useState(rate);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data: session } = useSession();
+  const { session } = useSession();
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
+  const handleCommentContentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setCommentContent(e.target.value);
   };
 
   const handlePatchComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!value || rating === 0) {
+    if (!commentContent || rating === 0) {
       toast.warn('내용과 별점을 모두 입력해주세요.');
       return;
     }
 
     setIsSubmitting(true);
-    const response = await patchComment(clubId, commentId, value, rating);
+    const response = await patchComment(
+      clubId,
+      commentId,
+      commentContent,
+      rating,
+    );
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
 
     toast.success(response.message);
-    setValue('');
+    setCommentContent('');
     setRating(0);
     onCancel();
     setIsSubmitting(false);
@@ -66,8 +73,8 @@ function ClubDetailCommentEdit({
         disabled={!session}
       />
       <Textarea
-        value={value}
-        onChange={handleChange}
+        value={commentContent}
+        onChange={handleCommentContentChange}
         variant="comment"
         className="flex flex-1"
         placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
@@ -86,7 +93,7 @@ function ClubDetailCommentEdit({
           type="submit"
           size="none"
           className="w-[50%] px-5 py-2"
-          disabled={!value || rating === 0 || isSubmitting}
+          disabled={!commentContent || rating === 0 || isSubmitting}
         >
           수정
         </Button>

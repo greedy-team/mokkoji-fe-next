@@ -1,19 +1,19 @@
-import { CommentType } from '@/entities/club-detail/model/type';
+import { ClubComment } from '@/entities/club-detail/model/type';
 
 export default async function fetchComments(
   clubId: number,
   accessToken?: string,
-): Promise<CommentType[]> {
+): Promise<ClubComment[]> {
   const headers: HeadersInit = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : {};
 
-  const res = await fetch(
+  const commentsResponse = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/comments/${clubId}`,
     { headers },
   );
-  if (!res.ok) return [];
+  if (!commentsResponse.ok) return [];
 
-  const json = await res.json();
+  const json = await commentsResponse.json();
   return json.data?.comments ?? [];
 }

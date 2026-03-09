@@ -6,7 +6,7 @@ import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import { useLoginModal } from '@/shared/lib/login-modal-context';
-import { postComment } from '../api/postComment';
+import { postComment } from '../api/comment-api';
 import StarRating from './rating-component';
 
 interface ClubDetailCommentInputProps {
@@ -20,14 +20,16 @@ function ClubDetailCommentInput({
   count,
   onCommentChange,
 }: ClubDetailCommentInputProps) {
-  const [value, setValue] = useState('');
+  const [commentContent, setCommentContent] = useState('');
   const [rating, setRating] = useState(0);
-  const { data: session } = useSession();
+  const { session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { openLoginModal } = useLoginModal();
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
+  const handleCommentContentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setCommentContent(e.target.value);
   };
 
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,17 +39,17 @@ function ClubDetailCommentInput({
       toast.warn('별점을 입력해주세요!');
       return;
     }
-    if (!value.trim()) {
+    if (!commentContent.trim()) {
       toast.warn('댓글을 작성해주세요!');
       return;
     }
     setIsSubmitting(true);
-    const response = await postComment(clubId, value, rating);
+    const response = await postComment(clubId, commentContent, rating);
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
-    setValue('');
+    setCommentContent('');
     setRating(0);
     setIsSubmitting(false);
     await onCommentChange();
@@ -81,8 +83,8 @@ function ClubDetailCommentInput({
       </div>
       <p className="cursor-default text-base lg:font-semibold">댓글 {count}</p>
       <Textarea
-        value={value}
-        onChange={handleChange}
+        value={commentContent}
+        onChange={handleCommentContentChange}
         variant="comment"
         placeholder="허위사실, 욕설 등을 포함한 댓글은 별도의 안내 없이 삭제될 수 있어요."
       />
@@ -91,7 +93,7 @@ function ClubDetailCommentInput({
           variant="submit-default"
           type="submit"
           className="h-[43px] w-[113px]"
-          disabled={(!value.trim() && rating === 0) || isSubmitting}
+          disabled={(!commentContent.trim() && rating === 0) || isSubmitting}
         >
           댓글 남기기
         </Button>

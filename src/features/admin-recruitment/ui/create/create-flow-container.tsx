@@ -16,12 +16,12 @@ import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useCreateFlow from './use-create-flow';
 
-interface Props {
+interface CreateFlowContainerProps {
   clubId: number;
   clubInfo: ClubInfoType;
 }
 
-function CreateFlowContainer({ clubId, clubInfo }: Props) {
+function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
   const router = useRouter();
   const flow = useCreateFlow();
   const {
@@ -152,7 +152,7 @@ function CreateFlowContainer({ clubId, clubInfo }: Props) {
         </div>
       )}
 
-      {displayStep === 'postinfo' && (
+      {displayStep === 'postInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="모집공고" onBack={flow.prevStep} />
           {flow.isSubmitting ? (

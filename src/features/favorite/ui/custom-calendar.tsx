@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import dynamic from 'next/dynamic';
 import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import RecruitEndModal from '@/entities/favorite/ui/recruit-end-modal';
-import formatNavigation from '@/entities/favorite/ui/format-navigation';
+import DateNavigation from '@/entities/favorite/ui/format-navigation';
 import SharedLoading from '@/shared/ui/loading';
 import Image from 'next/image';
 import getWeekdays from '../util/get-week-days';
@@ -23,8 +23,8 @@ interface CustomCalendarProps {
 
 function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
   const {
-    modalOpen,
-    setModalOpen,
+    isModalOpen,
+    setIsModalOpen,
     selectedClubs,
     handleDateClick,
     deadlineMap,
@@ -64,7 +64,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
             />
           </div>
         }
-        navigationLabel={formatNavigation}
+        navigationLabel={DateNavigation}
         formatShortWeekday={(locale, date) => getWeekdays(date)}
         formatDay={(locale, date) => date.getDate().toString()}
         next2Label={null}
@@ -99,8 +99,8 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
       />
       <RecruitEndModal
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+        modalOpen={isModalOpen}
+        setModalOpen={setIsModalOpen}
         selectedClubs={selectedClubs}
         date={value}
       />

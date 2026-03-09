@@ -52,7 +52,7 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
                 startDate={item.recruitStartDate}
                 endDate={item.recruitEndDate}
                 description={item.description || ''}
-                favorite={item.isFavorite || false}
+                isFavorite={item.isFavorite || false}
                 logo={item.logo}
                 id={item.id}
                 recruitStatus={item.recruitStatus}

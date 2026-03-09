@@ -25,13 +25,13 @@ interface SessionData {
 }
 
 interface SessionContextValue {
-  data: SessionData | null;
+  session: SessionData | null;
   status: 'loading' | 'authenticated' | 'unauthenticated';
   refresh: () => void;
 }
 
 const SessionContext = createContext<SessionContextValue>({
-  data: null,
+  session: null,
   status: 'loading',
   refresh: () => {},
 });
@@ -41,7 +41,7 @@ export function AppSessionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [data, setData] = useState<SessionData | null>(null);
+  const [session, setSession] = useState<SessionData | null>(null);
   const [status, setStatus] =
     useState<SessionContextValue['status']>('loading');
 
@@ -50,14 +50,14 @@ export function AppSessionProvider({
       const res = await fetch('/api/auth/session');
       const json = await res.json();
       if (json?.user) {
-        setData(json);
+        setSession(json);
         setStatus('authenticated');
       } else {
-        setData(null);
+        setSession(null);
         setStatus('unauthenticated');
       }
     } catch {
-      setData(null);
+      setSession(null);
       setStatus('unauthenticated');
     }
   }, []);
@@ -67,8 +67,8 @@ export function AppSessionProvider({
   }, [fetchSession]);
 
   const value = useMemo(
-    () => ({ data, status, refresh: fetchSession }),
-    [data, status, fetchSession],
+    () => ({ session, status, refresh: fetchSession }),
+    [session, status, fetchSession],
   );
 
   return (

@@ -58,14 +58,14 @@ function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
             ) : (
               <HeaderManageModal
                 manageClubInfo={manageClubInfo}
-                menu="register"
+                manageAction="register"
                 onItemClick={closeMenu}
               />
             ))}
           {sessionRole && sessionRole !== UserRole.NORMAL && (
             <HeaderManageModal
               manageClubInfo={manageClubInfo}
-              menu="recruitment"
+              manageAction="recruitment"
               onItemClick={closeMenu}
             />
           )}

@@ -1,8 +1,11 @@
-import { FormField, StateProp } from '../model/type';
+import {
+  AdminRecruitmentFormField,
+  AdminRecruitmentFormState,
+} from '../model/type';
 
 export default function isFormValid(
-  { formData, errors }: StateProp,
-  fields: FormField[],
+  { formData, errors }: AdminRecruitmentFormState,
+  fields: AdminRecruitmentFormField[],
 ) {
   const allFilled = fields.every((field) => {
     const val = formData[field.name as keyof typeof formData];

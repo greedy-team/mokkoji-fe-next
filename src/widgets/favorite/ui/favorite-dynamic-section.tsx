@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import RecruitFavoriteList from '@/entities/favorite/ui/recruit-favorite-list';
 import RecruitDeadlineSoonList from '@/entities/favorite/ui/recruit-dead-line-list';

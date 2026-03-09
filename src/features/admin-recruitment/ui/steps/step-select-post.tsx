@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ClubRecruitments } from '@/views/club/model/type';
+import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';

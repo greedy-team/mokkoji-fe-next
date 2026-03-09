@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ClubRecruitments } from '@/views/club/model/type';
+import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { EditStep, EditFlowState } from './types';
 
 const EDIT_STEPS: EditStep[] = [

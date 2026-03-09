@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import ClubDetailTabs from '@/entities/club-detail/ui/club-detail-tabs';
+import ClubDetailTabs from '@/widgets/club-detail/ui/club-detail-tabs';
 import getRecentRecruitDetail from '@/views/club/api/getRecentRecruitDetail';
 import getClubRecruitments from '../api/getClubRecruitments';
 import getRecruitDetail from '../api/getRecruitDetail';

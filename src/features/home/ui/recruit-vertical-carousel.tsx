@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
-import { Club } from '@/widgets/club/model/type';
+import { Club } from '@/entities/club/model/type';
 import { formatToMonthDay } from '@/entities/club/util/getDateUtil';
 import RadiusTag from '@/shared/ui/radius-tag';
 

@@ -3,7 +3,7 @@
 import api from '@/shared/api/auth-api';
 import { ApiResponse } from '@/shared/model/type';
 import ErrorHandler from '@/shared/lib/error-message';
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 
 interface GetFavoriteByDateParams {
   yearMonth: string;

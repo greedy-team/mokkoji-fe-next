@@ -16,7 +16,10 @@ import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmen
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
 import StepSelectPost from '@/features/admin-recruitment/ui/steps/step-select-post';
-import { ClubRecruitments, RecruitmentDetail } from '@/views/club/model/type';
+import {
+  ClubRecruitments,
+  RecruitmentDetail,
+} from '@/entities/club-detail/model/type';
 import useEditFlow from './use-edit-flow';
 
 interface Props {

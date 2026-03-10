@@ -15,11 +15,11 @@ function ScrollItem({ title, description, logo, id }: ScrollItemProps) {
         <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
           <div className="flex flex-row items-center gap-3">
             <Avatar className="size-6 lg:size-12">
-              <AvatarImage src={logo} alt={logo} />
+              <AvatarImage src={logo} alt={`${title} 로고`} />
               <AvatarFallback>{title}</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-sm font-bold lg:text-xl">{title}</h1>
+              <h3 className="text-sm font-bold lg:text-xl">{title}</h3>
             </div>
           </div>
         </div>

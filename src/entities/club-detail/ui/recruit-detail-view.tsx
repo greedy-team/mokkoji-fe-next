@@ -73,7 +73,7 @@ function RecruitDetailView({
           <Image src="/detail/link.svg" alt="링크" width={16} height={16} />
         </button>
       )}
-      <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>
+      <h2 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h2>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
         className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"
@@ -123,6 +123,7 @@ function RecruitDetailView({
 
                 <Button
                   onClick={handlePrev}
+                  aria-label="이전 이미지"
                   className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/70 px-3 py-2 text-xl text-black hover:bg-white"
                 >
                   ‹
@@ -130,6 +131,7 @@ function RecruitDetailView({
 
                 <Button
                   onClick={handleNext}
+                  aria-label="다음 이미지"
                   className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/70 px-3 py-2 text-xl text-black hover:bg-white"
                 >
                   ›

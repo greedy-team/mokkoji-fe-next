@@ -99,6 +99,7 @@ function LoginForm({ isTermsConfirmed, onTermsModalOpen }: LoginFormProps) {
         )}
       </label>
       <Input
+        id="studentId"
         name="studentId"
         type="text"
         placeholder="학번"
@@ -126,6 +127,7 @@ function LoginForm({ isTermsConfirmed, onTermsModalOpen }: LoginFormProps) {
       </label>
       <div className="relative">
         <Input
+          id="password"
           name="password"
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="비밀번호"

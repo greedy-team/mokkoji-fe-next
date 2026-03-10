@@ -10,6 +10,7 @@ function SearchInput() {
           <SaveClientInput />
           <button
             type="submit"
+            aria-label="검색"
             className="absolute top-1/2 right-2 -translate-y-1/2 pb-2"
           >
             <Image

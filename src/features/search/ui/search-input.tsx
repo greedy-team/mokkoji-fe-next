@@ -3,14 +3,10 @@ import SaveClientInput from './save-client-input';
 
 function SearchInput() {
   return (
-    <div className="mt-10 flex w-[85%] justify-center lg:w-full">
-      <div className="w-full lg:w-[43%]">
-        <h1 className="mb-8 ml-2 text-3xl font-bold lg:ml-0">동아리 검색</h1>
-        <form
-          action="/search"
-          method="GET"
-          className="relative mx-auto w-[95%] lg:w-[80%]"
-        >
+    <div className="mt-10 flex w-full justify-center">
+      <div className="w-full">
+        <h1 className="mb-8 text-3xl font-bold">동아리 검색</h1>
+        <form action="/search" method="GET" className="relative w-full">
           <SaveClientInput />
           <button
             type="submit"

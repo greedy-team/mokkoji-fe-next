@@ -29,7 +29,7 @@ export default function MainLayout({
       <div className="hidden sm:block">
         <Header />
       </div>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 px-4 pt-4 lg:pt-10">{children}</main>
       <KakaoAdFit />
       <Footer />
       <BottomNav />

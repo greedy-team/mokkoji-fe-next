@@ -68,6 +68,7 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
           type="button"
           onClick={handlePrev}
           disabled={currentPage === 0}
+          aria-label="이전 페이지"
           className={cn(
             'h-[40px] w-[40px] rounded-full border border-[#CFCFCF] bg-white',
             currentPage === 0 && 'cursor-not-allowed opacity-50',
@@ -75,7 +76,8 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
         >
           <Image
             src="/favorite/prev.svg"
-            alt="prev"
+            alt=""
+            aria-hidden="true"
             width={60}
             height={60}
             className="scale-125"
@@ -85,6 +87,7 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
           type="button"
           onClick={() => handleNext()}
           disabled={currentPage >= viewTotalPages - 1}
+          aria-label="다음 페이지"
           className={cn(
             'h-[40px] w-[40px] rounded-full border border-[#CFCFCF] bg-white',
             currentPage >= viewTotalPages - 1 &&
@@ -93,7 +96,8 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
         >
           <Image
             src="/favorite/next.svg"
-            alt="next"
+            alt=""
+            aria-hidden="true"
             width={60}
             height={60}
             className="scale-125"

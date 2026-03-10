@@ -9,19 +9,24 @@ function HomeSearchBar() {
           method="GET"
           className="flex items-center justify-between gap-1 pb-2 text-xs lg:text-xl"
         >
+          <label htmlFor="home-search" className="sr-only">
+            동아리 검색
+          </label>
           <input
+            id="home-search"
             type="text"
             required
             name="q"
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] py-5 outline-none focus:placeholder-gray-300 lg:indent-2"
           />
-          <button type="submit">
+          <button type="submit" aria-label="검색">
             <Image
               src="/header/search.svg"
-              alt="검색"
+              alt=""
               width={25}
               height={25}
+              aria-hidden="true"
               className="h-[17px] w-[17px] cursor-pointer lg:h-[25px] lg:w-[25px]"
             />
           </button>

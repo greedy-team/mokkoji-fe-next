@@ -40,7 +40,11 @@ function HeaderSearch({
       ref={wrapperRef}
       className="flex items-center"
     >
+      <label htmlFor="header-search" className="sr-only">
+        동아리 검색
+      </label>
       <input
+        id="header-search"
         type="text"
         name="q"
         placeholder="검색어를 입력해주세요"
@@ -50,6 +54,7 @@ function HeaderSearch({
       />
       <button
         type={isSearchVisible ? 'submit' : 'button'}
+        aria-label={isSearchVisible ? '검색' : '검색창 열기'}
         onClick={(e) => {
           if (!isSearchVisible) {
             e.preventDefault();

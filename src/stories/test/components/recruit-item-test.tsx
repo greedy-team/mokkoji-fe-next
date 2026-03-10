@@ -41,7 +41,7 @@ function RecruitItemTest({
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
         <div className="flex flex-row items-center gap-4">
           <Avatar className="size-12 lg:size-14">
-            <AvatarImage src={logo} alt={logo} />
+            <AvatarImage src={logo} alt={`${name} 로고`} />
             <AvatarFallback />
           </Avatar>
           <div>
@@ -50,9 +50,9 @@ function RecruitItemTest({
               endDate={endDate}
               isAlwaysRecruiting={isAlwaysRecruiting}
             />
-            <h1 className="text-text-primary text-base font-bold lg:text-xl">
+            <h2 className="text-text-primary text-base font-bold lg:text-xl">
               {name}
-            </h1>
+            </h2>
           </div>
         </div>
         <RadiusTag recruitStatus={status} className="lg:text-[16px]" />

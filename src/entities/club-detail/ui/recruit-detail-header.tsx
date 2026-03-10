@@ -50,7 +50,9 @@ function RecruitDetailHeader({
             {title}
           </h1>
           <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
-            <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+            <Link
+              href={`/club?category=${ClubCategoryToLabel[category]?.toLowerCase()}`}
+            >
               {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
             </Link>
           </p>

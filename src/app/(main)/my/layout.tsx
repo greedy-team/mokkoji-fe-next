@@ -20,7 +20,7 @@ export default function Layout({
   return (
     <div className="flex flex-col">
       <HeaderMobile pageTitle="마이페이지" />
-      <main className="flex flex-col justify-center lg:items-center">
+      <main className="flex flex-col justify-center px-2 pt-10 lg:items-center lg:px-0">
         {children}
       </main>
     </div>

@@ -14,7 +14,7 @@ async function ClubItemList() {
   const clubListResponse = await getClubList({
     page,
     size,
-    category: (category?.toUpperCase() || '') as ClubCategory,
+    category: category as ClubCategory,
     affiliation: affiliation as ClubAffiliation,
     keyword,
   });

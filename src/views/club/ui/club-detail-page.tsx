@@ -31,7 +31,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   const selected = await getRecruitDetail(recruitmentId);
 
   return (
-    <div className="mt-5 w-full lg:mt-[35px]">
+    <div className="mt-5 w-full px-5 lg:mt-[35px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
       <RecruitDetailHeader
         title={recent.data.clubName}
         category={recent.data.category}

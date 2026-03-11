@@ -4,9 +4,9 @@ function ClubTextCard() {
   return (
     <div className="flex h-[50%] w-full flex-col justify-center gap-2 lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
-        <h2 className="text-primary-500 text-sm font-bold lg:text-2xl">
+        <h1 className="text-primary-500 text-sm font-bold lg:text-2xl">
           전체 동아리
-        </h2>
+        </h1>
       </AnimateOnView>
       <AnimateOnView animation="reveal">
         <p className="my-1 w-full text-2xl leading-[1.5] font-semibold lg:my-3 lg:w-[90%] lg:text-3xl lg:font-bold">

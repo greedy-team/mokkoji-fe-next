@@ -10,22 +10,20 @@ alwaysApply: true
 
 ## 기술 스택
 
-- Next.js 15.3 (App Router, Turbopack, standalone), React 19, TypeScript 5.8
+- Next.js 15 (App Router, Turbopack), React 19, TypeScript 5.8
 - Tailwind CSS v4 + shadcn/ui (new-york) + CVA + tailwind-merge
-- API 클라이언트: ky (`serverApi`: 비인증, `api`: 인증+미들웨어 토큰갱신)
+- API 클라이언트: ky (serverApi: 비인증, api(auth-api): 인증+자동 토큰갱신)
 - 인증: 쿠키 기반 자체 세션 (`app-session` httpOnly 쿠키, JWT access/refresh token)
-- URL 상태: nuqs, 날짜: dayjs, 가상화: @tanstack/react-virtual
-- 모니터링: Sentry, Clarity. 테스트: Playwright, Storybook
 - 패키지 매니저: pnpm
 
 ## 아키텍처 — Feature-Sliced Design (FSD)
 
 ```
-src/app/        → 라우팅 (App Router) + API Routes
+src/app/        → 라우팅 (App Router)
 src/views/      → 페이지 컴포저
 src/widgets/    → 독립 UI 블록
-src/features/   → 사용자 인터랙션 단위 (폼, 액션)
-src/entities/   → 도메인 모델 UI + 타입 정의
+src/features/   → 사용자 인터랙션 단위
+src/entities/   → 도메인 모델 UI
 src/shared/     → 공용 유틸, UI, API, hooks
 ```
 
@@ -33,16 +31,10 @@ src/shared/     → 공용 유틸, UI, API, hooks
 
 ## API 패턴
 
-- `serverApi` (`shared/api/server-api.ts`): 인증 불필요, base URL: `NEXT_PUBLIC_API_URL`
-- `api` (`shared/api/auth-api.ts`): `'server-only'`, beforeRequest에서 세션 accessToken 주입
-- 에러 처리: `createErrorResponse()` + ky `HTTPError` → status별 한글 메시지 매핑
-
-## 상태 관리
-
-- 폼: `useReducer` (`UPDATE_FIELD`, `VALIDATE_FIELD`, `RESET_FORM`)
-- URL 파라미터: nuqs `searchParamsCache`
-- 세션: `AppSessionProvider` (Context), 로그인 모달: `LoginModalProvider`
-- 외부 상태 라이브러리 없음
+- `serverApi` (`shared/api/server-api.ts`): 인증 불필요 서버 호출, `cache: 'no-store'`
+- `api` (`shared/api/auth-api.ts`): `'use server'` + `server-only`. beforeRequest에서 쿠키 세션의 accessToken 자동 주입, 만료 시 refreshToken 갱신, 401 시 자동 재시도
+- 서버 컴포넌트에서 세션: `getSession()` (from `shared/lib/cookie-session.ts`)
+- 클라이언트에서 세션: `useSession()` (from `shared/lib/session-context.tsx`), `/api/auth/session` 경유
 
 ## 코드 규칙
 
@@ -54,6 +46,23 @@ src/shared/     → 공용 유틸, UI, API, hooks
 
 ## 스타일링
 
-- Tailwind CSS v4 (postcss 플러그인, tailwind.config 없음)
-- `theme.css`: `@theme`로 primary/text/alert 색상 정의
-- `cn()` (clsx + tailwind-merge), shadcn/ui CSS Variables
+- Tailwind CSS v4 + shadcn/ui 컴포넌트
+- cn() 함수 (clsx + tailwind-merge) 사용
+- CSS Variables로 테마 관리 (globals.css)
+
+## 라우팅 그룹
+
+- `(home)`: 랜딩 페이지
+- `(main)`: 메인 서비스 (club, search, favorite, my 등)
+- `(admin)`: 관리자 (동아리 정보 수정, 모집 공고)
+
+## 상태 관리
+
+- 폼: `useReducer` 패턴 (각 feature별 전용 reducer)
+- URL 파라미터: `nuqs`
+- 세션: React Context (`AppSessionProvider`)
+
+## 배포
+
+- Docker + Blue-Green 배포 (EC2), Nginx 리버스 프록시
+- CI: GitHub Actions (PR → lint+build, main/develop push → Docker 빌드+배포)

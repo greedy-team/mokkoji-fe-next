@@ -1,7 +1,7 @@
 ---
 description: 변수·함수·컴포넌트 네이밍 규칙
-globs:
-alwaysApply: true
+globs: src/**
+alwaysApply: false
 ---
 
 - 변수, 함수, 컴포넌트, 파일 이름은 항상 이 프로젝트 도메인에 맞는 직관적인 이름으로 짓는다.

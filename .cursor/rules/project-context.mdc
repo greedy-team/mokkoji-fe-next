@@ -4,14 +4,56 @@ globs:
 alwaysApply: true
 ---
 
-## 모꼬지 — 세종대 동아리 플랫폼
+## 프로젝트 개요
 
-- Next.js 15.3 (App Router, Turbopack, standalone), React 19, TS 5.8
+세종대학교 동아리 통합 플랫폼 **모꼬지(Mokkoji)**. 동아리 홍보, 모집 공고, 즐겨찾기, 검색, 관리자 기능 제공.
+
+## 기술 스택
+
+- Next.js 15.3 (App Router, Turbopack, standalone), React 19, TypeScript 5.8
 - Tailwind CSS v4 + shadcn/ui (new-york) + CVA + tailwind-merge
-- API: ky (`serverApi` 비인증, `api` 인증+미들웨어 토큰갱신)
-- 인증: `app-session` httpOnly 쿠키, JWT access/refresh token
-- FSD: app → views → widgets → features → entities → shared (상위→하위만 import)
-- 코드: function-declaration, `@/*` alias, Airbnb ESLint + Prettier, cn()
-- 폼: useReducer, URL: nuqs, 세션: AppSessionProvider (Context)
-- 커밋: `[#이슈번호|no-issue] type: subject`, Husky + lint-staged
-- 패키지: pnpm
+- API 클라이언트: ky (`serverApi`: 비인증, `api`: 인증+미들웨어 토큰갱신)
+- 인증: 쿠키 기반 자체 세션 (`app-session` httpOnly 쿠키, JWT access/refresh token)
+- URL 상태: nuqs, 날짜: dayjs, 가상화: @tanstack/react-virtual
+- 모니터링: Sentry, Clarity. 테스트: Playwright, Storybook
+- 패키지 매니저: pnpm
+
+## 아키텍처 — Feature-Sliced Design (FSD)
+
+```
+src/app/        → 라우팅 (App Router) + API Routes
+src/views/      → 페이지 컴포저
+src/widgets/    → 독립 UI 블록
+src/features/   → 사용자 인터랙션 단위 (폼, 액션)
+src/entities/   → 도메인 모델 UI + 타입 정의
+src/shared/     → 공용 유틸, UI, API, hooks
+```
+
+상위 레이어만 하위를 import 가능 (app→views→widgets→features→entities→shared).
+
+## API 패턴
+
+- `serverApi` (`shared/api/server-api.ts`): 인증 불필요, base URL: `NEXT_PUBLIC_API_URL`
+- `api` (`shared/api/auth-api.ts`): `'server-only'`, beforeRequest에서 세션 accessToken 주입
+- 에러 처리: `createErrorResponse()` + ky `HTTPError` → status별 한글 메시지 매핑
+
+## 상태 관리
+
+- 폼: `useReducer` (`UPDATE_FIELD`, `VALIDATE_FIELD`, `RESET_FORM`)
+- URL 파라미터: nuqs `searchParamsCache`
+- 세션: `AppSessionProvider` (Context), 로그인 모달: `LoginModalProvider`
+- 외부 상태 라이브러리 없음
+
+## 코드 규칙
+
+- ESLint: Airbnb + Airbnb-TypeScript + Prettier 통합
+- 컴포넌트: `function-declaration` 스타일 (화살표 함수 X)
+- Import 별칭: `@/*` → `./src/*`
+- 커밋: `[#이슈번호|no-issue] type: subject` (소문자, commitlint)
+- Husky + lint-staged: 커밋 전 prettier + eslint 자동 실행
+
+## 스타일링
+
+- Tailwind CSS v4 (postcss 플러그인, tailwind.config 없음)
+- `theme.css`: `@theme`로 primary/text/alert 색상 정의
+- `cn()` (clsx + tailwind-merge), shadcn/ui CSS Variables

@@ -1,7 +1,6 @@
 ---
-description: 변경 파일 수가 10개를 초과하면 작업 분할 또는 PR 분리를 권장하는 규칙. 커밋, PR, 작업 완료 시 활성화.
-globs:
-alwaysApply: false
+description: 변경 파일 수가 10개를 초과하면 작업 분할 또는 PR 분리를 권장하는 규칙
+alwaysApply: true
 ---
 
 # 작업 범위 제한

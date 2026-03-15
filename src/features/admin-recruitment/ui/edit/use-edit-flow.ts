@@ -1,6 +1,9 @@
+'use client';
+
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
-import { EditStep, EditFlowState } from './types';
+import { EditStep } from './types';
 
 const EDIT_STEPS: EditStep[] = [
   'selectPost',
@@ -8,61 +11,69 @@ const EDIT_STEPS: EditStep[] = [
   'postInfo',
   'complete',
 ];
+const DEFAULT_STEP: EditStep = 'selectPost';
 
 function useEditFlow() {
-  const [state, setState] = useState<EditFlowState>({
-    currentStep: 'selectPost',
-    selectedPost: undefined,
-    isSubmitting: false,
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [selectedPost, setSelectedPost] = useState<
+    ClubRecruitments | undefined
+  >(undefined);
+  const [isSubmitting, setSubmitting] = useState(false);
+
+  const currentStep = (searchParams.get('step') as EditStep) ?? DEFAULT_STEP;
 
   const startEdit = (post: ClubRecruitments) => {
-    setState((prev) => ({
-      ...prev,
-      currentStep: 'basicInfo',
-      selectedPost: post,
-    }));
+    setSelectedPost(post);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', 'basicInfo');
+    router.push(`?${params.toString()}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const nextStep = () => {
-    const idx = EDIT_STEPS.indexOf(state.currentStep);
+    const idx = EDIT_STEPS.indexOf(currentStep);
     if (idx < EDIT_STEPS.length - 1) {
-      setState((prev) => ({ ...prev, currentStep: EDIT_STEPS[idx + 1] }));
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('step', EDIT_STEPS[idx + 1]);
+      router.push(`?${params.toString()}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const prevStep = () => {
-    const idx = EDIT_STEPS.indexOf(state.currentStep);
+    const idx = EDIT_STEPS.indexOf(currentStep);
     if (idx > 0) {
-      setState((prev) => ({ ...prev, currentStep: EDIT_STEPS[idx - 1] }));
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('step', EDIT_STEPS[idx - 1]);
+      router.push(`?${params.toString()}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const goToSelectPost = () => {
-    setState((prev) => ({
-      ...prev,
-      currentStep: 'selectPost',
-    }));
-  };
-
-  const setSubmitting = (isSubmitting: boolean) => {
-    setState((prev) => ({ ...prev, isSubmitting }));
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', 'selectPost');
+    router.push(`?${params.toString()}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const complete = () => {
-    setState((prev) => ({ ...prev, currentStep: 'complete' }));
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', 'complete');
+    router.replace(`?${params.toString()}`);
   };
 
   const reset = () => {
-    setState({
-      currentStep: 'selectPost',
-      selectedPost: undefined,
-      isSubmitting: false,
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', DEFAULT_STEP);
+    router.replace(`?${params.toString()}`);
   };
 
   return {
-    ...state,
+    currentStep,
+    selectedPost,
+    isSubmitting,
     startEdit,
     nextStep,
     prevStep,

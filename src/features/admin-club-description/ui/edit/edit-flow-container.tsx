@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SharedLoading from '@/shared/ui/loading';
 import useClubForm from '@/features/admin-club-description/util/useClubForm';
 import { patchClubInfo } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
@@ -19,7 +20,7 @@ interface ClubEditFlowContainerProps {
   clubId: number;
 }
 
-function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
+function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const router = useRouter();
   const flow = useEditFlow();
   const initialFormData = {
@@ -45,21 +46,6 @@ function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(clubInfo.logo ?? null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayStep, setDisplayStep] = useState(flow.currentStep);
-
-  useEffect(() => {
-    if (flow.currentStep !== displayStep) {
-      setIsTransitioning(true);
-      const timer = setTimeout(() => {
-        setDisplayStep(flow.currentStep);
-        setIsTransitioning(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [flow.currentStep, displayStep]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -135,7 +121,7 @@ function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
     toast.success('동아리 정보가 수정되었습니다!');
   };
 
-  if (displayStep === 'complete') {
+  if (flow.currentStep === 'complete') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">수정 완료!</h2>
@@ -148,12 +134,8 @@ function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   }
 
   return (
-    <div
-      className={`transition-opacity duration-300 ${
-        isTransitioning ? 'opacity-0' : 'opacity-100'
-      }`}
-    >
-      {displayStep === 'basicInfo' && (
+    <div>
+      {flow.currentStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader
             title="동아리 기본 정보"
@@ -182,9 +164,9 @@ function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
         </div>
       )}
 
-      {displayStep === 'description' && (
+      {flow.currentStep === 'description' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
-          <AdminPageHeader title="동아리 소개" onBack={() => flow.prevStep()} />
+          <AdminPageHeader title="동아리 소개" onBack={flow.prevStep} />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
@@ -208,6 +190,14 @@ function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
         </div>
       )}
     </div>
+  );
+}
+
+function EditFlowContainer(props: ClubEditFlowContainerProps) {
+  return (
+    <Suspense fallback={<SharedLoading />}>
+      <EditFlowContent {...props} />
+    </Suspense>
   );
 }
 

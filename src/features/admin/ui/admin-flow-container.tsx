@@ -30,7 +30,6 @@ function AdminFlowContent({ allowedClubs, role }: AdminFlowContainerProps) {
         <StepSelectActionMode
           clubName={flow.selectedClubName}
           onNext={flow.selectAction}
-          onBack={flow.goBack}
         />
       )}
     </div>

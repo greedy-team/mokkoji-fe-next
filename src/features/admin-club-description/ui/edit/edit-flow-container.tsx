@@ -137,10 +137,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
     <div>
       {flow.currentStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
-          <AdminPageHeader
-            title="동아리 기본 정보"
-            onBack={() => router.back()}
-          />
+          <AdminPageHeader title="동아리 기본 정보" />
           <StepClubBasicInfo
             formData={formData}
             errors={errors}
@@ -166,7 +163,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
 
       {flow.currentStep === 'description' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
-          <AdminPageHeader title="동아리 소개" onBack={flow.prevStep} />
+          <AdminPageHeader title="동아리 소개" />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (

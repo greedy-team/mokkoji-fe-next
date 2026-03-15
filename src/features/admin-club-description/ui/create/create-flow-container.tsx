@@ -68,10 +68,7 @@ function CreateFlowContent() {
     <div className="px-[8%] lg:px-[35%]">
       {flow.currentStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 py-8">
-          <AdminPageHeader
-            title="동아리 기본 정보"
-            onBack={() => router.back()}
-          />
+          <AdminPageHeader title="동아리 기본 정보" />
           <StepClubRegisterInfo
             formData={formData}
             errors={errors}

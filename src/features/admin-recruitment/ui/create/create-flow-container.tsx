@@ -100,10 +100,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
     <div>
       {flow.currentStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
-          <AdminPageHeader
-            title="모집글 기본 정보"
-            onBack={() => router.back()}
-          />
+          <AdminPageHeader title="모집글 기본 정보" />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -136,7 +133,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
 
       {flow.currentStep === 'postInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
-          <AdminPageHeader title="모집공고" onBack={flow.prevStep} />
+          <AdminPageHeader title="모집공고" />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (

@@ -7,6 +7,7 @@ import LoginRequired from '@/shared/ui/login-required';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
+import EmailDeleteButton from '../../../features/my/ui/email-delete-button';
 import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
 import LogoutLink from '../../../features/my/ui/logout-link';
 
@@ -36,11 +37,14 @@ async function MyPage() {
           <InfoRow label="이름" value={user.name} />
           <InfoRow label="학년" value={user.grade} />
           <InfoRow label="이메일" value={user.email}>
-            <EmailChangeDialog
-              initialEmail={user.email}
-              isEmailOn={user.emailOn}
-              triggerClassName="text-[#00E457] text-sm"
-            />
+            <div className="flex items-center gap-3">
+              <EmailChangeDialog
+                initialEmail={user.email}
+                isEmailOn={user.emailOn}
+                triggerClassName="text-[#00E457] text-sm"
+              />
+              {user.email && <EmailDeleteButton />}
+            </div>
           </InfoRow>
           <InfoRow label="메일 알림">
             <MailNotificationToggle

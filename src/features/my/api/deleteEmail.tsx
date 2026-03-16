@@ -4,17 +4,17 @@ import api from '@/shared/api/auth-api';
 import ErrorHandler from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
 
-async function putEmail(email: string, isEmailOn: boolean) {
+async function deleteEmail() {
   try {
     const response = await api.patch('users', {
-      json: { email, isEmailOn },
+      json: { email: '', isEmailOn: false },
     });
 
     const data = await response.json();
     revalidateTag('users');
     return {
       ok: true,
-      message: '이메일이 변경되었습니다.',
+      message: '이메일이 삭제되었습니다.',
       data,
       status: 200,
     };
@@ -23,4 +23,4 @@ async function putEmail(email: string, isEmailOn: boolean) {
   }
 }
 
-export default putEmail;
+export default deleteEmail;

@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import putEmail from '../api/putEmail';
 
 type MailNotificationToggleProps = {
@@ -15,8 +16,18 @@ export default function MailNotificationToggle({
 }: MailNotificationToggleProps) {
   const [enabled, setEnabled] = useState<boolean>(isEmailOn);
 
+  useEffect(() => {
+    setEnabled(isEmailOn);
+  }, [isEmailOn]);
+
   const handleToggle = async () => {
     const toggle = !enabled;
+
+    if (toggle && !email) {
+      toast.warn('이메일을 먼저 등록해주세요.');
+      return;
+    }
+
     setEnabled(toggle);
 
     try {

@@ -51,3 +51,5 @@ next-env.d.ts
 logs
 
 nginx/active/
+
+.claude

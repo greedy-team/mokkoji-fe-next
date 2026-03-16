@@ -35,7 +35,8 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
       return;
     }
     setSubmitting(true);
-    const response = await putEmail(email, isEmailOn);
+    const isNewEmail = !initialEmail;
+    const response = await putEmail(email, isNewEmail ? true : isEmailOn);
     if (!response.ok) {
       toast.error(response.message);
       return;

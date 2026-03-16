@@ -1,26 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { CommentType } from '@/widgets/club-detail/model/type';
+import { ClubComment } from '@/entities/club-detail/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';
 
 interface ClubDetailCommentProps {
   clubId: number;
-  comments: CommentType[];
+  comments: ClubComment[];
+  onCommentChange: () => Promise<void>;
 }
 
 export default function ClubDetailComment({
   clubId,
   comments,
+  onCommentChange,
 }: ClubDetailCommentProps) {
-  const [edit, setEdit] = useState<number | null>(null);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 
   return (
     <div className="flex flex-col gap-3.5">
       {comments.map((comment) => {
-        const isEditing = comment.id === edit;
+        const isEditing = comment.id === editingCommentId;
 
         return (
           <div
@@ -41,10 +43,16 @@ export default function ClubDetailComment({
                 commentId={comment.id}
                 content={comment.content}
                 rate={comment.rate}
-                onCancel={() => setEdit(null)}
+                onCancel={() => setEditingCommentId(null)}
+                onCommentChange={onCommentChange}
               />
             ) : (
-              <CommentItem clubId={clubId} comment={comment} onEdit={setEdit} />
+              <CommentItem
+                clubId={clubId}
+                comment={comment}
+                onEdit={setEditingCommentId}
+                onCommentChange={onCommentChange}
+              />
             )}
           </div>
         );

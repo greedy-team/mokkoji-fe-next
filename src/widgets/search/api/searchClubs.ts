@@ -1,10 +1,11 @@
 import {
   ClubCategory,
   ClubAffiliation,
-  ClubSearchResponse,
+  ClubSearchRawResponse,
+  mapClubType,
 } from '@/shared/model/type';
 import serverApi from '@/shared/api/server-api';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 
 interface SearchClubsParams {
   keyword?: string;
@@ -31,16 +32,21 @@ async function searchClubs(params: SearchClubsParams) {
         searchParams,
         next: { tags: ['clubs-search'] },
       })
-      .json<{ data: ClubSearchResponse }>();
+      .json<{ data: ClubSearchRawResponse }>();
+
+    const data = {
+      ...response.data,
+      clubs: response.data.clubs.map(mapClubType),
+    };
 
     return {
       ok: true,
       message: '성공',
-      data: response.data,
+      data,
       status: 200,
     };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

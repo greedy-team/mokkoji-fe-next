@@ -1,4 +1,4 @@
-type Props = {
+type DotsPulseLoaderProps = {
   /** 점 지름(px) */
   size?: number;
   /** 점 사이 간격(px) */
@@ -23,7 +23,7 @@ export default function DotsPulseLoader({
   className,
   wrapperClassName,
   text,
-}: Props) {
+}: DotsPulseLoaderProps) {
   const style = {
     ['--dot-size' as any]: `${size}px`,
     ['--dot-gap' as any]: `${gap}px`,

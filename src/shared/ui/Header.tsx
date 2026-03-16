@@ -1,21 +1,23 @@
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
-import { auth } from '@/auth';
-import getClubManageInfo from '@/shared/api/manage-api';
+import { getSession } from '@/shared/lib/cookie-session';
 import NavButton from './nav-button';
-import { UserRole } from '../model/type';
-import HeaderManageModal from './header-manage-modal';
 import HeaderMenuSection from './header-menu-section';
 import ScrollProgressBar from './scroll-progress-bar';
 
 async function Header() {
-  const session = await auth();
+  const session = await getSession();
   const role = session?.role;
-  const getClubManageInfoRes = await getClubManageInfo({ role });
 
   return (
     <header className="sticky top-0 right-0 left-0 z-50 flex h-[60px] shrink-0 items-center bg-white px-4 text-base font-semibold sm:px-8 lg:px-[150px]">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:shadow-lg"
+      >
+        본문 바로가기
+      </a>
       <ScrollProgressBar />
       <Link
         href="/"

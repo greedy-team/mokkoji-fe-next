@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import convertLinkText from '@/entities/club-detail/util/convetLinkText';
+import convertLinkText from '@/entities/club-detail/util/convertLinkText';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 interface RecruitDetailViewProps {
@@ -17,7 +17,7 @@ interface RecruitDetailViewProps {
   content: string;
   recruitForm: string;
   imageUrls: string[];
-  recentRid: number;
+  recentRecruitId: number;
 }
 
 function RecruitDetailView({
@@ -25,14 +25,14 @@ function RecruitDetailView({
   content,
   recruitForm,
   imageUrls,
-  recentRid,
+  recentRecruitId,
 }: RecruitDetailViewProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const currentRid = Number(searchParams.get('rid'));
-  const isRecentRecruitment = currentRid === recentRid;
+  const currentRecruitId = Number(searchParams.get('recruit'));
+  const isRecentRecruitment = currentRecruitId === recentRecruitId;
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);
@@ -42,13 +42,13 @@ function RecruitDetailView({
     setCurrentIndex((prev) => (prev + 1) % imageUrls.length);
   };
 
-  const isRecruitPeriod =
+  const isRecruitContentAvailable =
     Boolean(title?.trim()) ||
     Boolean(content?.trim()) ||
     Boolean(recruitForm?.trim()) ||
     imageUrls.length > 0;
 
-  if (!isRecruitPeriod) {
+  if (!isRecruitContentAvailable) {
     return (
       <p className="py-30 text-center text-gray-500">
         동아리 모집 기간이 아닙니다.
@@ -66,14 +66,14 @@ function RecruitDetailView({
       {!isRecentRecruitment && (
         <button
           onClick={goLatest}
-          className="text-primary-500 border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm"
+          className="border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm text-[#22CF64]"
         >
           <Image src="/detail/speaker.svg" alt="알림" width={16} height={16} />
           <span>최신 모집 공고 바로가기</span>
           <Image src="/detail/link.svg" alt="링크" width={16} height={16} />
         </button>
       )}
-      <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>
+      <h2 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h2>
       <p
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
         className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"
@@ -123,6 +123,7 @@ function RecruitDetailView({
 
                 <Button
                   onClick={handlePrev}
+                  aria-label="이전 이미지"
                   className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/70 px-3 py-2 text-xl text-black hover:bg-white"
                 >
                   ‹
@@ -130,6 +131,7 @@ function RecruitDetailView({
 
                 <Button
                   onClick={handleNext}
+                  aria-label="다음 이미지"
                   className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/70 px-3 py-2 text-xl text-black hover:bg-white"
                 >
                   ›

@@ -2,7 +2,6 @@
 import { ApiResponse, ClubCategory } from '@/shared/model/type';
 import ky from 'ky';
 import { RecruitmentResponse } from '@/widgets/recruit/model/type';
-import { Session } from 'next-auth';
 
 async function getClubRecruitClientList({
   page,
@@ -13,7 +12,7 @@ async function getClubRecruitClientList({
   page: number;
   size: number;
   category?: ClubCategory;
-  session: Session | null;
+  session: { accessToken?: string } | null;
 }) {
   const params = new URLSearchParams();
 
@@ -22,13 +21,13 @@ async function getClubRecruitClientList({
 
   if (category) params.set('category', category);
 
-  let res;
+  let recruitmentResponse;
   if (!session?.accessToken) {
-    res = await ky.get(
+    recruitmentResponse = await ky.get(
       `${process.env.NEXT_PUBLIC_API_URL}/recruitments?${params.toString()}`,
     );
   } else {
-    res = await ky.get(
+    recruitmentResponse = await ky.get(
       `${process.env.NEXT_PUBLIC_API_URL}/recruitments?${params.toString()}`,
       {
         headers: {
@@ -38,11 +37,12 @@ async function getClubRecruitClientList({
     );
   }
 
-  if (!res.ok) {
+  if (!recruitmentResponse.ok) {
     throw new Error('Failed to fetch recruitments');
   }
 
-  const data: ApiResponse<RecruitmentResponse> = await res.json();
+  const data: ApiResponse<RecruitmentResponse> =
+    await recruitmentResponse.json();
   return data.data;
 }
 

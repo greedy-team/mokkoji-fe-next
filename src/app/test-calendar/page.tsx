@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import DateRangePicker from '@/shared/ui/calender/date-range-picker';
+import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 
 function TestCalendarPage() {
   const [startDate, setStartDate] = useState<string | null>(null);

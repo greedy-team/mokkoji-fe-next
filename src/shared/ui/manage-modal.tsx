@@ -15,17 +15,17 @@ interface ManageModalProps {
   open: boolean;
   onClose: () => void;
   manageClubInfo: ManageClub[];
-  menu: string; // 'register' | 'recruit' 등
+  manageAction: 'register' | 'recruitment';
 }
 
 function ManageModal({
   open,
   onClose,
   manageClubInfo,
-  menu,
+  manageAction,
 }: ManageModalProps) {
   const title =
-    menu === 'register'
+    manageAction === 'register'
       ? '정보를 등록/수정할 동아리를 선택해주세요.'
       : '모집 공고를 작성할 동아리를 선택해주세요.';
 
@@ -59,7 +59,7 @@ function ManageModal({
               >
                 <Link
                   href={
-                    menu === 'register'
+                    manageAction === 'register'
                       ? `/club-register/${club.clubId}`
                       : `/post-recruitment/${club.clubId}`
                   }

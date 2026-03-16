@@ -5,12 +5,14 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
-import { ClubFormData, FormField } from '../model/type';
+import { ClubFormData, ClubRegisterFormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
 import isFormValid from '../util/isFormValid';
-import reducer, { initialState } from '../model/reducer/clubFormReducer';
+import clubRegisterFormReducer, {
+  initialState,
+} from '../model/reducer/clubFormReducer';
 
-const fields: FormField[] = [
+const fields: ClubRegisterFormField[] = [
   { label: '동아리 이름', name: 'name', type: 'input' },
   { label: '카테고리', name: 'category', type: 'options' },
   { label: '소속', name: 'affiliation', type: 'options' },
@@ -18,7 +20,7 @@ const fields: FormField[] = [
 ];
 
 function ClubRegisterForm() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(clubRegisterFormReducer, initialState);
   const router = useRouter();
   const { formData, errors } = state;
 
@@ -54,7 +56,7 @@ function ClubRegisterForm() {
   return (
     <SafeForm
       onSubmit={onSubmit}
-      title="등록하기"
+      submitLabel="등록하기"
       disabled={!isValid}
       formClassName="flex flex-col gap-4"
     >

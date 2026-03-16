@@ -14,12 +14,12 @@ import useEditFlow from './use-edit-flow';
 import StepClubBasicInfo from '../steps/step-club-basic-info';
 import StepClubDescription from '../steps/step-club-description';
 
-interface Props {
+interface ClubEditFlowContainerProps {
   clubInfo: ClubInfoType;
   clubId: number;
 }
 
-function EditFlowContainer({ clubInfo, clubId }: Props) {
+function EditFlowContainer({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const router = useRouter();
   const flow = useEditFlow();
   const initialFormData = {

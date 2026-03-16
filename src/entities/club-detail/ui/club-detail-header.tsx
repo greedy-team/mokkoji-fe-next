@@ -36,7 +36,9 @@ function ClubDetailHeader({
         <ClickLogo logo={logo} title={title} />
         <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
         <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
-          <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+          <Link
+            href={`/club?category=${ClubCategoryToLabel[category]?.toLowerCase()}`}
+          >
             {category} 동아리
           </Link>
         </p>
@@ -46,7 +48,7 @@ function ClubDetailHeader({
         <PeriodSection
           startDate={startDate}
           endDate={endDate}
-          decoration={false}
+          isDecorated={false}
           className="lg:text-lg"
           isAlwaysRecruiting={isAlwaysRecruiting}
         />

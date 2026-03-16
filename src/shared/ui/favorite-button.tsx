@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/shared/lib/session-context';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -22,7 +22,7 @@ function FavoriteButton({
   wrapperClass,
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
-  const { data: session } = useSession();
+  const { session } = useSession();
 
   const handleToggle = useMemo(
     () =>
@@ -32,10 +32,15 @@ function FavoriteButton({
           return;
         }
         try {
+          let result;
           if (!favorite) {
-            await postFavorite(Number(clubId));
+            result = await postFavorite(Number(clubId));
           } else {
-            await deleteFavorite(Number(clubId));
+            result = await deleteFavorite(Number(clubId));
+          }
+          if (!result.ok) {
+            toast.error(result.message);
+            return;
           }
           setFavorite((prev) => !prev);
         } catch (error) {

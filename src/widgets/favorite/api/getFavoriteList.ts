@@ -1,5 +1,5 @@
 import api from '@/shared/api/auth-api';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { ApiResponse, FavoriteList } from '@/shared/model/type';
 
 interface GetFavoriteListParams {
@@ -14,7 +14,7 @@ async function getFavoriteList({ page, size }: GetFavoriteListParams) {
       .json();
     return { ok: true, data: response.data, status: response.status };
   } catch (error) {
-    return ErrorHandler(error as Error);
+    return createErrorResponse(error as Error);
   }
 }
 

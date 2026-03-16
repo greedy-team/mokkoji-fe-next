@@ -20,19 +20,19 @@ const CATEGORY_MAP: Record<string, ClubCategory> = {
 async function SearchResults({ keyword, category }: SearchResultsProps) {
   const safeCategory = category ? CATEGORY_MAP[category] : undefined;
 
-  const result = await searchClubs({
+  const searchResponse = await searchClubs({
     keyword,
     category: safeCategory,
     page: 1,
     size: 10,
   });
 
-  if (!result.ok || !result.data) return <ErrorBoundaryUi />;
+  if (!searchResponse.ok || !searchResponse.data) return <ErrorBoundaryUi />;
 
-  const { clubs } = result.data;
+  const { clubs } = searchResponse.data;
 
   return (
-    <main className="flex w-[85%] flex-col lg:w-[43%]">
+    <main className="flex w-full flex-col">
       <section className="mt-13 mb-4">
         <span className="text-primary-500 font-bold">{clubs.length}건</span>
         <span className="text-black">의 검색결과</span>

@@ -20,7 +20,7 @@ function ClubItemClientList({ clubs }: ClubItemClientListProps) {
             startDate={item.recruitmentPreviewResponse?.recruitStart}
             endDate={item.recruitmentPreviewResponse?.recruitEnd}
             description={item.description}
-            favorite={item.favorite}
+            isFavorite={item.isFavorite}
             logo={item.logo}
             id={item.id}
             recruitStatus={item.recruitmentPreviewResponse?.recruitStatus}

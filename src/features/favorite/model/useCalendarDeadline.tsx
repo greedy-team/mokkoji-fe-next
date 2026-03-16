@@ -1,47 +1,49 @@
 'use client';
 
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import { useState, useMemo } from 'react';
 import { FavoriteDeadLineItem } from './type';
 
 function useCalendarDeadline(
-  data: FavoriteDateItem[],
+  favoriteDeadlines: FavoriteDateItem[],
   setValue: (date: Date) => void,
 ) {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClubs, setSelectedClubs] = useState<FavoriteDeadLineItem[]>(
     [],
   );
 
   const deadlineMap = useMemo(() => {
     const map = new Map<string, FavoriteDeadLineItem[]>();
-    if (!data) {
+    if (!favoriteDeadlines) {
       return map;
     }
-    data.forEach((item) => {
-      const dateKey = new Date(item.recruitEnd).toDateString();
+    favoriteDeadlines.forEach((favorite) => {
+      const dateKey = new Date(favorite.recruitEnd).toDateString();
       if (!map.has(dateKey)) {
         map.set(dateKey, []);
       }
-      map.get(dateKey)!.push({ clubId: item.clubId, clubName: item.clubName });
+      map
+        .get(dateKey)!
+        .push({ clubId: favorite.clubId, clubName: favorite.clubName });
     });
 
     return map;
-  }, [data]);
+  }, [favoriteDeadlines]);
 
   const handleDateClick = (date: Date) => {
     setValue(date);
     const dateKey = date.toDateString();
     if (deadlineMap.has(dateKey)) {
       setSelectedClubs(deadlineMap.get(dateKey)!);
-      setModalOpen(true);
+      setIsModalOpen(true);
     }
   };
 
   return {
     deadlineMap,
-    modalOpen,
-    setModalOpen,
+    isModalOpen,
+    setIsModalOpen,
     selectedClubs,
     handleDateClick,
   };

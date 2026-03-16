@@ -1,7 +1,7 @@
 import getValidationError from '../../util/getValidationError';
-import { Action, StateProp } from '../type';
+import { ClubDescriptionFormAction, ClubDescriptionFormState } from '../type';
 
-export const initialState: StateProp = {
+export const initialState: ClubDescriptionFormState = {
   formData: {
     name: '',
     category: '',
@@ -14,7 +14,10 @@ export const initialState: StateProp = {
   errors: {},
 };
 
-export default function reducer(state: StateProp, action: Action): StateProp {
+export default function clubDescriptionFormReducer(
+  state: ClubDescriptionFormState,
+  action: ClubDescriptionFormAction,
+): ClubDescriptionFormState {
   switch (action.type) {
     case 'UPDATE_FIELD': {
       const { name, value } = action;

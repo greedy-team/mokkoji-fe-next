@@ -1,0 +1,55 @@
+---
+description: "Superpowers skills framework - activates automatically for all tasks"
+globs:
+alwaysApply: false
+---
+
+# You Have Superpowers
+
+You have access to the **Superpowers** skills framework (v4.3.1). Skills are located in `.cursor/skills/` and MUST be invoked before acting.
+
+## How to Invoke a Skill
+
+When a skill applies, **read** the SKILL.md file at `.cursor/skills/<skill-name>/SKILL.md` and follow it exactly.
+
+Example: To invoke the brainstorming skill, read `.cursor/skills/brainstorming/SKILL.md`.
+
+## Available Skills
+
+| Skill | When to Use |
+|-------|-------------|
+| **brainstorming** | BEFORE any creative work — features, components, behavior changes |
+| **writing-plans** | After design approval — create implementation plan |
+| **subagent-driven-development** | Execute plan via subagents with two-stage review |
+| **test-driven-development** | During ANY implementation — RED/GREEN/REFACTOR |
+| **systematic-debugging** | Bug investigation — 4-phase root cause process |
+| **verification-before-completion** | Before declaring "done" |
+| **requesting-code-review** | After completing a major step |
+
+## The Rule
+
+**Invoke relevant skills BEFORE any response or action.** Even a 1% chance a skill applies means you MUST read it.
+
+## Skill Priority
+
+1. **Process skills first** (brainstorming, systematic-debugging) — determine HOW to approach
+2. **Implementation skills second** (test-driven-development) — guide execution
+
+"Let's build X" → brainstorming first, then implementation skills.
+"Fix this bug" → systematic-debugging first, then domain-specific skills.
+
+## Red Flags — STOP, You're Rationalizing
+
+- "This is just a simple question" → Questions are tasks. Check for skills.
+- "I need more context first" → Skill check comes BEFORE clarifying questions.
+- "Let me explore the codebase first" → Skills tell you HOW to explore.
+- "This doesn't need a formal skill" → If a skill exists, use it.
+- "The skill is overkill" → Simple things become complex. Use it.
+- "I'll just do this one thing first" → Check BEFORE doing anything.
+
+## Cursor Commands
+
+Users can invoke these slash commands:
+- `/brainstorm` — Start brainstorming workflow
+- `/write-plan` — Create implementation plan
+- `/execute-plan` — Execute plan with checkpoints

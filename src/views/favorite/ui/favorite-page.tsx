@@ -1,11 +1,12 @@
 import FavoriteDateSection from '@/widgets/favorite/ui/favorite-date-section';
 import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
+import PageContainer from '@/shared/ui/page-container';
 
 async function FavoritePage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) {
     return <LoginRequired />;
@@ -13,10 +14,10 @@ async function FavoritePage() {
 
   return (
     <>
-      <div className="mx-auto w-full px-4 sm:w-4xl sm:px-5 lg:w-6xl">
+      <PageContainer>
         <FavoriteItemSection />
         <FavoriteDateSection />
-      </div>
+      </PageContainer>
       <ScrollTopButton />
     </>
   );

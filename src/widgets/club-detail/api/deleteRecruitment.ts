@@ -2,10 +2,10 @@
 
 import api from '@/shared/api/auth-api';
 import { revalidateTag } from 'next/cache';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import { RecruitmentDeleteResponse } from '@/features/post-recruitment/model/type';
 
-async function deleteRecruitmentForm(
+async function deleteRecruitment(
   clubId: number,
 ): Promise<RecruitmentDeleteResponse> {
   try {
@@ -14,10 +14,10 @@ async function deleteRecruitmentForm(
       .json<RecruitmentDeleteResponse>();
     revalidateTag('recruitments');
     revalidateTag(String(clubId));
-    return { ok: true, message: '등록이 완료되었습니다.', data: response.data };
+    return { ok: true, message: '삭제가 완료되었습니다.', data: response.data };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 
-export default deleteRecruitmentForm;
+export default deleteRecruitment;

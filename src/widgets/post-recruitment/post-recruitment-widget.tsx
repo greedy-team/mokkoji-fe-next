@@ -5,13 +5,15 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 async function PostRecruitmentWidget({ params }: DetailParams) {
   const { id } = await params;
-  const res = await getClubInfo(Number(id));
+  const clubInfoResponse = await getClubInfo(Number(id));
 
-  if (!res.ok) {
+  if (!clubInfoResponse.ok) {
     return <ErrorBoundaryUi />;
   }
 
-  return <PostRecruitmentForm clubInfo={res.data} clubId={Number(id)} />;
+  return (
+    <PostRecruitmentForm clubInfo={clubInfoResponse.data} clubId={Number(id)} />
+  );
 }
 
 export default PostRecruitmentWidget;

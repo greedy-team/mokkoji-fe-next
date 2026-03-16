@@ -27,6 +27,8 @@ function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
     <>
       <button
         onClick={toggleMenu}
+        aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+        aria-expanded={isMenuOpen}
         className="rounded-md p-2 hover:bg-gray-100 md:hidden"
       >
         {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -58,14 +60,14 @@ function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
             ) : (
               <HeaderManageModal
                 manageClubInfo={manageClubInfo}
-                menu="register"
+                manageAction="register"
                 onItemClick={closeMenu}
               />
             ))}
           {sessionRole && sessionRole !== UserRole.NORMAL && (
             <HeaderManageModal
               manageClubInfo={manageClubInfo}
-              menu="recruitment"
+              manageAction="recruitment"
               onItemClick={closeMenu}
             />
           )}

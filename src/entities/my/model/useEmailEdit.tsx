@@ -8,9 +8,9 @@ interface UseEmailEditProps {
 }
 
 function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +23,7 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
 
   const resetState = () => {
     setEmail(initialEmail ?? '');
-    setSubmitting(false);
+    setIsSubmitting(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -34,7 +34,7 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
     if (!isValidEmail) {
       return;
     }
-    setSubmitting(true);
+    setIsSubmitting(true);
     const isNewEmail = !initialEmail;
     const response = await putEmail(email, isNewEmail ? true : isEmailOn);
     if (!response.ok) {
@@ -42,17 +42,17 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
       return;
     }
     toast.success(response.message);
-    setOpen(false);
+    setIsDialogOpen(false);
 
-    setSubmitting(false);
+    setIsSubmitting(false);
   };
 
   return {
-    open,
-    setOpen,
+    isDialogOpen,
+    setIsDialogOpen,
     email,
     setEmail,
-    submitting,
+    isSubmitting,
     isValidEmail,
     helperText,
     resetState,

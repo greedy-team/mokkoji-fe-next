@@ -16,15 +16,18 @@ import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmen
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
 import StepRecruitmentPostInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-post-info';
 import StepSelectPost from '@/features/admin-recruitment/ui/steps/step-select-post';
-import { ClubRecruitments, RecruitmentDetail } from '@/views/club/model/type';
+import {
+  ClubRecruitments,
+  RecruitmentDetail,
+} from '@/entities/club-detail/model/type';
 import useEditFlow from './use-edit-flow';
 
-interface Props {
+interface EditFlowContainerProps {
   clubInfo: ClubInfoType;
   recruitments: ClubRecruitments[];
 }
 
-function EditFlowContainer({ clubInfo, recruitments }: Props) {
+function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
   const router = useRouter();
   const flow = useEditFlow();
   const {
@@ -178,7 +181,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?rid=${editRecruitmentId}`)
+            router.push(`/club/${clubInfo.id}?recruit=${editRecruitmentId}`)
           }
         >
           모집글 확인하기
@@ -229,7 +232,7 @@ function EditFlowContainer({ clubInfo, recruitments }: Props) {
         </div>
       )}
 
-      {displayStep === 'postinfo' && (
+      {displayStep === 'postInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="모집글" onBack={flow.goToSelectPost} />
           {flow.isSubmitting ? (

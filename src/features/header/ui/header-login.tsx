@@ -1,12 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
-import LoginModal from '@/widgets/login/ui/login-modal';
 import useClickOutside from '@/shared/model/useClickOutside';
+import { useLoginModal } from '@/shared/lib/login-modal-context';
 import {
   ChevronIcon,
   UserIcon,
@@ -18,11 +17,16 @@ interface HeaderLoginProps {
 }
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(dropdownRef, () => setShowDropdown(false));
+  useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/';
+  };
 
   return (
     <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
@@ -31,7 +35,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
           <Button
             variant="none"
             size="none"
-            onClick={() => setShowDropdown((prev) => !prev)}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
             className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-all hover:bg-[#e6e6e6]"
           >
             <Image
@@ -40,10 +44,10 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               width={21}
               height={22}
             />
-            <ChevronIcon isOpen={showDropdown} />
+            <ChevronIcon isOpen={isDropdownOpen} />
           </Button>
 
-          {showDropdown && (
+          {isDropdownOpen && (
             <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
               <Button variant="dropdownItem" size="none" asChild>
                 <Link href="/my">
@@ -57,7 +61,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               <Button
                 variant="dropdownItemDanger"
                 size="none"
-                onClick={() => signOut({ callbackUrl: '/' })}
+                onClick={handleSignOut}
               >
                 <LogoutIcon />
                 로그아웃
@@ -68,15 +72,11 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
           <button
-            onClick={() => setIsLoginOpen(true)}
+            onClick={openLoginModal}
             className="cursor-pointer whitespace-nowrap"
           >
             로그인
           </button>
-          <LoginModal
-            open={isLoginOpen}
-            onClose={() => setIsLoginOpen(false)}
-          />
         </div>
       )}
     </span>

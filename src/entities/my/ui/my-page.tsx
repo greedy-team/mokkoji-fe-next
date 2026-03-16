@@ -1,9 +1,10 @@
-import { auth } from '@/auth';
+import { getSession } from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
+import PageContainer from '@/shared/ui/page-container';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
@@ -12,7 +13,7 @@ import MailNotificationToggle from '../../../features/my/ui/mail-notification-to
 import LogoutLink from '../../../features/my/ui/logout-link';
 
 async function MyPage() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) {
     return <LoginRequired />;
@@ -25,11 +26,11 @@ async function MyPage() {
   }
 
   const { user } = myInfo.data;
-  const userRole = (session?.user?.role as UserRole) || UserRole.NORMAL;
+  const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
   return (
-    <div className="flex flex-col items-center px-4">
+    <PageContainer className="flex flex-col items-center">
       <div className="w-full">
         <div>
           <InfoRow label="학번" value={user.studentId} />
@@ -64,7 +65,7 @@ async function MyPage() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

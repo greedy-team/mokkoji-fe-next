@@ -1,13 +1,15 @@
 import { getClubInfo } from '@/shared/api/manage-api';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import EditFlowContainer from '@/features/admin-recruitment/ui/edit/edit-flow-container';
-import getClubRecruitments from '@/views/club/api/getClubRecruitments';
+import getClubRecruitments from '@/entities/club-detail/api/getClubRecruitments';
 
-interface Props {
+interface AdminRecruitmentEditWidgetProps {
   clubId: number;
 }
 
-async function AdminRecruitmentEditWidget({ clubId }: Props) {
+async function AdminRecruitmentEditWidget({
+  clubId,
+}: AdminRecruitmentEditWidgetProps) {
   const [clubInfoRes, recruitmentsRes] = await Promise.all([
     getClubInfo(clubId),
     getClubRecruitments(clubId),

@@ -2,7 +2,7 @@
 
 import api from '@/shared/api/auth-api';
 import { revalidateTag } from 'next/cache';
-import ErrorHandler from '@/shared/lib/error-message';
+import createErrorResponse from '@/shared/lib/error-message';
 import {
   RecruitmentFormData,
   RecruitmentPatchResponse,
@@ -23,7 +23,7 @@ async function patchRecruitmentForm(
     revalidateTag(String(clubId));
     return { ok: true, message: '등록이 완료되었습니다.', data: payload };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

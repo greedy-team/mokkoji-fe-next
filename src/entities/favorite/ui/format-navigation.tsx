@@ -1,4 +1,4 @@
-function formatNavigation({ date }: { date: Date }) {
+function DateNavigation({ date }: { date: Date }) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
@@ -21,4 +21,4 @@ function formatNavigation({ date }: { date: Date }) {
   );
 }
 
-export default formatNavigation;
+export default DateNavigation;

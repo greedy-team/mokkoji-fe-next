@@ -1,4 +1,4 @@
-import { FavoriteDateItem } from '@/views/favorite/model/type';
+import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
 import Link from 'next/link';
 import { useMemo } from 'react';

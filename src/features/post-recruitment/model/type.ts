@@ -17,18 +17,18 @@ export interface RecruitmentFormData {
   recruitForm: string;
 }
 
-export interface FormField {
+export interface RecruitmentFormField {
   label: string;
   name: keyof RecruitmentFormData;
   type: string;
 }
 
-export interface StateProp {
+export interface RecruitmentFormState {
   formData: RecruitmentFormData;
   errors: Partial<Record<keyof RecruitmentFormData, string>>;
 }
 
-export type Action =
+export type RecruitmentFormAction =
   | {
       type: 'UPDATE_FIELD';
       name: keyof RecruitmentFormData;

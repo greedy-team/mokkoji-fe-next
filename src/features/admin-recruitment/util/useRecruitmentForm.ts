@@ -2,7 +2,9 @@
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
-import reducer, { initialState } from '../model/reducer/recruitmentFormReducer';
+import adminRecruitmentFormReducer, {
+  initialState,
+} from '../model/reducer/recruitmentFormReducer';
 import { RecruitmentFormData } from '../model/type';
 
 const BASIC_FIELDS: (keyof RecruitmentFormData)[] = [
@@ -19,7 +21,10 @@ interface UseRecruitmentFormOptions {
 }
 
 function useRecruitmentForm({ onNextStep }: UseRecruitmentFormOptions) {
-  const [formState, dispatch] = useReducer(reducer, initialState);
+  const [formState, dispatch] = useReducer(
+    adminRecruitmentFormReducer,
+    initialState,
+  );
   const { formData, errors } = formState;
 
   const handleChange = <K extends keyof RecruitmentFormData>(

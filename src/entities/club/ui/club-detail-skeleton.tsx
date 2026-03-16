@@ -2,10 +2,10 @@ const dummyTabs = [1, 2, 3];
 
 function ClubDetailSkeleton() {
   return (
-    <div className="mt-6 px-5 lg:mt-[50px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
+    <div className="mt-5 w-full lg:mt-[35px]">
       <header className="w-full">
-        <div className="mb-4 flex flex-row items-center gap-3.5 lg:mb-8 lg:gap-4">
-          <div className="hidden rounded-full bg-gray-300 sm:block lg:h-18 lg:w-18" />
+        <div className="flex flex-row items-center gap-3.5 lg:mb-5 lg:gap-4">
+          <div className="hidden h-[72px] w-[72px] rounded-full bg-gray-300 sm:block" />
           <div className="h-7 w-40 rounded bg-gray-300 lg:h-10 lg:w-60" />
           <div className="h-7 w-32 rounded bg-gray-200 lg:h-10 lg:w-48" />
         </div>
@@ -32,8 +32,8 @@ function ClubDetailSkeleton() {
         </div>
       </header>
 
-      <div className="mt-16">
-        <div className="flex justify-center border-b border-b-[#D6D6D6] pb-3">
+      <div className="mt-8 lg:mt-12">
+        <div className="mb-8 flex justify-center border-b border-b-[#D6D6D6] pb-3 lg:mb-12">
           {dummyTabs.map((tab) => (
             <div key={tab} className="relative flex-1 text-center">
               <div className="mx-auto h-5 w-16 rounded bg-gray-300 lg:h-6 lg:w-20" />

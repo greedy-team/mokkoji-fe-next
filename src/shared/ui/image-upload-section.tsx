@@ -128,7 +128,10 @@ function ImageUploadSection({
           </div>
         </div>
       )}
-      <label htmlFor="image" className="text-base font-medium lg:font-semibold">
+      <label
+        htmlFor="imageInput"
+        className="text-base font-medium lg:font-semibold"
+      >
         이미지 파일 업로드
       </label>
       <div
@@ -193,14 +196,18 @@ function ImageUploadSection({
               >
                 <img
                   src={item.previewUrl}
-                  alt="preview"
+                  alt="업로드된 이미지 미리보기"
                   className="pointer-events-none h-full w-full object-contain"
                 />
 
-                <X
-                  className="absolute top-1 right-1 z-10 h-5 w-5 cursor-pointer transition-colors hover:text-red-600"
+                <button
+                  type="button"
+                  aria-label="이미지 제거"
+                  className="absolute top-1 right-1 z-10 cursor-pointer transition-colors hover:text-red-600"
                   onClick={() => handleImageRemove(item.id)}
-                />
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
             ))}
           </div>

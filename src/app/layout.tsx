@@ -6,7 +6,9 @@ import WebVitalProvider from '@/_providers/webvital-provider';
 import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
-import { SessionProvider } from 'next-auth/react';
+import { AppSessionProvider } from '@/shared/lib/session-context';
+import { LoginModalProvider } from '@/shared/lib/login-modal-context';
+import GlobalLoginModal from '@/widgets/login/ui/global-login-modal';
 import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({
@@ -26,6 +28,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: '모꼬지 | 세종대 동아리',
     description: '세종대 동아리 통합 플랫폼',
+    siteName: '모꼬지',
+    locale: 'ko_KR',
+    type: 'website',
+    images: [
+      {
+        url: '/mokkojiBanner.png',
+        width: 1200,
+        height: 630,
+        alt: '모꼬지 - 세종대 동아리 통합 플랫폼',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '모꼬지 | 세종대 동아리',
+    description: '세종대 동아리 통합 플랫폼',
+    images: ['/mokkojiBanner.png'],
   },
   other: {
     'naver-site-verification': '150a4435ae2108c4b46284bb245f020da60c9069',
@@ -42,7 +61,7 @@ export default function RootLayout({
       <head>
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2782954397492984"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
         <Script
@@ -57,27 +76,26 @@ export default function RootLayout({
     gtag('config', 'G-85PSBEJKQ2');
   `}
         </Script>
-        <Script
-          src="//t1.daumcdn.net/kas/static/ba.min.js"
-          strategy="afterInteractive"
-        />
         <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>
-        <SessionProvider refetchOnWindowFocus={false} refetchInterval={50 * 60}>
-          <ToDoPinProvider>
-            <WebVitalProvider />
-            <ToastContainer
-              autoClose={2000}
-              hideProgressBar
-              closeOnClick
-              pauseOnHover={false}
-              newestOnTop
-              limit={1}
-            />
-            {children}
-          </ToDoPinProvider>
-        </SessionProvider>
+        <AppSessionProvider>
+          <LoginModalProvider>
+            <ToDoPinProvider>
+              <WebVitalProvider />
+              <ToastContainer
+                autoClose={2000}
+                hideProgressBar
+                closeOnClick
+                pauseOnHover={false}
+                newestOnTop
+                limit={1}
+              />
+              {children}
+            </ToDoPinProvider>
+            <GlobalLoginModal />
+          </LoginModalProvider>
+        </AppSessionProvider>
       </body>
     </html>
   );

@@ -4,10 +4,11 @@ import {
   ClubCategory,
 } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
-import ErrorHandler from '@/shared/lib/error-message';
-import { auth } from '@/auth';
+import createErrorResponse from '@/shared/lib/error-message';
+import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
-import { ClubsResponse } from '../model/type';
+import { mapClub } from '@/entities/club/model/type';
+import { ClubsRawResponse } from '../model/type';
 
 async function getClubList({
   page,
@@ -22,7 +23,7 @@ async function getClubList({
   affiliation?: ClubAffiliation;
   keyword?: string;
 }) {
-  const session = await auth();
+  const session = await getSession();
 
   const rawParams: Record<string, string | undefined> = {
     page: String(page),
@@ -41,15 +42,27 @@ async function getClubList({
   });
 
   try {
-    const client = session?.accessToken ? api : serverApi;
+    const isAuthenticated = !!session?.accessToken;
+    const client = isAuthenticated ? api : serverApi;
+    const fetchOptions = isAuthenticated
+      ? { searchParams, cache: 'no-store' as const }
+      : { searchParams, next: { tags: ['clubs'] } };
 
     const response = await client
-      .get('clubs', { searchParams, next: { tags: ['clubs'] } })
-      .json<ApiResponse<ClubsResponse>>();
+      .get('clubs', fetchOptions)
+      .json<ApiResponse<ClubsRawResponse>>();
 
-    return { ok: true, message: '성공', data: response.data };
+    const responseData = response.data;
+    if (!responseData) return { ok: false, message: '데이터 없음' };
+
+    const data = {
+      ...responseData,
+      clubs: responseData.clubs.map(mapClub),
+    };
+
+    return { ok: true, message: '성공', data };
   } catch (e) {
-    return ErrorHandler(e as Error);
+    return createErrorResponse(e as Error);
   }
 }
 

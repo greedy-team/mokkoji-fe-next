@@ -39,7 +39,7 @@ function PrivacyPolicyPage() {
           </li>
           <li>
             <strong>광고성 정보 전송</strong> (이메일 제공 및 별도 동의자에
-            한함): 신규 서비스 및 이벤트 안내, 동아리 모집 알림 등
+            한함): 동아리 모집 알림 등
           </li>
         </ol>
       </section>
@@ -83,7 +83,7 @@ function PrivacyPolicyPage() {
                 광고성 정보 전송
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                수신 동의 철회 시까지
+                회원 탈퇴 시까지
               </td>
             </tr>
           </tbody>
@@ -105,7 +105,7 @@ function PrivacyPolicyPage() {
             <strong>필수</strong>: 학번, 이름, 학과, 학년
           </li>
           <li>
-            <strong>선택</strong>: 이메일 (광고성 정보 수신 동의 시 활용)
+            <strong>선택</strong>: 이메일 (수신 동의 시 활용)
           </li>
         </ul>
       </section>
@@ -115,10 +115,7 @@ function PrivacyPolicyPage() {
           제4조 (개인정보의 파기)
         </h2>
         <ol className="list-decimal space-y-2 pl-5">
-          <li>
-            보유 기간이 만료되거나 처리 목적이 달성된 개인정보는 지체 없이
-            파기합니다.
-          </li>
+          <li>보유 기간이 만료된 개인정보는 지체 없이 파기합니다.</li>
           <li>
             전자적으로 저장된 개인정보는 복구 불가능한 방식으로 완전 삭제하며,
             종이로 출력된 경우 분쇄 또는 소각하여 파기합니다.
@@ -238,7 +235,6 @@ function PrivacyPolicyPage() {
         <ul className="list-disc space-y-1 pl-5">
           <li>HTTPS 암호화 통신 적용</li>
           <li>개인정보 접근 권한 최소화 및 관리</li>
-          <li>접속 기록 1년 이상 보관</li>
           <li>서버 방화벽 및 보안 정책 적용</li>
         </ul>
       </section>
@@ -253,7 +249,7 @@ function PrivacyPolicyPage() {
         </p>
         <ul className="list-disc space-y-1 pl-5">
           <li>
-            <strong>성명</strong>: 신혜빈
+            <strong>성명</strong>: 안금서
           </li>
           <li>
             <strong>직책</strong>: 대표
@@ -312,11 +308,44 @@ function PrivacyPolicyPage() {
         <ol className="list-decimal space-y-2 pl-5">
           <li>본 방침은 2026년 2월 25일부터 시행됩니다.</li>
           <li>
-            방침을 변경하는 경우 최소 7일 전에 서비스 공지사항을 통해
-            안내합니다. 이용자의 권리·의무에 중대한 영향을 미치는 변경의 경우
-            최소 30일 전에 공지합니다.
+            이용자의 권리·의무에 중대한 영향을 미치는 변경의 경우 최소 30일 전에
+            공지합니다.
           </li>
         </ol>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="mb-3 text-base font-semibold">
+          제12조 (외부 서비스 및 광고)
+        </h2>
+        <p className="mb-3">
+          본 서비스는 Google AdSense를 포함한 타사 공급업체의 광고를 게재할 수
+          있습니다. <br />
+          Google을 포함한 타사 공급업체는 쿠키를 사용하여 사용자가 이전에 본
+          서비스 또는 다른 웹사이트를 방문한 기록을 기반으로 광고를 게재합니다.
+          Google은 광고 쿠키를 사용함으로써 파트너와 함께 인터넷의 본 서비스 및
+          다른 사이트 방문 기록을 기반으로 사용자에게 맞춤 광고를 제공합니다.
+          <br /> 이용자는{' '}
+          <a
+            href="https://myadcenter.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-500 underline"
+          >
+            Google 광고 설정
+          </a>
+          을 방문하여 맞춤설정 광고를 거부할 수 있습니다. 또는{' '}
+          <a
+            href="https://www.aboutads.info/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-500 underline"
+          >
+            www.aboutads.info
+          </a>
+          를 방문하여 맞춤설정 광고에 사용되는 타사 공급업체의 쿠키 사용을
+          거부할 수 있습니다.
+        </p>
       </section>
     </div>
   );

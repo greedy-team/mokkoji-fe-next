@@ -4,7 +4,6 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
-import PageContainer from '@/shared/ui/page-container';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from './email-change-dialog';
@@ -29,7 +28,7 @@ async function MyPage() {
   const isAdmin = userRole !== UserRole.NORMAL;
 
   return (
-    <PageContainer className="flex flex-col items-center">
+    <div className="flex flex-col items-center px-4">
       <div className="w-full">
         <div>
           <InfoRow label="학번" value={user.studentId} />
@@ -57,7 +56,7 @@ async function MyPage() {
           </div>
         </div>
       </div>
-    </PageContainer>
+    </div>
   );
 }
 

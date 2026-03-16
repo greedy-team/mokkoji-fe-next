@@ -85,32 +85,28 @@ function CalendarBody({
       <div className="mb-2 flex w-full justify-between">
         <button
           type="button"
-          aria-label="이전 달"
           className="cursor-pointer"
           onClick={() => handleMonthChange(-1)}
         >
           <Image
             src="/calenderPrev.svg"
-            alt=""
-            aria-hidden="true"
+            alt="저번달"
             width={20}
             height={20}
             className={variant === 'dark' ? 'invert' : ''}
           />
         </button>
-        <h2 className="flex-1 cursor-default py-3 text-center font-bold">
+        <h1 className="flex-1 cursor-default py-3 text-center font-bold">
           {currentYear}년 {currentMonth + 1}월
-        </h2>
+        </h1>
         <button
           type="button"
-          aria-label="다음 달"
           className="cursor-pointer"
           onClick={() => handleMonthChange(1)}
         >
           <Image
             src="/calenderPrev.svg"
-            alt=""
-            aria-hidden="true"
+            alt="다음달"
             width={20}
             height={20}
             className={`rotate-180 ${variant === 'dark' ? 'invert' : ''}`}

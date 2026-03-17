@@ -43,7 +43,7 @@ function RecruitDetailHeader({
 
   return (
     <header className="w-full cursor-default">
-      <div className="flex flex-row items-center gap-3.5 lg:mb-5 lg:gap-4">
+      <div className="mb-5 flex flex-row items-center gap-3.5 lg:gap-4">
         <ClickLogo logo={logo} title={title} />
         <div className="flex min-w-0 items-center gap-2">
           <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">

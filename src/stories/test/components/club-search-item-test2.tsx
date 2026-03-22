@@ -13,11 +13,11 @@ function ClubSearchItemTest2({ club }: ClubItemProps) {
         <header className="mb-2">
           <div className="flex items-center gap-2">
             <Avatar className="size-12 lg:size-14">
-              <AvatarImage src={club.logo} alt={`${club.name} 로고`} />
+              <AvatarImage src={club.logo} alt={club.logo} />
               <AvatarFallback />
             </Avatar>
             <div>
-              <h2 className="text-lg font-semibold">{club.name}</h2>
+              <h1 className="text-lg font-semibold">{club.name}</h1>
               <span className="text-xs text-[#9C9C9C]">
                 {club.category ? `${club.category} 동아리` : '동아리'}
               </span>

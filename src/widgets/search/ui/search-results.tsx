@@ -32,7 +32,7 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
   const { clubs } = searchResponse.data;
 
   return (
-    <main className="flex w-full flex-col">
+    <main className="flex w-[85%] flex-col lg:w-[43%]">
       <section className="mt-13 mb-4">
         <span className="text-primary-500 font-bold">{clubs.length}건</span>
         <span className="text-black">의 검색결과</span>

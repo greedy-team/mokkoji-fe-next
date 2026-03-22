@@ -3,7 +3,7 @@ import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { getSession } from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
-import PageContainer from '@/shared/ui/page-container';
+import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 
 async function FavoritePage() {
   const session = await getSession();
@@ -14,10 +14,11 @@ async function FavoritePage() {
 
   return (
     <>
-      <PageContainer>
+      <ScrollProgressBar />
+      <div className="mx-auto w-full px-4 sm:w-4xl sm:px-5 lg:w-6xl">
         <FavoriteItemSection />
         <FavoriteDateSection />
-      </PageContainer>
+      </div>
       <ScrollTopButton />
     </>
   );

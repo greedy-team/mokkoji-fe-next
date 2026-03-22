@@ -36,11 +36,7 @@ function ClubPageSearchbar() {
           onSubmit={onSubmit}
           className="flex items-center justify-between gap-1 pb-5"
         >
-          <label htmlFor="club-search" className="sr-only">
-            동아리 검색
-          </label>
           <input
-            id="club-search"
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
@@ -50,13 +46,11 @@ function ClubPageSearchbar() {
           />
           <button
             type="submit"
-            aria-label="검색"
             className="mr-5 flex items-center justify-center"
           >
             <img
               src="/club/search.svg"
-              alt=""
-              aria-hidden="true"
+              alt="검색"
               width={24}
               height={24}
               className="h-[17px] w-[17px] cursor-pointer sm:h-[24px] sm:w-[24px]"

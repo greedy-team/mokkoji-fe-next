@@ -81,14 +81,8 @@ function ClubDetailCommentInput({
         <p className="lg:font-semibold">이 동아리 어때요?</p>
         <StarRating value={rating} size="large" onChange={setRating} />
       </div>
-      <label
-        htmlFor="comment-input"
-        className="cursor-default text-base lg:font-semibold"
-      >
-        댓글 {count}
-      </label>
+      <p className="cursor-default text-base lg:font-semibold">댓글 {count}</p>
       <Textarea
-        id="comment-input"
         value={commentContent}
         onChange={handleCommentContentChange}
         variant="comment"

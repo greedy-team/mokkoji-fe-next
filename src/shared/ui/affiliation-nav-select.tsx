@@ -30,7 +30,7 @@ function AffiliationNavSelect() {
   };
 
   return (
-    <div className="mb-5 flex gap-3 text-xs sm:mb-12 sm:gap-4 sm:text-base">
+    <div className="mb-5 flex gap-4 text-sm sm:mb-12 sm:text-base">
       <button
         onClick={() => changeAffiliation('')}
         data-selected={active === ''}

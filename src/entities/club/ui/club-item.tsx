@@ -39,15 +39,15 @@ function ClubItem({
       <div className="flex w-full">
         <div className="flex w-full items-center gap-4">
           <Avatar className="h-[54px] w-[54px]">
-            <AvatarImage src={logo} alt={`${name} 로고`} />
+            <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
 
           <div className="flex flex-1 flex-col gap-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
+              <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {name}
-              </h2>
+              </h1>
 
               <FavoriteButton
                 isFavorite={isFavorite}

@@ -1,4 +1,4 @@
-import { formatDateDotted } from '@/entities/club/util/getDateUtil';
+import { formatDateDotted, formatTime } from '@/entities/club/util/getDateUtil';
 import cn from '@/shared/lib/utils';
 
 interface PeriodSectionProps {
@@ -30,9 +30,15 @@ function PeriodSection({
           모집기한 · {formatDateDotted(startDate!)}~{formatDateDotted(endDate!)}
         </span>
       ) : (
-        <span className="text[#0A0A0A]">
-          모집기한 | {formatDateDotted(startDate!)}~{formatDateDotted(endDate!)}
-        </span>
+        <>
+          <span className="text[#0A0A0A]">
+            모집기한 | {formatDateDotted(startDate!)}~
+            {formatDateDotted(endDate!)}
+          </span>
+          <span className="ml-1 text-[#8B95A1]">
+            (마감 시간 {formatTime(endDate!)})
+          </span>
+        </>
       )}
     </span>
   );

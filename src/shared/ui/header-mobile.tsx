@@ -12,11 +12,7 @@ function HeaderMobile({ pageTitle }: HeaderMobileProps) {
 
   return (
     <header className="flex items-center gap-2 px-5 py-5 lg:hidden">
-      <button
-        onClick={() => router.back()}
-        aria-label="뒤로가기"
-        className="p-1"
-      >
+      <button onClick={() => router.back()} className="p-1">
         <Image
           src="/mobile-prev.svg"
           alt="뒤로가기 버튼"

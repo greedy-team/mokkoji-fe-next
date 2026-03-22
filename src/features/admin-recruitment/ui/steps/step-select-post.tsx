@@ -101,14 +101,9 @@ function StepSelectPost({
       </div>
 
       {isDeleteModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="delete-modal-title"
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="flex h-[158px] w-[320px] flex-col justify-center rounded-[20px] bg-[#1A1A1A] p-5 lg:h-[168px] lg:w-[442px]">
-            <p id="delete-modal-title" className="text-center text-[#FBFBFB]">
+            <p className="text-center text-[#FBFBFB]">
               모집 공고를 삭제하시겠습니까?
             </p>
 

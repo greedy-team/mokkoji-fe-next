@@ -3,19 +3,20 @@ import { Suspense } from 'react';
 import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 import ClubHeader from '@/widgets/club/ui/club-header';
 import ClubItemList from '@/widgets/club/ui/club-item-list';
-import PageContainer from '@/shared/ui/page-container';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 
 function ClubPage() {
   return (
     <>
-      <PageContainer>
-        <ScrollProgressBar />
+      <ScrollProgressBar />
+      <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
         <ClubHeader />
-        <Suspense fallback={<ItemListSkeletonLoading />}>
-          <ClubItemList />
-        </Suspense>
-      </PageContainer>
+        <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
+          <Suspense fallback={<ItemListSkeletonLoading />}>
+            <ClubItemList />
+          </Suspense>
+        </div>
+      </div>
       <ScrollTopButton />
     </>
   );

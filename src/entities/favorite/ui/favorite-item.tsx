@@ -34,14 +34,14 @@ function FavoriteItem({
       <div className="mb-2 flex flex-row items-center justify-between lg:mb-8">
         <div className="flex flex-row items-center gap-4">
           <Avatar className="size-12 lg:size-14">
-            <AvatarImage src={logo} alt={`${title} 로고`} />
+            <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
           <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-1">
-              <h2 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
+              <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
                 {title}
-              </h2>
+              </h1>
 
               <FavoriteButton
                 isFavorite={isFavorite || false}

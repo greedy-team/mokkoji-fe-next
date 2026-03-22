@@ -22,7 +22,7 @@ const categories: ClubCategory[] = [
 function ClubCategoryButtonSection() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const active = (searchParams.get('category') ?? '').toUpperCase();
+  const active = searchParams.get('category') ?? '';
 
   const changeCategory = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -30,7 +30,7 @@ function ClubCategoryButtonSection() {
     if (value === '') {
       params.delete('category');
     } else {
-      params.set('category', value.toLowerCase());
+      params.set('category', value);
     }
 
     params.set('page', '1');

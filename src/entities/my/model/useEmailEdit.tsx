@@ -1,8 +1,13 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import putEmail from '../api/putEmail';
+import putEmail from '../../../features/my/api/putEmail';
 
-function useEmailEdit(initialEmail?: string) {
+interface UseEmailEditProps {
+  initialEmail?: string;
+  isEmailOn: boolean;
+}
+
+function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +35,8 @@ function useEmailEdit(initialEmail?: string) {
       return;
     }
     setIsSubmitting(true);
-    const response = await putEmail(email);
+    const isNewEmail = !initialEmail;
+    const response = await putEmail(email, isNewEmail ? true : isEmailOn);
     if (!response.ok) {
       toast.error(response.message);
       return;

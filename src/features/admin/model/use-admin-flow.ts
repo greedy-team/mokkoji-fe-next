@@ -51,8 +51,6 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     }
   };
 
-  const goBack = () => router.back();
-
   const reset = () => router.push('/admin');
 
   return {
@@ -61,7 +59,6 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
     selectedClubName,
     selectClub,
     selectAction,
-    goBack,
     reset,
     validateClubAccess,
   };

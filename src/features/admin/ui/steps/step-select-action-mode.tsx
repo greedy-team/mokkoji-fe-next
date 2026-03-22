@@ -7,20 +7,11 @@ import type { ContentType, ActionType } from '../../model/types';
 interface StepSelectActionModeProps {
   clubName?: string;
   onNext: (contentType: ContentType, actionType: ActionType) => void;
-  onBack: () => void;
 }
 
-function StepSelectActionMode({
-  clubName,
-  onNext,
-  onBack,
-}: StepSelectActionModeProps) {
+function StepSelectActionMode({ clubName, onNext }: StepSelectActionModeProps) {
   return (
-    <AdminStepLayout
-      clubName={clubName}
-      backButtonLabel="동아리 다시 선택하기"
-      onBack={onBack}
-    >
+    <AdminStepLayout clubName={clubName}>
       <MenuButton
         label="모집글 수정 및 삭제"
         onClick={() => onNext('recruitment', 'edit')}

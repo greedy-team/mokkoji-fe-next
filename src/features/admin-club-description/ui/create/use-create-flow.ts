@@ -1,29 +1,31 @@
+'use client';
+
 import { useState } from 'react';
-import { CreateFlowState } from './types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { CreateStep } from './types';
 
 function useCreateFlow() {
-  const [state, setState] = useState<CreateFlowState>({
-    currentStep: 'basicInfo',
-    isSubmitting: false,
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isSubmitting, setSubmitting] = useState(false);
 
-  const setSubmitting = (isSubmitting: boolean) => {
-    setState((prev) => ({ ...prev, isSubmitting }));
-  };
+  const currentStep = (searchParams.get('step') as CreateStep) ?? 'basicInfo';
 
   const complete = () => {
-    setState((prev) => ({ ...prev, currentStep: 'complete' }));
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', 'complete');
+    router.replace(`?${params.toString()}`);
   };
 
   const reset = () => {
-    setState({
-      currentStep: 'basicInfo',
-      isSubmitting: false,
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('step', 'basicInfo');
+    router.replace(`?${params.toString()}`);
   };
 
   return {
-    ...state,
+    currentStep,
+    isSubmitting,
     setSubmitting,
     complete,
     reset,

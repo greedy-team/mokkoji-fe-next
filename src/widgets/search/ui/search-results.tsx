@@ -24,7 +24,7 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
     keyword,
     category: safeCategory,
     page: 1,
-    size: 10,
+    size: 100,
   });
 
   if (!searchResponse.ok || !searchResponse.data) return <ErrorBoundaryUi />;

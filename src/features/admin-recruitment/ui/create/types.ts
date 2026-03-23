@@ -1,6 +1,4 @@
-export type CreateStep = 'basicInfo' | 'postInfo' | 'complete';
-
-export interface CreateFlowState {
-  currentStep: CreateStep;
-  isSubmitting: boolean;
-}
+export type CreateStep =
+  | 'basicInfoCreateStep'
+  | 'postInfoCreateStep'
+  | 'completeCreateStep';

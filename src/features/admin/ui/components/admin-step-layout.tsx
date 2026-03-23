@@ -1,21 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { PrevButton } from '@/shared/ui/navigation-button';
 
 interface AdminStepLayoutProps {
   clubName?: string;
   children: React.ReactNode;
-  backButtonLabel: string;
-  onBack: () => void;
 }
 
-function AdminStepLayout({
-  clubName,
-  children,
-  backButtonLabel,
-  onBack,
-}: AdminStepLayoutProps) {
+function AdminStepLayout({ clubName, children }: AdminStepLayoutProps) {
   return (
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2 pt-10">
@@ -35,9 +27,7 @@ function AdminStepLayout({
         {children}
       </div>
 
-      <PrevButton onClick={onBack} className="mt-4">
-        {backButtonLabel}
-      </PrevButton>
+      <div className="mt-4" />
     </div>
   );
 }

@@ -24,13 +24,7 @@ interface StepRecruitmentBasicInfoProps {
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleImageRemove: (id: string) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  handleDragStart: (id: string) => void;
-  handleDragOver: (
-    e: React.DragEvent<HTMLDivElement>,
-    targetId: string,
-  ) => void;
-  handleDragEnd: () => void;
-  draggingId: string | null;
+  handleSortEnd: (activeId: string, overId: string) => void;
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }
@@ -45,10 +39,7 @@ function StepRecruitmentBasicInfo({
   handleImageChange,
   handleImageRemove,
   inputRef,
-  handleDragStart,
-  handleDragOver,
-  handleDragEnd,
-  draggingId,
+  handleSortEnd,
   onDragOver,
   onDrop,
 }: StepRecruitmentBasicInfoProps) {
@@ -127,10 +118,7 @@ function StepRecruitmentBasicInfo({
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}
         inputRef={inputRef}
-        handleDragStart={handleDragStart}
-        handleDragOver={handleDragOver}
-        handleDragEnd={handleDragEnd}
-        draggingId={draggingId}
+        handleSortEnd={handleSortEnd}
         onDragOver={onDragOver}
         onDrop={onDrop}
       />

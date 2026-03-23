@@ -39,10 +39,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     handleImageChange,
     handleImageRemove,
     inputRef,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    draggingId,
+    handleSortEnd,
     onDragOver,
     onDrop,
   } = useImageUpload();
@@ -191,10 +188,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}
         inputRef={inputRef}
-        handleDragStart={handleDragStart}
-        handleDragOver={handleDragOver}
-        handleDragEnd={handleDragEnd}
-        draggingId={draggingId}
+        handleSortEnd={handleSortEnd}
         onDragOver={onDragOver}
         onDrop={onDrop}
       />

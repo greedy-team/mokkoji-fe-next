@@ -61,10 +61,7 @@ function ClubDetailRecruitmentEdit({
     handleImageChange,
     handleImageRemove,
     inputRef,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    draggingId,
+    handleSortEnd,
     onDragOver,
     onDrop,
   } = useImageUpload(imageUrls);
@@ -156,14 +153,11 @@ function ClubDetailRecruitmentEdit({
         label="모집 기간"
       />
       <ImageUploadSection
-        handleDragStart={handleDragStart}
-        handleDragOver={handleDragOver}
-        handleDragEnd={handleDragEnd}
-        draggingId={draggingId}
         imageFiles={imageFiles}
         handleImageRemove={handleImageRemove}
         handleImageChange={handleImageChange}
         inputRef={inputRef}
+        handleSortEnd={handleSortEnd}
         onDragOver={onDragOver}
         onDrop={onDrop}
       />

@@ -6,12 +6,12 @@ import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { EditStep } from './types';
 
 const EDIT_STEPS: EditStep[] = [
-  'selectPost',
-  'basicInfo',
-  'postInfo',
-  'complete',
+  'selectPostEditStep',
+  'basicInfoEditStep',
+  'postInfoEditStep',
+  'completeEditStep',
 ];
-const DEFAULT_STEP: EditStep = 'selectPost';
+const DEFAULT_STEP: EditStep = 'selectPostEditStep';
 
 function useEditFlow() {
   const router = useRouter();
@@ -26,7 +26,7 @@ function useEditFlow() {
   const startEdit = (post: ClubRecruitments) => {
     setSelectedPost(post);
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'basicInfo');
+    params.set('step', 'basicInfoEditStep');
     router.push(`?${params.toString()}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -53,14 +53,14 @@ function useEditFlow() {
 
   const goToSelectPost = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'selectPost');
+    params.set('step', 'selectPostEditStep');
     router.push(`?${params.toString()}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const complete = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'complete');
+    params.set('step', 'completeEditStep');
     router.replace(`?${params.toString()}`);
   };
 

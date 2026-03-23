@@ -1,1 +1,5 @@
-export type EditStep = 'selectPost' | 'basicInfo' | 'postInfo' | 'complete';
+export type EditStep =
+  | 'selectPostEditStep'
+  | 'basicInfoEditStep'
+  | 'postInfoEditStep'
+  | 'completeEditStep';

@@ -54,7 +54,7 @@ function CreateFlowContent() {
     toast.success('동아리가 등록되었습니다!');
   };
 
-  if (flow.currentStep === 'complete') {
+  if (flow.currentStep === 'completeCreateStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
@@ -66,7 +66,7 @@ function CreateFlowContent() {
 
   return (
     <div className="px-[8%] lg:px-[35%]">
-      {flow.currentStep === 'basicInfo' && (
+      {flow.currentStep === 'basicInfoCreateStep' && (
         <div className="flex flex-col gap-2 py-8">
           <AdminPageHeader title="동아리 기본 정보" />
           <StepClubRegisterInfo

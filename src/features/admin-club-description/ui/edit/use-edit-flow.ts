@@ -4,8 +4,12 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { EditStep } from './types';
 
-const EDIT_STEPS: EditStep[] = ['basicInfo', 'description', 'complete'];
-const DEFAULT_STEP: EditStep = 'basicInfo';
+const EDIT_STEPS: EditStep[] = [
+  'basicInfoEditStep',
+  'descriptionEditStep',
+  'completeEditStep',
+];
+const DEFAULT_STEP: EditStep = 'basicInfoEditStep';
 
 function useEditFlow() {
   const router = useRouter();
@@ -36,7 +40,7 @@ function useEditFlow() {
 
   const complete = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'complete');
+    params.set('step', 'completeEditStep');
     router.replace(`?${params.toString()}`);
   };
 

@@ -9,17 +9,18 @@ function useCreateFlow() {
   const searchParams = useSearchParams();
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const currentStep = (searchParams.get('step') as CreateStep) ?? 'basicInfo';
+  const currentStep =
+    (searchParams.get('step') as CreateStep) ?? 'basicInfoCreateStep';
 
   const complete = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'complete');
+    params.set('step', 'completeCreateStep');
     router.replace(`?${params.toString()}`);
   };
 
   const reset = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'basicInfo');
+    params.set('step', 'basicInfoCreateStep');
     router.replace(`?${params.toString()}`);
   };
 

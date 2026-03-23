@@ -149,7 +149,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
     );
   }
 
-  if (flow.currentStep === 'selectPost') {
+  if (flow.currentStep === 'selectPostEditStep') {
     return (
       <StepSelectPost
         recruitments={localRecruitments}
@@ -160,7 +160,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
     );
   }
 
-  if (flow.currentStep === 'complete') {
+  if (flow.currentStep === 'completeEditStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">수정 완료!</h2>
@@ -178,7 +178,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
 
   return (
     <>
-      {flow.currentStep === 'basicInfo' && (
+      {flow.currentStep === 'basicInfoEditStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader title="모집글 기본 정보" />
           <StepRecruitmentBasicInfo
@@ -211,7 +211,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
         </div>
       )}
 
-      {flow.currentStep === 'postInfo' && (
+      {flow.currentStep === 'postInfoEditStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="모집글" />
           {flow.isSubmitting ? (

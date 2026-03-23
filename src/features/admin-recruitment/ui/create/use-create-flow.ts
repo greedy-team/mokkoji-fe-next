@@ -4,8 +4,12 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CreateStep } from './types';
 
-const STEPS: CreateStep[] = ['basicInfo', 'postInfo', 'complete'];
-const DEFAULT_STEP: CreateStep = 'basicInfo';
+const STEPS: CreateStep[] = [
+  'basicInfoCreateStep',
+  'postInfoCreateStep',
+  'completeCreateStep',
+];
+const DEFAULT_STEP: CreateStep = 'basicInfoCreateStep';
 
 function useCreateFlow() {
   const router = useRouter();
@@ -36,7 +40,7 @@ function useCreateFlow() {
 
   const complete = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'complete');
+    params.set('step', 'completeCreateStep');
     router.replace(`?${params.toString()}`);
   };
 

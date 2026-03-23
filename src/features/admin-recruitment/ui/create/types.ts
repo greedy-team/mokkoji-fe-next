@@ -1,1 +1,4 @@
-export type CreateStep = 'basicInfo' | 'postInfo' | 'complete';
+export type CreateStep =
+  | 'basicInfoCreateStep'
+  | 'postInfoCreateStep'
+  | 'completeCreateStep';

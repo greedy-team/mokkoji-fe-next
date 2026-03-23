@@ -80,7 +80,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
     toast.success('모집 공고가 등록되었습니다!');
   };
 
-  if (flow.currentStep === 'complete') {
+  if (flow.currentStep === 'completeCreateStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
@@ -98,7 +98,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
 
   return (
     <>
-      {flow.currentStep === 'basicInfo' && (
+      {flow.currentStep === 'basicInfoCreateStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader title="모집글 기본 정보" />
           <StepRecruitmentBasicInfo
@@ -131,7 +131,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
         </div>
       )}
 
-      {flow.currentStep === 'postInfo' && (
+      {flow.currentStep === 'postInfoCreateStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
           <AdminPageHeader title="모집공고" />
           {flow.isSubmitting ? (

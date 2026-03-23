@@ -38,6 +38,7 @@ export type ClubDescriptionFormAction =
 
 export interface ClubEditLogoUrls {
   data?: {
+    id: number;
     updateLogo: string;
     deleteLogo: string;
   };

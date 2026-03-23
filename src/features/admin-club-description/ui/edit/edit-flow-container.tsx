@@ -134,7 +134,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   }
 
   return (
-    <div>
+    <>
       {flow.currentStep === 'basicInfo' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
           <AdminPageHeader title="동아리 기본 정보" />
@@ -186,7 +186,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
           />
         </div>
       )}
-    </div>
+    </>
   );
 }
 

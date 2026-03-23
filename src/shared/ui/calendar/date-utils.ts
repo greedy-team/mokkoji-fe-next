@@ -35,3 +35,14 @@ export const extractDateOnly = (dateTimeStr: string | null) => {
   if (!dateTimeStr) return '';
   return dateTimeStr.split('T')[0];
 };
+
+export const extractDateTimeDisplay = (
+  dateTimeStr: string | null,
+  showTime: boolean,
+) => {
+  if (!dateTimeStr) return '';
+  const [date, time] = dateTimeStr.split('T');
+  if (!showTime || !time) return date;
+  const [hour, minute] = time.split(':');
+  return `${date} ${hour}:${minute}`;
+};

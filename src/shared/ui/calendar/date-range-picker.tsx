@@ -10,6 +10,7 @@ import {
   isValidDateFormat,
   formatDateToString,
   extractDateOnly,
+  extractDateTimeDisplay,
 } from './date-utils';
 
 type FocusedField = 'start' | 'end' | null;
@@ -70,11 +71,11 @@ function DateRangePicker({
   });
 
   useEffect(() => {
-    setStartInputValue(extractDateOnly(startDate));
+    setStartInputValue(extractDateTimeDisplay(startDate, true));
   }, [startDate]);
 
   useEffect(() => {
-    setEndInputValue(extractDateOnly(endDate));
+    setEndInputValue(extractDateTimeDisplay(endDate, true));
   }, [endDate]);
 
   const handleStartInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,14 +149,16 @@ function DateRangePicker({
     setTimeout(() => {
       if (field === 'start') {
         setStartInputValue((prev) =>
-          isValidDateFormat(prev)
+          isValidDateFormat(prev.slice(0, 10))
             ? prev
-            : extractDateOnly(startDateRef.current),
+            : extractDateTimeDisplay(startDateRef.current, true),
         );
       }
       if (field === 'end') {
         setEndInputValue((prev) =>
-          isValidDateFormat(prev) ? prev : extractDateOnly(endDateRef.current),
+          isValidDateFormat(prev.slice(0, 10))
+            ? prev
+            : extractDateTimeDisplay(endDateRef.current, true),
         );
       }
     }, 100);
@@ -219,7 +222,7 @@ function DateRangePicker({
             ref={startInputRef}
             type="text"
             id="recruitPeriodStart"
-            placeholder="YYYY-MM-DD"
+            placeholder="YYYY-MM-DD HH:MM"
             value={startInputValue}
             onChange={handleStartInputChange}
             onKeyDown={handleStartInputKeyDown}
@@ -238,7 +241,7 @@ function DateRangePicker({
             ref={endInputRef}
             type="text"
             id="recruitPeriodEnd"
-            placeholder="YYYY-MM-DD"
+            placeholder="YYYY-MM-DD HH:MM"
             value={endInputValue}
             onChange={handleEndInputChange}
             onKeyDown={handleEndInputKeyDown}

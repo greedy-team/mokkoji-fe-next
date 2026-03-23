@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 
@@ -21,7 +20,6 @@ function StepSelectPost({
   isDeleting = false,
   title = '전체 모집 공고',
 }: StepSelectPostProps) {
-  const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<ClubRecruitments>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -48,7 +46,7 @@ function StepSelectPost({
   return (
     <div className="flex min-h-[calc(100vh-100px)] flex-col justify-between px-[11%] py-2 lg:min-h-[calc(100vh-200px)] lg:py-8">
       <div>
-        <AdminPageHeader title={title} onBack={() => router.back()} />
+        <AdminPageHeader title={title} />
 
         {recruitments.length === 0 ? (
           <p className="mt-4 text-gray-400">등록된 모집글이 없습니다.</p>

@@ -13,16 +13,18 @@ import { Button } from '@/shared/ui/button';
 import Input from '@/shared/ui/input';
 import cn from '@/shared/lib/utils';
 import Image from 'next/image';
-import useEmailEdit from '../model/useEmailEdit';
+import useEmailEdit from '../../../entities/my/model/useEmailEdit';
 
 type EmailChangeDialogProps = {
   initialEmail?: string;
+  isEmailOn: boolean;
   triggerClassName?: string;
   triggerLabel?: string;
 };
 
 export default function EmailChangeDialog({
   initialEmail,
+  isEmailOn,
   triggerClassName,
   triggerLabel = '이메일 수정하기',
 }: EmailChangeDialogProps) {
@@ -36,7 +38,7 @@ export default function EmailChangeDialog({
     helperText,
     resetState,
     handleSubmit,
-  } = useEmailEdit(initialEmail);
+  } = useEmailEdit({ initialEmail, isEmailOn });
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger

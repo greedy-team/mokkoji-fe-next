@@ -4,10 +4,10 @@ import api from '@/shared/api/auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
 
-async function putEmail(email: string) {
+async function putEmail(email: string, isEmailOn: boolean) {
   try {
-    const response = await api.put('users', {
-      json: { email },
+    const response = await api.patch('users', {
+      json: { email, isEmailOn },
     });
 
     const data = await response.json();

@@ -47,6 +47,7 @@ function SortableImage({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    touchAction: 'none' as const,
   };
 
   return (
@@ -99,7 +100,7 @@ function ImageUploadSection({
       activationConstraint: { distance: 5 },
     }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 5 },
+      activationConstraint: { delay: 250, tolerance: 10 },
     }),
   );
 

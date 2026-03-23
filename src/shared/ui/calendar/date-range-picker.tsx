@@ -162,7 +162,7 @@ function DateRangePicker({
   };
 
   return (
-    <fieldset className="relative" ref={calendarRef}>
+    <fieldset className="relative w-full min-w-0" ref={calendarRef}>
       {label && (
         <div className="flex items-center gap-3">
           <label
@@ -214,7 +214,7 @@ function DateRangePicker({
           상시모집
         </div>
       ) : (
-        <div className="mt-1 flex items-center gap-2">
+        <div className="mt-1 flex w-full items-center gap-2">
           <input
             ref={startInputRef}
             type="text"
@@ -226,7 +226,7 @@ function DateRangePicker({
             onFocus={handleStartInputFocus}
             onBlur={() => handleInputBlur('start')}
             className={cn(
-              'flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
+              'min-w-0 flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
               focusedField === 'start'
                 ? 'border-[#00D451]'
                 : 'border-transparent',
@@ -245,7 +245,7 @@ function DateRangePicker({
             onFocus={handleEndInputFocus}
             onBlur={() => handleInputBlur('end')}
             className={cn(
-              'flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
+              'min-w-0 flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
               focusedField === 'end'
                 ? 'border-[#00D451]'
                 : 'border-transparent',

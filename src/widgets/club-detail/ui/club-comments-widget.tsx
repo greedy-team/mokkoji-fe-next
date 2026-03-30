@@ -20,6 +20,16 @@ function ClubCommentsWidget({ clubId }: ClubCommentsWidgetProps) {
     const data = await fetchComments(clubId, session?.accessToken);
     setComments([...data].reverse());
     setIsLoading(false);
+
+    const { hash } = window.location;
+
+    if (hash) {
+      const element = document.querySelector(hash);
+
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   }, [clubId, session?.accessToken]);
 
   useEffect(() => {

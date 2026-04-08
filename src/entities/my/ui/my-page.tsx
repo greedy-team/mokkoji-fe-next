@@ -3,6 +3,7 @@ import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
+import Link from 'next/link';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 import getMyInfo from '../api/getMyInfo';
@@ -60,6 +61,16 @@ async function MyPage() {
               <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </div>
           )}
+
+          <div className="mt-6 flex items-center gap-2">
+            <Link
+              href="/my/comments"
+              className="flex items-center font-semibold"
+            >
+              내가 작성한 댓글
+            </Link>
+            <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+          </div>
 
           <div className="py-4 lg:hidden">
             <LogoutLink />

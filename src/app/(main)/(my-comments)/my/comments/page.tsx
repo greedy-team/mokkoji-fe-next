@@ -1,4 +1,5 @@
 import { getSession } from '@/shared/lib/cookie-session';
+import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import LoginRequired from '@/shared/ui/login-required';
 import getMyComments from '@/widgets/my-comment/api/getMyComments';
 import MyCommentList from '@/widgets/my-comment/ui/MyCommentList';
@@ -13,7 +14,7 @@ export default async function MyCommentsPage() {
   const result = await getMyComments();
 
   if (!result.ok || !result.data) {
-    return null;
+    return <ErrorBoundaryUi />;
   }
 
   return (

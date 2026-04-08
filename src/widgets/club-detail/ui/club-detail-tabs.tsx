@@ -95,7 +95,7 @@ function ClubDetailTabs({
 
   return (
     <div className="mt-8 lg:mt-12">
-      <div className="mb-8 flex justify-center border-b border-b-[#D6D6D6] pb-3 lg:mb-12">
+      <div className="sticky top-0 z-30 mb-8 flex justify-center border-b border-b-[#D6D6D6] bg-white py-5 pb-3 lg:mb-12">
         {TABS.map((tab) => {
           const isSelected = tab.key === activeTab;
 

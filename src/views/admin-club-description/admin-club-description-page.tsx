@@ -5,9 +5,11 @@ import AdminClubDescriptionWidget from '@/widgets/admin-club-description/admin-c
 
 function AdminClubDescriptionPage({ params }: RecruitmentActionParams) {
   return (
-    <Suspense fallback={<SharedLoading />}>
-      <AdminClubDescriptionWidget params={params} />
-    </Suspense>
+    <div className="w-full">
+      <Suspense fallback={<SharedLoading />}>
+        <AdminClubDescriptionWidget params={params} />
+      </Suspense>
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { arrayMove } from '@dnd-kit/sortable';
 import { toast } from 'react-toastify';
 
 interface ImageItem {
@@ -17,8 +18,6 @@ async function urlToFile(url: string, fileName: string): Promise<File> {
 function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
   const [imageFiles, setImageFiles] = useState<ImageItem[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [draggingId, setDraggingId] = useState<string | null>(null);
-
   useEffect(() => {
     if (imageUrls.length === 0) return;
 
@@ -63,30 +62,12 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     handleImageChange(syntheticEvent);
   };
 
-  const handleDragStart = (id: string) => {
-    setDraggingId(id);
-  };
-
-  const handleDragOver = (
-    e: React.DragEvent<HTMLDivElement>,
-    targetId: string,
-  ) => {
-    e.preventDefault();
-    if (draggingId === targetId) return;
-
+  const handleSortEnd = (activeId: string, overId: string) => {
     setImageFiles((prev) => {
-      const draggingIndex = prev.findIndex((item) => item.id === draggingId);
-      const targetIndex = prev.findIndex((item) => item.id === targetId);
-
-      const newArr = [...prev];
-      const [dragItem] = newArr.splice(draggingIndex, 1);
-      newArr.splice(targetIndex, 0, dragItem);
-      return newArr;
+      const oldIndex = prev.findIndex((item) => item.id === activeId);
+      const newIndex = prev.findIndex((item) => item.id === overId);
+      return arrayMove(prev, oldIndex, newIndex);
     });
-  };
-
-  const handleDragEnd = () => {
-    setDraggingId(null);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,10 +108,7 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     handleImageChange,
     handleImageRemove,
     inputRef,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    draggingId,
+    handleSortEnd,
     onDragOver,
     onDrop,
     maxLength,

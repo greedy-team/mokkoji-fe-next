@@ -111,10 +111,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
             handleImageChange={imageUpload.handleImageChange}
             handleImageRemove={imageUpload.handleImageRemove}
             inputRef={imageUpload.inputRef}
-            handleDragStart={imageUpload.handleDragStart}
-            handleDragOver={imageUpload.handleDragOver}
-            handleDragEnd={imageUpload.handleDragEnd}
-            draggingId={imageUpload.draggingId}
+            handleSortEnd={imageUpload.handleSortEnd}
             onDragOver={imageUpload.onDragOver}
             onDrop={imageUpload.onDrop}
           />

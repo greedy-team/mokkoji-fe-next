@@ -46,6 +46,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(clubInfo.logo ?? null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [completedClubId, setCompletedClubId] = useState<number | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -116,6 +117,10 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
       }
     }
 
+    if (res.data?.data?.id) {
+      setCompletedClubId(res.data.data.id);
+    }
+
     flow.setSubmitting(false);
     flow.complete();
     toast.success('동아리 정보가 수정되었습니다!');
@@ -128,7 +133,13 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
         <p className="text-gray-400">
           동아리 정보가 성공적으로 수정되었습니다.
         </p>
-        <Button onClick={() => router.push('/club')}>동아리 확인하기</Button>
+        <Button
+          onClick={() =>
+            router.push(completedClubId ? `/club/${completedClubId}` : '/club')
+          }
+        >
+          동아리 확인하기
+        </Button>
       </div>
     );
   }

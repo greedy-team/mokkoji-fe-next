@@ -5,9 +5,11 @@ import AdminRecruitmentWidget from '@/widgets/admin-recruitment/admin-recruitmen
 
 function AdminRecruitmentPage({ params }: RecruitmentActionParams) {
   return (
-    <Suspense fallback={<SharedLoading />}>
-      <AdminRecruitmentWidget params={params} />
-    </Suspense>
+    <div className="w-full">
+      <Suspense fallback={<SharedLoading />}>
+        <AdminRecruitmentWidget params={params} />
+      </Suspense>
+    </div>
   );
 }
 

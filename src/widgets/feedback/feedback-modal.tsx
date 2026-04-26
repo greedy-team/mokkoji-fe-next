@@ -8,12 +8,14 @@ function FeedbackModal() {
   const [hovered, setHovered] = useState(0);
   const [comment, setComment] = useState('');
   const { isVisible } = useScrollUp();
+  const [isOpen, setIsOpen] = useState(true);
 
   const content = (
     <div className="border-gray2 relative w-full rounded-xl border bg-white p-6">
       <button
         className="absolute top-5 right-5 text-sm text-[#474747]"
         aria-label="닫기"
+        onClick={() => setIsOpen(false)}
       >
         ✕
       </button>
@@ -64,10 +66,12 @@ function FeedbackModal() {
 
   return (
     <>
-      <div className="mt-5 flex w-full flex-col items-center justify-center sm:hidden">
-        {content}
-      </div>
-      {isVisible && (
+      {isOpen && (
+        <div className="mt-5 flex w-full flex-col items-center justify-center sm:hidden">
+          {content}
+        </div>
+      )}
+      {isOpen && isVisible && (
         <div className="fixed right-23 bottom-25 z-50 hidden w-85 sm:block">
           {content}
         </div>

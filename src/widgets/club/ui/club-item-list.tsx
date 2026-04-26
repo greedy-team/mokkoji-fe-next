@@ -2,6 +2,7 @@ import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { searchParamsCache } from '@/shared/lib/club-search-params';
 import NumberPagination from '@/shared/ui/numberPagination';
+import FeedbackModal from '@/widgets/feedback/feedback-modal';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';
 
@@ -34,6 +35,7 @@ async function ClubItemList() {
   return (
     <div className="mb-8">
       <ClubItemClientList clubs={clubListResponse.data.clubs} />
+      <FeedbackModal />
       <NumberPagination
         page={page}
         totalPages={clubListResponse.data.page.totalPages}

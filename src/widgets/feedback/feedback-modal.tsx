@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import useScrollUp from '@/shared/model/useScrollUp';
+import { toast } from 'react-toastify';
 
 function FeedbackModal() {
   const [rating, setRating] = useState(0);
@@ -9,6 +10,38 @@ function FeedbackModal() {
   const [comment, setComment] = useState('');
   const { isVisible } = useScrollUp();
   const [isOpen, setIsOpen] = useState(true);
+  const handleSubmit = async () => {
+    await fetch(process.env.NEXT_PUBLIC_DISCORD_FEEDBACK_WEBHOOK_URL!, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        embeds: [
+          {
+            title: '📋 모꼬지 사용자 피드백',
+            color: 0x4ade80,
+            fields: [
+              {
+                name: '⭐ 별점',
+                value: '★'.repeat(rating) + '☆'.repeat(5 - rating),
+                inline: true,
+              },
+              {
+                name: '💬 의견',
+                value: comment || '(내용 없음)',
+                inline: false,
+              },
+            ],
+            footer: {
+              text: `모꼬지 피드백 • ${new Date().toLocaleString('ko-KR')}`,
+            },
+          },
+        ],
+      }),
+    });
+    toast.success('의견 감사합니다!');
+    setRating(0);
+    setComment('');
+  };
 
   const content = (
     <div className="border-gray2 relative w-full rounded-xl border bg-white p-6">
@@ -57,6 +90,7 @@ function FeedbackModal() {
 
       <button
         disabled={rating === 0 && comment.length <= 0}
+        onClick={handleSubmit}
         className="bg-lightmode-tag w-full cursor-pointer rounded-lg py-3 text-sm transition-colors disabled:bg-gray-200 disabled:text-gray-400"
       >
         확인

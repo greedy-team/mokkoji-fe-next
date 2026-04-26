@@ -38,7 +38,9 @@ function FeedbackModal() {
         ],
       }),
     });
-    toast.success('의견 감사합니다!');
+    toast.success('의견 감사합니다!', {
+      autoClose: 2000,
+    });
     setRating(0);
     setComment('');
   };

@@ -2,7 +2,7 @@ import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { searchParamsCache } from '@/shared/lib/club-search-params';
 import NumberPagination from '@/shared/ui/numberPagination';
-import FeedbackModal from '@/widgets/feedback/feedback-modal';
+import FeedbackModal from '@/widgets/feedback/ui/feedback-modal';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';
 

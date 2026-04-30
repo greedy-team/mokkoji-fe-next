@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import useScrollUp from '@/shared/model/useScrollUp';
 import { toast } from 'react-toastify';
+import postReport from '../api/postReport';
+import postDiscordWebhook from '../api/postDiscordWebhook';
 
 function FeedbackModal() {
   const [rating, setRating] = useState(0);
@@ -10,39 +12,17 @@ function FeedbackModal() {
   const [comment, setComment] = useState('');
   const { isVisible } = useScrollUp();
   const [isOpen, setIsOpen] = useState(true);
+
   const handleSubmit = async () => {
-    await fetch(process.env.NEXT_PUBLIC_DISCORD_FEEDBACK_WEBHOOK_URL!, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        embeds: [
-          {
-            title: '📋 모꼬지 사용자 피드백',
-            color: 0x4ade80,
-            fields: [
-              {
-                name: '⭐ 별점',
-                value: '★'.repeat(rating) + '☆'.repeat(5 - rating),
-                inline: true,
-              },
-              {
-                name: '💬 의견',
-                value: comment || '(내용 없음)',
-                inline: false,
-              },
-            ],
-            footer: {
-              text: `모꼬지 피드백 • ${new Date().toLocaleString('ko-KR')}`,
-            },
-          },
-        ],
-      }),
-    });
-    toast.success('의견 감사합니다!', {
-      autoClose: 2000,
-    });
-    setRating(0);
-    setComment('');
+    try {
+      await postDiscordWebhook({ rating, comment });
+      await postReport({ rating, content: comment });
+      toast.success('의견 감사합니다!', { autoClose: 2000 });
+      setRating(0);
+      setComment('');
+    } catch {
+      toast.error('전송에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   const content = (

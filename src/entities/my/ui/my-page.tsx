@@ -62,14 +62,21 @@ async function MyPage() {
             </div>
           )}
 
-          <div className="mt-6 flex items-center gap-2">
-            <Link
-              href="/my/comments"
-              className="flex items-center font-semibold"
-            >
-              내가 작성한 댓글
+          <div className="mt-6">
+            <Link href="/my/comments" className="flex w-fit items-center gap-2">
+              <div className="flex h-[46px] w-[172px] items-center gap-2 rounded-[8px] bg-[#F8F8F8] px-3">
+                <Image
+                  src="/mypage/message.svg"
+                  alt="댓글 아이콘"
+                  width={20}
+                  height={20}
+                />
+                <span className="text-sm font-semibold whitespace-nowrap">
+                  내가 작성한 <span className="text-primary-500">댓글</span>
+                </span>
+              </div>
+              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </Link>
-            <Image src="/nextBlack.svg" alt="" width={8} height={12} />
           </div>
 
           <div className="py-4 lg:hidden">

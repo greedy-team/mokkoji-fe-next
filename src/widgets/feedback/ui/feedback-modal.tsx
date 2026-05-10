@@ -35,9 +35,9 @@ function FeedbackModal() {
         ✕
       </button>
 
-      <h2 className="mb-1 pr-6 text-lg font-semibold text-[#474747]">
+      <h1 className="mb-1 pr-6 text-lg font-semibold text-[#474747]">
         모꼬지 사용 경험이 궁금해요!
-      </h2>
+      </h1>
       <p className="mb-4 text-sm text-[#474747]">자유롭게 의견을 남겨주세요.</p>
 
       <div className="mb-4 flex gap-2">

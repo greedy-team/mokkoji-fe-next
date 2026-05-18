@@ -10,6 +10,7 @@ import { AppSessionProvider } from '@/shared/lib/session-context';
 import { LoginModalProvider } from '@/shared/lib/login-modal-context';
 import GlobalLoginModal from '@/widgets/login/ui/global-login-modal';
 import { ToastContainer } from 'react-toastify';
+import MSWProvider from '@/_providers/msw-provider';
 
 const pretendard = localFont({
   src: [
@@ -79,23 +80,25 @@ export default function RootLayout({
         <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>
-        <AppSessionProvider>
-          <LoginModalProvider>
-            <ToDoPinProvider>
-              <WebVitalProvider />
-              <ToastContainer
-                autoClose={2000}
-                hideProgressBar
-                closeOnClick
-                pauseOnHover={false}
-                newestOnTop
-                limit={1}
-              />
-              {children}
-            </ToDoPinProvider>
-            <GlobalLoginModal />
-          </LoginModalProvider>
-        </AppSessionProvider>
+        <MSWProvider>
+          <AppSessionProvider>
+            <LoginModalProvider>
+              <ToDoPinProvider>
+                <WebVitalProvider />
+                <ToastContainer
+                  autoClose={2000}
+                  hideProgressBar
+                  closeOnClick
+                  pauseOnHover={false}
+                  newestOnTop
+                  limit={1}
+                />
+                {children}
+              </ToDoPinProvider>
+              <GlobalLoginModal />
+            </LoginModalProvider>
+          </AppSessionProvider>
+        </MSWProvider>
       </body>
     </html>
   );

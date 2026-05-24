@@ -10,13 +10,7 @@ import ClubMasterApplicationWidget from '@/widgets/admin/ui/ClubMasterApplicatio
 import ClubApplicationWidget from '@/widgets/admin/ui/ClubApplicationWidget';
 import AdminClubListWidget from '@/widgets/admin/ui/AdminClubListWidget';
 
-type DashboardTab = 'dashboard' | 'clubApplication' | 'clubList';
-
-const TABS: { label: string; value: DashboardTab }[] = [
-  { label: '대시보드', value: 'dashboard' },
-  { label: '동아리 생성 신청', value: 'clubApplication' },
-  { label: '동아리 목록', value: 'clubList' },
-];
+type DashboardTab = 'dashboard' | 'management';
 
 interface AdminDashboardViewProps {
   clubMasterApplications: ClubMasterApplication[];
@@ -43,20 +37,28 @@ function AdminDashboardView({
     <div className="flex min-h-screen flex-col bg-white">
       <div className="flex flex-col gap-8 px-[140px] py-6">
         <div className="flex items-center gap-4">
-          {TABS.map((tab) => (
-            <button
-              key={tab.value}
-              type="button"
-              onClick={() => setActiveTab(tab.value)}
-              className={
-                activeTab === tab.value
-                  ? 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]'
-                  : 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#F8F8F8] px-5 text-[16px] leading-[140%] font-medium text-[#8B95A1]'
-              }
-            >
-              {tab.label}
-            </button>
-          ))}
+          <button
+            type="button"
+            onClick={() => setActiveTab('dashboard')}
+            className={
+              activeTab === 'dashboard'
+                ? 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]'
+                : 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#F8F8F8] px-5 text-[16px] leading-[140%] font-medium text-[#8B95A1]'
+            }
+          >
+            대시보드
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('management')}
+            className={
+              activeTab === 'management'
+                ? 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]'
+                : 'flex h-[50px] items-center justify-center rounded-[30px] bg-[#F8F8F8] px-5 text-[16px] leading-[140%] font-medium text-[#8B95A1]'
+            }
+          >
+            동아리 관리
+          </button>
         </div>
 
         {activeTab === 'dashboard' && (
@@ -114,37 +116,37 @@ function AdminDashboardView({
                 </p>
               </div>
               <ClubMasterApplicationWidget
-                initialApplications={clubMasterApplications}
+                initialClubApplications={clubApplications}
+                initialClubMasterApplications={clubMasterApplications}
               />
             </div>
           </div>
         )}
 
-        {activeTab === 'clubApplication' && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
-                동아리 생성 신청 목록
-              </h3>
-              <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
-                동아리 생성 신청을 검토하고 승인 또는 반려할 수 있어요.
-              </p>
+        {activeTab === 'management' && (
+          <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
+                  동아리 생성 신청 목록
+                </h3>
+                <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
+                  동아리 생성 신청을 검토하고 승인 또는 반려할 수 있어요.
+                </p>
+              </div>
+              <ClubApplicationWidget initialApplications={clubApplications} />
             </div>
-            <ClubApplicationWidget initialApplications={clubApplications} />
-          </div>
-        )}
-
-        {activeTab === 'clubList' && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
-                전체 동아리 목록
-              </h3>
-              <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
-                등록된 동아리와 동아리장 연결 현황을 확인할 수 있어요.
-              </p>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
+                  전체 동아리 목록
+                </h3>
+                <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
+                  등록된 동아리와 동아리장 연결 현황을 확인할 수 있어요.
+                </p>
+              </div>
+              <AdminClubListWidget clubs={clubs} />
             </div>
-            <AdminClubListWidget clubs={clubs} />
           </div>
         )}
       </div>

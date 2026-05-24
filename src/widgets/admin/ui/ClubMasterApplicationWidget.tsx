@@ -3,65 +3,111 @@
 import { useState, useTransition } from 'react';
 import type {
   ClubMasterApplication,
+  ClubApplication,
   ApplicationStatus,
 } from '@/features/admin/model/dashboard-types';
 import ApplicationTableRow from '@/features/admin/ui/ApplicationTableRow';
 import approveClubMasterApplication from '@/features/admin/api/approveClubMasterApplication';
 import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterApplication';
+import approveClubApplication from '@/features/admin/api/approveClubApplication';
+import rejectClubApplication from '@/features/admin/api/rejectClubApplication';
 
-const STATUS_TABS: { label: string; value: ApplicationStatus }[] = [
-  { label: '대기 중', value: 'PENDING' },
-  { label: '승인됨', value: 'APPROVED' },
-  { label: '반려됨', value: 'REJECTED' },
-];
+type SubTab = 'combined' | 'masterOnly';
 
 interface ClubMasterApplicationWidgetProps {
-  initialApplications: ClubMasterApplication[];
+  initialClubApplications: ClubApplication[];
+  initialClubMasterApplications: ClubMasterApplication[];
 }
 
 function ClubMasterApplicationWidget({
-  initialApplications,
+  initialClubApplications,
+  initialClubMasterApplications,
 }: ClubMasterApplicationWidgetProps) {
-  const [activeStatus, setActiveStatus] =
-    useState<ApplicationStatus>('PENDING');
-  const [applications, setApplications] = useState(initialApplications);
+  const [activeTab, setActiveTab] = useState<SubTab>('combined');
+  const [clubApplications, setClubApplications] = useState(
+    initialClubApplications,
+  );
+  const [clubMasterApplications, setClubMasterApplications] = useState(
+    initialClubMasterApplications,
+  );
   const [, startTransition] = useTransition();
 
-  const filtered = applications.filter(
-    (application) => application.status === activeStatus,
+  const pendingClubApplications = clubApplications.filter(
+    (a) => a.status === 'PENDING',
+  );
+  const pendingMasterApplications = clubMasterApplications.filter(
+    (a) => a.status === 'PENDING',
   );
 
-  const handleApprove = (applicationId: number) => {
+  const handleCombinedApprove = (applicationId: number) => {
     startTransition(async () => {
-      const success = await approveClubMasterApplication(applicationId);
+      await Promise.all([
+        approveClubApplication(applicationId),
+        approveClubMasterApplication(applicationId),
+      ]);
+      setClubApplications((previous) =>
+        previous.map((a) =>
+          a.applicationId === applicationId
+            ? { ...a, status: 'APPROVED' as ApplicationStatus }
+            : a,
+        ),
+      );
+    });
+  };
+
+  const handleCombinedReject = (
+    applicationId: number,
+    rejectReason?: string,
+  ) => {
+    startTransition(async () => {
+      const success = await rejectClubApplication(applicationId, rejectReason);
       if (success) {
-        setApplications((previous) =>
-          previous.map((application) =>
-            application.applicationId === applicationId
-              ? { ...application, status: 'APPROVED' as ApplicationStatus }
-              : application,
+        setClubApplications((previous) =>
+          previous.map((a) =>
+            a.applicationId === applicationId
+              ? {
+                  ...a,
+                  status: 'REJECTED' as ApplicationStatus,
+                  rejectReason: rejectReason ?? null,
+                }
+              : a,
           ),
         );
       }
     });
   };
 
-  const handleReject = (applicationId: number, rejectReason?: string) => {
+  const handleMasterApprove = (applicationId: number) => {
+    startTransition(async () => {
+      const success = await approveClubMasterApplication(applicationId);
+      if (success) {
+        setClubMasterApplications((previous) =>
+          previous.map((a) =>
+            a.applicationId === applicationId
+              ? { ...a, status: 'APPROVED' as ApplicationStatus }
+              : a,
+          ),
+        );
+      }
+    });
+  };
+
+  const handleMasterReject = (applicationId: number, rejectReason?: string) => {
     startTransition(async () => {
       const success = await rejectClubMasterApplication(
         applicationId,
         rejectReason,
       );
       if (success) {
-        setApplications((previous) =>
-          previous.map((application) =>
-            application.applicationId === applicationId
+        setClubMasterApplications((previous) =>
+          previous.map((a) =>
+            a.applicationId === applicationId
               ? {
-                  ...application,
+                  ...a,
                   status: 'REJECTED' as ApplicationStatus,
                   rejectReason: rejectReason ?? null,
                 }
-              : application,
+              : a,
           ),
         );
       }
@@ -71,54 +117,107 @@ function ClubMasterApplicationWidget({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
-        {STATUS_TABS.map((tab) => (
-          <button
-            key={tab.value}
-            type="button"
-            onClick={() => setActiveStatus(tab.value)}
-            className={
-              activeStatus === tab.value
-                ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
-                : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
-            }
-          >
-            {tab.label}
-          </button>
-        ))}
+        <button
+          type="button"
+          onClick={() => setActiveTab('combined')}
+          className={
+            activeTab === 'combined'
+              ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
+              : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
+          }
+        >
+          동아리장 &amp; 동아리 생성
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('masterOnly')}
+          className={
+            activeTab === 'masterOnly'
+              ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
+              : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
+          }
+        >
+          동아리장
+        </button>
       </div>
-      <div className="flex w-full flex-col">
-        <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-          <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            신청일자
-          </span>
-          <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            동아리명
-          </span>
-          <span className="w-[100px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            학교명
-          </span>
-          <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
-            신청자
-          </span>
-          <span className="w-[152px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            상태
-          </span>
-        </div>
-        {filtered.length === 0 ? (
-          <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
-            해당 상태의 신청이 없습니다.
+
+      {activeTab === 'combined' && (
+        <div className="flex w-full flex-col">
+          <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
+            <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              신청일자
+            </span>
+            <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              동아리명
+            </span>
+            <span className="w-[100px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              분류
+            </span>
+            <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
+              신청자
+            </span>
+            <span className="w-[152px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              상태
+            </span>
           </div>
-        ) : (
-          filtered.map((application) => (
-            <ApplicationTableRow
-              key={application.applicationId}
-              {...application}
-              onApprove={handleApprove}
-              onReject={handleReject}
-            />
-          ))
-        )}
-      </div>
+          {pendingClubApplications.length === 0 ? (
+            <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
+              신청 내역이 없습니다.
+            </div>
+          ) : (
+            pendingClubApplications.map((application) => (
+              <ApplicationTableRow
+                key={application.applicationId}
+                applicationId={application.applicationId}
+                clubName={application.clubName}
+                applicantName={application.applicantName}
+                category={application.category}
+                status={application.status}
+                createdAt={application.createdAt}
+                onApprove={handleCombinedApprove}
+                onReject={handleCombinedReject}
+              />
+            ))
+          )}
+        </div>
+      )}
+
+      {activeTab === 'masterOnly' && (
+        <div className="flex w-full flex-col">
+          <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
+            <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              신청일자
+            </span>
+            <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              동아리명
+            </span>
+            <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
+              신청자
+            </span>
+            <span className="w-[152px] text-[16px] leading-[140%] font-medium text-[#000000]">
+              상태
+            </span>
+          </div>
+          {pendingMasterApplications.length === 0 ? (
+            <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
+              신청 내역이 없습니다.
+            </div>
+          ) : (
+            pendingMasterApplications.map((application) => (
+              <ApplicationTableRow
+                key={application.applicationId}
+                applicationId={application.applicationId}
+                clubName={application.clubName}
+                applicantName={application.applicantName}
+                status={application.status}
+                createdAt={application.createdAt}
+                onApprove={handleMasterApprove}
+                onReject={handleMasterReject}
+              />
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

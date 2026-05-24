@@ -112,7 +112,12 @@ function ClubApplicationWidget({
           filtered.map((application) => (
             <ApplicationTableRow
               key={application.applicationId}
-              {...application}
+              applicationId={application.applicationId}
+              clubName={application.clubName}
+              applicantName={application.applicantName}
+              category={application.category}
+              status={application.status}
+              createdAt={application.createdAt}
               onApprove={handleApprove}
               onReject={handleReject}
             />

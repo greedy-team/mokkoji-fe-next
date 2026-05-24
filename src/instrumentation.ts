@@ -12,6 +12,12 @@ export async function register() {
       const { default: nextFetchLogger } = await import('next-fetch-logger');
       nextFetchLogger();
     }
+
+    const { isMockingEnabled } = await import('./mocks/config');
+    if (isMockingEnabled) {
+      const { startMockServer } = await import('./mocks/server');
+      startMockServer();
+    }
   }
 
   if (process.env.NEXT_RUNTIME === 'edge' && isProd) {

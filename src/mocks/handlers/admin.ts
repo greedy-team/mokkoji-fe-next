@@ -26,12 +26,19 @@ export const adminHandlers = [
   http.get(url('/admin/club-master-applications'), ({ request }) => {
     const params = new URL(request.url).searchParams;
     const status = params.get('status') as ApplicationStatus | null;
+    const universityCode = params.get('universityCode');
     const page = Number(params.get('page') ?? 1);
     const size = Number(params.get('size') ?? 20);
 
-    const filtered = status
+    let filtered = status
       ? clubMasterApplications.filter((item) => item.status === status)
       : clubMasterApplications;
+
+    if (universityCode) {
+      filtered = filtered.filter((item) =>
+        item.universityName.startsWith(universityCode),
+      );
+    }
 
     return HttpResponse.json({
       data: {
@@ -65,13 +72,20 @@ export const adminHandlers = [
 
   http.get(url('/admin/clubs'), ({ request }) => {
     const params = new URL(request.url).searchParams;
+    const universityCode = params.get('universityCode');
     const page = Number(params.get('page') ?? 1);
     const size = Number(params.get('size') ?? 20);
 
+    const filtered = universityCode
+      ? adminClubs.filter((item) =>
+          item.universityName.startsWith(universityCode),
+        )
+      : adminClubs;
+
     return HttpResponse.json({
       data: {
-        clubs: adminClubs,
-        pagination: buildPage(adminClubs.length, page, size),
+        clubs: filtered,
+        pagination: buildPage(filtered.length, page, size),
       },
     });
   }),
@@ -79,12 +93,19 @@ export const adminHandlers = [
   http.get(url('/admin/club-applications'), ({ request }) => {
     const params = new URL(request.url).searchParams;
     const status = params.get('status') as ApplicationStatus | null;
+    const universityCode = params.get('universityCode');
     const page = Number(params.get('page') ?? 1);
     const size = Number(params.get('size') ?? 20);
 
-    const filtered = status
+    let filtered = status
       ? clubApplications.filter((item) => item.status === status)
       : clubApplications;
+
+    if (universityCode) {
+      filtered = filtered.filter((item) =>
+        item.universityName.startsWith(universityCode),
+      );
+    }
 
     return HttpResponse.json({
       data: {

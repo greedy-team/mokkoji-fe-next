@@ -7,9 +7,9 @@ import ApproveCompleteDialog from './ApproveCompleteDialog';
 
 interface ApplicationTableRowProps {
   applicationId: number;
-  universityName: string;
   clubName: string;
   applicantName: string;
+  category?: string;
   status: ApplicationStatus;
   createdAt: string;
   onApprove: (applicationId: number) => void;
@@ -18,9 +18,9 @@ interface ApplicationTableRowProps {
 
 function ApplicationTableRow({
   applicationId,
-  universityName,
   clubName,
   applicantName,
+  category,
   status,
   createdAt,
   onApprove,
@@ -51,9 +51,11 @@ function ApplicationTableRow({
         <span className="w-[160px] text-[16px] leading-[19px] font-normal text-[#000000]">
           {clubName}
         </span>
-        <span className="w-[100px] text-[16px] leading-[19px] font-normal text-[#000000]">
-          {universityName}
-        </span>
+        {category !== undefined && (
+          <span className="w-[100px] text-[16px] leading-[19px] font-normal text-[#000000]">
+            {category}
+          </span>
+        )}
         <span className="flex-1 text-[16px] leading-[19px] font-normal text-[#000000]">
           {applicantName}
         </span>
@@ -65,14 +67,14 @@ function ApplicationTableRow({
                 onClick={handleApprove}
                 className="flex h-9 w-[72px] items-center justify-center rounded-[30px] bg-[#4AF38A] text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#000000] transition-colors hover:bg-[#22CF64]"
               >
-                승인
+                승인하기
               </button>
               <button
                 type="button"
                 onClick={() => setRejectDialogOpen(true)}
                 className="flex h-9 w-[72px] items-center justify-center rounded-[30px] border border-[#22CF64] bg-white text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#22CF64] transition-colors hover:bg-[#f0fff6]"
               >
-                반려
+                반려하기
               </button>
             </>
           ) : (

@@ -47,7 +47,7 @@ function RejectReasonDialog({
               <textarea
                 value={reason}
                 onChange={(event) => setReason(event.target.value)}
-                placeholder="입력해주신 내용을 검토한 결과, 일부 정보가 부족하여 승인이 어려웠습니다. 내용을 보완해 다시 신청해 주세요"
+                placeholder="반려 사유를 입력해주세요"
                 className="h-[160px] w-full resize-none rounded-[16px] border border-[#7F7F7F] px-5 pt-5 text-[16px] leading-[140%] font-medium text-[#474747] placeholder:text-[#9F9F9F] focus:outline-none"
               />
             </div>

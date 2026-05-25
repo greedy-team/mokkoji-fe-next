@@ -1,5 +1,3 @@
-'use client';
-
 import type {
   ClubMasterApplication,
   ClubApplication,
@@ -44,7 +42,7 @@ function AdminDashboardView({
           </p>
         </div>
         <div className="flex items-center gap-5">
-          <div className="relative h-[117px] w-[178px] rounded-[20px] bg-[#F8F8F8]">
+          <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
             <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
               등록된 동아리
             </span>
@@ -52,7 +50,7 @@ function AdminDashboardView({
               {totalClubs}개
             </span>
           </div>
-          <div className="relative h-[117px] w-[175px] rounded-[20px] bg-[#F8F8F8]">
+          <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
             <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
               승인 대기
             </span>
@@ -60,7 +58,7 @@ function AdminDashboardView({
               {pendingMasterCount}건
             </span>
           </div>
-          <div className="relative h-[117px] w-[177px] rounded-[20px] bg-[#F8F8F8]">
+          <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
             <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
               신규 신청
             </span>

@@ -27,6 +27,9 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
                 <br />
                 신청자에게 안내 메일이 발송됩니다.
               </Dialog.Title>
+              <Dialog.Description className="sr-only">
+                승인이 완료되었습니다.
+              </Dialog.Description>
             </div>
             <button
               type="button"

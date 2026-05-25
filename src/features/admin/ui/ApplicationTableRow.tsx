@@ -16,6 +16,22 @@ interface ApplicationTableRowProps {
   onReject: (applicationId: number, rejectReason?: string) => void;
 }
 
+function Cell({
+  width,
+  children,
+}: {
+  width: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={`${width} text-[16px] leading-[19px] font-normal text-[#000000]`}
+    >
+      {children}
+    </span>
+  );
+}
+
 function ApplicationTableRow({
   applicationId,
   clubName,
@@ -45,20 +61,10 @@ function ApplicationTableRow({
   return (
     <>
       <div className="flex w-full items-center border-b border-[#D6D6D6] py-2.5">
-        <span className="w-[120px] text-[16px] leading-[19px] font-normal text-[#000000]">
-          {formattedDate}
-        </span>
-        <span className="w-[160px] text-[16px] leading-[19px] font-normal text-[#000000]">
-          {clubName}
-        </span>
-        {category !== undefined && (
-          <span className="w-[100px] text-[16px] leading-[19px] font-normal text-[#000000]">
-            {category}
-          </span>
-        )}
-        <span className="flex-1 text-[16px] leading-[19px] font-normal text-[#000000]">
-          {applicantName}
-        </span>
+        <Cell width="w-[120px]">{formattedDate}</Cell>
+        <Cell width="w-[160px]">{clubName}</Cell>
+        {category !== undefined && <Cell width="w-[100px]">{category}</Cell>}
+        <Cell width="flex-1">{applicantName}</Cell>
         <div className="flex w-[152px] items-center gap-2">
           {status === 'PENDING' ? (
             <>
@@ -79,11 +85,7 @@ function ApplicationTableRow({
             </>
           ) : (
             <span
-              className={
-                status === 'APPROVED'
-                  ? 'text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#22CF64]'
-                  : 'text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]'
-              }
+              className={`text-[14px] leading-[140%] font-medium tracking-[-0.03em] ${status === 'APPROVED' ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
             >
               {status === 'APPROVED' ? '승인됨' : '반려됨'}
             </span>

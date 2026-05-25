@@ -7,6 +7,8 @@ import type {
   ApplicationStatus,
 } from '@/features/admin/model/dashboard-types';
 import ApplicationTableRow from '@/features/admin/ui/ApplicationTableRow';
+import SubTabButton from '@/features/admin/ui/SubTabButton';
+import TableHeaderCell from '@/features/admin/ui/TableHeaderCell';
 import approveClubMasterApplication from '@/features/admin/api/approveClubMasterApplication';
 import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterApplication';
 import approveClubApplication from '@/features/admin/api/approveClubApplication';
@@ -126,48 +128,28 @@ function ClubMasterApplicationWidget({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
-        <button
-          type="button"
+        <SubTabButton
+          isActive={activeTab === 'combined'}
           onClick={() => setActiveTab('combined')}
-          className={
-            activeTab === 'combined'
-              ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
-              : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
-          }
         >
           동아리장 &amp; 동아리 생성
-        </button>
-        <button
-          type="button"
+        </SubTabButton>
+        <SubTabButton
+          isActive={activeTab === 'masterOnly'}
           onClick={() => setActiveTab('masterOnly')}
-          className={
-            activeTab === 'masterOnly'
-              ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
-              : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
-          }
         >
           동아리장
-        </button>
+        </SubTabButton>
       </div>
 
       {activeTab === 'combined' && (
         <div className="flex w-full flex-col">
           <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-            <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              신청일자
-            </span>
-            <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              동아리명
-            </span>
-            <span className="w-[100px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              분류
-            </span>
-            <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
-              신청자
-            </span>
-            <span className="w-[152px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              상태
-            </span>
+            <TableHeaderCell width="w-[120px]">신청일자</TableHeaderCell>
+            <TableHeaderCell width="w-[160px]">동아리명</TableHeaderCell>
+            <TableHeaderCell width="w-[100px]">분류</TableHeaderCell>
+            <TableHeaderCell width="flex-1">신청자</TableHeaderCell>
+            <TableHeaderCell width="w-[152px]">상태</TableHeaderCell>
           </div>
           {pendingClubApplications.length === 0 ? (
             <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
@@ -194,18 +176,10 @@ function ClubMasterApplicationWidget({
       {activeTab === 'masterOnly' && (
         <div className="flex w-full flex-col">
           <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-            <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              신청일자
-            </span>
-            <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              동아리명
-            </span>
-            <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
-              신청자
-            </span>
-            <span className="w-[152px] text-[16px] leading-[140%] font-medium text-[#000000]">
-              상태
-            </span>
+            <TableHeaderCell width="w-[120px]">신청일자</TableHeaderCell>
+            <TableHeaderCell width="w-[160px]">동아리명</TableHeaderCell>
+            <TableHeaderCell width="flex-1">신청자</TableHeaderCell>
+            <TableHeaderCell width="w-[152px]">상태</TableHeaderCell>
           </div>
           {pendingMasterApplications.length === 0 ? (
             <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">

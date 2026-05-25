@@ -1,4 +1,5 @@
 import type { AdminClub } from '@/features/admin/model/dashboard-types';
+import TableHeaderCell from '@/features/admin/ui/TableHeaderCell';
 import ClubTableRow from '@/features/admin/ui/ClubTableRow';
 
 interface AdminClubListWidgetProps {
@@ -10,27 +11,13 @@ function AdminClubListWidget({ clubs }: AdminClubListWidgetProps) {
     <div className="flex flex-col gap-4">
       <div className="flex w-full flex-col">
         <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-          <span className="w-[160px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            동아리명
-          </span>
-          <span className="w-[120px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            학교명
-          </span>
-          <span className="w-[100px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            분류
-          </span>
-          <span className="w-[100px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            소속
-          </span>
-          <span className="flex-1 text-[16px] leading-[140%] font-medium text-[#000000]">
-            동아리장
-          </span>
-          <span className="w-[200px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            이메일
-          </span>
-          <span className="w-[60px] text-[16px] leading-[140%] font-medium text-[#000000]">
-            상태
-          </span>
+          <TableHeaderCell width="w-[160px]">동아리명</TableHeaderCell>
+          <TableHeaderCell width="w-[120px]">학교명</TableHeaderCell>
+          <TableHeaderCell width="w-[100px]">분류</TableHeaderCell>
+          <TableHeaderCell width="w-[100px]">소속</TableHeaderCell>
+          <TableHeaderCell width="flex-1">동아리장</TableHeaderCell>
+          <TableHeaderCell width="w-[200px]">이메일</TableHeaderCell>
+          <TableHeaderCell width="w-[60px]">상태</TableHeaderCell>
         </div>
         {clubs.length === 0 ? (
           <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">

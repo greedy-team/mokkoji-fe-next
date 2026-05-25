@@ -41,17 +41,26 @@ function ClubMasterApplicationWidget({
 
   const handleCombinedApprove = (applicationId: number) => {
     startTransition(async () => {
-      await Promise.all([
+      const [clubSuccess, masterSuccess] = await Promise.all([
         approveClubApplication(applicationId),
         approveClubMasterApplication(applicationId),
       ]);
-      setClubApplications((previous) =>
-        previous.map((a) =>
-          a.applicationId === applicationId
-            ? { ...a, status: 'APPROVED' as ApplicationStatus }
-            : a,
-        ),
-      );
+      if (clubSuccess && masterSuccess) {
+        setClubApplications((previous) =>
+          previous.map((a) =>
+            a.applicationId === applicationId
+              ? { ...a, status: 'APPROVED' as ApplicationStatus }
+              : a,
+          ),
+        );
+        setClubMasterApplications((previous) =>
+          previous.map((a) =>
+            a.applicationId === applicationId
+              ? { ...a, status: 'APPROVED' as ApplicationStatus }
+              : a,
+          ),
+        );
+      }
     });
   };
 

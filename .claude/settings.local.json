@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "PowerShell(git add \"src/app/\\(admin\\)/dashboard/\" \"src/features/admin/api/\" \"src/features/admin/model/dashboard-types.ts\" \"src/features/admin/ui/ApplicationTableRow.tsx\" \"src/features/admin/ui/ApproveCompleteDialog.tsx\" \"src/features/admin/ui/ClubTableRow.tsx\" \"src/features/admin/ui/RejectReasonDialog.tsx\" \"src/views/admin/ui/AdminDashboardView.tsx\" \"src/widgets/admin/ui/AdminClubListWidget.tsx\" \"src/widgets/admin/ui/ClubApplicationWidget.tsx\" \"src/widgets/admin/ui/ClubMasterApplicationWidget.tsx\")",
+      "PowerShell(git add \"src/features/admin/ui/ApplicationTableRow.tsx\" \"src/features/admin/ui/ClubTableRow.tsx\" \"src/widgets/admin/ui/AdminClubListWidget.tsx\")",
+      "Edit(/.claude/skills/design-system/**)"
+    ]
+  }
+}

@@ -55,7 +55,8 @@ logs
 
 nginx/active/
 
-.claude
+.claude/figma
+.claude/spec.md
 .mcp.json
 .omc/
 .serena/

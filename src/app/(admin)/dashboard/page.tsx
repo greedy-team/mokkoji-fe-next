@@ -25,7 +25,6 @@ async function DashboardPage() {
       <AdminDashboardView
         clubMasterApplications={clubMasterApplications}
         clubApplications={clubApplications}
-        clubs={clubs}
         totalClubs={totalClubs}
         pendingMasterCount={pendingMasterCount}
         pendingClubCount={pendingClubCount}

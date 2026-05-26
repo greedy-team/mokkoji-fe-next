@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useCallback, useContext, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoginModalContextValue {
   isOpen: boolean;
@@ -25,14 +20,14 @@ export function LoginModalProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
-  const openLoginModal = useCallback(() => setIsOpen(true), []);
-  const closeLoginModal = useCallback(() => setIsOpen(false), []);
+  const openLoginModal = useCallback(() => router.push('/login'), [router]);
+  const closeLoginModal = useCallback(() => {}, []);
 
   const value = useMemo(
-    () => ({ isOpen, openLoginModal, closeLoginModal }),
-    [isOpen, openLoginModal, closeLoginModal],
+    () => ({ isOpen: false, openLoginModal, closeLoginModal }),
+    [openLoginModal, closeLoginModal],
   );
 
   return (

@@ -16,12 +16,14 @@ interface SessionUser {
   name: string;
   grade: string;
   email: string;
+  universityCode: string;
 }
 
 interface SessionData {
   user: SessionUser;
   role?: UserRole;
   accessToken?: string;
+  universityCode?: string;
 }
 
 interface SessionContextValue {

@@ -65,7 +65,12 @@ function LoginForm({ isTermsConfirmed, onTermsModalOpen }: LoginFormProps) {
       }
       closeLoginModal();
       refreshSession();
-      router.refresh();
+      const universityCode = data.data?.universityCode as string | undefined;
+      if (universityCode) {
+        router.push(`/${universityCode.toLowerCase()}`);
+      } else {
+        router.refresh();
+      }
     } catch {
       toast.error('로그인 중 오류가 발생했습니다.');
     } finally {

@@ -1,5 +1,7 @@
+import ClubApplicationTabs from '@/widgets/club-application/ui/club-application-tab';
+
 function ClubApplicationPage() {
-  return <div>동아리 신청 페이지</div>;
+  return <ClubApplicationTabs />;
 }
 
 export default ClubApplicationPage;

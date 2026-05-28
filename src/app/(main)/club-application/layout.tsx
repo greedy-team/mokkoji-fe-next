@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col">
-      <main className="flex justify-center px-4 py-10">{children}</main>
+      <main className="flex px-4 py-7">{children}</main>
     </div>
   );
 }

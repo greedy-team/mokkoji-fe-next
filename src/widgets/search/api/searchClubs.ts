@@ -14,6 +14,7 @@ interface SearchClubsParams {
   recruitStatus?: string;
   page?: number;
   size?: number;
+  universityCode?: string;
 }
 
 async function searchClubs(params: SearchClubsParams) {
@@ -25,6 +26,7 @@ async function searchClubs(params: SearchClubsParams) {
   searchParams.set('recruitStatus', params.recruitStatus || '');
   searchParams.set('page', String(params.page || 1));
   searchParams.set('size', String(params.size || 10));
+  searchParams.set('universityCode', params.universityCode ?? 'SEJONG');
 
   try {
     const response = await serverApi

@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import useClickOutside from '@/shared/model/useClickOutside';
-import { useLoginModal } from '@/shared/lib/login-modal-context';
+import { useSession } from '@/shared/lib/session-context';
 import {
   ChevronIcon,
   UserIcon,
@@ -16,9 +16,11 @@ interface HeaderLoginProps {
   userName: string;
 }
 
-function HeaderLogin({ userName }: HeaderLoginProps) {
+function HeaderLogin({ userName: initialUserName }: HeaderLoginProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { openLoginModal } = useLoginModal();
+  const { status } = useSession();
+  const isLoggedIn =
+    status === 'authenticated' || (status === 'loading' && !!initialUserName);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
@@ -30,7 +32,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
 
   return (
     <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
-      {userName ? (
+      {isLoggedIn ? (
         <div className="relative" ref={dropdownRef}>
           <Button
             variant="none"
@@ -71,12 +73,9 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
         </div>
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
-          <button
-            onClick={openLoginModal}
-            className="cursor-pointer whitespace-nowrap"
-          >
+          <Link href="/login" className="cursor-pointer whitespace-nowrap">
             로그인
-          </button>
+          </Link>
         </div>
       )}
     </span>

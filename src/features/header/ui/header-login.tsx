@@ -16,11 +16,11 @@ interface HeaderLoginProps {
   userName: string;
 }
 
-function HeaderLogin({ userName: initialUserName }: HeaderLoginProps) {
+function HeaderLogin({ userName }: HeaderLoginProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { status } = useSession();
   const isLoggedIn =
-    status === 'authenticated' || (status === 'loading' && !!initialUserName);
+    status === 'authenticated' || (status === 'loading' && !!userName);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));

@@ -99,6 +99,7 @@
     "gh-pages": "^6.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "msw": "^2.14.6",
     "prettier-plugin-tailwindcss": "0.6.11",
     "storybook": "8.6.14",
     "tailwindcss": "^4",
@@ -111,6 +112,11 @@
     "*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix"
+    ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
     ]
   }
 }

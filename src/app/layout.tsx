@@ -8,6 +8,7 @@ import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
+import MSWProvider from '@/_providers/msw-provider';
 
 const pretendard = localFont({
   src: [
@@ -77,20 +78,23 @@ export default function RootLayout({
         <ClarityProvider />
       </head>
       <body className={`${pretendard.className} scrollbar-hide`}>
-        <AppSessionProvider>
-          <ToDoPinProvider>
-            <WebVitalProvider />
-            <ToastContainer
-              autoClose={2000}
-              hideProgressBar
-              closeOnClick
-              pauseOnHover={false}
-              newestOnTop
-              limit={1}
-            />
-            {children}
-          </ToDoPinProvider>
-        </AppSessionProvider>
+        <MSWProvider>
+          <AppSessionProvider>
+            <LoginModalProvider>
+              <ToDoPinProvider>
+                <WebVitalProvider />
+                <ToastContainer
+                  autoClose={2000}
+                  hideProgressBar
+                  closeOnClick
+                  pauseOnHover={false}
+                  newestOnTop
+                  limit={1}
+                />
+                {children}
+              </ToDoPinProvider>
+          </AppSessionProvider>
+        </MSWProvider>
       </body>
     </html>
   );

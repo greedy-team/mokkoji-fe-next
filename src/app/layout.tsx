@@ -80,19 +80,18 @@ export default function RootLayout({
       <body className={`${pretendard.className} scrollbar-hide`}>
         <MSWProvider>
           <AppSessionProvider>
-            <LoginModalProvider>
-              <ToDoPinProvider>
-                <WebVitalProvider />
-                <ToastContainer
-                  autoClose={2000}
-                  hideProgressBar
-                  closeOnClick
-                  pauseOnHover={false}
-                  newestOnTop
-                  limit={1}
-                />
-                {children}
-              </ToDoPinProvider>
+            <ToDoPinProvider>
+              <WebVitalProvider />
+              <ToastContainer
+                autoClose={2000}
+                hideProgressBar
+                closeOnClick
+                pauseOnHover={false}
+                newestOnTop
+                limit={1}
+              />
+              {children}
+            </ToDoPinProvider>
           </AppSessionProvider>
         </MSWProvider>
       </body>

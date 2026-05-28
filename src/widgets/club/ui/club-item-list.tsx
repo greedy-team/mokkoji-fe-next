@@ -5,7 +5,7 @@ import NumberPagination from '@/shared/ui/numberPagination';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';
 
-async function ClubItemList() {
+async function ClubItemList({ universityCode }: { universityCode: string }) {
   const page = Number(searchParamsCache.get('page') ?? 1);
   const size = 15;
   const category = searchParamsCache.get('category');
@@ -17,6 +17,7 @@ async function ClubItemList() {
     category: category as ClubCategory,
     affiliation: affiliation as ClubAffiliation,
     keyword,
+    universityCode,
   });
 
   if (!clubListResponse.ok || !clubListResponse.data) {

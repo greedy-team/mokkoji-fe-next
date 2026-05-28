@@ -9,7 +9,7 @@ async function Page({ params }: DetailParams) {
   const role = session?.role;
 
   if (!session || !session.user) {
-    redirect('/login');
+    redirect('/');
   }
 
   if (

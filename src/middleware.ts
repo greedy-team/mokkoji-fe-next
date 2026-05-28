@@ -68,16 +68,33 @@ function applySetCookie(req: NextRequest, res: NextResponse): void {
   });
 }
 
+const NON_UNIVERSITY_PREFIXES = new Set(['admin', 'api', 'test', '_next']);
+
+function stripUniversityCodePrefix(pathname: string): string {
+  const segments = pathname.split('/');
+  const firstSegment = segments[1];
+  if (
+    firstSegment &&
+    !NON_UNIVERSITY_PREFIXES.has(firstSegment) &&
+    /^[a-z]+$/.test(firstSegment)
+  ) {
+    return `/${segments.slice(2).join('/')}` || '/';
+  }
+  return pathname;
+}
+
 /**
  * route.ts에 정의된 publicRoutes와 대조하여 인증 없이 접근 가능한 경로인지 판별한다.
  * '/:path*'로 끝나는 패턴은 하위 경로까지 포함한다.
+ * /{universityCode}/... 형태의 경로는 universityCode를 제거한 뒤 대조한다.
  */
 function isPublicPath(pathname: string) {
+  const normalizedPath = stripUniversityCodePrefix(pathname);
   return publicRoutes.some((route) => {
     if (route.endsWith('/:path*')) {
-      return pathname.startsWith(route.replace('/:path*', ''));
+      return normalizedPath.startsWith(route.replace('/:path*', ''));
     }
-    return route === pathname;
+    return route === normalizedPath;
   });
 }
 

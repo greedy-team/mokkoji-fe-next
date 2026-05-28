@@ -26,6 +26,7 @@ async function getClubList({
   universityCode?: string;
 }) {
   const session = await getSession();
+  const effectiveUniversityCode = session?.universityCode ?? universityCode;
 
   const rawParams: Record<string, string | undefined> = {
     page: String(page),
@@ -33,7 +34,7 @@ async function getClubList({
     category: category ? String(category) : undefined,
     affiliation: affiliation ? String(affiliation) : undefined,
     keyword: keyword?.trim() ? String(keyword?.trim()) : undefined,
-    universityCode,
+    universityCode: effectiveUniversityCode,
   };
 
   const searchParams = new URLSearchParams();

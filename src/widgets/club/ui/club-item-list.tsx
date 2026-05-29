@@ -26,7 +26,7 @@ async function ClubItemList({ universityCode }: { universityCode: string }) {
 
   if (clubListResponse.data.clubs.length === 0) {
     return (
-      <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
+      <p className="my-30 w-full text-center text-sm font-bold text-[#00E457]">
         동아리가 없습니다.
       </p>
     );

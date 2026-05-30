@@ -1,6 +1,6 @@
 'use server';
 
-import api from '@/shared/api/auth-api';
+import api from '@/shared/api/root-auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
 import type { ClubCreateFormData } from '../model/type';
 

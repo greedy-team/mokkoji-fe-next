@@ -83,7 +83,7 @@ function ClubCreateBasicStep({
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="sejong">세종대학교</SelectItem>
+            <SelectItem value="SEJONG">세종대학교</SelectItem>
           </SelectContent>
         </Select>
       </div>

@@ -1,7 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
+import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import postCreateClubApplication from '../api/postCreateClubApplication';
 import type { ClubCreateFormData } from '../model/type';
@@ -13,6 +15,7 @@ export type { ClubCreateFormData };
 type Step = 'basic' | 'description';
 
 function ClubCreateForm() {
+  const router = useRouter();
   const { session } = useSession();
   const [formData, setFormData] = useState<ClubCreateFormData>({
     clubName: '',
@@ -39,12 +42,21 @@ function ClubCreateForm() {
     setStep('description');
   };
 
-  const handleSubmit = (description: string) => {
-    postCreateClubApplication({
+  const handleSubmit = async (description: string) => {
+    const result = await postCreateClubApplication({
       ...formData,
       description,
       applicantName: session?.user.name ?? '',
     });
+    if (result.ok) {
+      toast.success(
+        '제출되었습니다. 마이페이지에서 현황을 확인하실 수 있습니다.',
+      );
+      router.push('/my');
+    } else {
+      toast.error(result.message);
+      router.push('/');
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 'use client';
 
+import ClubCreateForm from '@/features/club-create/ui/club-crete-form';
 import { useState } from 'react';
 
 const TABS = [
@@ -13,8 +14,8 @@ function ClubApplicationTabs() {
   const [activeTab, setActiveTab] = useState<TabKey>('club-create');
 
   return (
-    <div>
-      <div className="sticky top-0 z-30 mb-8 flex justify-start border-b border-b-[#D6D6D6] bg-white pb-3 lg:mb-12">
+    <div className="w-full">
+      <div className="sticky top-0 z-30 flex w-full justify-start border-b border-b-[#D6D6D6] bg-white pb-3 lg:mb-12">
         {TABS.map((tab) => {
           const isSelected = tab.key === activeTab;
 
@@ -42,7 +43,7 @@ function ClubApplicationTabs() {
       </div>
 
       <div className="min-h-[600px] w-full">
-        {activeTab === 'club-create' && <div>{/* 동아리 생성 폼 */}</div>}
+        {activeTab === 'club-create' && <ClubCreateForm />}
         {activeTab === 'club-leader-application' && (
           <div>{/* 동아리장 신청 폼 */}</div>
         )}

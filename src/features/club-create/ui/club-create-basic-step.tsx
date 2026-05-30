@@ -67,7 +67,10 @@ function ClubCreateBasicStep({
         <Select
           value={formData.universityCode}
           onValueChange={(value) =>
-            setFormData((prev) => ({ ...prev, universityCode: value }))
+            setFormData((prev) => ({
+              ...prev,
+              universityCode: value.toUpperCase(),
+            }))
           }
         >
           <SelectTrigger

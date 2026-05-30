@@ -1,10 +1,13 @@
 'use client';
 
+/* eslint-disable import/no-extraneous-dependencies */
 import { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Extension } from '@tiptap/core';
 import {
   AlignLeft,
   AlignCenter,
@@ -15,6 +18,53 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
+
+const FontSize = Extension.create({
+  name: 'fontSize',
+  addOptions() {
+    return { types: ['textStyle'] };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: (element: HTMLElement) => element.style.fontSize || null,
+            renderHTML: (attributes: Record<string, string | null>) => {
+              if (!attributes.fontSize) return {};
+              return {
+                style: `font-size: ${attributes.fontSize}; font-weight: bold;`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setFontSize: (fontSize: string) => (ctx: any) =>
+        ctx.chain().setMark('textStyle', { fontSize }).run(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      unsetFontSize: () => (ctx: any) =>
+        ctx
+          .chain()
+          .setMark('textStyle', { fontSize: null })
+          .removeEmptyTextStyle()
+          .run(),
+    };
+  },
+});
+
+const FONT_SIZES: Record<string, string | null> = {
+  paragraph: null,
+  heading1: '1.875rem',
+  heading2: '1.5rem',
+  heading3: '1.25rem',
+};
 
 const TEXT_STYLE_OPTIONS = [
   { label: '본문', value: 'paragraph' },
@@ -41,9 +91,11 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ heading: false }),
       Underline,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TextAlign.configure({ types: ['paragraph'] }),
+      TextStyle,
+      FontSize,
     ],
     content: '',
     onTransaction: () => rerender((v) => v + 1),
@@ -58,9 +110,10 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
 
   const getCurrentStyle = () => {
     if (!editor) return '본문';
-    if (editor.isActive('heading', { level: 1 })) return '제목 1';
-    if (editor.isActive('heading', { level: 2 })) return '제목 2';
-    if (editor.isActive('heading', { level: 3 })) return '제목 3';
+    const { fontSize } = editor.getAttributes('textStyle');
+    if (fontSize === FONT_SIZES.heading1) return '제목 1';
+    if (fontSize === FONT_SIZES.heading2) return '제목 2';
+    if (fontSize === FONT_SIZES.heading3) return '제목 3';
     return '본문';
   };
 
@@ -73,14 +126,11 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
 
   const setStyle = (value: string) => {
     if (!editor) return;
-    if (value === 'paragraph') {
-      editor.chain().focus().setParagraph().run();
-    } else if (value === 'heading1') {
-      editor.chain().focus().toggleHeading({ level: 1 }).run();
-    } else if (value === 'heading2') {
-      editor.chain().focus().toggleHeading({ level: 2 }).run();
-    } else if (value === 'heading3') {
-      editor.chain().focus().toggleHeading({ level: 3 }).run();
+    const fontSize = FONT_SIZES[value];
+    if (!fontSize) {
+      (editor.chain().focus() as any).unsetFontSize().run();
+    } else {
+      (editor.chain().focus() as any).setFontSize(fontSize).run();
     }
     setStyleOpen(false);
   };

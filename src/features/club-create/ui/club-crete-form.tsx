@@ -2,27 +2,21 @@
 
 import { useRef, useState } from 'react';
 
+import { useSession } from '@/shared/lib/session-context';
+import postCreateClubApplication from '../api/postCreateClubApplication';
+import type { ClubCreateFormData } from '../model/type';
 import ClubCreateDescriptionStep from './club-create-description-step';
 import ClubCreateBasicStep from './club-create-basic-step';
 
-export interface ClubCreateFormData {
-  universityCode: string;
-  applicantName: string;
-  clubName: string;
-  clubCategory: string;
-  clubAffiliation: string;
-  logo: string;
-  instagram: string;
-  description: string;
-}
+export type { ClubCreateFormData };
 
 type Step = 'basic' | 'description';
 
 function ClubCreateForm() {
+  const { session } = useSession();
   const [formData, setFormData] = useState<ClubCreateFormData>({
     clubName: '',
     universityCode: '',
-    applicantName: '',
     clubCategory: '',
     clubAffiliation: '',
     logo: '',
@@ -30,7 +24,6 @@ function ClubCreateForm() {
     description: '',
   });
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [logoFile, setLogoFile] = useState<File | null>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
@@ -38,7 +31,6 @@ function ClubCreateForm() {
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLogoFile(file);
     setLogoPreview(URL.createObjectURL(file));
     setFormData((prev) => ({ ...prev, logo: file.name }));
   };
@@ -48,7 +40,11 @@ function ClubCreateForm() {
   };
 
   const handleSubmit = (description: string) => {
-    setFormData((prev) => ({ ...prev, description }));
+    postCreateClubApplication({
+      ...formData,
+      description,
+      applicantName: session?.user.name ?? '',
+    });
   };
 
   return (

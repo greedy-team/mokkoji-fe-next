@@ -30,6 +30,7 @@ function ClubCreateForm() {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,11 +44,13 @@ function ClubCreateForm() {
   };
 
   const handleSubmit = async (description: string) => {
+    setIsSubmitting(true);
     const result = await postCreateClubApplication({
       ...formData,
       description,
       applicantName: session?.user.name ?? '',
     });
+    setIsSubmitting(false);
     if (result.ok) {
       toast.success(
         '제출되었습니다. 마이페이지에서 현황을 확인하실 수 있습니다.',
@@ -74,7 +77,10 @@ function ClubCreateForm() {
         />
       )}
       {step === 'description' && (
-        <ClubCreateDescriptionStep onSubmit={handleSubmit} />
+        <ClubCreateDescriptionStep
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
       )}
     </>
   );

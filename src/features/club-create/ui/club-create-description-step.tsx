@@ -31,9 +31,10 @@ const ALIGN_OPTIONS = [
 
 interface Props {
   onSubmit: (description: string) => void;
+  isSubmitting: boolean;
 }
 
-function ClubCreateDescriptionStep({ onSubmit }: Props) {
+function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
   const [styleOpen, setStyleOpen] = useState(false);
   const [alignOpen, setAlignOpen] = useState(false);
   const [, rerender] = useState(0);
@@ -190,10 +191,10 @@ function ClubCreateDescriptionStep({ onSubmit }: Props) {
       <Button
         type="button"
         variant="submit-default"
-        disabled={isEmpty}
+        disabled={isEmpty || isSubmitting}
         onClick={() => editor && onSubmit(editor.getHTML())}
       >
-        제출하기
+        {isSubmitting ? '제출 중입니다...' : '제출하기'}
       </Button>
     </div>
   );

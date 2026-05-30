@@ -243,6 +243,7 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
         variant="submit-default"
         disabled={isEmpty || isSubmitting}
         onClick={() => editor && onSubmit(editor.getHTML())}
+        className="mt-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
       >
         {isSubmitting ? '제출 중입니다...' : '제출하기'}
       </Button>

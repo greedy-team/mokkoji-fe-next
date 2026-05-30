@@ -227,7 +227,7 @@ function ClubCreateBasicStep({
         variant="submit-default"
         disabled={!isValid || !isConfirmed}
         onClick={onNext}
-        className="mt-2"
+        className="mt-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
       >
         다음
       </Button>

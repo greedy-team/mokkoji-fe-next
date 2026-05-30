@@ -18,6 +18,7 @@ import {
   ClubCategoryIcon,
   ClubCategoryToStringLabel,
 } from '@/shared/model/type';
+import ClubCreateDescriptionStep from './club-create-description-step';
 
 interface ClubCreateFormData {
   universityCode: string;
@@ -247,6 +248,7 @@ function ClubCreateForm() {
       >
         다음
       </Button>
+      {/* <ClubCreateDescriptionStep onSubmit={() => handleNext} /> */}
     </div>
   );
 }

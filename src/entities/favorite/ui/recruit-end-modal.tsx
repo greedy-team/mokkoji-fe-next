@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface RecruitEndModalProps {
   modalOpen: boolean;
@@ -23,6 +24,8 @@ function RecruitEndModal({
   selectedClubs,
   date,
 }: RecruitEndModalProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
+
   return (
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>
       <DialogContent className="sm:max-w-sm">
@@ -36,7 +39,7 @@ function RecruitEndModal({
             selectedClubs.map((club) => (
               <li key={club.clubId}>
                 <Link
-                  href={`club/${club.clubId}`}
+                  href={`/${universityCode}/club/${club.clubId}`}
                   className="mr-2 text-[#00E457] underline"
                 >
                   {club.clubName}

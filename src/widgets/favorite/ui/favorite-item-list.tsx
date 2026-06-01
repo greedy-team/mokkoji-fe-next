@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui/button';
 import { ClubType } from '@/shared/model/type';
 import ClubItem from '@/entities/club/ui/club-item';
 import { useBreakpoint } from '@/shared/hooks/useMediaQuery';
+import { useParams } from 'next/navigation';
 import useFavoriteItems from '../util/useFavoriteItems';
 
 interface FavoriteItemListProps {
@@ -18,6 +19,7 @@ const MOBILE_SIZE = 3;
 const DESKTOP_SIZE = 6;
 
 function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const isDesktopView = useBreakpoint('lg');
   const viewSize = isDesktopView ? DESKTOP_SIZE : MOBILE_SIZE;
   const { currentPage, viewData, handleNext, handlePrev, viewTotalPages } =
@@ -46,7 +48,7 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
       >
         {viewData.map((item) => (
           <li key={`mobile-${item.id}`}>
-            <Link href={`/club/${item.id}`}>
+            <Link href={`/${universityCode}/club/${item.id}`}>
               <ClubItem
                 name={item.name}
                 startDate={item.recruitStartDate}

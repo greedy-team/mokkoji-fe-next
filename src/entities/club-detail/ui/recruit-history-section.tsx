@@ -1,6 +1,9 @@
+'use client';
+
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -36,6 +39,7 @@ function RecruitHistorySection({
   recruitHistories,
   selectedRecruitId,
 }: RecruitHistorySectionProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const recruitHistoryList = Array.isArray(recruitHistories)
     ? recruitHistories
     : [];
@@ -98,7 +102,7 @@ function RecruitHistorySection({
                     {pageItems.map((recruitment) => {
                       const queryString = new URLSearchParams();
                       queryString.set('recruit', String(recruitment.id));
-                      const href = `/club/${clubId}?${queryString.toString()}`;
+                      const href = `/${universityCode}/club/${clubId}?${queryString.toString()}`;
 
                       return (
                         <Link key={recruitment.id} href={href}>
@@ -149,7 +153,7 @@ function RecruitHistorySection({
           {recruitHistoryList.map((recruitment) => {
             const queryString = new URLSearchParams();
             queryString.set('recruit', String(recruitment.id));
-            const href = `/club/${clubId}?${queryString.toString()}`;
+            const href = `/${universityCode}/club/${clubId}?${queryString.toString()}`;
 
             return (
               <div

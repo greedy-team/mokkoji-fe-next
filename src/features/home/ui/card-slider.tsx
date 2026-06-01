@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import { useParams } from 'next/navigation';
 import { Club } from '@/entities/club/model/type';
 
 const slideWidthPx = 250;
@@ -15,6 +16,7 @@ interface CardSliderProps {
 }
 
 function CardSlider({ clubs }: CardSliderProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -54,7 +56,7 @@ function CardSlider({ clubs }: CardSliderProps) {
 
           return (
             <NavLink
-              href={`/club/${club.id}`}
+              href={`/${universityCode}/club/${club.id}`}
               key={club.id}
               isActive={isActive}
               translateX={currentTranslateX}

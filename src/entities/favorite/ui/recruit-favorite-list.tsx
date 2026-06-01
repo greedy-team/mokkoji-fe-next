@@ -1,10 +1,14 @@
+'use client';
+
 import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const sortedData = useMemo(() => {
     return data?.length
       ? [...data].sort((a, b) => {
@@ -38,7 +42,9 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}
               </span>
               <span>
-                <Link href={`/club/${club.clubId}`}>{club.clubName}</Link>
+                <Link href={`/${universityCode}/club/${club.clubId}`}>
+                  {club.clubName}
+                </Link>
               </span>
             </li>
           ))}

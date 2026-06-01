@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
@@ -18,6 +19,7 @@ const visibleCount = 10;
 const angleStep = 360 / visibleCount;
 
 function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const [scrollAngle, setScrollAngle] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(0);
@@ -89,7 +91,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/club/${club.id}`}>
+              <Link href={`/${universityCode}/club/${club.id}`}>
                 <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 lg:size-10">

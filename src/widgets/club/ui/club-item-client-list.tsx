@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import ClubItem from '@/entities/club/ui/club-item';
 import { Club } from '../model/type';
 
@@ -7,6 +10,7 @@ interface ClubItemClientListProps {
 }
 
 function ClubItemClientList({ clubs }: ClubItemClientListProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const uniqueClubs = Array.from(
     new Map(clubs.map((club) => [club.id, club])).values(),
   );
@@ -14,7 +18,11 @@ function ClubItemClientList({ clubs }: ClubItemClientListProps) {
   return (
     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
       {uniqueClubs.map((item) => (
-        <Link key={item.id} href={`/club/${item.id}`} className="block">
+        <Link
+          key={item.id}
+          href={`/${universityCode}/club/${item.id}`}
+          className="block"
+        >
           <ClubItem
             name={item.name}
             startDate={item.recruitmentPreviewResponse?.recruitStart}

@@ -1,8 +1,11 @@
+'use client';
+
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import Link from 'next/link';
 import ClickLogo from '@/shared/ui/click-logo';
+import { useParams } from 'next/navigation';
 import PeriodSection from './period-section';
 
 interface ClubDetailHeaderProps {
@@ -30,13 +33,17 @@ function ClubDetailHeader({
   status,
   isAlwaysRecruiting,
 }: ClubDetailHeaderProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
+
   return (
     <header className="mb-5 w-full cursor-default pb-4">
       <div className="mb-4 flex flex-row items-center gap-5">
         <ClickLogo logo={logo} title={title} />
         <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
         <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
-          <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+          <Link
+            href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+          >
             {category} 동아리
           </Link>
         </p>

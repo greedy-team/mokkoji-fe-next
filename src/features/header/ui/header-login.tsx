@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import useClickOutside from '@/shared/model/useClickOutside';
 import { useLoginModal } from '@/shared/lib/login-modal-context';
+import { useParams } from 'next/navigation';
 import {
   ChevronIcon,
   UserIcon,
@@ -20,12 +21,13 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { universityCode } = useParams<{ universityCode: string }>();
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    window.location.href = '/';
+    window.location.href = `/${universityCode}`;
   };
 
   return (
@@ -50,7 +52,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
           {isDropdownOpen && (
             <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
               <Button variant="dropdownItem" size="none" asChild>
-                <Link href="/my">
+                <Link href={`/${universityCode}/my`}>
                   <UserIcon />
                   마이페이지
                 </Link>

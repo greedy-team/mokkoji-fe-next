@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { ManageClub } from '../model/type';
 import {
   Dialog,
@@ -24,6 +25,7 @@ function ManageModal({
   manageClubInfo,
   manageAction,
 }: ManageModalProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
   const title =
     manageAction === 'register'
       ? '정보를 등록/수정할 동아리를 선택해주세요.'
@@ -60,8 +62,8 @@ function ManageModal({
                 <Link
                   href={
                     manageAction === 'register'
-                      ? `/club-register/${club.clubId}`
-                      : `/post-recruitment/${club.clubId}`
+                      ? `/${universityCode}/club-register/${club.clubId}`
+                      : `/${universityCode}/post-recruitment/${club.clubId}`
                   }
                   onClick={onClose}
                 >

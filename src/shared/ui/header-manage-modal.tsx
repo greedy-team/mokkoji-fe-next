@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSession } from '@/shared/lib/session-context';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 import ManageModal from './manage-modal';
 import { ManageClub } from '../model/type';
 import cn from '../lib/utils';
@@ -22,9 +22,14 @@ function HeaderManageModal({
   const isAuthenticated = status === 'authenticated';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
+  const { universityCode } = useParams<{ universityCode: string }>();
 
-  const isRegisterActive = pathname.startsWith('/club-register');
-  const isRecruitmentActive = pathname.startsWith('/post-recruitment');
+  const isRegisterActive = pathname.startsWith(
+    `/${universityCode}/club-register`,
+  );
+  const isRecruitmentActive = pathname.startsWith(
+    `/${universityCode}/post-recruitment`,
+  );
 
   const isActive =
     (manageAction === 'register' && isRegisterActive) ||

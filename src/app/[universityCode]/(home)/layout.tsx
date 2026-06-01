@@ -29,14 +29,18 @@ export async function generateMetadata({
   };
 }
 
-export default function HomeLayout({
+export default async function HomeLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ universityCode: string }>;
 }) {
+  const { universityCode } = await params;
+
   return (
     <div className="flex h-screen w-full flex-col">
-      <Header />
+      <Header universityCode={universityCode} />
       <main className="flex-1">{children}</main>
       <Footer />
       <BottomNav />

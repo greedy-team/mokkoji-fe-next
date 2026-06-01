@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import { useParams } from 'next/navigation';
 
 interface HeaderSearchProps {
   isSearchVisible: boolean;
@@ -13,6 +14,7 @@ function HeaderSearch({
   setIsSearchVisible,
 }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
+  const { universityCode } = useParams<{ universityCode: string }>();
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -35,7 +37,7 @@ function HeaderSearch({
 
   return (
     <form
-      action="/search"
+      action={`/${universityCode}/search`}
       method="GET"
       ref={wrapperRef}
       className="flex items-center"

@@ -30,15 +30,19 @@ export async function generateMetadata({
   };
 }
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ universityCode: string }>;
 }) {
+  const { universityCode } = await params;
+
   return (
     <div className="flex h-screen w-full flex-col">
       <div className="hidden sm:block">
-        <Header />
+        <Header universityCode={universityCode} />
       </div>
       <main className="flex-1">{children}</main>
       <KakaoAdFit />

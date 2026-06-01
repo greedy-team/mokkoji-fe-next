@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     );
 
     if (!loginResponseBody.data) {
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL(`/${state}/login`, request.url));
     }
 
     const { accessToken, refreshToken, isNewUser } = loginResponseBody.data;
@@ -55,7 +55,9 @@ export async function GET(request: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
-    const universityCode = userResponseBody.data.universityCode ?? 'sejong';
+    const apiUniversityCode = (
+      userResponseBody.data.universityCode ?? 'SEJONG'
+    ).toUpperCase();
 
     const session: CookieSession = {
       accessToken,
@@ -63,12 +65,12 @@ export async function GET(request: NextRequest) {
       user: userResponseBody.data,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
-      universityCode,
+      universityCode: apiUniversityCode,
     };
 
     const redirectUrl = isNewUser
-      ? `/${universityCode}/my?newUser=true`
-      : `/${universityCode}/my`;
+      ? `/${state}/my?newUser=true`
+      : `/${state}/my`;
     const response = NextResponse.redirect(new URL(redirectUrl, request.url));
     response.cookies.set(buildSessionCookie(session));
 

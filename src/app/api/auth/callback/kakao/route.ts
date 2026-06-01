@@ -23,12 +23,14 @@ export async function GET(request: NextRequest) {
     });
 
     const loginResponseBody: LoginSuccessResponse = await loginResponse.json();
+    // eslint-disable-next-line no-console
+    console.log(
+      '[callback] login response:',
+      JSON.stringify(loginResponseBody),
+    );
 
     if (!loginResponseBody.data) {
-      return NextResponse.json(
-        { ok: false, message: '로그인 실패' },
-        { status: 401 },
-      );
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
     const { accessToken, refreshToken, isNewUser } = loginResponseBody.data;
@@ -37,6 +39,8 @@ export async function GET(request: NextRequest) {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const userResponseBody: { data: UserInfoType } = await userResponse.json();
+    // eslint-disable-next-line no-console
+    console.log('[callback] user response:', JSON.stringify(userResponseBody));
 
     let role: string | undefined;
     try {
@@ -49,23 +53,27 @@ export async function GET(request: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
-    const { universityCode } = userResponseBody.data.user;
+    const universityCode = userResponseBody.data.universityCode ?? 'sejong';
 
     const session: CookieSession = {
       accessToken,
       refreshToken,
-      user: userResponseBody.data.user,
+      user: userResponseBody.data,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
       universityCode,
     };
 
-    const redirectUrl = isNewUser ? '/?newUser=true' : '/';
+    const redirectUrl = isNewUser
+      ? `/${universityCode}/my?newUser=true`
+      : `/${universityCode}/my`;
     const response = NextResponse.redirect(new URL(redirectUrl, request.url));
     response.cookies.set(buildSessionCookie(session));
 
     return response;
   } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('[callback] 예외 발생:', error);
     return NextResponse.redirect(new URL('/login', request.url));
   }
 }

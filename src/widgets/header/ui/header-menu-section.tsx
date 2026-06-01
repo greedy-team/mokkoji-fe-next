@@ -8,7 +8,7 @@ import MobileHeader from '@/shared/ui/mobile-header';
 interface HeaderMenuSectionProps {
   role?: UserRole;
   session: {
-    user?: { name?: string };
+    user?: { name?: string | null };
     manageClubInfo?: ManageClub[];
   } | null;
 }

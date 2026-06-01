@@ -19,7 +19,7 @@ export const SESSION_COOKIE_OPTIONS = {
 export interface CookieSession {
   accessToken: string;
   refreshToken: string;
-  user: UserInfoType['user'];
+  user: UserInfoType;
   role?: UserRole;
   expiresAt?: number;
   universityCode?: string;

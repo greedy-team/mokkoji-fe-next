@@ -1,15 +1,18 @@
 'use client';
 
 import Image from 'next/image';
-
-function handleKakaoLogin() {
-  const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
-  const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
-  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  window.location.href = url;
-}
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 export default function KakaoLoginPage() {
+  const universityCode = useUniversityCode();
+
+  const handleKakaoLogin = () => {
+    const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+    const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+    const url = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&state=${universityCode}`;
+    window.location.href = url;
+  };
+
   return (
     <div className="flex h-full flex-col bg-white">
       <main className="flex flex-1 flex-col items-center justify-center gap-6 px-8">

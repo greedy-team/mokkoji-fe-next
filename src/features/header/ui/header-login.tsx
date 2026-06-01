@@ -76,7 +76,10 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
         </div>
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
-          <Link href="/login" className="cursor-pointer whitespace-nowrap">
+          <Link
+            href={`/${universityCode}/login`}
+            className="cursor-pointer whitespace-nowrap"
+          >
             로그인
           </Link>
         </div>

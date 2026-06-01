@@ -13,8 +13,10 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
 
+  const state = searchParams.get('state') ?? 'sejong';
+
   if (!code) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(`/${state}/login`, request.url));
   }
 
   try {
@@ -74,6 +76,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('[callback] 예외 발생:', error);
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(`/${state}/login`, request.url));
   }
 }

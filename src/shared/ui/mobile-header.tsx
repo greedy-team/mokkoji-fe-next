@@ -1,7 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+
 import NavButton from './nav-button';
 import HeaderManageModal from './header-manage-modal';
 import { ManageClub, UserRole } from '../model/type';
@@ -14,6 +17,7 @@ interface MobileMenuClientProps {
 
 function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const universityCode = useUniversityCode();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -39,20 +43,28 @@ function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
         )}
       >
         <nav className="flex flex-col gap-4 py-4">
-          <NavButton label="동아리" href="/club" onItemClick={closeMenu} />
           <NavButton
-            label="즐겨찾기"
-            href="/favorite?page=1&size=6"
+            label="동아리"
+            href={`/${universityCode}/club`}
             onItemClick={closeMenu}
           />
-          <NavButton label="고객센터" href="/support" onItemClick={closeMenu} />
+          <NavButton
+            label="즐겨찾기"
+            href={`/${universityCode}/favorite?page=1&size=6`}
+            onItemClick={closeMenu}
+          />
+          <NavButton
+            label="고객센터"
+            href={`/${universityCode}/support`}
+            onItemClick={closeMenu}
+          />
           {sessionRole &&
             sessionRole !== UserRole.NORMAL &&
             (sessionRole === UserRole.CLUB_ADMIN ||
             sessionRole === UserRole.GREEDY_ADMIN ? (
               <NavButton
                 label="동아리 등록"
-                href="/club-register"
+                href={`/${universityCode}/club-register`}
                 onItemClick={closeMenu}
               />
             ) : (

@@ -5,6 +5,7 @@ interface UserInfoType {
     name: string;
     grade: string;
     email: string;
+    universityCode: string;
   };
 }
 

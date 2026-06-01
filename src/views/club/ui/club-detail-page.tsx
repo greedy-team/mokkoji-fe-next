@@ -8,12 +8,12 @@ import getClubRecruitments from '../api/getClubRecruitments';
 import getRecruitDetail from '../api/getRecruitDetail';
 
 interface ClubDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; universityCode: string }>;
   searchParams: Promise<{ tab?: string; recruit?: string }>;
 }
 
 async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
-  const { id } = await params;
+  const { id, universityCode } = await params;
   const { tab = 'recruit', recruit } = await searchParams;
 
   const [recent, recruitHistories] = await Promise.all([
@@ -56,9 +56,14 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
             recruitHistories={historiesArray}
             clubId={Number(id)}
             selectedRecruitmentId={recruitmentId}
+            universityCode={universityCode}
           />
         ) : (
-          <ClubDetailTabs activeTab={tab} clubId={Number(id)} />
+          <ClubDetailTabs
+            activeTab={tab}
+            clubId={Number(id)}
+            universityCode={universityCode}
+          />
         )}
       </div>
     </>

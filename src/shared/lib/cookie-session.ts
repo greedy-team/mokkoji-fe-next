@@ -22,6 +22,7 @@ export interface CookieSession {
   user: UserInfoType['user'];
   role?: UserRole;
   expiresAt?: number;
+  universityCode?: string;
 }
 
 /* ────────────────────────────────────────────

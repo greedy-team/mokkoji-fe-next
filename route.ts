@@ -19,4 +19,7 @@ export const publicRoutes = [
   '/my',
   '/my/:path*',
   '/privacy-policy',
+  '/post-recruitment/:path*',
+  '/club-register',
+  '/club-register/:path*',
 ];

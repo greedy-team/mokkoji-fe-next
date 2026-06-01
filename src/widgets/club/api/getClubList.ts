@@ -16,14 +16,17 @@ async function getClubList({
   category,
   affiliation,
   keyword,
+  universityCode = 'SEJONG',
 }: {
   page: number;
   size: number;
   category?: ClubCategory;
   affiliation?: ClubAffiliation;
   keyword?: string;
+  universityCode?: string;
 }) {
   const session = await getSession();
+  const effectiveUniversityCode = session?.universityCode ?? universityCode;
 
   const rawParams: Record<string, string | undefined> = {
     page: String(page),
@@ -31,6 +34,7 @@ async function getClubList({
     category: category ? String(category) : undefined,
     affiliation: affiliation ? String(affiliation) : undefined,
     keyword: keyword?.trim() ? String(keyword?.trim()) : undefined,
+    universityCode: effectiveUniversityCode,
   };
 
   const searchParams = new URLSearchParams();

@@ -22,9 +22,9 @@ function NavBottomButton({
 }: NavBottomButtonProps) {
   const pathname = usePathname();
   const hrefPath = href.split('?')[0];
-  const pathnameFirstSegment = pathname.split('/')[1] || '';
-  const hrefFirstSegment = hrefPath.split('/')[1] || '';
-  const active = pathnameFirstSegment === hrefFirstSegment;
+  const pathnameSegment = pathname.split('/')[2] || '';
+  const hrefSegment = hrefPath.split('/')[2] || '';
+  const active = pathnameSegment === hrefSegment;
 
   return (
     <Link

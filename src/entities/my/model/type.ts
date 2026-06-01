@@ -7,6 +7,7 @@ interface UserInfoType {
     email: string;
     role: string;
     emailOn: boolean;
+    universityCode: string;
   };
 }
 

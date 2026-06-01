@@ -43,17 +43,20 @@ export async function POST(req: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
+    const { universityCode } = userResponseBody.data.user;
+
     const session: CookieSession = {
       accessToken,
       refreshToken,
       user: userResponseBody.data.user,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
+      universityCode,
     };
 
     const response = NextResponse.json({
       ok: true,
-      data: { user: session.user, role: session.role },
+      data: { user: session.user, role: session.role, universityCode },
     });
 
     response.cookies.set(buildSessionCookie(session));

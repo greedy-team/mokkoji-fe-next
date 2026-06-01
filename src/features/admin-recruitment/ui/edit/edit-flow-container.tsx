@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -30,6 +32,7 @@ interface EditFlowContainerProps {
 
 function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
   const router = useRouter();
+  const universityCode = useUniversityCode();
   const flow = useEditFlow();
   const {
     formData,
@@ -167,7 +170,9 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?recruit=${editRecruitmentId}`)
+            router.push(
+              `/${universityCode}/club/${clubInfo.id}?recruit=${editRecruitmentId}`,
+            )
           }
         >
           모집글 확인하기

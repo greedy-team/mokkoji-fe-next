@@ -6,6 +6,7 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 interface SearchResultsProps {
   keyword?: string;
   category?: string;
+  universityCode: string;
 }
 
 const CATEGORY_MAP: Record<string, ClubCategory> = {
@@ -17,7 +18,11 @@ const CATEGORY_MAP: Record<string, ClubCategory> = {
   other: ClubCategory.OTHER,
 };
 
-async function SearchResults({ keyword, category }: SearchResultsProps) {
+async function SearchResults({
+  keyword,
+  category,
+  universityCode,
+}: SearchResultsProps) {
   const safeCategory = category ? CATEGORY_MAP[category] : undefined;
 
   const searchResponse = await searchClubs({
@@ -25,6 +30,7 @@ async function SearchResults({ keyword, category }: SearchResultsProps) {
     category: safeCategory,
     page: 1,
     size: 100,
+    universityCode,
   });
 
   if (!searchResponse.ok || !searchResponse.data) return <ErrorBoundaryUi />;

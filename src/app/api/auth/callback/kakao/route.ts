@@ -9,28 +9,40 @@ import UserInfoType from '@/entities/my/model/type';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import { buildSessionCookie, CookieSession } from '@/shared/lib/cookie-session';
 
-export async function POST(req: NextRequest) {
-  try {
-    const { studentId, password } = await req.json();
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
 
-    const loginResponse = await serverApi.post('users/auth/login', {
-      json: { studentId, password },
+  const state = searchParams.get('state') ?? 'sejong';
+
+  if (!code) {
+    return NextResponse.redirect(new URL(`/${state}/login`, request.url));
+  }
+
+  try {
+    const loginResponse = await serverApi.post('users/auth/kakao', {
+      json: { code },
     });
+
     const loginResponseBody: LoginSuccessResponse = await loginResponse.json();
+    // eslint-disable-next-line no-console
+    console.log(
+      '[callback] login response:',
+      JSON.stringify(loginResponseBody),
+    );
 
     if (!loginResponseBody.data) {
-      return NextResponse.json(
-        { ok: false, message: '로그인 실패' },
-        { status: 401 },
-      );
+      return NextResponse.redirect(new URL(`/${state}/login`, request.url));
     }
 
-    const { accessToken, refreshToken } = loginResponseBody.data;
+    const { accessToken, refreshToken, isNewUser } = loginResponseBody.data;
 
     const userResponse = await serverApi.get('users', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const userResponseBody: { data: UserInfoType } = await userResponse.json();
+    // eslint-disable-next-line no-console
+    console.log('[callback] user response:', JSON.stringify(userResponseBody));
 
     let role: string | undefined;
     try {
@@ -43,30 +55,29 @@ export async function POST(req: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
-    const { universityCode } = userResponseBody.data.user;
+    const apiUniversityCode = (
+      userResponseBody.data.universityCode ?? 'SEJONG'
+    ).toUpperCase();
 
     const session: CookieSession = {
       accessToken,
       refreshToken,
-      user: userResponseBody.data.user,
+      user: userResponseBody.data,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
-      universityCode,
+      universityCode: apiUniversityCode,
     };
 
-    const response = NextResponse.json({
-      ok: true,
-      data: { user: session.user, role: session.role, universityCode },
-    });
-
+    const redirectUrl = isNewUser
+      ? `/${state}/my?newUser=true`
+      : `/${state}/my`;
+    const response = NextResponse.redirect(new URL(redirectUrl, request.url));
     response.cookies.set(buildSessionCookie(session));
 
     return response;
   } catch (error) {
-    console.error('[cookie-login error]', error);
-    return NextResponse.json(
-      { ok: false, message: '학번 또는 비밀번호를 확인해주세요.' },
-      { status: 401 },
-    );
+    // eslint-disable-next-line no-console
+    console.error('[callback] 예외 발생:', error);
+    return NextResponse.redirect(new URL(`/${state}/login`, request.url));
   }
 }

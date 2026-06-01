@@ -83,6 +83,19 @@ function stripUniversityCodePrefix(pathname: string): string {
   return pathname;
 }
 
+function extractUniversityCode(pathname: string): string {
+  const segments = pathname.split('/');
+  const firstSegment = segments[1];
+  if (
+    firstSegment &&
+    !NON_UNIVERSITY_PREFIXES.has(firstSegment) &&
+    /^[a-z]+$/.test(firstSegment)
+  ) {
+    return firstSegment;
+  }
+  return 'sejong';
+}
+
 /**
  * route.ts에 정의된 publicRoutes와 대조하여 인증 없이 접근 가능한 경로인지 판별한다.
  * '/:path*'로 끝나는 패턴은 하위 경로까지 포함한다.
@@ -148,18 +161,20 @@ export default async function middleware(req: NextRequest) {
 
   const isNowLoggedIn = !!session?.accessToken;
   const isPublic = isPublicPath(nextUrl.pathname);
+  const universityCode = extractUniversityCode(nextUrl.pathname);
+  const loginUrl = `/${universityCode}/login`;
 
   let response: NextResponse;
 
   if (session && isExpired && !session.refreshToken && !sessionUpdated) {
-    // accessToken 만료 + refreshToken 없음 → 세션 쿠키 삭제, 비공개 경로면 홈으로 리다이렉트
+    // accessToken 만료 + refreshToken 없음 → 세션 쿠키 삭제, 비공개 경로면 로그인으로 리다이렉트
     response = isPublic
       ? NextResponse.next()
-      : NextResponse.redirect(new URL('/', nextUrl));
+      : NextResponse.redirect(new URL(loginUrl, nextUrl));
     response.cookies.delete(SESSION_COOKIE_NAME);
   } else if (!isNowLoggedIn && !isPublic) {
-    // 비로그인 상태에서 비공개 경로 접근 → 홈으로 리다이렉트
-    response = NextResponse.redirect(new URL('/', nextUrl));
+    // 비로그인 상태에서 비공개 경로 접근 → 로그인으로 리다이렉트
+    response = NextResponse.redirect(new URL(loginUrl, nextUrl));
   } else {
     // 그 외 → 정상 통과
     response = NextResponse.next();

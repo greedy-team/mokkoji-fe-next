@@ -45,9 +45,7 @@ export async function generateMetadata({
 }
 
 async function Page({ params, searchParams }: PageProps) {
-  const detailParams: Promise<{ id: string }> = params.then(({ id }) => ({
-    id,
-  }));
+  const detailParams: Promise<{ id: string; universityCode: string }> = params;
   return (
     <Suspense fallback={<ClubDetailSkeleton />}>
       <ClubDetailPage params={detailParams} searchParams={searchParams} />

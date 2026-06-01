@@ -1,12 +1,14 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import ScrollProgressBar from './scroll-progress-bar';
 
 function AdminHeader() {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <>

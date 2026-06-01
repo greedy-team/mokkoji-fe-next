@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { Button } from '@/shared/ui/button';
 import { AlertCircle, RotateCcw, ArrowLeft } from 'lucide-react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface ErrorFallbackProps {
   message?: string;
@@ -10,7 +12,7 @@ interface ErrorFallbackProps {
 
 function ClubCustomErrorBoundary({ message }: ErrorFallbackProps) {
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 rounded-xl border border-red-200 bg-red-50 p-8 text-center text-red-600">

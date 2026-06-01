@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { Suspense } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
@@ -14,7 +16,7 @@ import StepClubRegisterInfo from '../steps/step-club-register-info';
 
 function CreateFlowContent() {
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const flow = useCreateFlow();
   const {
     formData,

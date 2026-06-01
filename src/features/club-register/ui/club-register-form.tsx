@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
@@ -22,7 +24,7 @@ const fields: ClubRegisterFormField[] = [
 function ClubRegisterForm() {
   const [state, dispatch] = useReducer(clubRegisterFormReducer, initialState);
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const { formData, errors } = state;
 
   const onSubmit = async (e: React.FormEvent) => {

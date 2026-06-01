@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
@@ -19,7 +21,7 @@ const visibleCount = 10;
 const angleStep = 360 / visibleCount;
 
 function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const [scrollAngle, setScrollAngle] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(0);

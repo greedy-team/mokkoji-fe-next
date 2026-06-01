@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { Suspense, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
@@ -30,7 +32,7 @@ interface EditFlowContainerProps {
 
 function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const flow = useEditFlow();
   const {
     formData,

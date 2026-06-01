@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { FavoriteDeadLineItem } from '@/entities/favorite/model/type';
 import formatKoreanDate from '@/features/favorite/util/formatKoreanDate';
 import {
@@ -9,7 +11,6 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 interface RecruitEndModalProps {
   modalOpen: boolean;
@@ -24,7 +25,7 @@ function RecruitEndModal({
   selectedClubs,
   date,
 }: RecruitEndModalProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>

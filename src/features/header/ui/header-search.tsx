@@ -1,8 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
 
 interface HeaderSearchProps {
   isSearchVisible: boolean;
@@ -14,7 +15,7 @@ function HeaderSearch({
   setIsSearchVisible,
 }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (

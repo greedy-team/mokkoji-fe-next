@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import NavBottomButton from './nav-bottom-button';
 import {
   HomeIcon,
@@ -11,7 +12,7 @@ import {
 } from './icons/bottom-nav-icons';
 
 function BottomNav() {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 flex h-[85px] shrink-0 border-2 bg-white lg:hidden">

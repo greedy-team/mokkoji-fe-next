@@ -1,11 +1,13 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Image from 'next/image';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function LogoutLink() {
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });

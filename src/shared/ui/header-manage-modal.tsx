@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useState } from 'react';
 import { useSession } from '@/shared/lib/session-context';
-import { usePathname, useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import ManageModal from './manage-modal';
 import { ManageClub } from '../model/type';
 import cn from '../lib/utils';
@@ -22,7 +24,7 @@ function HeaderManageModal({
   const isAuthenticated = status === 'authenticated';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   const isRegisterActive = pathname.startsWith(
     `/${universityCode}/club-register`,

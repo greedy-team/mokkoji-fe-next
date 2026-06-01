@@ -1,16 +1,17 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { ClubType } from '@/shared/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 interface ClubItemProps {
   club: ClubType;
 }
 
 function ClubSearchItem({ club }: ClubItemProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <Link href={`/${universityCode}/club/${club.id}`}>

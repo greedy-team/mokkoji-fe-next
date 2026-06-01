@@ -1,9 +1,11 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -39,7 +41,7 @@ function RecruitHistorySection({
   recruitHistories,
   selectedRecruitId,
 }: RecruitHistorySectionProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const recruitHistoryList = Array.isArray(recruitHistories)
     ? recruitHistories
     : [];

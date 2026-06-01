@@ -1,14 +1,16 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useEffect } from 'react';
-import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import type { AdminClubInfo, ContentType, ActionType, Step } from './types';
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const adminBase = `/${universityCode}/admin`;
 
   const isSingleClub = allowedClubs.length === 1;

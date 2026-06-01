@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useParams } from 'next/navigation';
+
 import NavButton from './nav-button';
 import HeaderManageModal from './header-manage-modal';
 import { ManageClub, UserRole } from '../model/type';
@@ -15,7 +17,7 @@ interface MobileMenuClientProps {
 
 function MobileHeader({ sessionRole, manageClubInfo }: MobileMenuClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);

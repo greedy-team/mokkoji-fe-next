@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
 import Image from 'next/image';
@@ -10,7 +12,7 @@ import {
   ClubInfoType,
 } from '@/shared/model/type';
 import getKeyByValue from '@/shared/lib/getKeyByValue';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
@@ -40,7 +42,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,12 +1,14 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import useClickOutside from '@/shared/model/useClickOutside';
 import { useLoginModal } from '@/shared/lib/login-modal-context';
-import { useParams } from 'next/navigation';
+
 import {
   ChevronIcon,
   UserIcon,
@@ -21,7 +23,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { openLoginModal } = useLoginModal();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 

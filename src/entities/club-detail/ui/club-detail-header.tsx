@@ -1,11 +1,13 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
 import Link from 'next/link';
 import ClickLogo from '@/shared/ui/click-logo';
-import { useParams } from 'next/navigation';
+
 import PeriodSection from './period-section';
 
 interface ClubDetailHeaderProps {
@@ -33,7 +35,7 @@ function ClubDetailHeader({
   status,
   isAlwaysRecruiting,
 }: ClubDetailHeaderProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <header className="mb-5 w-full cursor-default pb-4">

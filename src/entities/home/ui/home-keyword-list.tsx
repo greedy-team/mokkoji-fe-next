@@ -1,8 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import {
   ClubCategory,
   ClubCategoryIcon,
@@ -19,7 +21,7 @@ const KEYWORDS: ClubCategory[] = [
 ];
 
 function HomeKeywordList() {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <div className="mb-2 flex flex-col items-center gap-3 lg:mb-6 lg:gap-4">

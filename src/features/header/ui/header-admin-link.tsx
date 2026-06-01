@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import { toast } from 'react-toastify';
 import { UserRole } from '@/shared/model/type';
 import { useLoginModal } from '@/shared/lib/login-modal-context';
@@ -12,7 +14,7 @@ interface HeaderAdminLinkProps {
 }
 
 function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const { openLoginModal } = useLoginModal();
 
   const handleClick = (e: React.MouseEvent) => {

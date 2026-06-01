@@ -1,10 +1,12 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import { UserRole } from '@/shared/model/type';
-import { useParams } from 'next/navigation';
+
 import type { AdminClubInfo } from '../../model/types';
 
 interface StepSelectClubProps {
@@ -15,7 +17,7 @@ interface StepSelectClubProps {
 
 function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
   const isGreedyAdmin = role === UserRole.GREEDY_ADMIN;
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   return (
     <div className="flex w-full flex-col items-center gap-10">

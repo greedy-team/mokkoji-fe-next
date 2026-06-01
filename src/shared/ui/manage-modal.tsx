@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import { ManageClub } from '../model/type';
 import {
   Dialog,
@@ -25,7 +27,7 @@ function ManageModal({
   manageClubInfo,
   manageAction,
 }: ManageModalProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const title =
     manageAction === 'register'
       ? '정보를 등록/수정할 동아리를 선택해주세요.'

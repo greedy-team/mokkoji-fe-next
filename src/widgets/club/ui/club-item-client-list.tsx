@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+
 import ClubItem from '@/entities/club/ui/club-item';
 import { Club } from '../model/type';
 
@@ -10,7 +12,7 @@ interface ClubItemClientListProps {
 }
 
 function ClubItemClientList({ clubs }: ClubItemClientListProps) {
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
   const uniqueClubs = Array.from(
     new Map(clubs.map((club) => [club.id, club])).values(),
   );

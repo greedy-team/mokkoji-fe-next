@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useReducer, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
@@ -7,7 +9,7 @@ import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
 import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 import ky from 'ky';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
@@ -45,7 +47,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   } = useImageUpload();
   const { formData, errors } = state;
   const router = useRouter();
-  const { universityCode } = useParams<{ universityCode: string }>();
+  const universityCode = useUniversityCode();
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });

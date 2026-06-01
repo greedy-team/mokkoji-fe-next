@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 import { toast } from 'react-toastify';
 import { UserRole } from '@/shared/model/type';
-import { useLoginModal } from '@/shared/lib/login-modal-context';
 
 interface HeaderAdminLinkProps {
   role?: UserRole;
@@ -15,13 +14,11 @@ interface HeaderAdminLinkProps {
 
 function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
   const universityCode = useUniversityCode();
-  const { openLoginModal } = useLoginModal();
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
       toast.info('로그인을 먼저 진행해 주세요.');
-      openLoginModal();
       return;
     }
 

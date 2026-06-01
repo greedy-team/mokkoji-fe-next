@@ -49,12 +49,15 @@ export async function GET(request: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
+    const { universityCode } = userResponseBody.data.user;
+
     const session: CookieSession = {
       accessToken,
       refreshToken,
       user: userResponseBody.data.user,
       role: role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
+      universityCode,
     };
 
     const redirectUrl = isNewUser ? '/?newUser=true' : '/';

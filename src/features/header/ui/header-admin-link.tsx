@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { UserRole } from '@/shared/model/type';
 
@@ -12,6 +12,7 @@ interface HeaderAdminLinkProps {
 
 function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
@@ -29,7 +30,7 @@ function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
 
   return (
     <Link
-      href="/admin"
+      href={`/${universityCode}/admin`}
       className="flex items-center font-semibold"
       onClick={handleClick}
     >

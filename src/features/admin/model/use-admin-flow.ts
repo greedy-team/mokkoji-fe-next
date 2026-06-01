@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import type { AdminClubInfo, ContentType, ActionType, Step } from './types';
 
 function useAdminFlow(allowedClubs: AdminClubInfo[]) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { universityCode } = useParams<{ universityCode: string }>();
+  const adminBase = `/${universityCode}/admin`;
 
   const isSingleClub = allowedClubs.length === 1;
   const initialClub = isSingleClub ? allowedClubs[0] : undefined;
@@ -22,12 +24,12 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
 
   useEffect(() => {
     if (isSingleClub && step === 'selectClub' && initialClub) {
-      const params = new URLSearchParams();
-      params.set('step', 'actionMode');
-      params.set('clubId', String(initialClub.clubId));
-      router.replace(`/admin?${params.toString()}`);
+      const urlParams = new URLSearchParams();
+      urlParams.set('step', 'actionMode');
+      urlParams.set('clubId', String(initialClub.clubId));
+      router.replace(`${adminBase}?${urlParams.toString()}`);
     }
-  }, [isSingleClub, step, initialClub, router]);
+  }, [isSingleClub, step, initialClub, router, adminBase]);
 
   const validateClubAccess = (clubId: number) => {
     return allowedClubs.some((club) => club.clubId === clubId);
@@ -39,19 +41,21 @@ function useAdminFlow(allowedClubs: AdminClubInfo[]) {
       return;
     }
 
-    const params = new URLSearchParams();
-    params.set('step', 'actionMode');
-    params.set('clubId', String(clubId));
-    router.push(`/admin?${params.toString()}`);
+    const urlParams = new URLSearchParams();
+    urlParams.set('step', 'actionMode');
+    urlParams.set('clubId', String(clubId));
+    router.push(`${adminBase}?${urlParams.toString()}`);
   };
 
   const selectAction = (contentType: ContentType, actionType: ActionType) => {
     if (selectedClubId) {
-      router.push(`/admin/${contentType}/${actionType}/${selectedClubId}`);
+      router.push(
+        `${adminBase}/${contentType}/${actionType}/${selectedClubId}`,
+      );
     }
   };
 
-  const reset = () => router.push('/admin');
+  const reset = () => router.push(adminBase);
 
   return {
     step: isSingleClub && step === 'selectClub' ? 'actionMode' : step,

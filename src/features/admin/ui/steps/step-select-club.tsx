@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import { UserRole } from '@/shared/model/type';
+import { useParams } from 'next/navigation';
 import type { AdminClubInfo } from '../../model/types';
 
 interface StepSelectClubProps {
@@ -14,6 +15,7 @@ interface StepSelectClubProps {
 
 function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
   const isGreedyAdmin = role === UserRole.GREEDY_ADMIN;
+  const { universityCode } = useParams<{ universityCode: string }>();
 
   return (
     <div className="flex w-full flex-col items-center gap-10">
@@ -27,7 +29,7 @@ function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
             새로운 동아리를 등록하고 싶으신가요?
           </span>
           <Link
-            href="/admin/description/create/0"
+            href={`/${universityCode}/admin/description/create/0`}
             className="flex items-center gap-2"
           >
             <span className="text-base font-bold lg:text-2xl">

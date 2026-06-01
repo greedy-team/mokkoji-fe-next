@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
@@ -30,6 +30,7 @@ interface EditFlowContainerProps {
 
 function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
   const flow = useEditFlow();
   const {
     formData,
@@ -167,7 +168,9 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?recruit=${editRecruitmentId}`)
+            router.push(
+              `/${universityCode}/club/${clubInfo.id}?recruit=${editRecruitmentId}`,
+            )
           }
         >
           모집글 확인하기

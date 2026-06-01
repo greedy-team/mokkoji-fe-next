@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
@@ -40,11 +43,13 @@ function ClubDetailTabs({
   clubId,
   selectedRecruitmentId,
 }: ClubDetailTabsProps) {
+  const { universityCode } = useParams<{ universityCode: string }>();
+
   const getHref = (key: string) => {
     const queryString = new URLSearchParams();
     queryString.set('recruit', String(selectedRecruitmentId));
     if (key !== 'recruit') queryString.set('tab', key);
-    return `/club/${clubId}?${queryString.toString()}`;
+    return `/${universityCode}/club/${clubId}?${queryString.toString()}`;
   };
 
   const renderContent = () => {

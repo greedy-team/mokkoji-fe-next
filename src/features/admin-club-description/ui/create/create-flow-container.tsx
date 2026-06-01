@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
@@ -14,6 +14,7 @@ import StepClubRegisterInfo from '../steps/step-club-register-info';
 
 function CreateFlowContent() {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
   const flow = useCreateFlow();
   const {
     formData,
@@ -59,7 +60,9 @@ function CreateFlowContent() {
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">동아리가 성공적으로 등록되었습니다.</p>
-        <Button onClick={() => router.push('/club')}>동아리 확인하기</Button>
+        <Button onClick={() => router.push(`/${universityCode}/club`)}>
+          동아리 확인하기
+        </Button>
       </div>
     );
   }

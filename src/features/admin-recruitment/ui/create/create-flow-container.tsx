@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
@@ -24,6 +24,7 @@ interface CreateFlowContainerProps {
 
 function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
   const flow = useCreateFlow();
   const {
     formData,
@@ -87,7 +88,9 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?recruit=${createRecruitmentId}`)
+            router.push(
+              `/${universityCode}/club/${clubInfo.id}?recruit=${createRecruitmentId}`,
+            )
           }
         >
           모집글 확인하기

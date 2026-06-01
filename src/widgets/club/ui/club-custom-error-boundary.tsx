@@ -2,7 +2,7 @@
 
 import { Button } from '@/shared/ui/button';
 import { AlertCircle, RotateCcw, ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 interface ErrorFallbackProps {
   message?: string;
@@ -10,6 +10,7 @@ interface ErrorFallbackProps {
 
 function ClubCustomErrorBoundary({ message }: ErrorFallbackProps) {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 rounded-xl border border-red-200 bg-red-50 p-8 text-center text-red-600">
@@ -31,7 +32,7 @@ function ClubCustomErrorBoundary({ message }: ErrorFallbackProps) {
         <Button
           variant="outline"
           className="flex items-center gap-2"
-          onClick={() => router.replace('/club')}
+          onClick={() => router.replace(`/${universityCode}/club`)}
         >
           <RotateCcw className="h-4 w-4" />
           새로고침

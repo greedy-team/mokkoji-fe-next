@@ -1,14 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function LogoutLink() {
   const router = useRouter();
+  const { universityCode } = useParams<{ universityCode: string }>();
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/');
+    router.push(`/${universityCode}`);
     router.refresh();
   };
 

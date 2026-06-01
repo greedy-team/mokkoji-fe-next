@@ -142,6 +142,10 @@ export default async function middleware(req: NextRequest) {
   }
 
   // ── 3) 라우팅 결정 ──
+  if (nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/sejong', nextUrl));
+  }
+
   const isNowLoggedIn = !!session?.accessToken;
   const isPublic = isPublicPath(nextUrl.pathname);
 

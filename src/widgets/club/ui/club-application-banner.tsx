@@ -1,9 +1,13 @@
 import Link from 'next/link';
 
-function ClubApplicationBanner() {
+interface ClubApplicationBannerProps {
+  universityCode: string;
+}
+
+function ClubApplicationBanner({ universityCode }: ClubApplicationBannerProps) {
   return (
     <Link
-      href="/club-application"
+      href={`/${universityCode}/club-application`}
       className="flex w-full items-center justify-between rounded-lg bg-[#3C475A] px-4 py-6"
     >
       <div className="flex items-center gap-3">

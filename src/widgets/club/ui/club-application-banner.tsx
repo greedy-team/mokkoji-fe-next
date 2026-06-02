@@ -1,14 +1,28 @@
+'use client';
+
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { useSession } from '@/shared/lib/session-context';
 
 interface ClubApplicationBannerProps {
   universityCode: string;
 }
 
 function ClubApplicationBanner({ universityCode }: ClubApplicationBannerProps) {
+  const { session } = useSession();
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!session) {
+      e.preventDefault();
+      toast.error('로그인이 필요합니다.');
+    }
+  };
+
   return (
     <Link
       href={`/${universityCode}/club-application`}
       className="flex w-full items-center justify-between rounded-lg bg-[#3C475A] px-4 py-6"
+      onClick={handleClick}
     >
       <div className="flex items-center gap-3">
         <span className="text-2xl">💌</span>

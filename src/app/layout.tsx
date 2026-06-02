@@ -7,8 +7,6 @@ import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
-import { LoginModalProvider } from '@/shared/lib/login-modal-context';
-import GlobalLoginModal from '@/widgets/login/ui/global-login-modal';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
 
@@ -82,21 +80,18 @@ export default function RootLayout({
       <body className={`${pretendard.className} scrollbar-hide`}>
         <MSWProvider>
           <AppSessionProvider>
-            <LoginModalProvider>
-              <ToDoPinProvider>
-                <WebVitalProvider />
-                <ToastContainer
-                  autoClose={2000}
-                  hideProgressBar
-                  closeOnClick
-                  pauseOnHover={false}
-                  newestOnTop
-                  limit={1}
-                />
-                {children}
-              </ToDoPinProvider>
-              <GlobalLoginModal />
-            </LoginModalProvider>
+            <ToDoPinProvider>
+              <WebVitalProvider />
+              <ToastContainer
+                autoClose={2000}
+                hideProgressBar
+                closeOnClick
+                pauseOnHover={false}
+                newestOnTop
+                limit={1}
+              />
+              {children}
+            </ToDoPinProvider>
           </AppSessionProvider>
         </MSWProvider>
       </body>

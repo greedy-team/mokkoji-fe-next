@@ -9,6 +9,7 @@
   --color-text-tertiary: #9f9f9f; /* 텍스트 placeholder */
   --color-alert-500: #ff383c;
   --color-disabled: #cccccc;
+  --color-gray2: #d6d6d6;
 
   --color-darkmode-line: #43E780; /* 다크모드 시 LINE */
   --color-darkmode-tag: #1AE166; /* 다크모드 시 TAG */

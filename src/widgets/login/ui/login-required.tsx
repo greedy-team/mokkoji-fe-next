@@ -1,22 +1,22 @@
 'use client';
 
-import { useLoginModal } from '@/shared/lib/login-modal-context';
+import Link from 'next/link';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 function LoginRequired() {
-  const { openLoginModal } = useLoginModal();
+  const universityCode = useUniversityCode();
 
   return (
     <div className="flex h-full min-h-[50vh] flex-col items-center justify-center gap-[10px]">
       <h1 className="text-sm font-bold lg:text-2xl">
         로그인이 필요한 서비스예요!
       </h1>
-      <button
-        type="button"
-        onClick={openLoginModal}
+      <Link
+        href={`/${universityCode}/login`}
         className="font-semibold text-[#00E457] underline"
       >
         로그인하기
-      </button>
+      </Link>
     </div>
   );
 }

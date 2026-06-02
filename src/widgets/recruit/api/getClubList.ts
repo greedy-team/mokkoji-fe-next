@@ -15,6 +15,7 @@ interface GetRecruitListParams {
   keyword?: string;
   category?: ClubCategory;
   recruitStatus?: string;
+  universityCode?: string;
 }
 
 async function getClubList(params: GetRecruitListParams) {
@@ -25,6 +26,8 @@ async function getClubList(params: GetRecruitListParams) {
     keyword: params.keyword,
     category: params.category,
     recruitStatus: params.recruitStatus,
+    universityCode:
+      session?.universityCode ?? params.universityCode ?? 'SEJONG',
   };
 
   const searchParams = new URLSearchParams();

@@ -12,5 +12,7 @@ export async function GET() {
     user: session.user,
     role: session.role,
     accessToken: session.accessToken,
+    universityCode: session.universityCode,
+    expiresAt: session.expiresAt,
   });
 }

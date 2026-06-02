@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { toast } from 'react-toastify';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
 import postCreateClubApplication from '../api/postCreateClubApplication';
 import type { ClubCreateFormData } from '../model/type';
@@ -31,6 +32,7 @@ function ClubCreateForm() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const universityCode = useUniversityCode();
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -55,10 +57,10 @@ function ClubCreateForm() {
       toast.success(
         '제출되었습니다. 마이페이지에서 현황을 확인하실 수 있습니다.',
       );
-      router.push('/my');
+      router.push(`/${universityCode}/my`);
     } else {
       toast.error(result.message);
-      router.push('/');
+      router.push(`/${universityCode}`);
     }
   };
 

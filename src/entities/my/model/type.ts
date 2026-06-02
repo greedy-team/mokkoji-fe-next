@@ -1,13 +1,10 @@
 interface UserInfoType {
-  user: {
-    studentId: number;
-    department: string;
-    name: string;
-    grade: string;
-    email: string;
-    role: string;
-    emailOn: boolean;
-  };
+  id: number;
+  name: string | null;
+  email: string | null;
+  role: string;
+  emailOn: boolean;
+  universityCode: string | null;
 }
 
 export default UserInfoType;

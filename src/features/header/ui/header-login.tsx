@@ -1,11 +1,13 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import useClickOutside from '@/shared/model/useClickOutside';
-import { useLoginModal } from '@/shared/lib/login-modal-context';
+import { useSession } from '@/shared/lib/session-context';
 import {
   ChevronIcon,
   UserIcon,
@@ -18,19 +20,22 @@ interface HeaderLoginProps {
 
 function HeaderLogin({ userName }: HeaderLoginProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { openLoginModal } = useLoginModal();
+  const { status } = useSession();
+  const isLoggedIn =
+    status === 'authenticated' || (status === 'loading' && !!userName);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const universityCode = useUniversityCode();
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleSignOut = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    window.location.href = '/';
+    window.location.href = `/${universityCode}`;
   };
 
   return (
     <span className="rounded-sm p-2 px-4 text-xs font-light text-[#9C9C9C] lg:text-sm">
-      {userName ? (
+      {isLoggedIn ? (
         <div className="relative" ref={dropdownRef}>
           <Button
             variant="none"
@@ -50,7 +55,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
           {isDropdownOpen && (
             <div className="absolute top-full right-0 z-50 mt-2 min-w-[140px] overflow-hidden rounded-xl bg-[#f1f1f1] py-1 shadow-lg">
               <Button variant="dropdownItem" size="none" asChild>
-                <Link href="/my">
+                <Link href={`/${universityCode}/my`}>
                   <UserIcon />
                   마이페이지
                 </Link>
@@ -71,12 +76,12 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
         </div>
       ) : (
         <div className="flex gap-2 whitespace-nowrap">
-          <button
-            onClick={openLoginModal}
+          <Link
+            href={`/${universityCode}/login`}
             className="cursor-pointer whitespace-nowrap"
           >
             로그인
-          </button>
+          </Link>
         </div>
       )}
     </span>

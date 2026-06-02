@@ -1,4 +1,9 @@
+'use client';
+
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
+
 import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import {
@@ -37,6 +42,7 @@ function RecruitDetailHeader({
   status,
   isAlwaysRecruiting,
 }: RecruitDetailHeaderProps) {
+  const universityCode = useUniversityCode();
   const [date] = (createdAt || '').split('T');
   const [year, month, day] = date.split('-');
   const formattedDate = `${year}년 ${month}월 ${day}일`;
@@ -50,7 +56,9 @@ function RecruitDetailHeader({
             {title}
           </h1>
           <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
-            <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+            <Link
+              href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+            >
               {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
             </Link>
           </p>

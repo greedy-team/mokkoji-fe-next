@@ -25,7 +25,7 @@ async function MyPage() {
     return <ErrorBoundaryUi />;
   }
 
-  const { user } = myInfo.data;
+  const user = myInfo.data;
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
@@ -34,14 +34,11 @@ async function MyPage() {
       <ScrollProgressBar />
       <div className="w-full">
         <div>
-          <InfoRow label="학번" value={user.studentId} />
-          <InfoRow label="학과" value={user.department} />
           <InfoRow label="이름" value={user.name} />
-          <InfoRow label="학년" value={user.grade} />
           <InfoRow label="이메일" value={user.email}>
             <div className="flex items-center gap-3">
               <EmailChangeDialog
-                initialEmail={user.email}
+                initialEmail={user.email ?? undefined}
                 isEmailOn={user.emailOn}
                 triggerClassName="text-[#00E457] text-sm"
               />
@@ -50,7 +47,7 @@ async function MyPage() {
           </InfoRow>
           <InfoRow label="메일 알림">
             <MailNotificationToggle
-              email={user.email}
+              email={user.email ?? ''}
               isEmailOn={user.emailOn}
             />
           </InfoRow>

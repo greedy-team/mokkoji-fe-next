@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useReducer, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ClubInfoType } from '@/shared/model/type';
@@ -45,6 +47,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   } = useImageUpload();
   const { formData, errors } = state;
   const router = useRouter();
+  const universityCode = useUniversityCode();
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -93,7 +96,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
       return;
     }
     setIsSubmitting(false);
-    router.push('/recruit');
+    router.push(`/${universityCode}/club`);
     toast.success('모집 공고가 성공적으로 업로드되었습니다!');
   };
 

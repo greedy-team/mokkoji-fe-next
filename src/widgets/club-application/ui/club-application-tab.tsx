@@ -14,7 +14,7 @@ function ClubApplicationTabs() {
   const [activeTab, setActiveTab] = useState<TabKey>('club-create');
 
   return (
-    <div className="w-full">
+    <div className="w-full sm:px-8 lg:px-[150px]">
       <div className="sticky top-0 z-30 flex w-full justify-start border-b border-b-[#D6D6D6] bg-white pb-3 lg:mb-12">
         {TABS.map((tab) => {
           const isSelected = tab.key === activeTab;

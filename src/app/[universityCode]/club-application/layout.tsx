@@ -1,3 +1,5 @@
+import BottomNav from '@/shared/ui/bottom-nav';
+import Header from '@/shared/ui/Header';
 import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
 
@@ -11,10 +13,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ universityCode: string }>;
+}) {
+  const { universityCode } = await params;
   return (
     <div className="flex flex-col">
+      <Header universityCode={universityCode} />
       <main className="flex px-4 py-7">{children}</main>
+      <BottomNav />
     </div>
   );
 }

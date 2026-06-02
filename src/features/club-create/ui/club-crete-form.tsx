@@ -55,7 +55,11 @@ function ClubCreateForm() {
     setIsSubmitting(false);
     if (result.ok) {
       toast.success(
-        '제출되었습니다. 마이페이지에서 현황을 확인하실 수 있습니다.',
+        <span>
+          제출되었습니다.
+          <br />
+          마이페이지에서 현황을 확인하실 수 있습니다.
+        </span>,
       );
       router.push(`/${universityCode}/my`);
     } else {

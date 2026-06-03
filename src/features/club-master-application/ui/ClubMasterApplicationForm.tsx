@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
@@ -20,21 +20,31 @@ import type { ClubOption } from '../model/type';
 function ClubMasterApplicationForm() {
   const router = useRouter();
   const universityCode = useUniversityCode();
-  const [isPending, startTransition] = useTransition();
+  const [isClubsLoading, setIsClubsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [selectedUniversityCode, setSelectedUniversityCode] = useState('');
+  const [selectedUniversityCode, setSelectedUniversityCode] = useState(
+    universityCode.toUpperCase(),
+  );
   const [selectedClubId, setSelectedClubId] = useState('');
   const [userName, setUserName] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clubs, setClubs] = useState<ClubOption[]>([]);
 
+  useEffect(() => {
+    getClubsByUniversity(universityCode.toUpperCase()).then((result) => {
+      setClubs(result);
+      setIsClubsLoading(false);
+    });
+  }, [universityCode]);
+
   const handleUniversityChange = (value: string) => {
     setSelectedUniversityCode(value);
     setSelectedClubId('');
-    startTransition(async () => {
-      const result = await getClubsByUniversity(value);
+    setIsClubsLoading(true);
+    getClubsByUniversity(value).then((result) => {
       setClubs(result);
+      setIsClubsLoading(false);
     });
   };
 
@@ -95,7 +105,7 @@ function ClubMasterApplicationForm() {
         <Select
           value={selectedClubId}
           onValueChange={setSelectedClubId}
-          disabled={!selectedUniversityCode || isPending}
+          disabled={!selectedUniversityCode || isClubsLoading}
         >
           <SelectTrigger
             id="master-club"
@@ -103,7 +113,7 @@ function ClubMasterApplicationForm() {
           >
             <SelectValue
               placeholder={
-                isPending ? '불러오는 중...' : '동아리를 선택해주세요'
+                isClubsLoading ? '불러오는 중...' : '동아리를 선택해주세요'
               }
             />
           </SelectTrigger>

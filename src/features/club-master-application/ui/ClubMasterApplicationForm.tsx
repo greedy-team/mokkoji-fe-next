@@ -69,6 +69,26 @@ function ClubMasterApplicationForm() {
   return (
     <div className="flex flex-col gap-6 py-8">
       <div className="flex flex-col gap-1.5">
+        <label htmlFor="master-school" className="text-sm">
+          학교
+        </label>
+        <Select
+          value={selectedUniversityCode}
+          onValueChange={handleUniversityChange}
+        >
+          <SelectTrigger
+            id="master-school"
+            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-5 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] data-[placeholder]:text-[#9C9C9C]"
+          >
+            <SelectValue placeholder="모꼬지대학교" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="SEJONG">세종대학교</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
         <label htmlFor="master-club" className="text-sm">
           동아리명
         </label>
@@ -93,26 +113,6 @@ function ClubMasterApplicationForm() {
                 {club.name}
               </SelectItem>
             ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="master-school" className="text-sm">
-          학교
-        </label>
-        <Select
-          value={selectedUniversityCode}
-          onValueChange={handleUniversityChange}
-        >
-          <SelectTrigger
-            id="master-school"
-            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-5 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] data-[placeholder]:text-[#9C9C9C]"
-          >
-            <SelectValue placeholder="모꼬지대학교" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="SEJONG">세종대학교</SelectItem>
           </SelectContent>
         </Select>
       </div>

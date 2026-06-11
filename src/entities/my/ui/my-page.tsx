@@ -67,11 +67,11 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
                 : undefined
             }
           />
-          <div className="py-4 lg:hidden">
+
+          <div className="py-4">
+            <UniversitySelectModalWrapper defaultOpen={isNewUser} />
             <LogoutLink />
           </div>
-
-          {isNewUser && <UniversitySelectModalWrapper />}
         </div>
       </div>
     </div>

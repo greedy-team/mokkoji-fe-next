@@ -10,10 +10,12 @@ import UniversitySelectModal from './university-select-modal';
 
 interface UniversitySelectModalWrapperProps {
   defaultOpen?: boolean;
+  universityCode: string | null;
 }
 
 function UniversitySelectModalWrapper({
   defaultOpen = false,
+  universityCode,
 }: UniversitySelectModalWrapperProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -41,6 +43,7 @@ function UniversitySelectModalWrapper({
       <UniversitySelectModal
         isOpen={isOpen}
         universities={universities}
+        universityCode={universityCode}
         onConfirm={async (code) => {
           await patchUniversityCode(code === 'NONE' ? null : code);
           setIsOpen(false);

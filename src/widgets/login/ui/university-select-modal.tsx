@@ -8,15 +8,17 @@ import type { University } from '@/entities/university/model/type';
 interface UniversitySelectModalProps {
   isOpen: boolean;
   universities: University[];
+  universityCode: string | null;
   onConfirm: (universityCode: string) => void;
 }
 
 function UniversitySelectModal({
   isOpen,
   universities,
+  universityCode,
   onConfirm,
 }: UniversitySelectModalProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(universityCode);
 
   return (
     <>

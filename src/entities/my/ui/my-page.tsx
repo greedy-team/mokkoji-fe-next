@@ -1,5 +1,6 @@
 import { getSession } from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
+import UniversitySelectModalWrapper from '@/widgets/login/ui/university-select-modal-wrapper';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
@@ -61,6 +62,7 @@ async function MyPage() {
           <div className="py-4 lg:hidden">
             <LogoutLink />
           </div>
+          <UniversitySelectModalWrapper />
         </div>
       </div>
     </div>

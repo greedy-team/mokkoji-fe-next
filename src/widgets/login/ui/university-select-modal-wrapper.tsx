@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { University } from '@/entities/university/model/type';
 import getUniversities from '@/entities/university/api/getUniversities';
+import patchUniversityCode from '@/features/my/api/patchUniversityCode';
 import UniversitySelectModal from './university-select-modal';
 
 function UniversitySelectModalWrapper() {
@@ -21,7 +22,10 @@ function UniversitySelectModalWrapper() {
     <UniversitySelectModal
       isOpen={isOpen}
       universities={universities}
-      onConfirm={() => setIsOpen(false)}
+      onConfirm={async (code) => {
+        await patchUniversityCode(code === 'NONE' ? null : code);
+        setIsOpen(false);
+      }}
     />
   );
 }

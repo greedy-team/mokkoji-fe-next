@@ -57,7 +57,7 @@ function ClubMasterApplicationWidget({
         );
         setClubMasterApplications((previous) =>
           previous.map((a) =>
-            a.applicationId === applicationId
+            a.id === applicationId
               ? { ...a, status: 'APPROVED' as ApplicationStatus }
               : a,
           ),
@@ -94,7 +94,7 @@ function ClubMasterApplicationWidget({
       if (success) {
         setClubMasterApplications((previous) =>
           previous.map((a) =>
-            a.applicationId === applicationId
+            a.id === applicationId
               ? { ...a, status: 'APPROVED' as ApplicationStatus }
               : a,
           ),
@@ -112,7 +112,7 @@ function ClubMasterApplicationWidget({
       if (success) {
         setClubMasterApplications((previous) =>
           previous.map((a) =>
-            a.applicationId === applicationId
+            a.id === applicationId
               ? {
                   ...a,
                   status: 'REJECTED' as ApplicationStatus,
@@ -188,10 +188,10 @@ function ClubMasterApplicationWidget({
           ) : (
             pendingMasterApplications.map((application) => (
               <ApplicationTableRow
-                key={application.applicationId}
-                applicationId={application.applicationId}
+                key={application.id}
+                applicationId={application.id}
                 clubName={application.clubName}
-                applicantName={application.applicantName}
+                applicantName={application.userName}
                 status={application.status}
                 createdAt={application.createdAt}
                 onApprove={handleMasterApprove}

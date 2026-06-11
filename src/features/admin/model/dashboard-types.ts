@@ -1,10 +1,10 @@
 export type ApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface ClubMasterApplication {
-  applicationId: number;
+  id: number;
   universityName: string;
   clubName: string;
-  applicantName: string;
+  userName: string;
   status: ApplicationStatus;
   rejectReason: string | null;
   createdAt: string;

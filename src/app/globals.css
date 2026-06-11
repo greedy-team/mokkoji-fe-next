@@ -547,3 +547,16 @@ html::-webkit-scrollbar {
     font-size: 1.25rem !important;
   }
 }
+
+.tiptap h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.tiptap h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.tiptap h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}

@@ -9,18 +9,10 @@ import {
   useState,
 } from 'react';
 import { UserRole } from '@/shared/model/type';
-
-interface SessionUser {
-  studentId: number;
-  department: string;
-  name: string;
-  grade: string;
-  email: string;
-  universityCode: string;
-}
+import UserInfoType from '@/shared/model/user';
 
 interface SessionData {
-  user: SessionUser;
+  user: UserInfoType;
   role?: UserRole;
   accessToken?: string;
   universityCode?: string;

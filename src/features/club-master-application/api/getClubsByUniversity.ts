@@ -1,7 +1,7 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
-import api from '@/shared/api/auth-api';
+import serverApi from '@/shared/api/server-api';
 import type { ClubOption } from '../model/type';
 
 interface ClubPreviewResponse {
@@ -17,7 +17,7 @@ interface AllClubsApiResponse {
 
 const fetchClubsByUniversity = unstable_cache(
   async (universityCode: string): Promise<ClubOption[]> => {
-    const response = await api
+    const response = await serverApi
       .get('clubs', {
         searchParams: {
           universityCode,

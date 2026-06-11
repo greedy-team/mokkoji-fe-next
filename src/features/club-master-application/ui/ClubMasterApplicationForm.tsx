@@ -88,7 +88,7 @@ function ClubMasterApplicationForm() {
         >
           <SelectTrigger
             id="master-school"
-            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-5 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] data-[placeholder]:text-[#9C9C9C]"
+            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-3 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] data-[placeholder]:text-[#9C9C9C]"
           >
             <SelectValue placeholder="모꼬지대학교" />
           </SelectTrigger>
@@ -109,7 +109,7 @@ function ClubMasterApplicationForm() {
         >
           <SelectTrigger
             id="master-club"
-            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-5 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] disabled:opacity-50 data-[placeholder]:text-[#9C9C9C]"
+            className="h-auto w-full rounded-lg border border-[#D6D6D6] bg-white py-3 indent-1.5 text-sm transition-colors duration-200 focus:border-[#00E457] disabled:opacity-50 data-[placeholder]:text-[#9C9C9C]"
           >
             <SelectValue
               placeholder={
@@ -117,7 +117,7 @@ function ClubMasterApplicationForm() {
               }
             />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent viewportClassName="h-auto max-h-48 overflow-y-auto">
             {clubs.map((club) => (
               <SelectItem key={club.id} value={String(club.id)}>
                 {club.name}
@@ -129,11 +129,11 @@ function ClubMasterApplicationForm() {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="master-name" className="text-sm">
-          실명
+          이름
         </label>
         <Input
           id="master-name"
-          placeholder="김세종"
+          placeholder="홍길동"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           className="rounded-lg border border-[#D6D6D6] bg-white px-4 py-3 text-sm placeholder:text-[#C0C0C0]"

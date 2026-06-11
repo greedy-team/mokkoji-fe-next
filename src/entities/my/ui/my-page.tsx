@@ -6,6 +6,7 @@ import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
+import { getUniversityName } from '@/shared/lib/universityMeta';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
@@ -13,7 +14,7 @@ import EmailDeleteButton from '../../../features/my/ui/email-delete-button';
 import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
 import LogoutLink from '../../../features/my/ui/logout-link';
 
-async function MyPage() {
+async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
   const session = await getSession();
 
   if (!session) {
@@ -58,11 +59,19 @@ async function MyPage() {
               <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </div>
           )}
-
+          <InfoRow
+            label="학교"
+            value={
+              user.universityCode
+                ? getUniversityName(user.universityCode)
+                : undefined
+            }
+          />
           <div className="py-4 lg:hidden">
             <LogoutLink />
           </div>
-          <UniversitySelectModalWrapper />
+
+          {isNewUser && <UniversitySelectModalWrapper />}
         </div>
       </div>
     </div>

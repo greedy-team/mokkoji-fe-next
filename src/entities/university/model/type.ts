@@ -1,7 +1,8 @@
 export interface University {
   id: number;
   name: string;
-  universityCode: string;
+  code: string;
+  logo: string;
 }
 
 export interface UniversitiesResponse {

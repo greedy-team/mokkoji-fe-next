@@ -2,20 +2,18 @@
 
 import { useState } from 'react';
 import cn from '@/shared/lib/utils';
-import { universityDisplayName } from '@/shared/lib/universityMeta';
 import { Button } from '@/shared/ui/button';
-
-const UNIVERSITY_OPTIONS = Object.entries(universityDisplayName).map(
-  ([code, name]) => ({ code, name }),
-);
+import type { University } from '@/entities/university/model/type';
 
 interface UniversitySelectModalProps {
   isOpen: boolean;
-  onConfirm: (university: string) => void;
+  universities: University[];
+  onConfirm: (universityCode: string) => void;
 }
 
 function UniversitySelectModal({
   isOpen,
+  universities,
   onConfirm,
 }: UniversitySelectModalProps) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -42,7 +40,7 @@ function UniversitySelectModal({
         </h1>
 
         <div className="mb-30 flex flex-wrap gap-3">
-          {UNIVERSITY_OPTIONS.map(({ code, name }) => {
+          {universities.map(({ code, name }) => {
             const isSelected = selected === code;
             return (
               <Button
@@ -57,6 +55,15 @@ function UniversitySelectModal({
               </Button>
             );
           })}
+          <Button
+            type="button"
+            variant={selected === 'NONE' ? 'optionsSelected' : 'options'}
+            size="none"
+            onClick={() => setSelected('NONE')}
+            className={`px-4 py-2.5 text-sm ${selected === 'NONE' ? 'border-[#22CF64] text-[#22CF64]' : 'border-[#F8F8F8] bg-[#F8F8F8] text-[#8B95A1]'}`}
+          >
+            학교없음
+          </Button>
         </div>
 
         <Button

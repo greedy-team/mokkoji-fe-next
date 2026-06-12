@@ -7,7 +7,7 @@ function TableHeaderCell({
 }) {
   return (
     <span
-      className={`${width} text-[16px] leading-[140%] font-medium text-[#000000]`}
+      className={`${width} shrink-0 text-[16px] leading-[140%] font-medium text-[#000000]`}
     >
       {children}
     </span>

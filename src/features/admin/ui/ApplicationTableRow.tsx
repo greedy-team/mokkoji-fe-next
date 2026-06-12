@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ApplicationStatus } from '@/features/admin/model/dashboard-types';
+import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
 import TableDataCell from './TableDataCell';
 import RejectReasonDialog from './RejectReasonDialog';
 import ApproveCompleteDialog from './ApproveCompleteDialog';
@@ -49,7 +50,9 @@ function ApplicationTableRow({
         <TableDataCell width="w-[120px]">{formattedDate}</TableDataCell>
         <TableDataCell width="w-[160px]">{clubName}</TableDataCell>
         {category !== undefined && (
-          <TableDataCell width="w-[100px]">{category}</TableDataCell>
+          <TableDataCell width="w-[100px]">
+            {ClubCategoryLabel[category as ClubCategory] ?? category}
+          </TableDataCell>
         )}
         <TableDataCell width="flex-1">{applicantName}</TableDataCell>
         <div className="flex w-[152px] items-center gap-2">

@@ -1,6 +1,6 @@
 'use server';
 
-import api from '@/shared/api/auth-api';
+import api from '@/shared/api/dashboard-api';
 
 async function rejectClubMasterApplication(
   applicationId: number,

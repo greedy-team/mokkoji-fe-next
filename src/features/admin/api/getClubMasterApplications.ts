@@ -1,5 +1,5 @@
 import 'server-only';
-import api from '@/shared/api/auth-api';
+import api from '@/shared/api/dashboard-api';
 import type {
   ClubMasterApplication,
   PaginationMeta,

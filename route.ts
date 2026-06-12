@@ -19,6 +19,4 @@ export const publicRoutes = [
   '/my',
   '/my/:path*',
   '/privacy-policy',
-  '/dashboard',
-  '/dashboard/:path*',
 ];

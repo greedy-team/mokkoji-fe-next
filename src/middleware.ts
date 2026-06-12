@@ -9,6 +9,10 @@ import {
   parseSessionCookie,
   CookieSession,
 } from '@/shared/lib/cookie-session';
+import {
+  DASHBOARD_SESSION_COOKIE_NAME,
+  parseDashboardSessionCookie,
+} from '@/shared/lib/dashboard-session';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import { publicRoutes } from '../route';
 
@@ -82,18 +86,35 @@ function isPublicPath(pathname: string) {
 }
 
 /* ────────────────────────────────────────────
- * 미들웨어 본체
- *
- * 처리 순서:
- *   1. 세션 쿠키 파싱 & 토큰 만료 여부 확인
- *   2. 만료 시 refreshToken으로 accessToken 갱신
- *   3. 인증 상태 + 경로 공개 여부에 따라 라우팅(통과/리다이렉트)
- *   4. 갱신된 세션이 있으면 응답 쿠키에 반영
- *   5. User-Agent 기반 디바이스 타입 쿠키 설정
- *   6. applySetCookie로 요청 헤더 오버라이드 → RSC에서 갱신된 쿠키 즉시 사용 가능
+ * 대시보드 전용 인증 처리
+ * 메인 서비스 세션(app-session)과 분리된 별도 쿠키(dashboard-session)로 관리한다.
  * ──────────────────────────────────────────── */
 
+function handleDashboardAuth(req: NextRequest): NextResponse | null {
+  const { pathname } = req.nextUrl;
+
+  if (pathname !== '/dashboard' && !pathname.startsWith('/dashboard/'))
+    return null;
+
+  const raw = req.cookies.get(DASHBOARD_SESSION_COOKIE_NAME)?.value;
+  const isAuthenticated = !!parseDashboardSessionCookie(raw)?.accessToken;
+
+  if (pathname === '/dashboard/login') {
+    return isAuthenticated
+      ? NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+      : NextResponse.next();
+  }
+
+  return isAuthenticated
+    ? NextResponse.next()
+    : NextResponse.redirect(new URL('/dashboard/login', req.nextUrl));
+}
+
 export default async function middleware(req: NextRequest) {
+  // 대시보드 경로는 별도 세션으로 처리
+  const dashboardResponse = handleDashboardAuth(req);
+  if (dashboardResponse) return dashboardResponse;
+
   const { nextUrl } = req;
   const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)?.value;
   let session: CookieSession | null = parseSessionCookie(sessionCookie);

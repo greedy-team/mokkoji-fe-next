@@ -15,9 +15,9 @@ async function DashboardPage() {
   const clubApplications = clubApplicationData?.applications ?? [];
   const clubs = clubsData?.clubs ?? [];
 
-  const totalClubs = clubsData?.pagination.totalElements ?? 0;
-  const pendingMasterCount = clubMasterData?.pagination.totalElements ?? 0;
-  const pendingClubCount = clubApplicationData?.page.totalElements ?? 0;
+  const totalClubs = clubsData?.pagination?.totalElements ?? 0;
+  const pendingMasterCount = clubMasterData?.pagination?.totalElements ?? 0;
+  const pendingClubCount = clubApplicationData?.page?.totalElements ?? 0;
   const totalMasters = clubs.filter((club) => club.clubMaster !== null).length;
 
   return (

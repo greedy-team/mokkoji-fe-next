@@ -6,11 +6,13 @@ import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 import getMyInfo from '../api/getMyInfo';
+import getClubApplicationStatus from '../api/getClubApplicationStatus';
 import InfoRow from './info-row';
 import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
 import EmailDeleteButton from '../../../features/my/ui/email-delete-button';
 import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
 import LogoutLink from '../../../features/my/ui/logout-link';
+import ClubApplicationStatus from '../../../features/my/ui/club-application-status';
 
 async function MyPage() {
   const session = await getSession();
@@ -19,13 +21,17 @@ async function MyPage() {
     return <LoginRequired />;
   }
 
-  const myInfo = await getMyInfo();
+  const [myInfo, clubApplicationStatus] = await Promise.all([
+    getMyInfo(),
+    getClubApplicationStatus(),
+  ]);
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
   }
 
   const user = myInfo.data;
+  const clubApplications = clubApplicationStatus.data?.clubApplications ?? [];
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
@@ -51,6 +57,11 @@ async function MyPage() {
             <span className="text-sm text-neutral-900">카카오 로그인</span>
           </div>
         </div>
+
+        {clubApplications.length > 0 && (
+          <ClubApplicationStatus applications={clubApplications} />
+        )}
+
         <div className="flex flex-col">
           <span className="mb-4 font-semibold">내 정보</span>
           <InfoRow label="이메일" value={user.email}>

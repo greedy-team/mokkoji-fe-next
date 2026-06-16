@@ -36,9 +36,9 @@ async function MyPage() {
   const isAdmin = userRole !== UserRole.NORMAL;
 
   return (
-    <div className="flex flex-col items-center px-4">
+    <>
       <ScrollProgressBar />
-      <div className="w-full">
+      <div className="mx-auto w-full px-4 sm:w-lg">
         <div className="mb-6 flex flex-col gap-2">
           <div className="text-text-secondary">{user.name}</div>
           <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
@@ -92,7 +92,7 @@ async function MyPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

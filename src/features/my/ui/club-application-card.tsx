@@ -1,22 +1,40 @@
 'use client';
 
-import { useState } from 'react';
 import dayjs from 'dayjs';
-import { ClubApplicationType } from '@/entities/my/model/type';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import {
+  ClubApplicationStatus as ClubApplicationStatusType,
+  ClubApplicationType,
+} from '@/entities/my/model/type';
+
+const ClubApplicationStatusLabel: Record<ClubApplicationStatusType, string> = {
+  PENDING: '승인 대기',
+  APPROVED: '승인 완료',
+  REJECTED: '반려 완료',
+};
 
 type ClubApplicationCardProps = {
   application: ClubApplicationType;
 };
 
 function ClubApplicationCard({ application }: ClubApplicationCardProps) {
-  const [showRejectReason, setShowRejectReason] = useState(false);
   const { clubName, universityName, status, createdAt, rejectReason } =
     application;
 
   return (
-    <li className="flex flex-col gap-3 rounded-2xl border-2 border-[#22CF64] p-4">
+    <li className="flex flex-col gap-3 rounded-2xl border border-[#22CF64] p-4">
       <div className="flex flex-col gap-1">
-        <span className="text-xl font-semibold">
+        <span className="font-semibold">
           {clubName}{' '}
           <span className="text-text-tertiary text-lg">{universityName}</span>
         </span>
@@ -57,20 +75,46 @@ function ClubApplicationCard({ application }: ClubApplicationCardProps) {
             <span className="text-alert-500 border-alert-500 rounded-full border px-3 py-1 text-xs">
               반려
             </span>
-            <button
-              type="button"
-              onClick={() => setShowRejectReason((prev) => !prev)}
-              className="text-text-tertiary text-xs underline"
-            >
-              반려 사유 확인
-            </button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="text-text-tertiary text-xs underline"
+                >
+                  반려 사유 확인
+                </button>
+              </DialogTrigger>
+              <DialogContent
+                aria-describedby="reject-reason-description"
+                className="w-[400px] rounded-2xl"
+              >
+                <DialogHeader>
+                  <DialogTitle className="flex items-start font-semibold">
+                    반려 사유
+                  </DialogTitle>
+                </DialogHeader>
+                <DialogDescription
+                  id="reject-reason-description"
+                  className="text-text-secondary text-sm"
+                >
+                  {rejectReason}
+                </DialogDescription>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button
+                      type="button"
+                      variant="submit-default"
+                      className="mt-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
+                    >
+                      확인
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
       </div>
-
-      {status === 'REJECTED' && showRejectReason && rejectReason && (
-        <span className="text-alert-500 text-xs">{rejectReason}</span>
-      )}
     </li>
   );
 }

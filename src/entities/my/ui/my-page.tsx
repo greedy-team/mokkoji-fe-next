@@ -87,7 +87,7 @@ async function MyPage() {
             </div>
           )}
 
-          <div className="py-4 lg:hidden">
+          <div className="mb-15 py-4 lg:hidden">
             <LogoutLink />
           </div>
         </div>

@@ -12,16 +12,7 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import {
-  ClubApplicationStatus as ClubApplicationStatusType,
-  ClubApplicationType,
-} from '@/entities/my/model/type';
-
-const ClubApplicationStatusLabel: Record<ClubApplicationStatusType, string> = {
-  PENDING: '승인 대기',
-  APPROVED: '승인 완료',
-  REJECTED: '반려 완료',
-};
+import { ClubApplicationType } from '@/entities/my/model/type';
 
 type ClubApplicationCardProps = {
   application: ClubApplicationType;

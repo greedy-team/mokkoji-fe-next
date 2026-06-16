@@ -39,7 +39,7 @@ async function MyPage() {
     <>
       <ScrollProgressBar />
       <div className="mx-auto w-full px-4 sm:w-lg">
-        <div className="mb-6 flex flex-col gap-2">
+        <div className="mb-8 flex flex-col gap-2">
           <div className="text-text-secondary">{user.name}</div>
           <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
             <svg

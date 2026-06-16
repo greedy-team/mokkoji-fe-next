@@ -47,7 +47,7 @@ export default function MailNotificationToggle({
         aria-label="메일 알림 설정"
         onClick={handleToggle}
         className={`relative h-7 w-14 rounded-full p-1 transition-colors ${
-          enabled ? 'bg-[#00E457]' : 'bg-gray-300'
+          enabled ? 'bg-[#4AF38A]' : 'bg-gray-300'
         }`}
       >
         <span

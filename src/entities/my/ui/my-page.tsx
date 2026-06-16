@@ -33,8 +33,26 @@ async function MyPage() {
     <div className="flex flex-col items-center px-4">
       <ScrollProgressBar />
       <div className="w-full">
-        <div>
-          <InfoRow label="이름" value={user.name} />
+        <div className="mb-6 flex flex-col gap-2">
+          <div className="text-text-secondary">{user.name}</div>
+          <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
+            <svg
+              className="left-4 h-4 w-4 shrink-0"
+              viewBox="0 0 22 22"
+              fill="none"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M11 2C6.029 2 2 5.358 2 9.5c0 2.613 1.613 4.913 4.063 6.263L5.25 19.25l4.013-2.65c.572.083 1.158.125 1.737.125 4.971 0 9-3.358 9-7.5S15.971 2 11 2z"
+                fill="#1A1A1A"
+              />
+            </svg>
+            <span className="text-sm text-neutral-900">카카오 로그인</span>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <span className="mb-4 font-semibold">내 정보</span>
           <InfoRow label="이메일" value={user.email}>
             <div className="flex items-center gap-3">
               <EmailChangeDialog

@@ -21,7 +21,7 @@ function getHttpErrorMessage(status: number) {
 
 async function readServerMessage(error: HTTPError): Promise<string | null> {
   try {
-    const body = (await error.response.clone().json()) as { message?: string };
+    const body = (await error.response.json()) as { message?: string };
     return body.message ?? null;
   } catch {
     return null;
@@ -36,18 +36,13 @@ interface CustomErrorMapping {
 async function createErrorResponse(
   error: Error,
   customErrArray?: CustomErrorMapping[],
-  useServerMessageFor?: number[],
 ) {
   if (error instanceof HTTPError) {
     const { status } = error.response;
-
-    if (useServerMessageFor?.includes(status)) {
-      const serverMessage = await readServerMessage(error);
-      if (serverMessage) {
-        return { ok: false, message: serverMessage, data: undefined, status };
-      }
+    const serverMessage = await readServerMessage(error);
+    if (serverMessage) {
+      return { ok: false, message: serverMessage, data: undefined, status };
     }
-
     const customMessage = customErrArray?.find(
       (item) => item.status === status,
     );

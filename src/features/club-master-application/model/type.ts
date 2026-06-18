@@ -4,7 +4,7 @@ export interface ClubMasterApplicationFormData {
   userName: string;
 }
 
-export interface ClubOption {
+export interface ClubSummary {
   id: number;
   name: string;
 }

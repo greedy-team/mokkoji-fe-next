@@ -15,7 +15,7 @@ import {
 } from '@/shared/ui/select';
 import getClubsByUniversity from '../api/getClubsByUniversity';
 import postClubMasterApplication from '../api/postClubMasterApplication';
-import type { ClubOption } from '../model/type';
+import type { ClubSummary } from '../model/type';
 
 function ClubMasterApplicationForm() {
   const router = useRouter();
@@ -29,7 +29,7 @@ function ClubMasterApplicationForm() {
   const [selectedClubId, setSelectedClubId] = useState('');
   const [userName, setUserName] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [clubs, setClubs] = useState<ClubOption[]>([]);
+  const [clubs, setClubs] = useState<ClubSummary[]>([]);
 
   useEffect(() => {
     getClubsByUniversity(universityCode.toUpperCase()).then((result) => {

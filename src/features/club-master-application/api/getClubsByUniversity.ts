@@ -2,21 +2,16 @@
 
 import { unstable_cache } from 'next/cache';
 import serverApi from '@/shared/api/server-api';
-import type { ClubOption } from '../model/type';
-
-interface ClubPreviewResponse {
-  id: number;
-  name: string;
-}
+import type { ClubSummary } from '../model/type';
 
 interface AllClubsApiResponse {
   data: {
-    clubs: ClubPreviewResponse[];
+    clubs: ClubSummary[];
   };
 }
 
 const fetchClubsByUniversity = unstable_cache(
-  async (universityCode: string): Promise<ClubOption[]> => {
+  async (universityCode: string): Promise<ClubSummary[]> => {
     const response = await serverApi
       .get('clubs', {
         searchParams: {
@@ -34,7 +29,7 @@ const fetchClubsByUniversity = unstable_cache(
 
 async function getClubsByUniversity(
   universityCode: string,
-): Promise<ClubOption[]> {
+): Promise<ClubSummary[]> {
   try {
     return await fetchClubsByUniversity(universityCode);
   } catch {

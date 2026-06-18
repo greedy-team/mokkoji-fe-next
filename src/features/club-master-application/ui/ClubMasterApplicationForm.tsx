@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import Input from '@/shared/ui/input';
+import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import {
   Select,
@@ -20,6 +20,7 @@ import type { ClubSummary } from '../model/type';
 function ClubMasterApplicationForm() {
   const router = useRouter();
   const universityCode = useUniversityCode();
+  const { session } = useSession();
   const [isClubsLoading, setIsClubsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -27,7 +28,6 @@ function ClubMasterApplicationForm() {
     universityCode.toUpperCase(),
   );
   const [selectedClubId, setSelectedClubId] = useState('');
-  const [userName, setUserName] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clubs, setClubs] = useState<ClubSummary[]>([]);
 
@@ -49,17 +49,14 @@ function ClubMasterApplicationForm() {
   };
 
   const isValid =
-    selectedUniversityCode !== '' &&
-    selectedClubId !== '' &&
-    userName.trim() !== '' &&
-    isConfirmed;
+    selectedUniversityCode !== '' && selectedClubId !== '' && isConfirmed;
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const result = await postClubMasterApplication({
       universityCode: selectedUniversityCode,
       clubId: Number(selectedClubId),
-      userName: userName.trim(),
+      userName: session?.user?.name ?? null,
     });
     setIsSubmitting(false);
     if (result.ok) {
@@ -125,19 +122,6 @@ function ClubMasterApplicationForm() {
             ))}
           </SelectContent>
         </Select>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="master-name" className="text-sm">
-          이름
-        </label>
-        <Input
-          id="master-name"
-          placeholder="홍길동"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          className="rounded-lg border border-[#D6D6D6] bg-white px-4 py-3 text-sm placeholder:text-[#C0C0C0]"
-        />
       </div>
 
       <div className="flex flex-col gap-3">

@@ -1,7 +1,7 @@
 export interface ClubMasterApplicationFormData {
   universityCode: string;
   clubId: number;
-  userName: string;
+  userName: string | null;
 }
 
 export interface ClubSummary {

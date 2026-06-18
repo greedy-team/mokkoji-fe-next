@@ -9,9 +9,7 @@ async function postClubMasterApplication(data: ClubMasterApplicationFormData) {
     await api.post('club-master-applications', { json: data });
     return { ok: true, message: '동아리장 등록 신청이 완료되었습니다.' };
   } catch (error) {
-    return createErrorResponse(error as Error, [
-      { status: 409, message: '이미 신청된 동아리입니다.' },
-    ]);
+    return createErrorResponse(error as Error, undefined, [403, 404, 409]);
   }
 }
 

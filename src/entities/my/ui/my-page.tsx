@@ -3,6 +3,7 @@ import { UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
+import Link from 'next/link';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 import getMyInfo from '../api/getMyInfo';
@@ -57,6 +58,23 @@ async function MyPage() {
               <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </div>
           )}
+
+          <div className="mt-6">
+            <Link href="/my/comments" className="flex w-fit items-center gap-2">
+              <div className="flex h-[46px] w-[172px] items-center gap-2 rounded-[8px] bg-[#F8F8F8] px-3">
+                <Image
+                  src="/mypage/message.svg"
+                  alt="댓글 아이콘"
+                  width={20}
+                  height={20}
+                />
+                <span className="text-sm font-semibold whitespace-nowrap">
+                  내가 작성한 <span className="text-primary-500">댓글</span>
+                </span>
+              </div>
+              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+            </Link>
+          </div>
 
           <div className="py-4 lg:hidden">
             <LogoutLink />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ClubComment } from '@/entities/club-detail/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
@@ -18,6 +18,11 @@ export default function ClubDetailComment({
   onCommentChange,
 }: ClubDetailCommentProps) {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [highlightedCommentId, setHighlightedCommentId] = useState('');
+
+  useEffect(() => {
+    setHighlightedCommentId(window.location.hash.slice(1));
+  }, []);
 
   return (
     <div className="flex flex-col gap-3.5">
@@ -27,7 +32,8 @@ export default function ClubDetailComment({
         return (
           <div
             key={comment.id}
-            className="flex gap-4 rounded-2xl border border-[#D6D6D6] p-5"
+            id={`comment-${comment.id}`}
+            className={`flex gap-4 rounded-2xl border p-5 ${highlightedCommentId === `comment-${comment.id}` ? 'border-blue-500' : 'border-[#D6D6D6]'}`}
           >
             <Avatar className="size-12">
               <AvatarImage

@@ -1,33 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { University } from '@/entities/university/model/type';
-import getUniversities from '@/entities/university/api/getUniversities';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
 import UniversitySelectModal from './university-select-modal';
 
 interface UniversitySelectModalWrapperProps {
   defaultOpen?: boolean;
   universityCode: string | null;
+  universities: University[];
 }
 
 function UniversitySelectModalWrapper({
   defaultOpen = false,
   universityCode,
+  universities,
 }: UniversitySelectModalWrapperProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [universities, setUniversities] = useState<University[]>([]);
-
-  useEffect(() => {
-    getUniversities().then((res) => {
-      if (res.data?.universities) {
-        setUniversities(res.data.universities);
-      }
-    });
-  }, []);
 
   return (
     <>

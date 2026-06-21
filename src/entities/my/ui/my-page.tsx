@@ -7,6 +7,7 @@ import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 import { getUniversityName } from '@/shared/lib/universityMeta';
+import getUniversities from '@/entities/university/api/getUniversities';
 import getMyInfo from '../api/getMyInfo';
 import InfoRow from './info-row';
 import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
@@ -21,13 +22,17 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
     return <LoginRequired />;
   }
 
-  const myInfo = await getMyInfo();
+  const [myInfo, universitiesRes] = await Promise.all([
+    getMyInfo(),
+    getUniversities(),
+  ]);
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
   }
 
   const user = myInfo.data;
+  const universities = universitiesRes.data?.universities ?? [];
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
@@ -72,6 +77,7 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
             <UniversitySelectModalWrapper
               defaultOpen={isNewUser}
               universityCode={user.universityCode}
+              universities={universities}
             />
             <LogoutLink />
           </div>

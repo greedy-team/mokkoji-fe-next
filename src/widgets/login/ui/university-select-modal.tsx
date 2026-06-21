@@ -7,6 +7,7 @@ import type { University } from '@/entities/university/model/type';
 
 interface UniversitySelectModalProps {
   isOpen: boolean;
+  isLoading?: boolean;
   universities: University[];
   universityCode: string | null;
   onConfirm: (universityCode: string) => void;
@@ -14,6 +15,7 @@ interface UniversitySelectModalProps {
 
 function UniversitySelectModal({
   isOpen,
+  isLoading = false,
   universities,
   universityCode,
   onConfirm,
@@ -71,10 +73,13 @@ function UniversitySelectModal({
         <Button
           type="button"
           variant="submit-default"
-          disabled={selected === null}
+          disabled={selected === null || isLoading}
           onClick={() => selected && onConfirm(selected)}
-          className="mt-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
+          className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
         >
+          {isLoading && (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#474747] border-t-transparent" />
+          )}
           확인
         </Button>
       </div>

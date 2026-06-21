@@ -20,6 +20,7 @@ function UniversitySelectModalWrapper({
 }: UniversitySelectModalWrapperProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -34,10 +35,13 @@ function UniversitySelectModalWrapper({
 
       <UniversitySelectModal
         isOpen={isOpen}
+        isLoading={isLoading}
         universities={universities}
         universityCode={universityCode}
         onConfirm={async (code) => {
+          setIsLoading(true);
           await patchUniversityCode(code === 'NONE' ? null : code);
+          setIsLoading(false);
           setIsOpen(false);
           router.refresh();
         }}

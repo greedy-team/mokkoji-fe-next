@@ -42,18 +42,7 @@ async function MyPage() {
         <div className="mb-8 flex flex-col gap-2">
           <div className="text-text-secondary">{user.name}</div>
           <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
-            <svg
-              className="left-4 h-4 w-4 shrink-0"
-              viewBox="0 0 22 22"
-              fill="none"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M11 2C6.029 2 2 5.358 2 9.5c0 2.613 1.613 4.913 4.063 6.263L5.25 19.25l4.013-2.65c.572.083 1.158.125 1.737.125 4.971 0 9-3.358 9-7.5S15.971 2 11 2z"
-                fill="#1A1A1A"
-              />
-            </svg>
+            <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
             <span className="text-sm text-neutral-900">카카오 로그인</span>
           </div>
         </div>

@@ -5,14 +5,14 @@ import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
-import getMyInfo from '../api/getMyInfo';
-import getClubApplicationStatus from '../api/getClubApplicationStatus';
-import InfoRow from './info-row';
-import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
-import EmailDeleteButton from '../../../features/my/ui/email-delete-button';
-import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
-import LogoutLink from '../../../features/my/ui/logout-link';
-import ClubApplicationStatus from '../../../features/my/ui/club-application-status';
+import getMyInfo from '@/entities/my/api/getMyInfo';
+import getClubApplicationStatus from '@/entities/my/api/getClubApplicationStatus';
+import InfoRow from '@/entities/my/ui/info-row';
+import EmailChangeDialog from '@/features/my/ui/email-change-dialog';
+import EmailDeleteButton from '@/features/my/ui/email-delete-button';
+import MailNotificationToggle from '@/features/my/ui/mail-notification-toggle';
+import LogoutLink from '@/features/my/ui/logout-link';
+import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 
 async function MyPage() {
   const session = await getSession();

@@ -94,6 +94,7 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
               universityCode={user.universityCode}
               universities={universities}
             />
+          </div>
           <div className="mb-15 py-4 lg:hidden">
             <LogoutLink />
           </div>

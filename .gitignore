@@ -57,7 +57,6 @@ nginx/active/
 
 .claude/figma
 .claude/spec.md
-.mcp.json
 .omc/
 .serena/
 scripts/token-now.py

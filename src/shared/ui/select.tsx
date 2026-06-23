@@ -54,8 +54,18 @@ function SelectContent({
   className,
   children,
   position = 'popper',
+  viewportClassName,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+  viewportClassName?: string;
+}) {
+  const viewportRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScrollUp = () =>
+    viewportRef.current?.scrollBy({ top: -36, behavior: 'smooth' });
+  const handleScrollDown = () =>
+    viewportRef.current?.scrollBy({ top: 36, behavior: 'smooth' });
+
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -69,17 +79,19 @@ function SelectContent({
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
+        <SelectScrollUpButton onClick={handleScrollUp} />
         <SelectPrimitive.Viewport
+          ref={viewportRef}
           className={cn(
             'p-1',
             position === 'popper' &&
               'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1',
+            viewportClassName,
           )}
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
+        <SelectScrollDownButton onClick={handleScrollDown} />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );

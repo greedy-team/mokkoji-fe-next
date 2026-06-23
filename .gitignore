@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Playwright auth state (개인 계정 세션)
+playwright/.auth/
+
 # dependencies
 /node_modules
 /.pnp
@@ -52,8 +55,8 @@ logs
 
 nginx/active/
 
-.claude
-.mcp.json
+.claude/figma
+.claude/spec.md
 .omc/
 .serena/
 scripts/token-now.py

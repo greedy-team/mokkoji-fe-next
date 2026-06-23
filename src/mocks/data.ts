@@ -173,4 +173,15 @@ export const myClubMasterApplications: MyClubMasterApplication[] = [
   },
 ];
 
-export const knownApplicationIds = new Set<number>([12, 13, 14, 15, 16]);
+export const knownApplicationIds = new Set<number>([12, 13, 14, 15]);
+
+export interface University {
+  id: number;
+  name: string;
+  universityCode: string;
+}
+
+export const universities: University[] = [
+  { id: 1, name: '세종대학교', universityCode: 'SEJONG' },
+  { id: 2, name: '건국대학교', universityCode: 'KONKUK' },
+];

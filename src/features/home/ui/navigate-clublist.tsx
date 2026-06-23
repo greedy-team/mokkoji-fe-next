@@ -1,8 +1,14 @@
+'use client';
+
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
 function NavigateClubList() {
+  const universityCode = useUniversityCode();
+
   return (
     <Button
       asChild
@@ -10,7 +16,10 @@ function NavigateClubList() {
       size="navi"
       className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[linear-gradient(160deg,#4Af38A_0%,#33E3D0_100%)] text-xs font-semibold text-black shadow-[0_0_8px_rgba(0,0,0,0.2)] transition hover:brightness-105 lg:text-xl"
     >
-      <Link href="/club" className="flex items-center gap-2.5">
+      <Link
+        href={`/${universityCode}/club`}
+        className="flex items-center gap-2.5"
+      >
         동아리 찾아보기
         <Image
           src="/main/arrow.svg"

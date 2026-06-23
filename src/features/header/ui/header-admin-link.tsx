@@ -1,7 +1,9 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import { toast } from 'react-toastify';
 import { UserRole } from '@/shared/model/type';
 
@@ -11,13 +13,12 @@ interface HeaderAdminLinkProps {
 }
 
 function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
-  const router = useRouter();
+  const universityCode = useUniversityCode();
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
       toast.info('로그인을 먼저 진행해 주세요.');
-      router.push('/login');
       return;
     }
 
@@ -29,7 +30,7 @@ function HeaderAdminLink({ role, isLoggedIn }: HeaderAdminLinkProps) {
 
   return (
     <Link
-      href="/admin"
+      href={`/${universityCode}/admin`}
       className="flex items-center font-semibold"
       onClick={handleClick}
     >

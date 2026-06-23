@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useState } from 'react';
 import { useSession } from '@/shared/lib/session-context';
 import { usePathname } from 'next/navigation';
@@ -22,9 +24,14 @@ function HeaderManageModal({
   const isAuthenticated = status === 'authenticated';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
+  const universityCode = useUniversityCode();
 
-  const isRegisterActive = pathname.startsWith('/club-register');
-  const isRecruitmentActive = pathname.startsWith('/post-recruitment');
+  const isRegisterActive = pathname.startsWith(
+    `/${universityCode}/club-register`,
+  );
+  const isRecruitmentActive = pathname.startsWith(
+    `/${universityCode}/post-recruitment`,
+  );
 
   const isActive =
     (manageAction === 'register' && isRegisterActive) ||

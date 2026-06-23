@@ -144,6 +144,7 @@ export interface DetailParams {
 
 export interface RecruitmentActionParams {
   params: Promise<{
+    universityCode: string;
     action: 'create' | 'edit';
     id: string;
   }>;

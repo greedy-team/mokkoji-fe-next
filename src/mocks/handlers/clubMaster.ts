@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies, import/prefer-default-export */
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, passthrough } from 'msw';
 import { myClubMasterApplications } from '../data';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
@@ -7,6 +7,8 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 const url = (path: string) => `${baseUrl}${path}`;
 
 export const clubMasterHandlers = [
+  http.post(url('/club-applications'), () => passthrough()),
+
   http.post(
     url('/club-master-applications'),
     () => new HttpResponse(null, { status: 201 }),

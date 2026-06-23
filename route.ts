@@ -7,6 +7,7 @@ export const authRoutes = ['/admin/:path*'];
 
 export const publicRoutes = [
   '/',
+  '/login',
   '/register',
   '/favorite',
   '/club',
@@ -19,4 +20,7 @@ export const publicRoutes = [
   '/my',
   '/my/:path*',
   '/privacy-policy',
+  '/post-recruitment/:path*',
+  '/club-register',
+  '/club-register/:path*',
 ];

@@ -5,12 +5,14 @@ import HeaderAdminLink from '@/features/header/ui/header-admin-link';
 import Image from 'next/image';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
-import getMyInfo from '../api/getMyInfo';
-import InfoRow from './info-row';
-import EmailChangeDialog from '../../../features/my/ui/email-change-dialog';
-import EmailDeleteButton from '../../../features/my/ui/email-delete-button';
-import MailNotificationToggle from '../../../features/my/ui/mail-notification-toggle';
-import LogoutLink from '../../../features/my/ui/logout-link';
+import getMyInfo from '@/entities/my/api/getMyInfo';
+import getClubApplicationStatus from '@/entities/my/api/getClubApplicationStatus';
+import InfoRow from '@/entities/my/ui/info-row';
+import EmailChangeDialog from '@/features/my/ui/email-change-dialog';
+import EmailDeleteButton from '@/features/my/ui/email-delete-button';
+import MailNotificationToggle from '@/features/my/ui/mail-notification-toggle';
+import LogoutLink from '@/features/my/ui/logout-link';
+import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 
 async function MyPage() {
   const session = await getSession();
@@ -19,29 +21,42 @@ async function MyPage() {
     return <LoginRequired />;
   }
 
-  const myInfo = await getMyInfo();
+  const [myInfo, clubApplicationStatus] = await Promise.all([
+    getMyInfo(),
+    getClubApplicationStatus(),
+  ]);
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
   }
 
-  const { user } = myInfo.data;
+  const user = myInfo.data;
+  const clubApplications = clubApplicationStatus.data?.clubApplications ?? [];
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
   return (
-    <div className="flex flex-col items-center px-4">
+    <>
       <ScrollProgressBar />
-      <div className="w-full">
-        <div>
-          <InfoRow label="학번" value={user.studentId} />
-          <InfoRow label="학과" value={user.department} />
-          <InfoRow label="이름" value={user.name} />
-          <InfoRow label="학년" value={user.grade} />
+      <div className="mx-auto w-full px-4 sm:w-lg">
+        <div className="mb-8 flex flex-col gap-2">
+          <div className="text-text-secondary">{user.name}</div>
+          <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
+            <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
+            <span className="text-sm text-neutral-900">카카오 로그인</span>
+          </div>
+        </div>
+
+        {clubApplications.length > 0 && (
+          <ClubApplicationStatus applications={clubApplications} />
+        )}
+
+        <div className="flex flex-col">
+          <span className="mb-4 font-semibold">내 정보</span>
           <InfoRow label="이메일" value={user.email}>
             <div className="flex items-center gap-3">
               <EmailChangeDialog
-                initialEmail={user.email}
+                initialEmail={user.email ?? undefined}
                 isEmailOn={user.emailOn}
                 triggerClassName="text-[#00E457] text-sm"
               />
@@ -50,7 +65,7 @@ async function MyPage() {
           </InfoRow>
           <InfoRow label="메일 알림">
             <MailNotificationToggle
-              email={user.email}
+              email={user.email ?? ''}
               isEmailOn={user.emailOn}
             />
           </InfoRow>
@@ -61,12 +76,12 @@ async function MyPage() {
             </div>
           )}
 
-          <div className="py-4 lg:hidden">
+          <div className="mb-15 py-4 lg:hidden">
             <LogoutLink />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

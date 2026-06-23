@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import { useLoginModal } from '@/shared/lib/login-modal-context';
+import LoginRequired from '@/shared/ui/login-required';
 import { postComment } from '../api/comment-api';
 import StarRating from './rating-component';
 
@@ -24,7 +24,6 @@ function ClubDetailCommentInput({
   const [rating, setRating] = useState(0);
   const { session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { openLoginModal } = useLoginModal();
 
   const handleCommentContentChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -56,20 +55,7 @@ function ClubDetailCommentInput({
   };
 
   if (!session) {
-    return (
-      <div className="mb-15 flex w-full flex-col gap-2">
-        <div className="flex flex-col items-center justify-center gap-4 rounded-[10px] bg-[#F4F4F4] py-8">
-          <p className="text-sm font-bold">로그인이 필요한 서비스에요!</p>
-          <button
-            type="button"
-            onClick={openLoginModal}
-            className="cursor-pointer font-semibold text-[#00E457] underline"
-          >
-            로그인하기
-          </button>
-        </div>
-      </div>
-    );
+    return <LoginRequired />;
   }
 
   return (

@@ -1,6 +1,7 @@
 'use client';
 
 import ClubCreateForm from '@/features/club-create/ui/club-crete-form';
+import ClubMasterApplicationForm from '@/features/club-master-application/ui/ClubMasterApplicationForm';
 import { useState } from 'react';
 
 const TABS = [
@@ -45,7 +46,7 @@ function ClubApplicationTabs() {
       <div className="min-h-[600px] w-full">
         {activeTab === 'club-create' && <ClubCreateForm />}
         {activeTab === 'club-leader-application' && (
-          <div>{/* 동아리장 신청 폼 */}</div>
+          <ClubMasterApplicationForm />
         )}
       </div>
     </div>

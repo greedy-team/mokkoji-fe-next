@@ -42,18 +42,7 @@ export default function KakaoLoginPage() {
           onClick={handleKakaoLogin}
           className="relative flex w-full items-center justify-center rounded-2xl bg-[#FEE500] py-4 transition-all active:scale-[0.985] active:bg-[#F0D900]"
         >
-          <svg
-            className="absolute left-4 h-5 w-5 shrink-0"
-            viewBox="0 0 22 22"
-            fill="none"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M11 2C6.029 2 2 5.358 2 9.5c0 2.613 1.613 4.913 4.063 6.263L5.25 19.25l4.013-2.65c.572.083 1.158.125 1.737.125 4.971 0 9-3.358 9-7.5S15.971 2 11 2z"
-              fill="#1A1A1A"
-            />
-          </svg>
+          <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
           <span className="text-base font-semibold tracking-tight text-neutral-900">
             카카오톡으로 시작하기
           </span>

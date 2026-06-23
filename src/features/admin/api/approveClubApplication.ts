@@ -1,0 +1,14 @@
+'use server';
+
+import api from '@/shared/api/dashboard-api';
+
+async function approveClubApplication(applicationId: number): Promise<boolean> {
+  try {
+    await api.patch(`admin/club-applications/${applicationId}/approve`);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export default approveClubApplication;

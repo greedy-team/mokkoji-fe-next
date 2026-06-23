@@ -31,6 +31,9 @@ function AdminHeader() {
         <Link href={`/${universityCode}/admin`}>
           <span>관리자 페이지</span>
         </Link>
+        <Link href="/dashboard">
+          <span>총동연 대시보드</span>
+        </Link>
       </header>
     </>
   );

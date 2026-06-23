@@ -136,6 +136,20 @@ export const clubApplications: ClubApplication[] = [
     rejectReason: '동일한 이름의 동아리가 이미 존재합니다.',
     createdAt: '2026-04-15T11:25:00',
   },
+  {
+    applicationId: 16,
+    universityName: '건국대학교',
+    clubName: '알고리즘연구회',
+    applicantName: '박민준',
+    category: '학술/교양',
+    affiliation: '소학회',
+    description: '알고리즘 및 PS 연구 동아리.',
+    logo: 'https://placehold.co/120x120?text=Algo',
+    instagram: 'https://instagram.com/algo',
+    status: 'APPROVED',
+    rejectReason: null,
+    createdAt: '2026-04-10T09:00:00',
+  },
 ];
 
 export const myClubMasterApplications: MyClubMasterApplication[] = [

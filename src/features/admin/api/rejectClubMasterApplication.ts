@@ -7,7 +7,7 @@ async function rejectClubMasterApplication(
   rejectReason?: string,
 ): Promise<boolean> {
   try {
-    await api.post(`admin/club-master-applications/${applicationId}/reject`, {
+    await api.patch(`admin/club-master-applications/${applicationId}/reject`, {
       json: { rejectReason },
     });
     return true;

@@ -4,7 +4,7 @@ import api from '@/shared/api/dashboard-api';
 
 async function approveClubApplication(applicationId: number): Promise<boolean> {
   try {
-    await api.post(`admin/club-applications/${applicationId}/approve`);
+    await api.patch(`admin/club-applications/${applicationId}/approve`);
     return true;
   } catch {
     return false;

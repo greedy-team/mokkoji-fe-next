@@ -8,6 +8,7 @@ allowed-tools: Bash, Read
 
 - 레포지토리: `greedy-team/mokkoji-fe-next`
 - 브랜치 컨벤션: `{이슈번호}-{타입}-{짧은-영문-설명}` (예: `541-feat-club-bookmark-api`)
+- **브랜치 베이스**: 항상 `develop`에서 분기한다. (현재 체크아웃된 브랜치나 main에서 분기하지 않는다)
 
 ## 컨텍스트 확인
 
@@ -62,8 +63,10 @@ allowed-tools: Bash, Read
 - `{이슈번호}-{타입}-{짧은-영문-설명}` 형식의 브랜치명을 제안한다.
   - 영문 설명은 kebab-case, 3단어 이내로 (예: `club-bookmark-api`)
 - 사용자에게 보여주고 확인받는다.
-- 승인되면:
+- 승인되면 **반드시 `develop`에서 분기**한다 (최신 상태로 갱신 후 생성):
   ```bash
+  git checkout develop
+  git pull origin develop
   git checkout -b {브랜치명}
   ```
 - 브랜치 생성 및 전환 완료를 알린다.
@@ -71,4 +74,5 @@ allowed-tools: Bash, Read
 ## 안전 규칙
 
 - `gh issue create`와 `git checkout -b`는 **사용자의 명시적 확인 없이는 절대 실행하지 않는다.**
+- 브랜치는 **항상 `develop`에서 분기한다.** 다른 브랜치에서 분기하면 머지되지 않은 커밋이 섞이므로 금지.
 - 이미 같은 이름의 브랜치가 존재하면 사용자에게 알리고 다른 이름을 제안한다.

@@ -20,8 +20,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // eslint-disable-next-line no-console
+    console.log('[callback] Origin header:', process.env.NEXT_PUBLIC_BASE_URL);
     const loginResponse = await serverApi.post('users/auth/kakao', {
       json: { code },
+      headers: { Origin: process.env.NEXT_PUBLIC_BASE_URL },
     });
 
     const loginResponseBody: LoginSuccessResponse = await loginResponse.json();

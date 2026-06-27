@@ -17,7 +17,7 @@ allowed-tools: mcp__discord-forum-mcp__list_forum_threads, mcp__discord-forum-mc
 
 1. ToolSearch로 `list_forum_threads`를 검색한다.
 2. 툴이 나타나면 → 즉시 1단계로 진행한다.
-3. 툴이 없으면 → `Bash(sleep 3)`으로 3초 대기 후 다시 ToolSearch한다. 이 과정을 최대 **5회** 반복한다.
+3. 툴이 없으면 → `Bash(sleep 30)`으로 30초 대기 후 다시 ToolSearch한다. 이 과정을 최대 **5회** 반복한다.
 4. 5회 모두 실패하면 → "discord-forum-mcp 서버가 아직 준비되지 않았습니다. 잠시 후 다시 `/plan_from_discord`를 실행해주세요."라고 안내하고 종료한다.
 
 > 이 단계는 GUI 익스텐션에서 MCP 서버 기동 전에 커맨드가 실행되는 타이밍 문제를 처리한다.
@@ -53,7 +53,8 @@ allowed-tools: mcp__discord-forum-mcp__list_forum_threads, mcp__discord-forum-mc
 
 - 핵심을 2~3줄로 요약하고, 실행 플랜을 번호 목록으로 제시한다.
 - **디스코드에는 아무것도 쓰지 않는다.** 사용자 승인을 기다린다. 수정 요청이 오면 반영해 다시 보여준다.
-- 승인되면 → **3A-2. 작업 실행**
+- 승인되면 → `.claude/commands/create_issue.md`의 절차를 따라 이슈를 생성하고 브랜치를 연결한다. 이때 현재 플랜 내용(배경, 작업 항목)을 컨텍스트로 활용한다.
+- 이슈·브랜치가 준비되면 → **3A-2. 작업 실행**
 
 ### 3A-2. 작업 실행
 
@@ -76,7 +77,8 @@ allowed-tools: mcp__discord-forum-mcp__list_forum_threads, mcp__discord-forum-mc
   - 작업 항목을 FSD 레이어 순서(features → widgets → views)로 구분해 번호 목록으로 나열한다
   - 각 항목에는 대상 파일 경로(예: `features/club/api/clubApi.ts`)와 해야 할 일을 함께 적는다
 - 플랜을 사용자에게 보여주고 **멈춘다.** 수정 요청이 오면 반영해 다시 보여준다.
-- 승인되면 → **4. 되돌려쓰기**
+- 승인되면 → `.claude/commands/create_issue.md`의 절차를 따라 이슈를 생성하고 브랜치를 연결한다. 이때 참조한 PR 링크와 프론트 작업 항목을 컨텍스트로 활용한다.
+- 이슈·브랜치가 준비되면 → **4. 되돌려쓰기**
 
   > PR 접근 권한이 없거나 `gh` 명령이 실패하면 오류 내용을 알리고 사용자에게 PR 내용을 직접 붙여넣어 달라고 요청한다.
 

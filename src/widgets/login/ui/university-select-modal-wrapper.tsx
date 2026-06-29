@@ -70,6 +70,7 @@ function UniversitySelectModalWrapper({
         isLoading={isLoading}
         universities={universities}
         universityCode={universityCode}
+        onClose={() => setIsOpen(false)}
         onConfirm={handleConfirm}
       />
 

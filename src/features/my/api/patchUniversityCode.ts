@@ -5,9 +5,14 @@ import createErrorResponse from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
 
 async function patchUniversityCode(universityCode: string | null) {
+  const body =
+    universityCode === null
+      ? { clearUniversityCode: true }
+      : { universityCode };
+
   try {
     const response = await api.patch('users', {
-      json: { universityCode },
+      json: body,
     });
 
     const data = await response.json();

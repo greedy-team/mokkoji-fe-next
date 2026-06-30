@@ -5,6 +5,15 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { University } from '@/entities/university/model/type';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
+import { Button } from '@/shared/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/shared/ui/dialog';
 import UniversitySelectModal from './university-select-modal';
 
 interface UniversitySelectModalWrapperProps {
@@ -21,6 +30,29 @@ function UniversitySelectModalWrapper({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingCode, setPendingCode] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const applyUniversityChange = async (code: string | null) => {
+    setIsLoading(true);
+    await patchUniversityCode(code);
+    setIsLoading(false);
+    setIsConfirmOpen(false);
+    setIsOpen(false);
+    router.refresh();
+  };
+
+  const handleConfirm = (code: string) => {
+    const normalizedCode = code === 'NONE' ? null : code;
+
+    if (normalizedCode === universityCode) {
+      setIsOpen(false);
+      return;
+    }
+
+    setPendingCode(normalizedCode);
+    setIsConfirmOpen(true);
+  };
 
   return (
     <>
@@ -38,14 +70,48 @@ function UniversitySelectModalWrapper({
         isLoading={isLoading}
         universities={universities}
         universityCode={universityCode}
-        onConfirm={async (code) => {
-          setIsLoading(true);
-          await patchUniversityCode(code === 'NONE' ? null : code);
-          setIsLoading(false);
-          setIsOpen(false);
-          router.refresh();
-        }}
+        onConfirm={handleConfirm}
       />
+
+      <Dialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+        <DialogContent
+          aria-describedby="university-change-desc"
+          className="w-[360px] rounded-2xl"
+        >
+          <DialogHeader>
+            <DialogTitle className="font-semibold">
+              학교를 변경할까요?
+            </DialogTitle>
+            <DialogDescription
+              id="university-change-desc"
+              className="text-text-secondary text-sm"
+            >
+              학교를 변경하면 기존 즐겨찾기가 모두 삭제됩니다. 계속하시겠어요?
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1"
+              disabled={isLoading}
+              onClick={() => setIsConfirmOpen(false)}
+            >
+              취소
+            </Button>
+            <Button
+              type="button"
+              variant="submit-default"
+              className="flex-1"
+              disabled={isLoading}
+              onClick={() => applyUniversityChange(pendingCode)}
+            >
+              {isLoading ? '변경 중…' : '변경하기'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

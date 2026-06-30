@@ -39,9 +39,12 @@ function UniversitySelectModal({
           isOpen ? 'translate-y-0' : 'translate-y-full',
         )}
       >
-        <h1 className="text-text-primary mb-6 text-center text-lg font-semibold">
+        <h1 className="text-text-primary mb-2 text-center text-lg font-semibold">
           학교 선택하기
         </h1>
+        <p className="text-text-secondary mb-6 text-center text-xs">
+          학교를 변경하면 기존 즐겨찾기가 모두 삭제돼요.
+        </p>
 
         <div className="mb-30 flex flex-wrap gap-3">
           {universities.map(({ code, name }) => {

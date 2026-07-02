@@ -8,6 +8,7 @@
       "Bash(npx:*)",
       "Bash(node:*)",
       "Bash(git:*)",
+      "Bash(cd:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
       "Bash(cp:*)",
@@ -30,7 +31,12 @@
       "Grep",
       "Agent",
       "WebFetch",
-      "WebSearch"
+      "WebSearch",
+      "mcp__discord-forum-mcp__list_forum_threads",
+      "mcp__discord-forum-mcp__get_forum_tags",
+      "mcp__discord-forum-mcp__read_messages",
+      "mcp__discord-forum-mcp__send_message",
+      "mcp__discord-forum-mcp__update_forum_post"
     ]
   }
 }

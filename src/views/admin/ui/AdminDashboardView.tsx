@@ -10,7 +10,6 @@ interface AdminDashboardViewProps {
   totalClubs: number;
   pendingMasterCount: number;
   pendingClubCount: number;
-  totalMasters: number;
 }
 
 function AdminDashboardView({
@@ -19,7 +18,6 @@ function AdminDashboardView({
   totalClubs,
   pendingMasterCount,
   pendingClubCount,
-  totalMasters,
 }: AdminDashboardViewProps) {
   return (
     <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
@@ -52,15 +50,7 @@ function AdminDashboardView({
           </div>
           <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
             <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
-              승인 대기
-            </span>
-            <span className="absolute right-5 bottom-4 text-[36px] leading-[140%] font-bold text-[#474747]">
-              {pendingMasterCount}건
-            </span>
-          </div>
-          <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
-            <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
-              신규 신청
+              동아리 신청
             </span>
             <span className="absolute right-5 bottom-4 text-[36px] leading-[140%] font-bold text-[#474747]">
               {pendingClubCount}건
@@ -68,10 +58,10 @@ function AdminDashboardView({
           </div>
           <div className="relative h-[117px] w-[176px] rounded-[20px] bg-[#F8F8F8]">
             <span className="absolute top-4 left-5 text-[16px] leading-[140%] font-medium text-[#474747]">
-              전체 동아리장
+              동아리장 신청
             </span>
             <span className="absolute right-5 bottom-4 text-[36px] leading-[140%] font-bold text-[#474747]">
-              {totalMasters}명
+              {pendingMasterCount}건
             </span>
           </div>
         </div>

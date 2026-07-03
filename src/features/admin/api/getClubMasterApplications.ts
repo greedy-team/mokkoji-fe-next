@@ -12,7 +12,7 @@ interface Params {
 
 interface Response {
   applications: ClubMasterApplication[];
-  pagination: PaginationMeta;
+  page: PaginationMeta;
 }
 
 async function getClubMasterApplications(

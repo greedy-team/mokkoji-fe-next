@@ -13,18 +13,12 @@ async function DashboardPage() {
 
   const clubMasterApplications = clubMasterData?.applications ?? [];
   const clubApplications = clubApplicationData?.applications ?? [];
-  const clubs = clubsData?.clubs ?? [];
 
   const totalClubs = clubsData?.page?.totalElements ?? 0;
   const pendingMasterCount = clubMasterApplications.filter(
     (application) => application.status === 'PENDING',
   ).length;
   const pendingClubCount = clubApplicationData?.page?.totalElements ?? 0;
-  const totalMasters = new Set(
-    clubs
-      .filter((club) => club.clubMaster !== null)
-      .map((club) => club.clubMaster!.id),
-  ).size;
 
   return (
     <Suspense>
@@ -34,7 +28,6 @@ async function DashboardPage() {
         totalClubs={totalClubs}
         pendingMasterCount={pendingMasterCount}
         pendingClubCount={pendingClubCount}
-        totalMasters={totalMasters}
       />
     </Suspense>
   );

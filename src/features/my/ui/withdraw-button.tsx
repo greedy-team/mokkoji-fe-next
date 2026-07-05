@@ -43,7 +43,7 @@ export default function WithdrawButton() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="text-text-secondary mt-2 flex items-center gap-2 text-sm hover:underline"
+          className="mt-2 flex items-center gap-2 text-[#FF383C] hover:underline"
         >
           회원 탈퇴
           <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
@@ -57,7 +57,10 @@ export default function WithdrawButton() {
         <DialogHeader>
           <DialogTitle className="font-semibold">회원 탈퇴</DialogTitle>
           <DialogDescription id="withdraw-desc" className="text-sm">
-            탈퇴 시 계정과 관련된 모든 데이터가 삭제되며 복구할 수 없습니다.
+            탈퇴 시 계정과 관련된{' '}
+            <span className="font-semibold underline">
+              모든 데이터가 삭제되며 복구할 수 없습니다.
+            </span>
             <br />
             <br />
             정말 탈퇴하시겠습니까?

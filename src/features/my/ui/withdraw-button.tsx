@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import { useSession } from '@/shared/lib/session-context';
 import {
   Dialog,
   DialogTrigger,
@@ -19,6 +20,7 @@ import deleteUser from '../api/deleteUser';
 
 export default function WithdrawButton() {
   const router = useRouter();
+  const { refresh } = useSession();
   const universityCode = useUniversityCode();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -32,6 +34,7 @@ export default function WithdrawButton() {
       return;
     }
     await fetch('/api/auth/logout', { method: 'POST' });
+    refresh();
     toast.success('회원 탈퇴가 완료되었습니다.');
     setOpen(false);
     router.push(`/${universityCode}`);

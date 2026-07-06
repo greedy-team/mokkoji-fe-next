@@ -13,11 +13,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select';
+import type { University } from '@/entities/university/model/type';
 import getClubsByUniversity from '../api/getClubsByUniversity';
 import postClubMasterApplication from '../api/postClubMasterApplication';
 import type { ClubSummary } from '../model/type';
 
-function ClubMasterApplicationForm() {
+interface ClubMasterApplicationFormProps {
+  universities: University[];
+}
+
+function ClubMasterApplicationForm({
+  universities,
+}: ClubMasterApplicationFormProps) {
   const router = useRouter();
   const universityCode = useUniversityCode();
   const { session } = useSession();
@@ -90,7 +97,11 @@ function ClubMasterApplicationForm() {
             <SelectValue placeholder="모꼬지대학교" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SEJONG">세종대학교</SelectItem>
+            {universities.map(({ code, name }) => (
+              <SelectItem key={code} value={code}>
+                {name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -15,6 +15,7 @@ import {
   ClubCategoryIcon,
   ClubCategoryToStringLabel,
 } from '@/shared/model/type';
+import type { University } from '@/entities/university/model/type';
 import type { ClubCreateFormData } from './club-crete-form';
 
 interface ClubCreateBasicStepProps {
@@ -26,6 +27,7 @@ interface ClubCreateBasicStepProps {
   isConfirmed: boolean;
   setIsConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
   onNext: () => void;
+  universities: University[];
 }
 
 function ClubCreateBasicStep({
@@ -37,6 +39,7 @@ function ClubCreateBasicStep({
   isConfirmed,
   setIsConfirmed,
   onNext,
+  universities,
 }: ClubCreateBasicStepProps) {
   const isValid =
     formData.clubName !== '' &&
@@ -83,7 +86,11 @@ function ClubCreateBasicStep({
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SEJONG">세종대학교</SelectItem>
+            {universities.map(({ code, name }) => (
+              <SelectItem key={code} value={code}>
+                {name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

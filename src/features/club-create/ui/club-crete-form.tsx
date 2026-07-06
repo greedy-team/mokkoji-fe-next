@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
+import type { University } from '@/entities/university/model/type';
 import postCreateClubApplication from '../api/postCreateClubApplication';
 import type { ClubCreateFormData } from '../model/type';
 import ClubCreateDescriptionStep from './club-create-description-step';
@@ -15,7 +16,11 @@ export type { ClubCreateFormData };
 
 type Step = 'basic' | 'description';
 
-function ClubCreateForm() {
+interface ClubCreateFormProps {
+  universities: University[];
+}
+
+function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const router = useRouter();
   const { session } = useSession();
   const universityCode = useUniversityCode();
@@ -80,6 +85,7 @@ function ClubCreateForm() {
           isConfirmed={isConfirmed}
           setIsConfirmed={setIsConfirmed}
           onNext={handleNext}
+          universities={universities}
         />
       )}
       {step === 'description' && (

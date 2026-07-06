@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getClubMasterApplications from '@/features/admin/api/getClubMasterApplications';
 import getClubApplications from '@/features/admin/api/getClubApplications';
@@ -22,13 +23,17 @@ async function DashboardPage() {
 
   return (
     <Suspense>
-      <AdminDashboardView
-        clubMasterApplications={clubMasterApplications}
-        clubApplications={clubApplications}
-        totalClubs={totalClubs}
-        pendingMasterCount={pendingMasterCount}
-        pendingClubCount={pendingClubCount}
-        totalMasters={totalMasters}
+      <AdminMainView
+        dashboardContent={
+          <AdminDashboardView
+            clubMasterApplications={clubMasterApplications}
+            clubApplications={clubApplications}
+            totalClubs={totalClubs}
+            pendingMasterCount={pendingMasterCount}
+            pendingClubCount={pendingClubCount}
+            totalMasters={totalMasters}
+          />
+        }
       />
     </Suspense>
   );

@@ -3,14 +3,18 @@ import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
 
-function ClubCardMobileWidget() {
+interface ClubCardMobileWidgetProps {
+  universityName: string;
+}
+
+function ClubCardMobileWidget({ universityName }: ClubCardMobileWidgetProps) {
   return (
     <div className="flex flex-col gap-50">
       <div
         id="scroll-target"
         className="flex h-fit flex-col items-center gap-13 pt-30"
       >
-        <ClubTextCard />
+        <ClubTextCard universityName={universityName} />
         <AnimateOnView animation="reveal">
           <Image
             src="/main/clubcard.png"

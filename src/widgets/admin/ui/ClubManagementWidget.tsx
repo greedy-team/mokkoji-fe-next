@@ -15,7 +15,7 @@ interface ClubListProps {
 function ClubList({ searchClubQuery }: ClubListProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: ['dev-clubs'],
+      queryKey: ['admin', 'clubs'],
       queryFn: ({ pageParam }) =>
         getManagementClubs({
           page: pageParam as number,
@@ -43,7 +43,7 @@ function ClubList({ searchClubQuery }: ClubListProps) {
 
   // TODO: 삭제 API 미구현 — DELETE /clubs/{clubId} 연동 후 아래 캐시 업데이트 활성화
   // const handleDelete = (clubId: number) => {
-  //   queryClient.setQueryData(['dev-clubs'], (old: typeof data) => {
+  //   queryClient.setQueryData(['admin', 'clubs'], (old: typeof data) => {
   //     if (!old) return old;
   //     return {
   //       ...old,

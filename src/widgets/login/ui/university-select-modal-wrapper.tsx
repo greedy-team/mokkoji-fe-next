@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import type { University } from '@/entities/university/model/type';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
 import { Button } from '@/shared/ui/button';
@@ -35,8 +36,14 @@ function UniversitySelectModalWrapper({
 
   const applyUniversityChange = async (code: string | null) => {
     setIsLoading(true);
-    await patchUniversityCode(code);
+    const response = await patchUniversityCode(code);
     setIsLoading(false);
+
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
+
     setIsConfirmOpen(false);
     setIsOpen(false);
     router.refresh();

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
+import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
 import { Button } from '@/shared/ui/button';
 import {
   Select,
@@ -32,14 +33,14 @@ function ClubMasterApplicationForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [selectedUniversityCode, setSelectedUniversityCode] = useState(
-    universityCode.toUpperCase(),
+    urlCodeToApiCode(universityCode),
   );
   const [selectedClubId, setSelectedClubId] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clubs, setClubs] = useState<ClubSummary[]>([]);
 
   useEffect(() => {
-    getClubsByUniversity(universityCode.toUpperCase()).then((result) => {
+    getClubsByUniversity(urlCodeToApiCode(universityCode)).then((result) => {
       setClubs(result);
       setIsClubsLoading(false);
     });

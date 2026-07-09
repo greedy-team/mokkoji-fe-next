@@ -16,6 +16,7 @@ import {
   ClubCategoryToStringLabel,
 } from '@/shared/model/type';
 import type { University } from '@/entities/university/model/type';
+import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
 import type { ClubCreateFormData } from './club-crete-form';
 
 interface ClubCreateBasicStepProps {
@@ -72,7 +73,7 @@ function ClubCreateBasicStep({
           onValueChange={(value) =>
             setFormData((prev) => ({
               ...prev,
-              universityCode: value.toUpperCase(),
+              universityCode: urlCodeToApiCode(value),
             }))
           }
         >

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
+import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
 import type { University } from '@/entities/university/model/type';
 import postCreateClubApplication from '../api/postCreateClubApplication';
 import type { ClubCreateFormData } from '../model/type';
@@ -26,7 +27,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const universityCode = useUniversityCode();
   const [formData, setFormData] = useState<ClubCreateFormData>({
     clubName: '',
-    universityCode: universityCode.toUpperCase(),
+    universityCode: urlCodeToApiCode(universityCode),
     clubCategory: '',
     clubAffiliation: '',
     logo: '',

@@ -5,7 +5,6 @@ import type {
 } from '@/features/admin/model/dashboard-types';
 import ClubMasterApplicationWidget from '@/widgets/admin/ui/ClubMasterApplicationWidget';
 import AdminUniversitySelectWidget from '@/widgets/admin/ui/AdminUniversitySelectWidget';
-import { getUniversityName } from '@/shared/lib/universityMeta';
 import type { UniversityOption } from '@/entities/university/model/type';
 
 interface AdminDashboardViewProps {
@@ -32,6 +31,9 @@ function AdminDashboardView({
   selectedCode,
 }: AdminDashboardViewProps) {
   const isMokkojiAdmin = role === 'MOKKOJI_ADMIN';
+  const selectedUniversityName =
+    universities.find((university) => university.code === selectedCode)?.name ??
+    selectedCode;
 
   return (
     <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
@@ -49,7 +51,7 @@ function AdminDashboardView({
           />
         ) : (
           <span className="text-[16px] leading-[140%] font-medium text-[#474747]">
-            {getUniversityName(selectedCode)}
+            {selectedUniversityName}
           </span>
         )}
       </div>

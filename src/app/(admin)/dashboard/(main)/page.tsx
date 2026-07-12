@@ -20,7 +20,7 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
 
   const isMokkojiAdmin = adminInfo.role === 'MOKKOJI_ADMIN';
 
-  const universitiesResult = isMokkojiAdmin ? await getUniversities() : null;
+  const universitiesResult = await getUniversities();
   const universities =
     universitiesResult?.ok && universitiesResult.data
       ? universitiesResult.data.universities.map((university) => ({

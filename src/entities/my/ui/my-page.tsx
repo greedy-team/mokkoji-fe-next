@@ -52,9 +52,7 @@ async function MyPage({
   const createItems = (clubApplicationStatus.data?.clubApplications ?? []).map(
     toCreateCardItem,
   );
-  const masterItems = (clubMasterStatus.data?.applications ?? []).map(
-    toMasterCardItem,
-  );
+  const masterItems = (clubMasterStatus.data ?? []).map(toMasterCardItem);
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 

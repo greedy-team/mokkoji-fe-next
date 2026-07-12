@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies, import/prefer-default-export */
 import { http, HttpResponse, passthrough } from 'msw';
+import { getUniversityName } from '@/shared/lib/universityMeta';
 import { clubApplications, myClubMasterApplications } from '../data';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
@@ -30,7 +31,17 @@ export const clubMasterHandlers = [
   ),
 
   http.get(url('/club-master-applications/me'), () =>
-    HttpResponse.json({ data: { applications: myClubMasterApplications } }),
+    HttpResponse.json({
+      data: myClubMasterApplications.map((application) => ({
+        id: application.id,
+        universityName: getUniversityName(application.universityCode),
+        clubName: application.clubName,
+        userName: application.userName,
+        status: application.status,
+        rejectReason: application.rejectReason ?? null,
+        createdAt: application.createdAt,
+      })),
+    }),
   ),
 
   http.post(

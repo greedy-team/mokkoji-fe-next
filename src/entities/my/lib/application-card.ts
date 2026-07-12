@@ -1,4 +1,3 @@
-import { getUniversityName } from '@/shared/lib/universityMeta';
 import {
   ApplicationCardItem,
   ClubApplicationType,
@@ -24,10 +23,10 @@ export function toMasterCardItem(
   return {
     id: application.id,
     clubName: application.clubName,
-    universityName: getUniversityName(application.universityCode),
+    universityName: application.universityName,
     status: application.status,
     rejectReason: application.rejectReason,
-    logo: application.logo ?? null,
+    logo: null,
     createdAt: application.createdAt,
   };
 }

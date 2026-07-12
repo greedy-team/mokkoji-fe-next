@@ -24,17 +24,13 @@ export interface ClubApplicationListType {
 
 export interface MyClubMasterApplicationType {
   id: number;
-  universityCode: string;
+  universityName: string;
   clubName: string;
   userName: string;
   status: ClubApplicationStatus;
   rejectReason: string | null;
-  logo?: string | null;
   createdAt: string;
-}
-
-export interface MyClubMasterApplicationListType {
-  applications: MyClubMasterApplicationType[];
+  updatedAt?: string;
 }
 
 export interface ApplicationCardItem {

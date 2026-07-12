@@ -1,11 +1,11 @@
 import api from '@/shared/api/auth-api';
 import { ApiResponse } from '@/shared/model/type';
 import createErrorResponse from '@/shared/lib/error-message';
-import { MyClubMasterApplicationListType } from '../model/type';
+import { MyClubMasterApplicationType } from '../model/type';
 
 async function getMyClubMasterApplications() {
   try {
-    const response: ApiResponse<MyClubMasterApplicationListType> = await api
+    const response: ApiResponse<MyClubMasterApplicationType[]> = await api
       .get('club-master-applications/me', {
         cache: 'no-store',
         next: { tags: ['club-master-applications-me'] },

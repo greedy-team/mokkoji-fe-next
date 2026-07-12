@@ -17,9 +17,7 @@ async function Page({ params }: PageProps) {
   }
 
   const clubMasterStatus = await getMyClubMasterApplications();
-  const items = (clubMasterStatus.data?.applications ?? []).map(
-    toMasterCardItem,
-  );
+  const items = (clubMasterStatus.data ?? []).map(toMasterCardItem);
 
   return (
     <div className="mx-auto w-full px-4 sm:w-lg">

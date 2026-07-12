@@ -8,11 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select';
-
-interface UniversityOption {
-  code: string;
-  name: string;
-}
+import type { UniversityOption } from '@/entities/university/model/type';
 
 interface AdminUniversitySelectWidgetProps {
   universities: UniversityOption[];

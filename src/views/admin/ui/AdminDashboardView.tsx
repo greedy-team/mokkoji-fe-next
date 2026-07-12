@@ -6,11 +6,7 @@ import type {
 import ClubMasterApplicationWidget from '@/widgets/admin/ui/ClubMasterApplicationWidget';
 import AdminUniversitySelectWidget from '@/widgets/admin/ui/AdminUniversitySelectWidget';
 import { getUniversityName } from '@/shared/lib/universityMeta';
-
-interface UniversityOption {
-  code: string;
-  name: string;
-}
+import type { UniversityOption } from '@/entities/university/model/type';
 
 interface AdminDashboardViewProps {
   clubMasterApplications: ClubMasterApplication[];

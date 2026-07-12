@@ -1,14 +1,48 @@
 import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
+import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getClubMasterApplications from '@/features/admin/api/getClubMasterApplications';
 import getClubApplications from '@/features/admin/api/getClubApplications';
 import getAdminClubs from '@/features/admin/api/getAdminClubs';
+import getUniversities from '@/entities/university/api/getUniversities';
 
-async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ universityCode?: string }>;
+}
+
+async function DashboardPage({ searchParams }: DashboardPageProps) {
+  const adminInfo = await getAdminInfo();
+
+  if (!adminInfo) {
+    redirect('/dashboard/login');
+  }
+
+  const isMokkojiAdmin = adminInfo.role === 'MOKKOJI_ADMIN';
+
+  const universitiesResult = isMokkojiAdmin ? await getUniversities() : null;
+  const universities =
+    universitiesResult?.ok && universitiesResult.data
+      ? universitiesResult.data.universities.map((university) => ({
+          code: university.code,
+          name: university.name,
+        }))
+      : [];
+
+  const { universityCode: selectedFromUrl } = await searchParams;
+  const universityCode = isMokkojiAdmin
+    ? (selectedFromUrl ?? universities[0]?.code)
+    : (adminInfo.universityCode ?? undefined);
+
   const [clubMasterData, clubApplicationData, clubsData] = await Promise.all([
-    getClubMasterApplications({ page: 1, size: 100 }),
-    getClubApplications({ status: 'PENDING', page: 1, size: 100 }),
-    getAdminClubs({ page: 1, size: 100 }),
+    getClubMasterApplications({ page: 1, size: 100, universityCode }),
+    getClubApplications({
+      status: 'PENDING',
+      page: 1,
+      size: 100,
+      universityCode,
+    }),
+    getAdminClubs({ page: 1, size: 100, universityCode }),
   ]);
 
   const clubMasterApplications = clubMasterData?.applications ?? [];
@@ -29,6 +63,9 @@ async function DashboardPage() {
         pendingMasterCount={pendingMasterCount}
         pendingClubCount={pendingClubCount}
         totalMasters={totalMasters}
+        role={adminInfo.role}
+        universities={universities}
+        selectedCode={universityCode ?? ''}
       />
     </Suspense>
   );

@@ -2,6 +2,7 @@ import { getSession } from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
 import getMyClubMasterApplications from '@/entities/my/api/getMyClubMasterApplications';
 import { toMasterCardItem } from '@/entities/my/lib/application-card';
+import { APPLICATION_SECTION } from '@/entities/my/model/constants';
 import ClubApplicationList from '@/features/my/ui/club-application-list';
 
 interface PageProps {
@@ -22,7 +23,7 @@ async function Page({ params }: PageProps) {
   return (
     <div className="mx-auto w-full px-4 sm:w-lg">
       <ClubApplicationList
-        title="동아리 & 동아리장 신청"
+        title={APPLICATION_SECTION.master.title}
         items={items}
         universityCode={universityCode}
         showLogo

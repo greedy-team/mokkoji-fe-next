@@ -2,6 +2,7 @@ import { getSession } from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
 import getClubApplicationStatus from '@/entities/my/api/getClubApplicationStatus';
 import { toCreateCardItem } from '@/entities/my/lib/application-card';
+import { APPLICATION_SECTION } from '@/entities/my/model/constants';
 import ClubApplicationList from '@/features/my/ui/club-application-list';
 
 interface PageProps {
@@ -24,7 +25,7 @@ async function Page({ params }: PageProps) {
   return (
     <div className="mx-auto w-full px-4 sm:w-lg">
       <ClubApplicationList
-        title="동아리 생성 신청"
+        title={APPLICATION_SECTION.create.title}
         items={items}
         universityCode={universityCode}
       />

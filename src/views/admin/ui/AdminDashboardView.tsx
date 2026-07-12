@@ -1,8 +1,11 @@
 import type {
   ClubMasterApplication,
   ClubApplication,
+  AdminRole,
 } from '@/features/admin/model/dashboard-types';
 import ClubMasterApplicationWidget from '@/widgets/admin/ui/ClubMasterApplicationWidget';
+import AdminUniversitySelectWidget from '@/widgets/admin/ui/AdminUniversitySelectWidget';
+import type { UniversityOption } from '@/entities/university/model/type';
 
 interface AdminDashboardViewProps {
   clubMasterApplications: ClubMasterApplication[];
@@ -10,6 +13,9 @@ interface AdminDashboardViewProps {
   totalClubs: number;
   pendingMasterCount: number;
   pendingClubCount: number;
+  role: AdminRole;
+  universities: UniversityOption[];
+  selectedCode: string;
 }
 
 function AdminDashboardView({
@@ -18,16 +24,34 @@ function AdminDashboardView({
   totalClubs,
   pendingMasterCount,
   pendingClubCount,
+  role,
+  universities,
+  selectedCode,
 }: AdminDashboardViewProps) {
+  const isMokkojiAdmin = role === 'MOKKOJI_ADMIN';
+  const selectedUniversityName =
+    universities.find((university) => university.code === selectedCode)?.name ??
+    selectedCode;
+
   return (
     <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
-      <div>
+      <div className="flex items-center justify-between">
         <button
           type="button"
           className="flex h-[50px] items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]"
         >
           대시보드
         </button>
+        {isMokkojiAdmin ? (
+          <AdminUniversitySelectWidget
+            universities={universities}
+            selectedCode={selectedCode}
+          />
+        ) : (
+          <span className="text-[16px] leading-[140%] font-medium text-[#474747]">
+            {selectedUniversityName}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-8">

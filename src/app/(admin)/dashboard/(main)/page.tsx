@@ -4,12 +4,18 @@ import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getClubMasterApplications from '@/features/admin/api/getClubMasterApplications';
 import getClubApplications from '@/features/admin/api/getClubApplications';
-import getAdminClubs from '@/features/admin/api/getAdminClubs';
 import getUniversities from '@/entities/university/api/getUniversities';
+import type { ApplicationStatus } from '@/features/admin/model/dashboard-types';
 
 interface DashboardPageProps {
   searchParams: Promise<{ universityCode?: string }>;
 }
+
+const APPLICATION_STATUSES: ApplicationStatus[] = [
+  'PENDING',
+  'APPROVED',
+  'REJECTED',
+];
 
 async function DashboardPage({ searchParams }: DashboardPageProps) {
   const adminInfo = await getAdminInfo();
@@ -34,34 +40,23 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
     ? (selectedFromUrl ?? universities[0]?.code)
     : (adminInfo.universityCode ?? undefined);
 
-  const [clubMasterData, clubApplicationData, clubsData] = await Promise.all([
+  const [clubMasterData, ...clubApplicationResults] = await Promise.all([
     getClubMasterApplications({ page: 1, size: 100, universityCode }),
-    getClubApplications({
-      status: 'PENDING',
-      page: 1,
-      size: 100,
-      universityCode,
-    }),
-    getAdminClubs({ page: 1, size: 100, universityCode }),
+    ...APPLICATION_STATUSES.map((status) =>
+      getClubApplications({ status, page: 1, size: 100, universityCode }),
+    ),
   ]);
 
   const clubMasterApplications = clubMasterData?.applications ?? [];
-  const clubApplications = clubApplicationData?.applications ?? [];
-
-  const totalClubs = clubsData?.page?.totalElements ?? 0;
-  const pendingMasterCount = clubMasterApplications.filter(
-    (application) => application.status === 'PENDING',
-  ).length;
-  const pendingClubCount = clubApplicationData?.page?.totalElements ?? 0;
+  const clubApplications = clubApplicationResults.flatMap(
+    (result) => result?.applications ?? [],
+  );
 
   return (
     <Suspense>
       <AdminDashboardView
         clubMasterApplications={clubMasterApplications}
         clubApplications={clubApplications}
-        totalClubs={totalClubs}
-        pendingMasterCount={pendingMasterCount}
-        pendingClubCount={pendingClubCount}
         role={adminInfo.role}
         universities={universities}
         selectedCode={universityCode ?? ''}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ApplicationCardItem } from '@/entities/my/model/type';
+import { APPLICATION_SECTION } from '@/entities/my/model/constants';
 import { sortByLatest } from '@/entities/my/lib/application-card';
 import ClubApplicationCard from './club-application-card';
 
@@ -25,8 +26,8 @@ function ApplicationSection({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-[#7F7F7F]">{title}</span>
-        <Link href={moreHref} className="text-sm text-[#8B95A1]">
+        <span className="text-text-tertiary text-sm">{title}</span>
+        <Link href={moreHref} className="text-text-secondary text-sm">
           더보기
         </Link>
       </div>
@@ -57,14 +58,14 @@ function ClubApplicationStatus({
       <div className="font-semibold">신청 현황</div>
       <div className="flex flex-col gap-5">
         <ApplicationSection
-          title="동아리 & 동아리장 신청"
-          moreHref={`/${universityCode}/my/applications/master`}
+          title={APPLICATION_SECTION.master.title}
+          moreHref={`/${universityCode}/my/applications/${APPLICATION_SECTION.master.path}`}
           items={masterItems}
           showLogo
         />
         <ApplicationSection
-          title="동아리 생성 신청"
-          moreHref={`/${universityCode}/my/applications/create`}
+          title={APPLICATION_SECTION.create.title}
+          moreHref={`/${universityCode}/my/applications/${APPLICATION_SECTION.create.path}`}
           items={createItems}
         />
       </div>

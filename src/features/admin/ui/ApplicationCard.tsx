@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import type { ApplicationCardItem } from '@/features/admin/model/dashboard-types';
 import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
 import RejectReasonDialog from './RejectReasonDialog';
@@ -28,6 +27,7 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
   const instagramHref = item.instagram
     ? resolveInstagramHref(item.instagram)
     : null;
+  const hasLogo = !!item.logo && /^https?:\/\//.test(item.logo);
 
   const handleApprove = () => {
     onApprove();
@@ -48,14 +48,13 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
               {item.applicantName}
             </span>
             <div className="flex items-center gap-6">
-              <div className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-full bg-[#F8F8F8]">
-                {item.logo && (
-                  <Image
+              <div className="h-[52px] w-[52px] shrink-0 overflow-hidden rounded-full bg-[#F8F8F8]">
+                {hasLogo && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={item.logo}
                     alt={`${item.clubName} 로고`}
-                    fill
-                    sizes="52px"
-                    className="object-cover"
+                    className="h-full w-full object-cover"
                   />
                 )}
               </div>

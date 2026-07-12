@@ -14,7 +14,7 @@ import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterAp
 import approveClubApplication from '@/features/admin/api/approveClubApplication';
 import rejectClubApplication from '@/features/admin/api/rejectClubApplication';
 
-type KindFilter = 'all' | 'clubOnly';
+type KindFilter = 'clubApplication' | 'clubMaster';
 
 const STATUS_TABS: { label: string; value: ApplicationStatus }[] = [
   { label: '진행 중', value: 'PENDING' },
@@ -31,7 +31,7 @@ function ClubMasterApplicationWidget({
   initialClubApplications,
   initialClubMasterApplications,
 }: ClubMasterApplicationWidgetProps) {
-  const [kindFilter, setKindFilter] = useState<KindFilter>('all');
+  const [kindFilter, setKindFilter] = useState<KindFilter>('clubApplication');
   const [statusTab, setStatusTab] = useState<ApplicationStatus>('PENDING');
   const [clubApplications, setClubApplications] = useState(
     initialClubApplications,
@@ -42,30 +42,8 @@ function ClubMasterApplicationWidget({
   const [, startTransition] = useTransition();
 
   const items = useMemo<ApplicationCardItem[]>(() => {
-    const clubItems: ApplicationCardItem[] = clubApplications.map(
-      (application) => ({
-        key: `club-${application.applicationId}`,
-        kind: 'club',
-        applicationId: application.applicationId,
-        clubName: application.clubName,
-        universityName: application.universityName,
-        applicantName: application.applicantName,
-        status: application.status,
-        createdAt: application.createdAt,
-        category: application.category,
-        affiliation: application.affiliation,
-        logo: application.logo,
-        instagram: application.instagram,
-        description: application.description,
-      }),
-    );
-
-    if (kindFilter === 'clubOnly') {
-      return clubItems;
-    }
-
-    const masterItems: ApplicationCardItem[] = clubMasterApplications.map(
-      (application) => ({
+    if (kindFilter === 'clubMaster') {
+      return clubMasterApplications.map((application) => ({
         key: `master-${application.id}`,
         kind: 'master',
         applicationId: application.id,
@@ -74,10 +52,24 @@ function ClubMasterApplicationWidget({
         applicantName: application.userName,
         status: application.status,
         createdAt: application.createdAt,
-      }),
-    );
+      }));
+    }
 
-    return [...clubItems, ...masterItems];
+    return clubApplications.map((application) => ({
+      key: `club-${application.applicationId}`,
+      kind: 'club',
+      applicationId: application.applicationId,
+      clubName: application.clubName,
+      universityName: application.universityName,
+      applicantName: application.applicantName,
+      status: application.status,
+      createdAt: application.createdAt,
+      category: application.category,
+      affiliation: application.affiliation,
+      logo: application.logo,
+      instagram: application.instagram,
+      description: application.description,
+    }));
   }, [clubApplications, clubMasterApplications, kindFilter]);
 
   const visibleItems = items.filter((item) => item.status === statusTab);
@@ -134,16 +126,16 @@ function ClubMasterApplicationWidget({
     <div className="flex flex-col gap-6">
       <div className="flex gap-3">
         <SubTabButton
-          isActive={kindFilter === 'all'}
-          onClick={() => setKindFilter('all')}
+          isActive={kindFilter === 'clubApplication'}
+          onClick={() => setKindFilter('clubApplication')}
         >
           동아리 생성 &amp; 동아리장
         </SubTabButton>
         <SubTabButton
-          isActive={kindFilter === 'clubOnly'}
-          onClick={() => setKindFilter('clubOnly')}
+          isActive={kindFilter === 'clubMaster'}
+          onClick={() => setKindFilter('clubMaster')}
         >
-          동아리 생성
+          동아리장
         </SubTabButton>
       </div>
 

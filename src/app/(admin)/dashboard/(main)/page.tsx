@@ -21,7 +21,7 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
   const adminInfo = await getAdminInfo();
 
   if (!adminInfo) {
-    redirect('/dashboard/login');
+    redirect('/api/auth/dashboard-logout');
   }
 
   const isMokkojiAdmin = adminInfo.role === 'MOKKOJI_ADMIN';

@@ -34,7 +34,7 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex h-[51px] w-full items-center justify-center rounded-[12px] bg-[#4AF38A] text-[16px] leading-[140%] font-medium text-[#474747] transition-colors hover:bg-[#22CF64]"
+              className="flex h-[51px] w-full cursor-pointer items-center justify-center rounded-[12px] bg-[#4AF38A] text-[16px] leading-[140%] font-medium text-[#474747] transition-colors hover:bg-[#22CF64]"
             >
               완료
             </button>

@@ -154,7 +154,7 @@ function ClubMasterApplicationWidget({
               key={tab.value}
               type="button"
               onClick={() => setStatusTab(tab.value)}
-              className="flex w-20 flex-col items-center gap-[5px]"
+              className="flex w-20 cursor-pointer flex-col items-center gap-[5px]"
             >
               <span
                 className={`text-[16px] leading-[140%] font-semibold tracking-[-0.03em] ${statusTab === tab.value ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
@@ -168,7 +168,7 @@ function ClubMasterApplicationWidget({
           ))}
         </div>
 
-        <div className="flex w-full flex-col border-t border-[#8B95A1]">
+        <div className="flex w-full flex-col">
           {visibleItems.length === 0 ? (
             <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
               신청 내역이 없습니다.

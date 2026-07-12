@@ -114,7 +114,7 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
                   <button
                     type="button"
                     onClick={() => setDescriptionOpen((previous) => !previous)}
-                    className="border-b border-[#8B95A1] text-[12px] leading-[100%] font-normal text-[#8B95A1]"
+                    className="cursor-pointer border-b border-[#8B95A1] text-[12px] leading-[100%] font-normal text-[#8B95A1]"
                   >
                     한 줄 소개 보기
                   </button>
@@ -135,14 +135,14 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
               <button
                 type="button"
                 onClick={handleApprove}
-                className="flex h-9 w-[72px] items-center justify-center rounded-[30px] bg-[#4AF38A] text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#000000] transition-colors hover:bg-[#22CF64]"
+                className="flex h-9 w-[72px] cursor-pointer items-center justify-center rounded-[30px] bg-[#4AF38A] text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#000000] transition-colors hover:bg-[#22CF64]"
               >
                 승인하기
               </button>
               <button
                 type="button"
                 onClick={() => setRejectDialogOpen(true)}
-                className="flex h-9 w-[72px] items-center justify-center rounded-[30px] border border-[#22CF64] bg-white text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#22CF64] transition-colors hover:bg-[#f0fff6]"
+                className="flex h-9 w-[72px] cursor-pointer items-center justify-center rounded-[30px] border border-[#22CF64] bg-white text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#22CF64] transition-colors hover:bg-[#f0fff6]"
               >
                 반려하기
               </button>

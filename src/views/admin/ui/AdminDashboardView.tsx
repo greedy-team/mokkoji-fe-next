@@ -110,6 +110,7 @@ function AdminDashboardView({
             </p>
           </div>
           <ClubMasterApplicationWidget
+            key={selectedCode}
             initialClubApplications={clubApplications}
             initialClubMasterApplications={clubMasterApplications}
           />

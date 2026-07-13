@@ -20,7 +20,7 @@ const adminQueries = {
         }),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) =>
-        allPages.length < lastPage.page.totalPages
+        lastPage?.page && allPages.length < lastPage.page.totalPages
           ? allPages.length + 1
           : undefined,
       enabled: !!universityCode,

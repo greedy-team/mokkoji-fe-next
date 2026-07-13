@@ -23,9 +23,9 @@ async function getManagementClubs(params: Params): Promise<AdminClubsData> {
   }
 
   const response = await fetch(`/api/admin/clubs?${searchParams}`);
-  const data = await response.json();
+  const json = await response.json();
 
-  return data;
+  return json.data;
 }
 
 export default getManagementClubs;

@@ -10,7 +10,9 @@ function useAdminClubs() {
     adminQueries.clubs(adminMe?.universityCode),
   );
 
-  const clubs = infiniteQuery.data?.pages.flatMap((page) => page.clubs) ?? [];
+  // TODO: 백엔드 admin/clubs 4페이지에서 UserRole.GREEDY_ADMIN enum 파싱 실패로 500 반환 — 수정 전까지 방어
+  const clubs =
+    infiniteQuery.data?.pages.flatMap((page) => page?.clubs ?? []) ?? [];
 
   return {
     clubs,

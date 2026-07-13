@@ -64,12 +64,9 @@ export function AppSessionProvider({
   useEffect(() => {
     if (!session?.expiresAt) return undefined;
     const delay = session.expiresAt - Date.now();
-    if (delay > 0) {
-      const timer = setTimeout(() => window.location.reload(), delay);
-      return () => clearTimeout(timer);
-    }
-    window.location.reload();
-    return undefined;
+    if (delay <= 0) return undefined;
+    const timer = setTimeout(() => window.location.reload(), delay);
+    return () => clearTimeout(timer);
   }, [session?.expiresAt]);
 
   const value = useMemo(

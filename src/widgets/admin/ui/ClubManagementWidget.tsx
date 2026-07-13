@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import useInfiniteScroll from '@/shared/hooks/useInfiniteScroll';
 import { AsyncBoundaryWithQuery } from '@/shared/ui/AsyncBoundary';
 import filterClubsByName from '@/features/admin/model/filter-clubs';
-import getManagementClubs from '@/features/admin/api/getManagementClubs';
+import useAdminClubs from '@/widgets/admin/ui/use-admin-clubs';
+import { ClubCategoryLabel } from '@/shared/model/type';
 import ClubManagementRow from '@/features/admin/ui/ClubManagementRow';
 
 interface ClubListProps {
@@ -13,25 +13,8 @@ interface ClubListProps {
 }
 
 function ClubList({ searchClubQuery }: ClubListProps) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useSuspenseInfiniteQuery({
-      queryKey: ['admin', 'clubs'],
-      queryFn: ({ pageParam }) =>
-        getManagementClubs({
-          page: pageParam as number,
-          size: 20,
-          universityCode: 'SEJONG',
-        }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage) return undefined;
-        return allPages.length < lastPage.page.totalPages
-          ? allPages.length + 1
-          : undefined;
-      },
-    });
-
-  const clubs = data.pages.flatMap((page) => page?.clubs ?? []);
+  const { clubs, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useAdminClubs();
 
   const filteredClubs = filterClubsByName(clubs, searchClubQuery);
 
@@ -75,10 +58,10 @@ function ClubList({ searchClubQuery }: ClubListProps) {
     <>
       {filteredClubs.map((club, index) => (
         <ClubManagementRow
-          key={club.id}
+          key={club.clubId}
           index={index + 1}
-          name={club.name}
-          category={club.category}
+          name={club.clubName}
+          category={ClubCategoryLabel[club.category]}
           onDelete={() => {}}
         />
       ))}

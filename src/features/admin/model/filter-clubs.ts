@@ -1,8 +1,8 @@
-import type { ClubType } from '@/shared/model/type';
+import type { AdminClub } from '@/entities/admin/model/types';
 
-function filterClubsByName(clubs: ClubType[], query: string): ClubType[] {
+function filterClubsByName(clubs: AdminClub[], query: string): AdminClub[] {
   if (!query) return clubs;
-  return clubs.filter((club) => club.name.includes(query));
+  return clubs.filter((club) => club.clubName.includes(query));
 }
 
 export default filterClubsByName;

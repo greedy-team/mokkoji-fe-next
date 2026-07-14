@@ -1,20 +1,30 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useInfiniteScroll from '@/shared/hooks/useInfiniteScroll';
 import { AsyncBoundaryWithQuery } from '@/shared/ui/AsyncBoundary';
 import filterClubsByName from '@/features/admin/model/filter-clubs';
 import useAdminClubs from '@/widgets/admin/ui/use-admin-clubs';
 import { ClubCategoryLabel } from '@/shared/model/type';
 import ClubManagementRow from '@/features/admin/ui/ClubManagementRow';
+import deleteClubMutationOptions from '@/entities/admin/api/mutations';
 
 interface ClubListProps {
   searchClubQuery: string;
 }
 
 function ClubList({ searchClubQuery }: ClubListProps) {
+  const queryClient = useQueryClient();
   const { clubs, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useAdminClubs();
+
+  const { mutate: deleteClubMutate, isPending: isDeleting } = useMutation({
+    ...deleteClubMutationOptions(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'clubs'] });
+    },
+  });
 
   useEffect(() => {
     if (searchClubQuery && hasNextPage && !isFetchingNextPage) {
@@ -30,25 +40,12 @@ function ClubList({ searchClubQuery }: ClubListProps) {
     fetchNextPage,
   });
 
-  // TODO: 삭제 API 미구현 — DELETE /clubs/{clubId} 연동 후 아래 캐시 업데이트 활성화
-  // const handleDelete = (clubId: number) => {
-  //   queryClient.setQueryData(['admin', 'clubs'], (old: typeof data) => {
-  //     if (!old) return old;
-  //     return {
-  //       ...old,
-  //       pages: old.pages.map((page) =>
-  //         page
-  //           ? {
-  //               ...page,
-  //               clubs: page.clubs.filter(
-  //                 (club: ClubType) => club.id !== clubId,
-  //               ),
-  //             }
-  //           : page,
-  //       ),
-  //     };
-  //   });
-  // };
+  const handleDelete = (clubId: number, clubName: string) => {
+    // eslint-disable-next-line no-restricted-globals, no-alert
+    if (confirm(`"${clubName}" 동아리를 삭제하시겠습니까?`)) {
+      deleteClubMutate(clubId);
+    }
+  };
 
   if (filteredClubs.length === 0) {
     return (
@@ -68,7 +65,8 @@ function ClubList({ searchClubQuery }: ClubListProps) {
           index={index + 1}
           name={club.clubName}
           category={ClubCategoryLabel[club.category]}
-          onDelete={() => {}}
+          disabled={isDeleting}
+          onDelete={() => handleDelete(club.clubId, club.clubName)}
         />
       ))}
       {isFetchingNextPage && (

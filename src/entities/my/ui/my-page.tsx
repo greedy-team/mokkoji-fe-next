@@ -24,6 +24,7 @@ import LogoutLink from '@/features/my/ui/logout-link';
 import WithdrawButton from '@/features/my/ui/withdraw-button';
 import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 import ClubMasterTransferSection from '@/features/my/ui/club-master-transfer-section';
+import ClubMasterTransferCodeSection from '@/features/my/ui/club-master-transfer-code-section';
 
 async function MyPage({
   universityCode,
@@ -64,7 +65,7 @@ async function MyPage({
     toCreateCardItem,
   );
   const masterItems = (clubMasterStatus.data ?? []).map(toMasterCardItem);
-  const isAdmin = userRole !== UserRole.NORMAL;
+  const isAdmin = userRole !== UserRole.CLUB_MASTER;
   const managedClubs =
     userRole === UserRole.CLUB_MASTER ? (clubManageInfo.data?.clubs ?? []) : [];
 
@@ -90,6 +91,7 @@ async function MyPage({
 
         <div className="flex flex-col">
           <span className="mb-4 font-semibold">내 정보</span>
+          <ClubMasterTransferCodeSection userCode={user.userCode} />
           <InfoRow label="이메일" value={user.email}>
             <div className="flex items-center gap-3">
               <EmailChangeDialog
@@ -100,18 +102,14 @@ async function MyPage({
               {user.email && <EmailDeleteButton />}
             </div>
           </InfoRow>
+
           <InfoRow label="메일 알림">
             <MailNotificationToggle
               email={user.email ?? ''}
               isEmailOn={user.emailOn}
             />
           </InfoRow>
-          {isAdmin && (
-            <div className="mt-6 flex items-center gap-2">
-              <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
-              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
-            </div>
-          )}
+
           <InfoRow
             label="학교"
             value={
@@ -120,6 +118,12 @@ async function MyPage({
                 : undefined
             }
           />
+          {isAdmin && (
+            <div className="mt-6 flex items-center gap-2">
+              <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
+              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+            </div>
+          )}
           <div className="pt-6">
             <UniversitySelectModalWrapper
               defaultOpen={isNewUser}
@@ -127,7 +131,7 @@ async function MyPage({
               universities={universities}
             />
           </div>
-          <div>
+          <div className="pt-6">
             <LogoutLink />
           </div>
           <div className="mt-2 mb-15">

@@ -1,6 +1,10 @@
 import AnimateOnView from '@/shared/ui/animate-on-view';
 
-function ClubTextCard() {
+interface ClubTextCardProps {
+  universityName: string;
+}
+
+function ClubTextCard({ universityName }: ClubTextCardProps) {
   return (
     <div className="flex h-[50%] w-full flex-col justify-center gap-2 lg:h-full lg:w-[50%]">
       <AnimateOnView animation="animate-fade-left">
@@ -10,7 +14,7 @@ function ClubTextCard() {
       </AnimateOnView>
       <AnimateOnView animation="reveal">
         <p className="my-1 w-full text-2xl leading-[1.5] font-semibold lg:my-3 lg:w-[90%] lg:text-3xl lg:font-bold">
-          세종대 동아리들을 <br className="lg:hidden" />
+          {universityName} 동아리들을 <br className="lg:hidden" />
           한눈에 확인해요.
         </p>
       </AnimateOnView>

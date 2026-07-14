@@ -1,16 +1,19 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import { useSession } from '@/shared/lib/session-context';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LogoutLink() {
   const router = useRouter();
+  const { refresh } = useSession();
   const universityCode = useUniversityCode();
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
+    refresh();
     router.push(`/${universityCode}`);
     router.refresh();
   };

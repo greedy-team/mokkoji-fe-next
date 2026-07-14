@@ -10,25 +10,39 @@ import { getUniversityName } from '@/shared/lib/universityMeta';
 import getUniversities from '@/entities/university/api/getUniversities';
 import getMyInfo from '@/entities/my/api/getMyInfo';
 import getClubApplicationStatus from '@/entities/my/api/getClubApplicationStatus';
+import getMyClubMasterApplications from '@/entities/my/api/getMyClubMasterApplications';
+import {
+  toCreateCardItem,
+  toMasterCardItem,
+} from '@/entities/my/lib/application-card';
 import InfoRow from '@/entities/my/ui/info-row';
 import EmailChangeDialog from '@/features/my/ui/email-change-dialog';
 import EmailDeleteButton from '@/features/my/ui/email-delete-button';
 import MailNotificationToggle from '@/features/my/ui/mail-notification-toggle';
 import LogoutLink from '@/features/my/ui/logout-link';
+import WithdrawButton from '@/features/my/ui/withdraw-button';
 import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 
-async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
+async function MyPage({
+  universityCode,
+  isNewUser = false,
+}: {
+  universityCode: string;
+  isNewUser?: boolean;
+}) {
   const session = await getSession();
 
   if (!session) {
     return <LoginRequired />;
   }
 
-  const [myInfo, universitiesRes, clubApplicationStatus] = await Promise.all([
-    getMyInfo(),
-    getUniversities(),
-    getClubApplicationStatus(),
-  ]);
+  const [myInfo, universitiesRes, clubApplicationStatus, clubMasterStatus] =
+    await Promise.all([
+      getMyInfo(),
+      getUniversities(),
+      getClubApplicationStatus(),
+      getMyClubMasterApplications(),
+    ]);
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
@@ -36,7 +50,10 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
 
   const user = myInfo.data;
   const universities = universitiesRes.data?.universities ?? [];
-  const clubApplications = clubApplicationStatus.data?.clubApplications ?? [];
+  const createItems = (clubApplicationStatus.data?.clubApplications ?? []).map(
+    toCreateCardItem,
+  );
+  const masterItems = (clubMasterStatus.data ?? []).map(toMasterCardItem);
   const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
 
@@ -52,9 +69,11 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
           </div>
         </div>
 
-        {clubApplications.length > 0 && (
-          <ClubApplicationStatus applications={clubApplications} />
-        )}
+        <ClubApplicationStatus
+          createItems={createItems}
+          masterItems={masterItems}
+          universityCode={universityCode}
+        />
 
         <div className="flex flex-col">
           <span className="mb-4 font-semibold">내 정보</span>
@@ -95,8 +114,11 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
               universities={universities}
             />
           </div>
-          <div className="mb-15 lg:hidden">
+          <div>
             <LogoutLink />
+          </div>
+          <div className="mt-2 mb-15">
+            <WithdrawButton />
           </div>
         </div>
       </div>

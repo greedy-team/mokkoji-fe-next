@@ -4,16 +4,23 @@ import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getDashboardData from '@/features/admin/api/getDashboardData';
 
+export const dynamic = 'force-dynamic';
+
 interface DashboardPageProps {
   searchParams: Promise<{ universityCode?: string }>;
 }
 
 async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const adminInfo = await getAdminInfo();
+  const adminInfoResult = await getAdminInfo();
 
-  if (!adminInfo) {
+  if (!adminInfoResult.ok || !adminInfoResult.data) {
+    if (adminInfoResult.status >= 500) {
+      throw new Error(adminInfoResult.message);
+    }
     redirect('/api/auth/dashboard-logout');
   }
+
+  const adminInfo = adminInfoResult.data;
 
   const { universityCode: selectedFromUrl } = await searchParams;
   const {

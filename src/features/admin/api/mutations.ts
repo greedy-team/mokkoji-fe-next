@@ -1,5 +1,5 @@
 import type { MutationOptions } from '@tanstack/react-query';
-import deleteClub from '@/entities/admin/api/deleteClub';
+import deleteClub from '@/features/admin/api/deleteClub';
 
 const deleteClubMutationOptions = () =>
   ({

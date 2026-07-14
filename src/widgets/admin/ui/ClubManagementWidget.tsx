@@ -8,7 +8,7 @@ import filterClubsByName from '@/features/admin/model/filter-clubs';
 import useAdminClubs from '@/widgets/admin/ui/use-admin-clubs';
 import { ClubCategoryLabel } from '@/shared/model/type';
 import ClubManagementRow from '@/features/admin/ui/ClubManagementRow';
-import deleteClubMutationOptions from '@/entities/admin/api/mutations';
+import deleteClubMutationOptions from '@/features/admin/api/mutations';
 
 interface ClubListProps {
   searchClubQuery: string;

@@ -8,6 +8,7 @@ import filterClubsByName from '@/features/admin/model/filter-clubs';
 import useAdminClubs from '@/widgets/admin/ui/use-admin-clubs';
 import { ClubCategoryLabel } from '@/shared/model/type';
 import ClubManagementRow from '@/features/admin/ui/ClubManagementRow';
+import DeleteDialog from '@/features/admin/ui/DeleteDialog';
 import deleteClubMutationOptions from '@/features/admin/api/mutations';
 
 interface ClubListProps {
@@ -40,10 +41,15 @@ function ClubList({ searchClubQuery }: ClubListProps) {
     fetchNextPage,
   });
 
-  const handleDelete = (clubId: number, clubName: string) => {
-    // eslint-disable-next-line no-restricted-globals, no-alert
-    if (confirm(`"${clubName}" 동아리를 삭제하시겠습니까?`)) {
-      deleteClubMutate(clubId);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    clubId: number;
+    clubName: string;
+  } | null>(null);
+
+  const handleDeleteConfirm = () => {
+    if (deleteTarget) {
+      deleteClubMutate(deleteTarget.clubId);
+      setDeleteTarget(null);
     }
   };
 
@@ -66,7 +72,9 @@ function ClubList({ searchClubQuery }: ClubListProps) {
           name={club.clubName}
           category={ClubCategoryLabel[club.category]}
           disabled={isDeleting}
-          onDelete={() => handleDelete(club.clubId, club.clubName)}
+          onDelete={() =>
+            setDeleteTarget({ clubId: club.clubId, clubName: club.clubName })
+          }
         />
       ))}
       {isFetchingNextPage && (
@@ -75,6 +83,14 @@ function ClubList({ searchClubQuery }: ClubListProps) {
         </div>
       )}
       <div ref={sentinelRef} className="h-4" />
+
+      <DeleteDialog
+        targetName={deleteTarget?.clubName}
+        open={deleteTarget !== null}
+        pending={isDeleting}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </>
   );
 }

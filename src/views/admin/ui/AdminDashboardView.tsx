@@ -36,14 +36,8 @@ function AdminDashboardView({
     selectedCode;
 
   return (
-    <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          className="flex h-[50px] items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]"
-        >
-          대시보드
-        </button>
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center justify-end">
         {isMokkojiAdmin ? (
           <AdminUniversitySelectWidget
             universities={universities}

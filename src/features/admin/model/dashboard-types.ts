@@ -1,5 +1,12 @@
 export type ApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
+export type AdminRole = 'UNIVERSITY_ADMIN' | 'MOKKOJI_ADMIN';
+
+export interface AdminInfo {
+  role: AdminRole;
+  universityCode: string | null;
+}
+
 export interface ClubMasterApplication {
   id: number;
   universityName: string;

@@ -8,6 +8,7 @@ import type {
 interface Params {
   page: number;
   size: number;
+  universityCode?: string;
 }
 
 interface Response {
@@ -23,6 +24,8 @@ async function getClubMasterApplications(
       page: String(params.page),
       size: String(params.size),
     });
+    if (params.universityCode)
+      query.set('universityCode', params.universityCode);
 
     const result = await api
       .get(`admin/club-master-applications?${query.toString()}`)

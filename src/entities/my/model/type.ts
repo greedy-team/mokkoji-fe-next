@@ -39,7 +39,6 @@ export interface ApplicationCardItem {
   universityName: string;
   status: ClubApplicationStatus;
   rejectReason: string | null;
-  logo?: string | null;
   createdAt: string;
 }
 

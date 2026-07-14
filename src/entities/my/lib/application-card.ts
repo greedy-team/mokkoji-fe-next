@@ -26,7 +26,6 @@ export function toMasterCardItem(
     universityName: application.universityName,
     status: application.status,
     rejectReason: application.rejectReason,
-    logo: null,
     createdAt: application.createdAt,
   };
 }

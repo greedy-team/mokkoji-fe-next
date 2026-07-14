@@ -6,7 +6,6 @@ import {
 } from '@/shared/model/type';
 import serverApi from '@/shared/api/server-api';
 import createErrorResponse from '@/shared/lib/error-message';
-import { getSession } from '@/shared/lib/cookie-session';
 
 interface SearchClubsParams {
   keyword?: string;
@@ -19,9 +18,7 @@ interface SearchClubsParams {
 }
 
 async function searchClubs(params: SearchClubsParams) {
-  const session = await getSession();
-  const effectiveUniversityCode =
-    session?.universityCode ?? params.universityCode ?? 'SEJONG';
+  const effectiveUniversityCode = params.universityCode ?? 'SEJONG';
 
   const searchParams = new URLSearchParams();
 

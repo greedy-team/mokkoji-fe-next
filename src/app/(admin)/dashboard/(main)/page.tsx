@@ -3,9 +3,7 @@ import { redirect } from 'next/navigation';
 import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
-import getClubMasterApplications from '@/features/admin/api/getClubMasterApplications';
-import getClubApplications from '@/features/admin/api/getClubApplications';
-import getAdminClubs from '@/features/admin/api/getAdminClubs';
+import getDashboardSummary from '@/features/admin/lib/getDashboardSummary';
 import getUniversities from '@/entities/university/api/getUniversities';
 
 export const dynamic = 'force-dynamic';
@@ -41,37 +39,18 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
     ? (selectedFromUrl ?? universities[0]?.code)
     : (adminInfo.universityCode ?? undefined);
 
-  const [clubMasterData, clubApplicationData, clubsData] = await Promise.all([
-    getClubMasterApplications({ page: 1, size: 100, universityCode }),
-    getClubApplications({
-      status: 'PENDING',
-      page: 1,
-      size: 100,
-      universityCode,
-    }),
-    getAdminClubs({ page: 1, size: 100, universityCode }),
-  ]);
+  const summaryResult = await getDashboardSummary(universityCode);
 
-  const clubMasterApplications = clubMasterData?.applications ?? [];
-  const clubApplications = clubApplicationData?.applications ?? [];
-  const clubs = clubsData?.clubs ?? [];
-
-  const totalClubs = clubsData?.pagination?.totalElements ?? 0;
-  const pendingMasterCount = clubMasterData?.pagination?.totalElements ?? 0;
-  const pendingClubCount = clubApplicationData?.page?.totalElements ?? 0;
-  const totalMasters = clubs.filter((club) => club.clubMaster !== null).length;
+  if (!summaryResult.ok || !summaryResult.data) {
+    throw new Error(summaryResult.message);
+  }
 
   return (
     <Suspense>
       <AdminMainView
         dashboardContent={
           <AdminDashboardView
-            clubMasterApplications={clubMasterApplications}
-            clubApplications={clubApplications}
-            totalClubs={totalClubs}
-            pendingMasterCount={pendingMasterCount}
-            pendingClubCount={pendingClubCount}
-            totalMasters={totalMasters}
+            summary={summaryResult.data}
             role={adminInfo.role}
             universities={universities}
             selectedCode={universityCode ?? ''}

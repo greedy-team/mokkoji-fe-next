@@ -1,11 +1,15 @@
-function MobileHomeHeader() {
+interface MobileHomeHeaderProps {
+  universityName: string;
+}
+
+function MobileHomeHeader({ universityName }: MobileHomeHeaderProps) {
   return (
     <header className="flex flex-col items-center py-8 text-[#2E2E2E]">
       <h1 className="bg-gradient-primary mb-4 w-fit bg-clip-text text-[clamp(3rem,14vw,3.75rem)] font-bold whitespace-nowrap text-transparent">
         Club, set, go!
       </h1>
       <p className="text-xl">
-        세종대의 모든{' '}
+        {universityName}의 모든{' '}
         <span className="bg-gradient-primary bg-clip-text font-bold text-transparent">
           동아리
         </span>

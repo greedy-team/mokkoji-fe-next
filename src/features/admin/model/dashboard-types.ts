@@ -53,3 +53,12 @@ export interface PaginationMeta {
   totalPages: number;
   totalElements: number;
 }
+
+export interface DashboardSummary {
+  clubMasterApplications: ClubMasterApplication[];
+  clubApplications: ClubApplication[];
+  totalClubs: number;
+  pendingMasterCount: number;
+  pendingClubCount: number;
+  totalMasters: number;
+}

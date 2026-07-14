@@ -6,18 +6,22 @@ import FeatureIntroduceMobileWidget from '@/widgets/home/ui/feature-introduce-mo
 import HelpCardMobileWidget from '@/widgets/home/ui/help-card-mobile-widget';
 import HomeSearchWidget from '@/widgets/home/ui/home-search-widget';
 
-function MobileHomePage() {
+interface MobileHomePageProps {
+  universityName: string;
+}
+
+function MobileHomePage({ universityName }: MobileHomePageProps) {
   return (
     <>
       <div className="mt-20 px-5">
-        <MobileHomeHeader />
+        <MobileHomeHeader universityName={universityName} />
         <HomeSearchWidget />
       </div>
       <div className="mt-4 mb-30 flex h-[72px] justify-center">
         <HomeDownButton />
       </div>
       <section className="px-5">
-        <ClubCardMobileWidget />
+        <ClubCardMobileWidget universityName={universityName} />
       </section>
       <section className="bg-[linear-gradient(to_bottom,_#FFFFFF_0%,_#F8FAFB_5%,_#F8FAFB_95%,_#FFFFFF_100%)] px-5">
         <FeatureIntroduceMobileWidget />

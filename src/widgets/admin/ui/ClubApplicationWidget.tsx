@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 import type {
   ClubApplication,
   ApplicationStatus,
@@ -35,35 +36,45 @@ function ClubApplicationWidget({
 
   const handleApprove = (applicationId: number) => {
     startTransition(async () => {
-      const success = await approveClubApplication(applicationId);
-      if (success) {
-        setApplications((previous) =>
-          previous.map((application) =>
-            application.applicationId === applicationId
-              ? { ...application, status: 'APPROVED' as ApplicationStatus }
-              : application,
-          ),
-        );
+      const result = await approveClubApplication(applicationId);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      setApplications((previous) =>
+        previous.map((application) =>
+          application.applicationId === applicationId
+            ? { ...application, status: 'APPROVED' as ApplicationStatus }
+            : application,
+        ),
+      );
+      toast.success(result.message);
     });
   };
 
   const handleReject = (applicationId: number, rejectReason?: string) => {
     startTransition(async () => {
-      const success = await rejectClubApplication(applicationId, rejectReason);
-      if (success) {
-        setApplications((previous) =>
-          previous.map((application) =>
-            application.applicationId === applicationId
-              ? {
-                  ...application,
-                  status: 'REJECTED' as ApplicationStatus,
-                  rejectReason: rejectReason ?? null,
-                }
-              : application,
-          ),
-        );
+      const result = await rejectClubApplication(applicationId, rejectReason);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      setApplications((previous) =>
+        previous.map((application) =>
+          application.applicationId === applicationId
+            ? {
+                ...application,
+                status: 'REJECTED' as ApplicationStatus,
+                rejectReason: rejectReason ?? null,
+              }
+            : application,
+        ),
+      );
+      toast.success(result.message);
     });
   };
 

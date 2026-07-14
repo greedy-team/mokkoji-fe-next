@@ -26,8 +26,7 @@ async function getClubList(params: GetRecruitListParams) {
     keyword: params.keyword,
     category: params.category,
     recruitStatus: params.recruitStatus,
-    universityCode:
-      session?.universityCode ?? params.universityCode ?? 'SEJONG',
+    universityCode: params.universityCode ?? 'SEJONG',
   };
 
   const searchParams = new URLSearchParams();

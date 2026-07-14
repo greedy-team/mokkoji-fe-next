@@ -60,6 +60,9 @@ function ClubItemClientList({ clubs }: ClubItemClientListProps) {
   return (
     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
       {items}
+      <div className="hidden sm:col-span-2 sm:block lg:col-span-3">
+        <ClubApplicationBanner universityCode={universityCode} />
+      </div>
     </div>
   );
 }

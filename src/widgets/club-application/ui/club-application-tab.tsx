@@ -2,6 +2,7 @@
 
 import ClubCreateForm from '@/features/club-create/ui/club-crete-form';
 import ClubMasterApplicationForm from '@/features/club-master-application/ui/ClubMasterApplicationForm';
+import type { University } from '@/entities/university/model/type';
 import { useState } from 'react';
 
 const TABS = [
@@ -11,7 +12,11 @@ const TABS = [
 
 type TabKey = (typeof TABS)[number]['key'];
 
-function ClubApplicationTabs() {
+interface ClubApplicationTabsProps {
+  universities: University[];
+}
+
+function ClubApplicationTabs({ universities }: ClubApplicationTabsProps) {
   const [activeTab, setActiveTab] = useState<TabKey>('club-create');
 
   return (
@@ -44,9 +49,11 @@ function ClubApplicationTabs() {
       </div>
 
       <div className="min-h-[600px] w-full">
-        {activeTab === 'club-create' && <ClubCreateForm />}
+        {activeTab === 'club-create' && (
+          <ClubCreateForm universities={universities} />
+        )}
         {activeTab === 'club-leader-application' && (
-          <ClubMasterApplicationForm />
+          <ClubMasterApplicationForm universities={universities} />
         )}
       </div>
     </div>

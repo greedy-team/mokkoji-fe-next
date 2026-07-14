@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useInfiniteScroll from '@/shared/hooks/useInfiniteScroll';
 import { AsyncBoundaryWithQuery } from '@/shared/ui/AsyncBoundary';
 import filterClubsByName from '@/features/admin/model/filter-clubs';
@@ -15,6 +15,12 @@ interface ClubListProps {
 function ClubList({ searchClubQuery }: ClubListProps) {
   const { clubs, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useAdminClubs();
+
+  useEffect(() => {
+    if (searchClubQuery && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [searchClubQuery, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const filteredClubs = filterClubsByName(clubs, searchClubQuery);
 

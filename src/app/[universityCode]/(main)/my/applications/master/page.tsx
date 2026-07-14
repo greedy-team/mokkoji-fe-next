@@ -26,7 +26,6 @@ async function Page({ params }: PageProps) {
         title={APPLICATION_SECTION.master.title}
         items={items}
         universityCode={universityCode}
-        showLogo
       />
     </div>
   );

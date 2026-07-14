@@ -22,4 +22,24 @@ export interface ClubApplicationListType {
   clubApplications: ClubApplicationType[];
 }
 
+export interface MyClubMasterApplicationType {
+  id: number;
+  universityName: string;
+  clubName: string;
+  userName: string;
+  status: ClubApplicationStatus;
+  rejectReason: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ApplicationCardItem {
+  id: number;
+  clubName: string;
+  universityName: string;
+  status: ClubApplicationStatus;
+  rejectReason: string | null;
+  createdAt: string;
+}
+
 export default UserInfoType;

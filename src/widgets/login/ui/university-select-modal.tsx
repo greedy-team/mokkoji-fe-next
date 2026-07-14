@@ -11,6 +11,7 @@ interface UniversitySelectModalProps {
   universities: University[];
   universityCode: string | null;
   onConfirm: (universityCode: string) => void;
+  onClose: () => void;
 }
 
 function UniversitySelectModal({
@@ -19,17 +20,20 @@ function UniversitySelectModal({
   universities,
   universityCode,
   onConfirm,
+  onClose,
 }: UniversitySelectModalProps) {
   const [selected, setSelected] = useState<string | null>(universityCode);
 
   return (
     <>
       <div
+        role="presentation"
         className={cn(
           'fixed inset-0 z-40 bg-black/50',
           'transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
+        onClick={onClose}
       />
 
       <div

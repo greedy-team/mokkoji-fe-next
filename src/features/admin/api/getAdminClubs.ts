@@ -1,5 +1,7 @@
 import 'server-only';
 import api from '@/shared/api/dashboard-api';
+import createErrorResponse from '@/shared/lib/error-message';
+import { ApiResponse } from '@/shared/model/type';
 import type {
   AdminClub,
   PaginationMeta,
@@ -11,12 +13,12 @@ interface Params {
   universityCode?: string;
 }
 
-interface Response {
+interface AdminClubsResponse {
   clubs: AdminClub[];
   pagination: PaginationMeta;
 }
 
-async function getAdminClubs(params: Params): Promise<Response | null> {
+async function getAdminClubs(params: Params) {
   try {
     const query = new URLSearchParams({
       page: String(params.page),
@@ -25,13 +27,22 @@ async function getAdminClubs(params: Params): Promise<Response | null> {
     if (params.universityCode)
       query.set('universityCode', params.universityCode);
 
-    const result = await api
+    const response = await api
       .get(`admin/clubs?${query.toString()}`)
-      .json<{ data: Response }>();
+      .json<ApiResponse<AdminClubsResponse>>();
 
-    return result.data ?? null;
-  } catch {
-    return null;
+    if (!response.data) {
+      return {
+        ok: false,
+        message: '데이터 없음',
+        data: undefined,
+        status: 200,
+      };
+    }
+
+    return { ok: true, message: '성공', data: response.data, status: 200 };
+  } catch (error) {
+    return createErrorResponse(error as Error);
   }
 }
 

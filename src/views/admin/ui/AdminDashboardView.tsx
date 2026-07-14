@@ -1,35 +1,32 @@
 import type {
-  ClubMasterApplication,
-  ClubApplication,
   AdminRole,
+  DashboardSummary,
 } from '@/features/admin/model/dashboard-types';
 import ClubMasterApplicationWidget from '@/widgets/admin/ui/ClubMasterApplicationWidget';
 import AdminUniversitySelectWidget from '@/widgets/admin/ui/AdminUniversitySelectWidget';
 import type { UniversityOption } from '@/entities/university/model/type';
 
 interface AdminDashboardViewProps {
-  clubMasterApplications: ClubMasterApplication[];
-  clubApplications: ClubApplication[];
-  totalClubs: number;
-  pendingMasterCount: number;
-  pendingClubCount: number;
-  totalMasters: number;
+  summary: DashboardSummary;
   role: AdminRole;
   universities: UniversityOption[];
   selectedCode: string;
 }
 
 function AdminDashboardView({
-  clubMasterApplications,
-  clubApplications,
-  totalClubs,
-  pendingMasterCount,
-  pendingClubCount,
-  totalMasters,
+  summary,
   role,
   universities,
   selectedCode,
 }: AdminDashboardViewProps) {
+  const {
+    clubMasterApplications,
+    clubApplications,
+    totalClubs,
+    pendingMasterCount,
+    pendingClubCount,
+    totalMasters,
+  } = summary;
   const isMokkojiAdmin = role === 'MOKKOJI_ADMIN';
   const selectedUniversityName =
     universities.find((university) => university.code === selectedCode)?.name ??

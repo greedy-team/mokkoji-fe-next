@@ -1,3 +1,4 @@
+import ky from 'ky';
 import type { Pagination } from '@/shared/model/type';
 import type { AdminClub } from '@/entities/admin/model/types';
 
@@ -22,8 +23,9 @@ async function getManagementClubs(params: Params): Promise<AdminClubsData> {
     searchParams.set('universityCode', params.universityCode);
   }
 
-  const response = await fetch(`/api/admin/clubs?${searchParams}`);
-  const json = await response.json();
+  const json = await ky
+    .get('/api/admin/clubs', { searchParams })
+    .json<{ data: AdminClubsData }>();
 
   return json.data;
 }

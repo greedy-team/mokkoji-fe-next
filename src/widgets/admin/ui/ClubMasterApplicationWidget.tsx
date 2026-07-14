@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 import type {
   ClubMasterApplication,
   ClubApplication,
@@ -43,26 +44,35 @@ function ClubMasterApplicationWidget({
 
   const handleCombinedApprove = (applicationId: number) => {
     startTransition(async () => {
-      const [clubSuccess, masterSuccess] = await Promise.all([
+      const [clubResult, masterResult] = await Promise.all([
         approveClubApplication(applicationId),
         approveClubMasterApplication(applicationId),
       ]);
-      if (clubSuccess && masterSuccess) {
-        setClubApplications((previous) =>
-          previous.map((a) =>
-            a.applicationId === applicationId
-              ? { ...a, status: 'APPROVED' as ApplicationStatus }
-              : a,
-          ),
-        );
-        setClubMasterApplications((previous) =>
-          previous.map((a) =>
-            a.id === applicationId
-              ? { ...a, status: 'APPROVED' as ApplicationStatus }
-              : a,
-          ),
-        );
+
+      const failedResult = [clubResult, masterResult].find(
+        (result) => !result.ok,
+      );
+
+      if (failedResult) {
+        toast.error(failedResult.message);
+        return;
       }
+
+      setClubApplications((previous) =>
+        previous.map((a) =>
+          a.applicationId === applicationId
+            ? { ...a, status: 'APPROVED' as ApplicationStatus }
+            : a,
+        ),
+      );
+      setClubMasterApplications((previous) =>
+        previous.map((a) =>
+          a.id === applicationId
+            ? { ...a, status: 'APPROVED' as ApplicationStatus }
+            : a,
+        ),
+      );
+      toast.success('동아리장 및 동아리 생성 신청을 승인했습니다.');
     });
   };
 
@@ -71,57 +81,72 @@ function ClubMasterApplicationWidget({
     rejectReason?: string,
   ) => {
     startTransition(async () => {
-      const success = await rejectClubApplication(applicationId, rejectReason);
-      if (success) {
-        setClubApplications((previous) =>
-          previous.map((a) =>
-            a.applicationId === applicationId
-              ? {
-                  ...a,
-                  status: 'REJECTED' as ApplicationStatus,
-                  rejectReason: rejectReason ?? null,
-                }
-              : a,
-          ),
-        );
+      const result = await rejectClubApplication(applicationId, rejectReason);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      setClubApplications((previous) =>
+        previous.map((a) =>
+          a.applicationId === applicationId
+            ? {
+                ...a,
+                status: 'REJECTED' as ApplicationStatus,
+                rejectReason: rejectReason ?? null,
+              }
+            : a,
+        ),
+      );
+      toast.success(result.message);
     });
   };
 
   const handleMasterApprove = (applicationId: number) => {
     startTransition(async () => {
-      const success = await approveClubMasterApplication(applicationId);
-      if (success) {
-        setClubMasterApplications((previous) =>
-          previous.map((a) =>
-            a.id === applicationId
-              ? { ...a, status: 'APPROVED' as ApplicationStatus }
-              : a,
-          ),
-        );
+      const result = await approveClubMasterApplication(applicationId);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      setClubMasterApplications((previous) =>
+        previous.map((a) =>
+          a.id === applicationId
+            ? { ...a, status: 'APPROVED' as ApplicationStatus }
+            : a,
+        ),
+      );
+      toast.success(result.message);
     });
   };
 
   const handleMasterReject = (applicationId: number, rejectReason?: string) => {
     startTransition(async () => {
-      const success = await rejectClubMasterApplication(
+      const result = await rejectClubMasterApplication(
         applicationId,
         rejectReason,
       );
-      if (success) {
-        setClubMasterApplications((previous) =>
-          previous.map((a) =>
-            a.id === applicationId
-              ? {
-                  ...a,
-                  status: 'REJECTED' as ApplicationStatus,
-                  rejectReason: rejectReason ?? null,
-                }
-              : a,
-          ),
-        );
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      setClubMasterApplications((previous) =>
+        previous.map((a) =>
+          a.id === applicationId
+            ? {
+                ...a,
+                status: 'REJECTED' as ApplicationStatus,
+                rejectReason: rejectReason ?? null,
+              }
+            : a,
+        ),
+      );
+      toast.success(result.message);
     });
   };
 

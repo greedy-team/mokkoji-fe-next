@@ -15,6 +15,7 @@ import EmailChangeDialog from '@/features/my/ui/email-change-dialog';
 import EmailDeleteButton from '@/features/my/ui/email-delete-button';
 import MailNotificationToggle from '@/features/my/ui/mail-notification-toggle';
 import LogoutLink from '@/features/my/ui/logout-link';
+import WithdrawButton from '@/features/my/ui/withdraw-button';
 import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 
 async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
@@ -95,8 +96,11 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
               universities={universities}
             />
           </div>
-          <div className="mb-15 lg:hidden">
+          <div>
             <LogoutLink />
+          </div>
+          <div className="mt-2 mb-15">
+            <WithdrawButton />
           </div>
         </div>
       </div>

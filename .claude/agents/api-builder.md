@@ -32,28 +32,40 @@ Your role: **API spec → `features/{domain}/api/` Server Action files**
 
 ### Response Return Pattern
 
-**Query (GET) — return data directly:**
-```typescript
-'use server';
-import api from '@/shared/api/auth-api';
-import { DomainType } from '@/entities/{domain}/model/type';
-import { ApiResponse } from '@/shared/model/type';
+**Every API function — GET and mutation alike — returns the standard `{ ok, message, data, status }` response.**
+Never return a bare `T | null` or `boolean`: doing so collapses 401 / 403 / 500 / network failure into a single
+value, and the UI can no longer tell "no data" from "request failed" or show the server's own message.
 
-async function getDomainItem(id: number): Promise<DomainType | null> {
+Always type the ky response as `ApiResponse<T>` — the backend sends all four fields, so typing it as
+`{ data: T }` hides `ok` / `message` / `status` from TypeScript and lets an `ok: false` body pass as success.
+
+**Query (GET):**
+```typescript
+import api from '@/shared/api/auth-api';
+import createErrorResponse from '@/shared/lib/error-message';
+import { ApiResponse } from '@/shared/model/type';
+import { DomainType } from '@/entities/{domain}/model/type';
+
+async function getDomainItem(id: number) {
   try {
-    const response: ApiResponse<DomainType> = await api
+    const response = await api
       .get(`endpoint/${id}`)
-      .json();
-    return response.data ?? null;
-  } catch {
-    return null;
+      .json<ApiResponse<DomainType>>();
+
+    if (!response.data) {
+      return { ok: false, message: '데이터 없음', data: undefined, status: 200 };
+    }
+
+    return { ok: true, message: '성공', data: response.data, status: 200 };
+  } catch (e) {
+    return createErrorResponse(e as Error);
   }
 }
 
 export default getDomainItem;
 ```
 
-**Modification (POST/PATCH/DELETE) — return ok/message/status:**
+**Modification (POST/PATCH/DELETE):**
 ```typescript
 'use server';
 import api from '@/shared/api/auth-api';
@@ -73,24 +85,37 @@ export async function postDomainItem(body: RequestBodyType) {
 
 **Public API (no authentication):**
 ```typescript
-'use server';
 import serverApi from '@/shared/api/server-api';
-import { PublicType } from '@/entities/{domain}/model/type';
+import createErrorResponse from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
+import { PublicType } from '@/entities/{domain}/model/type';
 
-async function getPublicList(): Promise<PublicType[] | null> {
+async function getPublicList() {
   try {
-    const response: ApiResponse<{ items: PublicType[] }> = await serverApi
+    const response = await serverApi
       .get('public-endpoint')
-      .json();
-    return response.data?.items ?? null;
-  } catch {
-    return null;
+      .json<ApiResponse<{ items: PublicType[] }>>();
+
+    if (!response.data) {
+      return { ok: false, message: '데이터 없음', data: undefined, status: 200 };
+    }
+
+    return { ok: true, message: '성공', data: response.data.items, status: 200 };
+  } catch (e) {
+    return createErrorResponse(e as Error);
   }
 }
 
 export default getPublicList;
 ```
+
+### `'use server'` — only for Server Actions
+
+`'use server'` marks a function as callable from a client component. Add it only when a client component
+actually invokes the function — in practice, mutations (POST/PATCH/DELETE) and client-triggered queries.
+
+A GET that is awaited inside a Server Component is not a Server Action. Mark it `import 'server-only';`
+instead, so it can never be bundled into the client.
 
 ---
 
@@ -130,15 +155,17 @@ For each API endpoint:
    - `auth: true` → `@/shared/api/auth-api`
    - `auth: false` → `@/shared/api/server-api`
 
-3. **Determine return type**:
-   - GET (query) → `Promise<T | null>`
-   - POST/PATCH/DELETE (modify) → `Promise<{ ok: boolean; message: string; status: number }>`
+3. **Determine return type**: the standard `{ ok, message, data, status }` response for every method.
+   - GET (query) → `{ ok, message, data, status }`
+   - POST/PATCH/DELETE (modify) → `{ ok, message, status }` (no `data` unless the API returns a body)
+   - Type the ky response as `ApiResponse<T>`, never as a bare `{ data: T }`
 
-4. **Error handling**:
-   - Modify function: `createErrorResponse(e as Error, [...custom errors])`
-   - Query function: `catch { return null; }`
+4. **Error handling**: always `createErrorResponse(e as Error, [...custom errors])`.
+   Never `catch { return null; }` — it destroys the status and the server's message.
 
-5. **Server Action declaration**: Add `'use server';` at file top
+5. **Directive at file top**:
+   - Called from a client component (mutations, client-triggered queries) → `'use server';`
+   - Awaited inside a Server Component → `import 'server-only';`
 
 ### Phase 4 — Define Types (if missing)
 
@@ -182,8 +209,21 @@ Implementation:
 ## Forbidden Patterns
 
 ```typescript
-// [Forbidden] Server Action without 'use server'
-async function getData() { ... }
+// [Forbidden] Swallowing the error — 401 / 403 / 500 / network all collapse into null
+} catch {
+  return null;
+}
+
+// [Forbidden] Returning a bare value instead of the standard response
+async function getDomainItem(): Promise<DomainType | null> { ... }
+async function approveItem(): Promise<boolean> { ... }
+
+// [Forbidden] Typing away ok / message / status,
+// so a 200 response carrying `ok: false` passes as success
+const response = await api.get('endpoint').json<{ data: DomainType }>();
+
+// [Forbidden] Client-callable function without 'use server'
+async function postData() { ... }
 
 // [Forbidden] Using ky directly in client components
 // API functions must always be separate files

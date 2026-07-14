@@ -7,17 +7,23 @@ import getClubApplications from '@/features/admin/api/getClubApplications';
 import getAdminClubs from '@/features/admin/api/getAdminClubs';
 import getUniversities from '@/entities/university/api/getUniversities';
 
+export const dynamic = 'force-dynamic';
+
 interface DashboardPageProps {
   searchParams: Promise<{ universityCode?: string }>;
 }
 
 async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const adminInfo = await getAdminInfo();
+  const adminInfoResult = await getAdminInfo();
 
-  if (!adminInfo) {
+  if (!adminInfoResult.ok || !adminInfoResult.data) {
+    if (adminInfoResult.status >= 500) {
+      throw new Error(adminInfoResult.message);
+    }
     redirect('/dashboard/login');
   }
 
+  const adminInfo = adminInfoResult.data;
   const isMokkojiAdmin = adminInfo.role === 'MOKKOJI_ADMIN';
 
   const universitiesResult = await getUniversities();

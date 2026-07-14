@@ -91,7 +91,7 @@ function FAQList() {
   }
 
   return (
-    <div className="mt-10 w-full space-y-6">
+    <div className="mt-8 w-full space-y-6">
       <h2 className="text-primary-500 text-xl font-bold lg:text-2xl">FAQ</h2>
       {faqData.map((item, idx) => (
         <div key={item.question} className="border-b pb-3 lg:pb-4">

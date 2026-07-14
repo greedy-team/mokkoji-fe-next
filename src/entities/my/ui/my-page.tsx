@@ -96,7 +96,7 @@ async function MyPage({ isNewUser = false }: { isNewUser?: boolean }) {
               universities={universities}
             />
           </div>
-          <div className="lg:hidden">
+          <div>
             <LogoutLink />
           </div>
           <div className="mt-2 mb-15">

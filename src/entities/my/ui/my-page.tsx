@@ -1,5 +1,6 @@
 import { getSession } from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
+import getClubManageInfo from '@/shared/api/manage-api';
 import UniversitySelectModalWrapper from '@/widgets/login/ui/university-select-modal-wrapper';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import HeaderAdminLink from '@/features/header/ui/header-admin-link';
@@ -22,6 +23,7 @@ import MailNotificationToggle from '@/features/my/ui/mail-notification-toggle';
 import LogoutLink from '@/features/my/ui/logout-link';
 import WithdrawButton from '@/features/my/ui/withdraw-button';
 import ClubApplicationStatus from '@/features/my/ui/club-application-status';
+import ClubMasterTransferSection from '@/features/my/ui/club-master-transfer-section';
 
 async function MyPage({
   universityCode,
@@ -36,13 +38,21 @@ async function MyPage({
     return <LoginRequired />;
   }
 
-  const [myInfo, universitiesRes, clubApplicationStatus, clubMasterStatus] =
-    await Promise.all([
-      getMyInfo(),
-      getUniversities(),
-      getClubApplicationStatus(),
-      getMyClubMasterApplications(),
-    ]);
+  const userRole = session?.role || UserRole.NORMAL;
+
+  const [
+    myInfo,
+    universitiesRes,
+    clubApplicationStatus,
+    clubMasterStatus,
+    clubManageInfo,
+  ] = await Promise.all([
+    getMyInfo(),
+    getUniversities(),
+    getClubApplicationStatus(),
+    getMyClubMasterApplications(),
+    getClubManageInfo({ role: userRole }),
+  ]);
 
   if (!myInfo.ok || !myInfo.data) {
     return <ErrorBoundaryUi />;
@@ -54,8 +64,9 @@ async function MyPage({
     toCreateCardItem,
   );
   const masterItems = (clubMasterStatus.data ?? []).map(toMasterCardItem);
-  const userRole = session?.role || UserRole.NORMAL;
   const isAdmin = userRole !== UserRole.NORMAL;
+  const managedClubs =
+    userRole === UserRole.CLUB_MASTER ? (clubManageInfo.data?.clubs ?? []) : [];
 
   return (
     <>
@@ -68,6 +79,8 @@ async function MyPage({
             <span className="text-sm text-neutral-900">카카오 로그인</span>
           </div>
         </div>
+
+        <ClubMasterTransferSection clubs={managedClubs} />
 
         <ClubApplicationStatus
           createItems={createItems}

@@ -12,39 +12,25 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { ApplicationCardItem } from '@/entities/my/model/type';
 
 type ClubApplicationCardProps = {
   item: ApplicationCardItem;
-  showLogo?: boolean;
 };
 
-function ClubApplicationCard({
-  item,
-  showLogo = false,
-}: ClubApplicationCardProps) {
-  const { clubName, universityName, status, createdAt, rejectReason, logo } =
-    item;
+function ClubApplicationCard({ item }: ClubApplicationCardProps) {
+  const { clubName, universityName, status, createdAt, rejectReason } = item;
 
   return (
     <li className="flex flex-col gap-3 rounded-2xl border border-[#22CF64] p-4">
-      <div className="flex items-center gap-4">
-        {showLogo && (
-          <Avatar className="size-13">
-            <AvatarImage src={logo ?? ''} alt={clubName} />
-            <AvatarFallback />
-          </Avatar>
-        )}
-        <div className="flex flex-col gap-1">
-          <span className="font-semibold">
-            {clubName}{' '}
-            <span className="text-text-tertiary text-lg">{universityName}</span>
-          </span>
-          <span className="text-text-tertiary text-sm">
-            신청일시 | {dayjs(createdAt).format('YYYY.MM.DD')}
-          </span>
-        </div>
+      <div className="flex flex-col gap-1">
+        <span className="font-semibold">
+          {clubName}{' '}
+          <span className="text-text-tertiary text-lg">{universityName}</span>
+        </span>
+        <span className="text-text-tertiary text-sm">
+          신청일시 | {dayjs(createdAt).format('YYYY.MM.DD')}
+        </span>
       </div>
 
       <div className="h-0.5 w-full rounded-full bg-[#f8f8f8]">

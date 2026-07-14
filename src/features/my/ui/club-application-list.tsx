@@ -8,14 +8,12 @@ type ClubApplicationListProps = {
   title: string;
   items: ApplicationCardItem[];
   universityCode: string;
-  showLogo?: boolean;
 };
 
 function ClubApplicationList({
   title,
   items,
   universityCode,
-  showLogo = false,
 }: ClubApplicationListProps) {
   const myHref = `/${universityCode}/my`;
   const sortedItems = sortByLatest(items);
@@ -36,11 +34,7 @@ function ClubApplicationList({
       {sortedItems.length > 0 ? (
         <ul className="flex flex-col gap-3">
           {sortedItems.map((item) => (
-            <ClubApplicationCard
-              key={item.id}
-              item={item}
-              showLogo={showLogo}
-            />
+            <ClubApplicationCard key={item.id} item={item} />
           ))}
         </ul>
       ) : (

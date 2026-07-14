@@ -8,14 +8,12 @@ type ApplicationSectionProps = {
   title: string;
   moreHref: string;
   items: ApplicationCardItem[];
-  showLogo?: boolean;
 };
 
 function ApplicationSection({
   title,
   moreHref,
   items,
-  showLogo = false,
 }: ApplicationSectionProps) {
   if (items.length === 0) {
     return null;
@@ -32,7 +30,7 @@ function ApplicationSection({
         </Link>
       </div>
       <ul>
-        <ClubApplicationCard item={latest} showLogo={showLogo} />
+        <ClubApplicationCard item={latest} />
       </ul>
     </div>
   );
@@ -61,7 +59,6 @@ function ClubApplicationStatus({
           title={APPLICATION_SECTION.master.title}
           moreHref={`/${universityCode}/my/applications/${APPLICATION_SECTION.master.path}`}
           items={masterItems}
-          showLogo
         />
         <ApplicationSection
           title={APPLICATION_SECTION.create.title}

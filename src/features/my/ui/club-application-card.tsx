@@ -12,15 +12,14 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { ClubApplicationType } from '@/entities/my/model/type';
+import { ApplicationCardItem } from '@/entities/my/model/type';
 
 type ClubApplicationCardProps = {
-  application: ClubApplicationType;
+  item: ApplicationCardItem;
 };
 
-function ClubApplicationCard({ application }: ClubApplicationCardProps) {
-  const { clubName, universityName, status, createdAt, rejectReason } =
-    application;
+function ClubApplicationCard({ item }: ClubApplicationCardProps) {
+  const { clubName, universityName, status, createdAt, rejectReason } = item;
 
   return (
     <li className="flex flex-col gap-3 rounded-2xl border border-[#22CF64] p-4">

@@ -8,3 +8,5 @@ export interface University {
 export interface UniversitiesResponse {
   universities: University[];
 }
+
+export type UniversityOption = Pick<University, 'code' | 'name'>;

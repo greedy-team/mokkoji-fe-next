@@ -18,9 +18,10 @@ type Step = 'basic' | 'description';
 function ClubCreateForm() {
   const router = useRouter();
   const { session } = useSession();
+  const universityCode = useUniversityCode();
   const [formData, setFormData] = useState<ClubCreateFormData>({
     clubName: '',
-    universityCode: '',
+    universityCode: universityCode.toUpperCase(),
     clubCategory: '',
     clubAffiliation: '',
     logo: '',
@@ -32,7 +33,6 @@ function ClubCreateForm() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const universityCode = useUniversityCode();
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

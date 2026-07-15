@@ -1,21 +1,27 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 import type {
   ClubMasterApplication,
   ClubApplication,
   ApplicationStatus,
+  ApplicationCardItem,
 } from '@/features/admin/model/dashboard-types';
-import ApplicationTableRow from '@/features/admin/ui/ApplicationTableRow';
+import ApplicationCard from '@/features/admin/ui/ApplicationCard';
 import SubTabButton from '@/features/admin/ui/SubTabButton';
-import TableHeaderCell from '@/features/admin/ui/TableHeaderCell';
 import approveClubMasterApplication from '@/features/admin/api/approveClubMasterApplication';
 import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterApplication';
 import approveClubApplication from '@/features/admin/api/approveClubApplication';
 import rejectClubApplication from '@/features/admin/api/rejectClubApplication';
 
-type SubTab = 'combined' | 'masterOnly';
+type KindFilter = 'clubApplication' | 'clubMaster';
+
+const STATUS_TABS: { label: string; value: ApplicationStatus }[] = [
+  { label: '진행 중', value: 'PENDING' },
+  { label: '승인', value: 'APPROVED' },
+  { label: '반려', value: 'REJECTED' },
+];
 
 interface ClubMasterApplicationWidgetProps {
   initialClubApplications: ClubApplication[];
@@ -26,7 +32,8 @@ function ClubMasterApplicationWidget({
   initialClubApplications,
   initialClubMasterApplications,
 }: ClubMasterApplicationWidgetProps) {
-  const [activeTab, setActiveTab] = useState<SubTab>('combined');
+  const [kindFilter, setKindFilter] = useState<KindFilter>('clubApplication');
+  const [statusTab, setStatusTab] = useState<ApplicationStatus>('PENDING');
   const [clubApplications, setClubApplications] = useState(
     initialClubApplications,
   );
@@ -35,197 +42,152 @@ function ClubMasterApplicationWidget({
   );
   const [, startTransition] = useTransition();
 
-  const pendingClubApplications = clubApplications.filter(
-    (a) => a.status === 'PENDING',
-  );
-  const pendingMasterApplications = clubMasterApplications.filter(
-    (a) => a.status === 'PENDING',
-  );
+  const items = useMemo<ApplicationCardItem[]>(() => {
+    if (kindFilter === 'clubMaster') {
+      return clubMasterApplications.map((application) => ({
+        key: `master-${application.id}`,
+        kind: 'master',
+        applicationId: application.id,
+        clubName: application.clubName,
+        universityName: application.universityName,
+        applicantName: application.userName,
+        status: application.status,
+        createdAt: application.createdAt,
+      }));
+    }
 
-  const handleCombinedApprove = (applicationId: number) => {
-    startTransition(async () => {
-      const [clubResult, masterResult] = await Promise.all([
-        approveClubApplication(applicationId),
-        approveClubMasterApplication(applicationId),
-      ]);
+    return clubApplications.map((application) => ({
+      key: `club-${application.applicationId}`,
+      kind: 'club',
+      applicationId: application.applicationId,
+      clubName: application.clubName,
+      universityName: application.universityName,
+      applicantName: application.applicantName,
+      status: application.status,
+      createdAt: application.createdAt,
+      category: application.category,
+      affiliation: application.affiliation,
+      logo: application.logo,
+      instagram: application.instagram,
+      description: application.description,
+    }));
+  }, [clubApplications, clubMasterApplications, kindFilter]);
 
-      const failedResult = [clubResult, masterResult].find(
-        (result) => !result.ok,
-      );
+  const visibleItems = items.filter((item) => item.status === statusTab);
 
-      if (failedResult) {
-        toast.error(failedResult.message);
-        return;
-      }
-
-      setClubApplications((previous) =>
-        previous.map((a) =>
-          a.applicationId === applicationId
-            ? { ...a, status: 'APPROVED' as ApplicationStatus }
-            : a,
-        ),
-      );
-      setClubMasterApplications((previous) =>
-        previous.map((a) =>
-          a.id === applicationId
-            ? { ...a, status: 'APPROVED' as ApplicationStatus }
-            : a,
-        ),
-      );
-      toast.success('동아리장 및 동아리 생성 신청을 승인했습니다.');
-    });
-  };
-
-  const handleCombinedReject = (
-    applicationId: number,
-    rejectReason?: string,
+  const updateStatus = (
+    item: ApplicationCardItem,
+    status: ApplicationStatus,
+    rejectReason: string | null = null,
   ) => {
-    startTransition(async () => {
-      const result = await rejectClubApplication(applicationId, rejectReason);
-
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
-      }
-
+    if (item.kind === 'club') {
       setClubApplications((previous) =>
-        previous.map((a) =>
-          a.applicationId === applicationId
-            ? {
-                ...a,
-                status: 'REJECTED' as ApplicationStatus,
-                rejectReason: rejectReason ?? null,
-              }
-            : a,
+        previous.map((application) =>
+          application.applicationId === item.applicationId
+            ? { ...application, status, rejectReason }
+            : application,
         ),
       );
-      toast.success(result.message);
-    });
+    } else {
+      setClubMasterApplications((previous) =>
+        previous.map((application) =>
+          application.id === item.applicationId
+            ? { ...application, status, rejectReason }
+            : application,
+        ),
+      );
+    }
   };
 
-  const handleMasterApprove = (applicationId: number) => {
+  const handleApprove = (item: ApplicationCardItem) => {
     startTransition(async () => {
-      const result = await approveClubMasterApplication(applicationId);
+      const result =
+        item.kind === 'club'
+          ? await approveClubApplication(item.applicationId)
+          : await approveClubMasterApplication(item.applicationId);
 
       if (!result.ok) {
         toast.error(result.message);
         return;
       }
 
-      setClubMasterApplications((previous) =>
-        previous.map((a) =>
-          a.id === applicationId
-            ? { ...a, status: 'APPROVED' as ApplicationStatus }
-            : a,
-        ),
-      );
+      updateStatus(item, 'APPROVED');
       toast.success(result.message);
     });
   };
 
-  const handleMasterReject = (applicationId: number, rejectReason?: string) => {
+  const handleReject = (item: ApplicationCardItem, rejectReason?: string) => {
     startTransition(async () => {
-      const result = await rejectClubMasterApplication(
-        applicationId,
-        rejectReason,
-      );
+      const result =
+        item.kind === 'club'
+          ? await rejectClubApplication(item.applicationId, rejectReason)
+          : await rejectClubMasterApplication(item.applicationId, rejectReason);
 
       if (!result.ok) {
         toast.error(result.message);
         return;
       }
 
-      setClubMasterApplications((previous) =>
-        previous.map((a) =>
-          a.id === applicationId
-            ? {
-                ...a,
-                status: 'REJECTED' as ApplicationStatus,
-                rejectReason: rejectReason ?? null,
-              }
-            : a,
-        ),
-      );
+      updateStatus(item, 'REJECTED', rejectReason ?? null);
       toast.success(result.message);
     });
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex gap-2">
+    <div className="flex flex-col gap-6">
+      <div className="flex gap-3">
         <SubTabButton
-          isActive={activeTab === 'combined'}
-          onClick={() => setActiveTab('combined')}
+          isActive={kindFilter === 'clubApplication'}
+          onClick={() => setKindFilter('clubApplication')}
         >
-          동아리장 &amp; 동아리 생성
+          동아리 생성 &amp; 동아리장
         </SubTabButton>
         <SubTabButton
-          isActive={activeTab === 'masterOnly'}
-          onClick={() => setActiveTab('masterOnly')}
+          isActive={kindFilter === 'clubMaster'}
+          onClick={() => setKindFilter('clubMaster')}
         >
           동아리장
         </SubTabButton>
       </div>
 
-      {activeTab === 'combined' && (
-        <div className="flex w-full flex-col">
-          <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-            <TableHeaderCell width="w-[120px]">신청일자</TableHeaderCell>
-            <TableHeaderCell width="w-[160px]">동아리명</TableHeaderCell>
-            <TableHeaderCell width="w-[100px]">분류</TableHeaderCell>
-            <TableHeaderCell width="flex-1">신청자</TableHeaderCell>
-            <TableHeaderCell width="w-[152px]">상태</TableHeaderCell>
-          </div>
-          {pendingClubApplications.length === 0 ? (
-            <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
-              신청 내역이 없습니다.
-            </div>
-          ) : (
-            pendingClubApplications.map((application) => (
-              <ApplicationTableRow
-                key={application.applicationId}
-                applicationId={application.applicationId}
-                clubName={application.clubName}
-                applicantName={application.applicantName}
-                category={application.category}
-                status={application.status}
-                createdAt={application.createdAt}
-                onApprove={handleCombinedApprove}
-                onReject={handleCombinedReject}
+      <div className="flex flex-col gap-6">
+        <div className="flex">
+          {STATUS_TABS.map((tab) => (
+            <button
+              key={tab.value}
+              type="button"
+              onClick={() => setStatusTab(tab.value)}
+              className="flex w-20 cursor-pointer flex-col items-center gap-[5px]"
+            >
+              <span
+                className={`text-[16px] leading-[140%] font-semibold tracking-[-0.03em] ${statusTab === tab.value ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
+              >
+                {tab.label}
+              </span>
+              <span
+                className={`h-px w-full ${statusTab === tab.value ? 'bg-[#22CF64]' : 'bg-transparent'}`}
               />
-            ))
-          )}
+            </button>
+          ))}
         </div>
-      )}
 
-      {activeTab === 'masterOnly' && (
         <div className="flex w-full flex-col">
-          <div className="flex w-full items-center border-t border-b border-[#8B95A1] py-2">
-            <TableHeaderCell width="w-[120px]">신청일자</TableHeaderCell>
-            <TableHeaderCell width="w-[160px]">동아리명</TableHeaderCell>
-            <TableHeaderCell width="flex-1">신청자</TableHeaderCell>
-            <TableHeaderCell width="w-[152px]">상태</TableHeaderCell>
-          </div>
-          {pendingMasterApplications.length === 0 ? (
+          {visibleItems.length === 0 ? (
             <div className="py-8 text-center text-[16px] leading-[140%] font-medium text-[#8B95A1]">
               신청 내역이 없습니다.
             </div>
           ) : (
-            pendingMasterApplications.map((application) => (
-              <ApplicationTableRow
-                key={application.id}
-                applicationId={application.id}
-                clubName={application.clubName}
-                applicantName={application.userName}
-                status={application.status}
-                createdAt={application.createdAt}
-                onApprove={handleMasterApprove}
-                onReject={handleMasterReject}
+            visibleItems.map((item) => (
+              <ApplicationCard
+                key={item.key}
+                item={item}
+                onApprove={() => handleApprove(item)}
+                onReject={(rejectReason) => handleReject(item, rejectReason)}
               />
             ))
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

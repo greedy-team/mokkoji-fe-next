@@ -13,8 +13,8 @@ function SubTabButton({
       onClick={onClick}
       className={
         isActive
-          ? 'flex h-[38px] items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
-          : 'flex h-[38px] items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
+          ? 'flex h-[38px] cursor-pointer items-center justify-center rounded-[30px] bg-[#000000] px-[14px] text-[16px] leading-[140%] font-medium text-white'
+          : 'flex h-[38px] cursor-pointer items-center justify-center rounded-[30px] border border-[#D6D6D6] px-[14px] text-[16px] leading-[140%] font-medium text-[#7F7F7F]'
       }
     >
       {children}

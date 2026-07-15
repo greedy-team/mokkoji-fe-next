@@ -3,8 +3,7 @@ import { redirect } from 'next/navigation';
 import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
-import getDashboardSummary from '@/features/admin/lib/getDashboardSummary';
-import getUniversities from '@/entities/university/api/getUniversities';
+import getDashboardData from '@/features/admin/api/getDashboardData';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,38 +18,26 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
     if (adminInfoResult.status >= 500) {
       throw new Error(adminInfoResult.message);
     }
-    redirect('/dashboard/login');
+    redirect('/api/auth/dashboard-logout');
   }
 
   const adminInfo = adminInfoResult.data;
-  const isMokkojiAdmin = adminInfo.role === 'MOKKOJI_ADMIN';
-
-  const universitiesResult = await getUniversities();
-  const universities =
-    universitiesResult?.ok && universitiesResult.data
-      ? universitiesResult.data.universities.map((university) => ({
-          code: university.code,
-          name: university.name,
-        }))
-      : [];
 
   const { universityCode: selectedFromUrl } = await searchParams;
-  const universityCode = isMokkojiAdmin
-    ? (selectedFromUrl ?? universities[0]?.code)
-    : (adminInfo.universityCode ?? undefined);
-
-  const summaryResult = await getDashboardSummary(universityCode);
-
-  if (!summaryResult.ok || !summaryResult.data) {
-    throw new Error(summaryResult.message);
-  }
+  const {
+    universities,
+    universityCode,
+    clubMasterApplications,
+    clubApplications,
+  } = await getDashboardData(adminInfo, selectedFromUrl);
 
   return (
     <Suspense>
       <AdminMainView
         dashboardContent={
           <AdminDashboardView
-            summary={summaryResult.data}
+            clubMasterApplications={clubMasterApplications}
+            clubApplications={clubApplications}
             role={adminInfo.role}
             universities={universities}
             selectedCode={universityCode ?? ''}

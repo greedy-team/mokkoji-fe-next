@@ -47,18 +47,27 @@ export interface AdminClub {
   } | null;
 }
 
+export type ApplicationKind = 'club' | 'master';
+
+export interface ApplicationCardItem {
+  key: string;
+  kind: ApplicationKind;
+  applicationId: number;
+  clubName: string;
+  universityName: string;
+  applicantName: string;
+  status: ApplicationStatus;
+  createdAt: string;
+  category?: string;
+  affiliation?: string;
+  logo?: string;
+  instagram?: string;
+  description?: string;
+}
+
 export interface PaginationMeta {
   page: number;
   size: number;
   totalPages: number;
   totalElements: number;
-}
-
-export interface DashboardSummary {
-  clubMasterApplications: ClubMasterApplication[];
-  clubApplications: ClubApplication[];
-  totalClubs: number;
-  pendingMasterCount: number;
-  pendingClubCount: number;
-  totalMasters: number;
 }

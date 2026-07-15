@@ -8,6 +8,7 @@ import {
 import UserInfoType from '@/entities/my/model/type';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import { buildSessionCookie, CookieSession } from '@/shared/lib/cookie-session';
+import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -20,19 +21,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // eslint-disable-next-line no-console
-    console.log('[callback] Origin header:', process.env.NEXT_PUBLIC_BASE_URL);
     const loginResponse = await serverApi.post('users/auth/kakao', {
       json: { code },
       headers: { Origin: process.env.NEXT_PUBLIC_BASE_URL },
     });
 
     const loginResponseBody: LoginSuccessResponse = await loginResponse.json();
-    // eslint-disable-next-line no-console
-    console.log(
-      '[callback] login response:',
-      JSON.stringify(loginResponseBody),
-    );
 
     if (!loginResponseBody.data) {
       return NextResponse.redirect(new URL(`/${state}/login`, request.url));
@@ -44,8 +38,6 @@ export async function GET(request: NextRequest) {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const userResponseBody: { data: UserInfoType } = await userResponse.json();
-    // eslint-disable-next-line no-console
-    console.log('[callback] user response:', JSON.stringify(userResponseBody));
 
     let role: string | undefined;
     try {
@@ -58,9 +50,9 @@ export async function GET(request: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
-    const apiUniversityCode = (
-      userResponseBody.data.universityCode ?? 'SEJONG'
-    ).toUpperCase();
+    const apiUniversityCode = urlCodeToApiCode(
+      userResponseBody.data.universityCode ?? 'SEJONG',
+    );
 
     const session: CookieSession = {
       accessToken,

@@ -5,6 +5,7 @@ import KakaoAdFit from '@/shared/ui/kakao-adfit';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';
+import QueryProvider from '@/shared/lib/QueryProvider';
 import {
   getUniversityName,
   urlCodeToApiCode,
@@ -39,15 +40,24 @@ export default async function MainLayout({
 }) {
   const { universityCode } = await params;
 
+  const userQueryOptions = {
+    queries: {
+      staleTime: 10 * 60 * 1000,
+      retry: 1,
+    },
+  };
+
   return (
-    <div className="flex h-screen w-full flex-col">
-      <div className="hidden sm:block">
-        <Header universityCode={universityCode} />
+    <QueryProvider defaultOptions={userQueryOptions}>
+      <div className="flex h-screen w-full flex-col">
+        <div className="hidden sm:block">
+          <Header universityCode={universityCode} />
+        </div>
+        <main className="flex-1">{children}</main>
+        <KakaoAdFit />
+        <Footer />
+        <BottomNav />
       </div>
-      <main className="flex-1">{children}</main>
-      <KakaoAdFit />
-      <Footer />
-      <BottomNav />
-    </div>
+    </QueryProvider>
   );
 }

@@ -102,9 +102,7 @@ async function MyPage({
           <InfoRow
             label="학교"
             value={
-              user.universityCode
-                ? getUniversityName(user.universityCode)
-                : undefined
+              user.universityCode ? getUniversityName(user.universityCode) : '-'
             }
           />
           <div className="pt-6">

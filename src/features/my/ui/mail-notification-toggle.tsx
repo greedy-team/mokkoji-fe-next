@@ -34,7 +34,7 @@ export default function MailNotificationToggle({
       await putEmail(email, toggle);
     } catch (err) {
       setEnabled(!toggle);
-      console.log(err);
+      console.error(err);
     }
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 import type {
   ClubMasterApplication,
   ClubApplication,
@@ -100,25 +101,35 @@ function ClubMasterApplicationWidget({
 
   const handleApprove = (item: ApplicationCardItem) => {
     startTransition(async () => {
-      const success =
+      const result =
         item.kind === 'club'
           ? await approveClubApplication(item.applicationId)
           : await approveClubMasterApplication(item.applicationId);
-      if (success) {
-        updateStatus(item, 'APPROVED');
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      updateStatus(item, 'APPROVED');
+      toast.success(result.message);
     });
   };
 
   const handleReject = (item: ApplicationCardItem, rejectReason?: string) => {
     startTransition(async () => {
-      const success =
+      const result =
         item.kind === 'club'
           ? await rejectClubApplication(item.applicationId, rejectReason)
           : await rejectClubMasterApplication(item.applicationId, rejectReason);
-      if (success) {
-        updateStatus(item, 'REJECTED', rejectReason ?? null);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      updateStatus(item, 'REJECTED', rejectReason ?? null);
+      toast.success(result.message);
     });
   };
 

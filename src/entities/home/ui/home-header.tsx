@@ -1,11 +1,15 @@
-function HomeHeader() {
+interface HomeHeaderProps {
+  universityName: string;
+}
+
+function HomeHeader({ universityName }: HomeHeaderProps) {
   return (
     <header className="flex flex-col items-center py-8 text-[#2E2E2E]">
       <h1 className="bg-gradient-primary mb-4 w-fit bg-clip-text p-4 text-[120px] font-bold text-transparent">
         Club, set, go!
       </h1>
       <p className="text-[32px]">
-        세종대의 모든{' '}
+        {universityName}의 모든{' '}
         <span className="bg-gradient-primary bg-clip-text font-bold text-transparent">
           동아리
         </span>

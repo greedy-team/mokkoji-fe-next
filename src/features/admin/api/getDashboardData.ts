@@ -42,9 +42,9 @@ async function getDashboardData(
   return {
     universities,
     universityCode,
-    clubMasterApplications: clubMasterData?.applications ?? [],
+    clubMasterApplications: clubMasterData.data?.applications ?? [],
     clubApplications: clubApplicationResults.flatMap(
-      (result) => result?.applications ?? [],
+      (result) => result.data?.applications ?? [],
     ),
   };
 }

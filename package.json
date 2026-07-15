@@ -35,6 +35,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.34.0",
     "@storybook/experimental-addon-test": "8.6.12",
+    "@tanstack/react-query": "^5.101.2",
     "@tanstack/react-virtual": "^3.13.12",
     "@tiptap/core": "^3.23.6",
     "@tiptap/extension-text-align": "^3.23.6",

@@ -4,6 +4,7 @@ import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';
+import QueryProvider from '@/shared/lib/QueryProvider';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 동아리 통합 플랫폼',
@@ -23,12 +24,21 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const userQueryOptions = {
+    queries: {
+      staleTime: 10 * 60 * 1000,
+      retry: 1,
+    },
+  };
+
   return (
-    <div className="flex h-screen w-full flex-col">
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
-      <BottomNav />
-    </div>
+    <QueryProvider defaultOptions={userQueryOptions}>
+      <div className="flex h-screen w-full flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <BottomNav />
+      </div>
+    </QueryProvider>
   );
 }

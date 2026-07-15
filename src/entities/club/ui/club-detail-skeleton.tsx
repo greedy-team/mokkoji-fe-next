@@ -2,7 +2,7 @@ const dummyTabs = [1, 2, 3];
 
 function ClubDetailSkeleton() {
   return (
-    <div className="mt-5 w-full px-5 lg:mt-[35px] lg:w-[60%] lg:max-w-[60%] lg:min-w-[60%]">
+    <div className="mt-5 w-full lg:mt-[35px]">
       <header className="w-full">
         <div className="flex flex-row items-center gap-3.5 lg:mb-5 lg:gap-4">
           <div className="hidden h-[72px] w-[72px] rounded-full bg-gray-300 sm:block" />

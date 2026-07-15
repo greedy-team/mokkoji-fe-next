@@ -13,7 +13,7 @@ async function postClubMasterTransfer(
     });
     return {
       ok: true,
-      message: '동아리장 권한 위임을 요청했습니다.',
+      message: '동아리장 권한 위임을 완료했습니다.',
       status: 201,
     };
   } catch (error) {

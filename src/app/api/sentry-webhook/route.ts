@@ -79,7 +79,6 @@ async function postToDiscord(payload: any) {
     body: JSON.stringify(payload),
   });
 
-  console.log(DISCORD_WEBHOOK_URL, '전송됨!!!');
   if (!discordResponse.ok) {
     const errorText = await discordResponse.text().catch(() => '');
     console.error('❌ Discord 전송 실패:', discordResponse.status, errorText);

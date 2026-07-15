@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
+import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getDashboardSummary from '@/features/admin/lib/getDashboardSummary';
@@ -46,11 +47,15 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
 
   return (
     <Suspense>
-      <AdminDashboardView
-        summary={summaryResult.data}
-        role={adminInfo.role}
-        universities={universities}
-        selectedCode={universityCode ?? ''}
+      <AdminMainView
+        dashboardContent={
+          <AdminDashboardView
+            summary={summaryResult.data}
+            role={adminInfo.role}
+            universities={universities}
+            selectedCode={universityCode ?? ''}
+          />
+        }
       />
     </Suspense>
   );

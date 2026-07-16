@@ -4,6 +4,7 @@ interface ClubManagementRowProps {
   index: number;
   name: string;
   category: string;
+  disabled?: boolean;
   onDelete: () => void;
 }
 
@@ -11,6 +12,7 @@ function ClubManagementRow({
   index,
   name,
   category,
+  disabled,
   onDelete,
 }: ClubManagementRowProps) {
   return (
@@ -27,7 +29,8 @@ function ClubManagementRow({
       <button
         type="button"
         onClick={onDelete}
-        className="flex items-center gap-1.5 rounded-lg border border-[#F04452] px-3 py-1.5 text-[13px] leading-[140%] font-medium text-[#F04452] transition-colors hover:bg-[#FFF0F1]"
+        disabled={disabled}
+        className="flex items-center gap-1.5 rounded-lg border border-[#F04452] px-3 py-1.5 text-[13px] leading-[140%] font-medium text-[#F04452] transition-colors hover:bg-[#FFF0F1] disabled:cursor-not-allowed disabled:opacity-50"
       >
         삭제하기
         <DeleteIcon width={14} height={14} />

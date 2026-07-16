@@ -5,6 +5,7 @@ interface UserInfoType {
   role: string;
   emailOn: boolean;
   universityCode: string | null;
+  userCode: string;
 }
 
 export type ClubApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';

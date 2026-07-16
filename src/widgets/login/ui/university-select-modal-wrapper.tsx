@@ -46,6 +46,10 @@ function UniversitySelectModalWrapper({
 
     setIsConfirmOpen(false);
     setIsOpen(false);
+
+    if (code) {
+      router.push(`/${code}`);
+    }
     router.refresh();
   };
 
@@ -60,6 +64,11 @@ function UniversitySelectModalWrapper({
     setPendingCode(normalizedCode);
     setIsConfirmOpen(true);
   };
+
+  const pendingUniversityName = pendingCode
+    ? (universities.find((university) => university.code === pendingCode)
+        ?.name ?? pendingCode)
+    : null;
 
   return (
     <>
@@ -94,7 +103,20 @@ function UniversitySelectModalWrapper({
               id="university-change-desc"
               className="text-text-secondary text-sm"
             >
-              학교를 변경하면 기존 즐겨찾기가 모두 삭제됩니다. 계속하시겠어요?
+              {pendingUniversityName ? (
+                <>
+                  학교를 변경하게 되면 지금부터 {pendingUniversityName} 모꼬지를
+                  이용하게 되며, 기존 즐겨찾기는 모두 삭제됩니다.
+                  <br />
+                  계속하시겠어요?
+                </>
+              ) : (
+                <>
+                  학교를 변경하게 되면 기존 즐겨찾기는 모두 삭제됩니다.
+                  <br />
+                  계속하시겠어요?
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
 

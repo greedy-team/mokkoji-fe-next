@@ -45,24 +45,11 @@ CSS tokens: `src/app/theme.css` / Animations: `src/app/globals.css`
 6. **No comments**: Exception only for complex, non-obvious logic.
 7. **No abbreviated naming**: Use full words. (`btn` → `button`, `idx` → `index`)
 8. **Server/Client separation**: Default to Server Component if no interaction. Use `'use client'` if `useState`/`useEffect`/event handlers exist.
+9. **No raw fetch**: Always use ky for HTTP requests. Never use fetch directly.
 
 ## Commit Rules
 
-Separate commits by FSD layer boundaries when implementing one feature. Commit immediately upon layer completion and move to the next layer.
+Separate commits by work type (feature, refactor, fix, config, etc.), not by FSD layer.
 
-```
-[#issue-number] feat: {domain} API and type definitions
-  → features/{domain}/api/, features/{domain}/model/
-
-[#issue-number] feat: {domain} Block component implementation
-  → features/{domain}/ui/
-
-[#issue-number] feat: {domain} widget implementation
-  → widgets/{domain}/ui/
-
-[#issue-number] feat: {domain} page and route connection
-  → views/{domain}/, app/, shared changes
-```
-
-- Never combine multiple layers in a single commit.
+- Never combine different types of work in a single commit.
 - Do not use `git add -A` / `git add .`. Always specify files explicitly.

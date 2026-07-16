@@ -271,6 +271,11 @@ html::-webkit-scrollbar {
   h4 {
     @apply cursor-default;
   }
+
+  button,
+  a {
+    @apply cursor-pointer;
+  }
 }
 
 @theme inline {

@@ -92,9 +92,9 @@ function FAQList() {
 
   return (
     <div className="mt-8 w-full space-y-6">
-      <h2 className="text-primary-500 text-xl font-bold lg:text-2xl">FAQ</h2>
+      <h1 className="text-primary-500 text-xl font-bold lg:text-3xl">FAQ</h1>
       {faqData.map((item, idx) => (
-        <div key={item.question} className="border-b pb-3 lg:pb-4">
+        <div key={item.question} className="border-b pb-3 lg:pb-5">
           <button
             className={cn(
               'hover:text-primary-500 w-full cursor-pointer text-left text-sm font-semibold transition lg:text-lg',

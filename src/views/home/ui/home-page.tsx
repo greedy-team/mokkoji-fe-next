@@ -4,9 +4,10 @@ import MobileHomePage from './mobile-home-page';
 
 interface HomePageProps {
   universityName: string;
+  universityCode: string;
 }
 
-async function HomePage({ universityName }: HomePageProps) {
+async function HomePage({ universityName, universityCode }: HomePageProps) {
   const cookieStore = await cookies();
   const deviceType = cookieStore.get('x-device-type')?.value;
 
@@ -14,7 +15,12 @@ async function HomePage({ universityName }: HomePageProps) {
     return <MobileHomePage universityName={universityName} />;
   }
 
-  return <DeskTopHomePage universityName={universityName} />;
+  return (
+    <DeskTopHomePage
+      universityName={universityName}
+      universityCode={universityCode}
+    />
+  );
 }
 
 export default HomePage;

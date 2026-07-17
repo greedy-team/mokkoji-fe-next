@@ -42,7 +42,7 @@ function FavoriteButton({
         }
         setFavorite((prev) => !prev);
         queryClient.invalidateQueries({ queryKey: ['favorites'] });
-      }, 1000),
+      }, 600),
     [favorite, session, clubId, queryClient],
   );
 

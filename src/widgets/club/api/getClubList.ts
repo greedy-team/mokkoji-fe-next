@@ -7,8 +7,7 @@ import api from '@/shared/api/auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
 import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
-import { mapClub } from '@/entities/club/model/type';
-import { ClubsRawResponse } from '../model/type';
+import { ClubsResponse } from '../model/type';
 
 async function getClubList({
   page,
@@ -53,17 +52,12 @@ async function getClubList({
 
     const response = await client
       .get('clubs', fetchOptions)
-      .json<ApiResponse<ClubsRawResponse>>();
+      .json<ApiResponse<ClubsResponse>>();
 
     const responseData = response.data;
     if (!responseData) return { ok: false, message: '데이터 없음' };
 
-    const data = {
-      ...responseData,
-      clubs: responseData.clubs.map(mapClub),
-    };
-
-    return { ok: true, message: '성공', data };
+    return { ok: true, message: '성공', data: responseData };
   } catch (e) {
     return createErrorResponse(e as Error);
   }

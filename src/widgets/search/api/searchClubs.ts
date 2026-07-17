@@ -1,8 +1,7 @@
 import {
   ClubCategory,
   ClubAffiliation,
-  ClubSearchRawResponse,
-  mapClubType,
+  ClubSearchResponse,
 } from '@/shared/model/type';
 import serverApi from '@/shared/api/server-api';
 import createErrorResponse from '@/shared/lib/error-message';
@@ -36,17 +35,12 @@ async function searchClubs(params: SearchClubsParams) {
         searchParams,
         next: { tags: ['clubs-search'] },
       })
-      .json<{ data: ClubSearchRawResponse }>();
-
-    const data = {
-      ...response.data,
-      clubs: response.data.clubs.map(mapClubType),
-    };
+      .json<{ data: ClubSearchResponse }>();
 
     return {
       ok: true,
       message: '성공',
-      data,
+      data: response.data,
       status: 200,
     };
   } catch (e) {

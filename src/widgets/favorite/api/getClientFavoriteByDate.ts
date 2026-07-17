@@ -1,11 +1,11 @@
-import ky from 'ky';
+import clientApi from '@/shared/api/client-api';
 import type { FavoriteDateItem } from '@/entities/favorite/model/type';
 
 async function getClientFavoriteByDate(
   yearMonth: string,
 ): Promise<FavoriteDateItem[]> {
-  const json = await ky
-    .get('/api/favorites/recruit', {
+  const json = await clientApi
+    .get('api/favorites/recruit', {
       searchParams: { yearMonth },
     })
     .json<{ data: FavoriteDateItem[] }>();

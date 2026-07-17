@@ -1,7 +1,7 @@
-import ky from 'ky';
+import clientApi from '@/shared/api/client-api';
 
 async function postClientFavorite(clubId: number): Promise<void> {
-  await ky.post(`/api/favorites/${clubId}`);
+  await clientApi.post(`api/favorites/${clubId}`);
 }
 
 export default postClientFavorite;

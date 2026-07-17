@@ -1,23 +1,23 @@
-import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
-import getFavoriteList from '../api/getFavoriteList';
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import favoriteQueries from '../api/queries';
 import FavoriteItemList from './favorite-item-list';
 
-const MAX_FAVORITE_SIZE = 100;
+function FavoriteItemSection() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+  const size = Number(searchParams.get('size')) || 6;
 
-async function FavoriteItemSection() {
-  const favoriteListResponse = await getFavoriteList({
-    page: 1,
-    size: MAX_FAVORITE_SIZE,
-  });
-
-  if (!favoriteListResponse.ok || !favoriteListResponse.data) {
-    return <ErrorBoundaryUi />;
-  }
+  const { data } = useSuspenseQuery(favoriteQueries.list({ page, size }));
 
   return (
     <FavoriteItemList
-      clubs={favoriteListResponse.data.clubs}
-      totalElements={favoriteListResponse.data.pagination.totalElements}
+      clubs={data.clubs}
+      totalElements={data.pagination.totalElements}
+      page={page}
+      size={size}
     />
   );
 }

@@ -17,6 +17,7 @@ interface ClubItemProps {
   recruitStatus?: RecruitStatus;
   isAlwaysRecruiting: boolean;
   height?: number;
+  favoriteButton?: React.ReactNode;
 }
 
 function ClubItem({
@@ -30,6 +31,7 @@ function ClubItem({
   recruitStatus,
   isAlwaysRecruiting,
   height = 150,
+  favoriteButton,
 }: ClubItemProps) {
   return (
     <div
@@ -49,11 +51,13 @@ function ClubItem({
                 {name}
               </h1>
 
-              <FavoriteButton
-                isFavorite={isFavorite}
-                clubId={id}
-                customClass="scale-100 mt-1"
-              />
+              {favoriteButton ?? (
+                <FavoriteButton
+                  isFavorite={isFavorite}
+                  clubId={id}
+                  customClass="scale-100 mt-1"
+                />
+              )}
               {recruitStatus && (
                 <RadiusTag
                   recruitStatus={recruitStatus}

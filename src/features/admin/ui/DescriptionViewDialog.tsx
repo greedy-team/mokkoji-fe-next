@@ -1,6 +1,7 @@
 'use client';
 
 import * as Dialog from '@radix-ui/react-dialog';
+import convertLinkText from '@/entities/club-detail/util/convertLinkText';
 
 interface DescriptionViewDialogProps {
   open: boolean;
@@ -29,9 +30,10 @@ function DescriptionViewDialog({
                 {clubName}
               </Dialog.Description>
             </div>
-            <div className="min-h-[120px] w-full rounded-[16px] border border-[#E2E2E2] px-5 py-5 text-[16px] leading-[140%] font-medium break-words whitespace-pre-wrap text-[#474747]">
-              {description}
-            </div>
+            <div
+              className="min-h-[120px] w-full rounded-[16px] border border-[#E2E2E2] px-5 py-5 text-[16px] leading-[140%] font-medium break-words whitespace-pre-wrap text-[#474747] [&_a]:text-[#20E86C] [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: convertLinkText(description) }}
+            />
             <button
               type="button"
               onClick={onClose}

@@ -52,10 +52,10 @@ function ClubApplicationCard({ item }: ClubApplicationCardProps) {
 
         {status === 'REJECTED' && (
           <div className="flex items-center gap-2">
+            <RejectReasonViewDialog rejectReason={rejectReason} />
             <span className="text-alert-500 border-alert-500 rounded-full border px-3 py-1 text-xs">
               반려
             </span>
-            <RejectReasonViewDialog rejectReason={rejectReason} />
           </div>
         )}
       </div>

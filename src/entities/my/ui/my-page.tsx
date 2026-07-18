@@ -119,20 +119,19 @@ async function MyPage({
                   ? getUniversityName(user.universityCode)
                   : '-'
               }
-            />
+            >
+              <UniversitySelectModalWrapper
+                defaultOpen={isNewUser}
+                universityCode={user.universityCode}
+                universities={universities}
+              />
+            </InfoRow>
             {isAdmin && (
               <div className="mt-6 flex items-center gap-2">
                 <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
                 <Image src="/nextBlack.svg" alt="" width={8} height={12} />
               </div>
             )}
-            <div className="pt-6">
-              <UniversitySelectModalWrapper
-                defaultOpen={isNewUser}
-                universityCode={user.universityCode}
-                universities={universities}
-              />
-            </div>
             <div className="pt-6">
               <LogoutLink />
             </div>

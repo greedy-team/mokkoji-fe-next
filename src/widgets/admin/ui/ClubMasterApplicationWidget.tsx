@@ -9,6 +9,7 @@ import type {
   ApplicationCardItem,
 } from '@/features/admin/model/dashboard-types';
 import ApplicationCard from '@/features/admin/ui/ApplicationCard';
+import ApproveCompleteDialog from '@/features/admin/ui/ApproveCompleteDialog';
 import SubTabButton from '@/features/admin/ui/SubTabButton';
 import approveClubMasterApplication from '@/features/admin/api/approveClubMasterApplication';
 import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterApplication';
@@ -40,6 +41,8 @@ function ClubMasterApplicationWidget({
   const [clubMasterApplications, setClubMasterApplications] = useState(
     initialClubMasterApplications,
   );
+  const [approveCompleteDialogOpen, setApproveCompleteDialogOpen] =
+    useState(false);
   const [, startTransition] = useTransition();
 
   const items = useMemo<ApplicationCardItem[]>(() => {
@@ -99,24 +102,22 @@ function ClubMasterApplicationWidget({
     }
   };
 
-  const handleApprove = (item: ApplicationCardItem): Promise<boolean> =>
-    new Promise((resolve) => {
-      startTransition(async () => {
-        const result =
-          item.kind === 'club'
-            ? await approveClubApplication(item.applicationId)
-            : await approveClubMasterApplication(item.applicationId);
+  const handleApprove = (item: ApplicationCardItem) => {
+    startTransition(async () => {
+      const result =
+        item.kind === 'club'
+          ? await approveClubApplication(item.applicationId)
+          : await approveClubMasterApplication(item.applicationId);
 
-        if (!result.ok) {
-          toast.error(result.message);
-          resolve(false);
-          return;
-        }
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
+      }
 
-        updateStatus(item, 'APPROVED');
-        resolve(true);
-      });
+      updateStatus(item, 'APPROVED');
+      setApproveCompleteDialogOpen(true);
     });
+  };
 
   const handleReject = (item: ApplicationCardItem, rejectReason?: string) => {
     startTransition(async () => {
@@ -190,6 +191,11 @@ function ClubMasterApplicationWidget({
           )}
         </div>
       </div>
+
+      <ApproveCompleteDialog
+        open={approveCompleteDialogOpen}
+        onClose={() => setApproveCompleteDialogOpen(false)}
+      />
     </div>
   );
 }

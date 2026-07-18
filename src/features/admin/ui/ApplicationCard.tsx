@@ -4,18 +4,15 @@ import { useState } from 'react';
 import type { ApplicationCardItem } from '@/features/admin/model/dashboard-types';
 import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
 import RejectReasonDialog from './RejectReasonDialog';
-import ApproveCompleteDialog from './ApproveCompleteDialog';
 
 interface ApplicationCardProps {
   item: ApplicationCardItem;
-  onApprove: () => Promise<boolean>;
+  onApprove: () => void;
   onReject: (rejectReason?: string) => void;
 }
 
 function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
-  const [approveCompleteDialogOpen, setApproveCompleteDialogOpen] =
-    useState(false);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const formattedDate = item.createdAt.slice(0, 10).replace(/-/g, '.');
@@ -28,13 +25,6 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
     ? resolveInstagramHref(item.instagram)
     : null;
   const hasLogo = !!item.logo && /^https?:\/\//.test(item.logo);
-
-  const handleApprove = async () => {
-    const success = await onApprove();
-    if (success) {
-      setApproveCompleteDialogOpen(true);
-    }
-  };
 
   const handleRejectConfirm = (reason?: string) => {
     onReject(reason);
@@ -135,7 +125,7 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
             <>
               <button
                 type="button"
-                onClick={handleApprove}
+                onClick={onApprove}
                 className="flex h-9 w-[72px] cursor-pointer items-center justify-center rounded-[30px] bg-[#4AF38A] text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#000000] transition-colors hover:bg-[#22CF64]"
               >
                 승인하기
@@ -162,11 +152,6 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
         open={rejectDialogOpen}
         onClose={() => setRejectDialogOpen(false)}
         onConfirm={handleRejectConfirm}
-      />
-
-      <ApproveCompleteDialog
-        open={approveCompleteDialogOpen}
-        onClose={() => setApproveCompleteDialogOpen(false)}
       />
     </>
   );

@@ -99,22 +99,24 @@ function ClubMasterApplicationWidget({
     }
   };
 
-  const handleApprove = (item: ApplicationCardItem) => {
-    startTransition(async () => {
-      const result =
-        item.kind === 'club'
-          ? await approveClubApplication(item.applicationId)
-          : await approveClubMasterApplication(item.applicationId);
+  const handleApprove = (item: ApplicationCardItem): Promise<boolean> =>
+    new Promise((resolve) => {
+      startTransition(async () => {
+        const result =
+          item.kind === 'club'
+            ? await approveClubApplication(item.applicationId)
+            : await approveClubMasterApplication(item.applicationId);
 
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
-      }
+        if (!result.ok) {
+          toast.error(result.message);
+          resolve(false);
+          return;
+        }
 
-      updateStatus(item, 'APPROVED');
-      toast.success(result.message);
+        updateStatus(item, 'APPROVED');
+        resolve(true);
+      });
     });
-  };
 
   const handleReject = (item: ApplicationCardItem, rejectReason?: string) => {
     startTransition(async () => {

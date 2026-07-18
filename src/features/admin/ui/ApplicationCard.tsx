@@ -8,7 +8,7 @@ import ApproveCompleteDialog from './ApproveCompleteDialog';
 
 interface ApplicationCardProps {
   item: ApplicationCardItem;
-  onApprove: () => void;
+  onApprove: () => Promise<boolean>;
   onReject: (rejectReason?: string) => void;
 }
 
@@ -29,9 +29,11 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
     : null;
   const hasLogo = !!item.logo && /^https?:\/\//.test(item.logo);
 
-  const handleApprove = () => {
-    onApprove();
-    setApproveCompleteDialogOpen(true);
+  const handleApprove = async () => {
+    const success = await onApprove();
+    if (success) {
+      setApproveCompleteDialogOpen(true);
+    }
   };
 
   const handleRejectConfirm = (reason?: string) => {

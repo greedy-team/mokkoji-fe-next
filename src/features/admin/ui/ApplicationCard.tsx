@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ApplicationCardItem } from '@/features/admin/model/dashboard-types';
 import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
+import RejectReasonViewDialog from '@/shared/ui/RejectReasonViewDialog';
 import RejectReasonDialog from './RejectReasonDialog';
 import ApproveCompleteDialog from './ApproveCompleteDialog';
 
@@ -147,11 +148,16 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
               </button>
             </>
           ) : (
-            <span
-              className={`text-[14px] leading-[140%] font-medium tracking-[-0.03em] ${item.status === 'APPROVED' ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
-            >
-              {item.status === 'APPROVED' ? '승인됨' : '반려됨'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={`text-[14px] leading-[140%] font-medium tracking-[-0.03em] ${item.status === 'APPROVED' ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
+              >
+                {item.status === 'APPROVED' ? '승인됨' : '반려됨'}
+              </span>
+              {item.status === 'REJECTED' && (
+                <RejectReasonViewDialog rejectReason={item.rejectReason} />
+              )}
+            </div>
           )}
         </div>
       </div>

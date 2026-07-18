@@ -1,17 +1,7 @@
 'use client';
 
 import dayjs from 'dayjs';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/shared/ui/dialog';
-import { Button } from '@/shared/ui/button';
+import RejectReasonViewDialog from '@/shared/ui/RejectReasonViewDialog';
 import { ApplicationCardItem } from '@/entities/my/model/type';
 
 type ClubApplicationCardProps = {
@@ -65,43 +55,7 @@ function ClubApplicationCard({ item }: ClubApplicationCardProps) {
             <span className="text-alert-500 border-alert-500 rounded-full border px-3 py-1 text-xs">
               반려
             </span>
-            <Dialog>
-              <DialogTrigger asChild>
-                <button
-                  type="button"
-                  className="text-text-tertiary text-xs underline"
-                >
-                  반려 사유 확인
-                </button>
-              </DialogTrigger>
-              <DialogContent
-                aria-describedby="reject-reason-description"
-                className="w-[400px] rounded-2xl"
-              >
-                <DialogHeader>
-                  <DialogTitle className="flex items-start font-semibold">
-                    반려 사유
-                  </DialogTitle>
-                </DialogHeader>
-                <DialogDescription
-                  id="reject-reason-description"
-                  className="text-text-secondary text-sm"
-                >
-                  {rejectReason}
-                </DialogDescription>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button
-                      type="button"
-                      variant="submit-default"
-                      className="mt-2 rounded-xl bg-[#4AF38A] py-6 font-normal text-[#474747] disabled:text-white"
-                    >
-                      확인
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <RejectReasonViewDialog rejectReason={rejectReason} />
           </div>
         )}
       </div>

@@ -30,12 +30,14 @@ function AdminDashboardView({
   return (
     <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
       <div className="flex items-center justify-between">
-        <button
-          type="button"
-          className="flex h-[50px] cursor-pointer items-center justify-center rounded-[30px] bg-[#4AF38A] px-5 text-[16px] leading-[140%] font-medium text-[#000000]"
-        >
-          대시보드
-        </button>
+        <div className="flex flex-col gap-1">
+          <h2 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
+            승인 대기 신청
+          </h2>
+          <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
+            현재 승인 대기 중인 신청을 확인하고 처리할 수 있어요.
+          </p>
+        </div>
         {isMokkojiAdmin ? (
           <AdminUniversitySelectWidget
             universities={universities}
@@ -46,15 +48,6 @@ function AdminDashboardView({
             {selectedUniversityName}
           </span>
         )}
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <h2 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
-          승인 대기 신청
-        </h2>
-        <p className="text-[14px] leading-[140%] font-medium tracking-[-0.03em] text-[#8B95A1]">
-          현재 승인 대기 중인 신청을 확인하고 처리할 수 있어요.
-        </p>
       </div>
 
       <ClubMasterApplicationWidget

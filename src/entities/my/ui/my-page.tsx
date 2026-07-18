@@ -65,7 +65,7 @@ async function MyPage({
     toCreateCardItem,
   );
   const masterItems = (clubMasterStatus.data ?? []).map(toMasterCardItem);
-  const isAdmin = userRole !== UserRole.CLUB_MASTER;
+  const isAdmin = userRole !== UserRole.NORMAL;
   const managedClubs =
     userRole === UserRole.CLUB_MASTER ? (clubManageInfo.data?.clubs ?? []) : [];
 
@@ -91,49 +91,54 @@ async function MyPage({
 
         <div className="flex flex-col">
           <span className="mb-4 font-semibold">내 정보</span>
-          <ClubMasterTransferCodeSection userCode={user.userCode} />
-          <InfoRow label="이메일" value={user.email}>
-            <div className="flex items-center gap-3">
-              <EmailChangeDialog
-                initialEmail={user.email ?? undefined}
+          <div className="ml-1">
+            <ClubMasterTransferCodeSection userCode={user.userCode} />
+
+            <InfoRow label="이메일" value={user.email}>
+              <div className="flex items-center gap-3">
+                <EmailChangeDialog
+                  initialEmail={user.email ?? undefined}
+                  isEmailOn={user.emailOn}
+                  triggerClassName="text-[#00E457] text-sm"
+                />
+                {user.email && <EmailDeleteButton />}
+              </div>
+            </InfoRow>
+
+            <InfoRow label="메일 알림">
+              <MailNotificationToggle
+                email={user.email ?? ''}
                 isEmailOn={user.emailOn}
-                triggerClassName="text-[#00E457] text-sm"
               />
-              {user.email && <EmailDeleteButton />}
-            </div>
-          </InfoRow>
+            </InfoRow>
 
-          <InfoRow label="메일 알림">
-            <MailNotificationToggle
-              email={user.email ?? ''}
-              isEmailOn={user.emailOn}
+            <InfoRow
+              label="학교"
+              value={
+                user.universityCode
+                  ? getUniversityName(user.universityCode)
+                  : '-'
+              }
             />
-          </InfoRow>
-
-          <InfoRow
-            label="학교"
-            value={
-              user.universityCode ? getUniversityName(user.universityCode) : '-'
-            }
-          />
-          {isAdmin && (
-            <div className="mt-6 flex items-center gap-2">
-              <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
-              <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+            {isAdmin && (
+              <div className="mt-6 flex items-center gap-2">
+                <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
+                <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+              </div>
+            )}
+            <div className="pt-6">
+              <UniversitySelectModalWrapper
+                defaultOpen={isNewUser}
+                universityCode={user.universityCode}
+                universities={universities}
+              />
             </div>
-          )}
-          <div className="pt-6">
-            <UniversitySelectModalWrapper
-              defaultOpen={isNewUser}
-              universityCode={user.universityCode}
-              universities={universities}
-            />
-          </div>
-          <div className="pt-6">
-            <LogoutLink />
-          </div>
-          <div className="mt-2 mb-15">
-            <WithdrawButton />
+            <div className="pt-6">
+              <LogoutLink />
+            </div>
+            <div className="mt-2 mb-15">
+              <WithdrawButton />
+            </div>
           </div>
         </div>
       </div>

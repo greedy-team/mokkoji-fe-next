@@ -46,7 +46,7 @@ export default function WithdrawButton() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="mt-2 flex items-center gap-2 text-[#FF383C] hover:underline"
+          className="mt-2 flex items-center gap-2 text-sm text-[#FF383C] hover:underline"
         >
           회원 탈퇴
           <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />

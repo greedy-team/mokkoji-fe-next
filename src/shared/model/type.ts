@@ -1,3 +1,5 @@
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
+
 export interface ApiResponse<T> {
   ok: boolean;
   message: string | undefined;
@@ -48,7 +50,13 @@ export interface ClubTypeRaw extends Omit<ClubType, 'isFavorite'> {
 }
 
 export function mapClubType({ favorite, ...rest }: ClubTypeRaw): ClubType {
-  return { ...rest, isFavorite: favorite };
+  return {
+    ...rest,
+    description: rest.description
+      ? stripHtmlTags(rest.description)
+      : rest.description,
+    isFavorite: favorite,
+  };
 }
 
 export interface Pagination {

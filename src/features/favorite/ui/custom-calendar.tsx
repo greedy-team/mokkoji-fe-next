@@ -41,7 +41,7 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
         }}
         value={value}
         locale="ko-KR"
-        className="h-[574px] !w-full rounded-xl !border-none !bg-[#FBFBFB] !p-3 text-gray-800 lg:!w-[700px]"
+        className="!w-full rounded-xl !border-none !bg-[#FBFBFB] !p-3 text-gray-800 lg:!w-[700px]"
         nextLabel={
           <div className="flex items-center justify-center">
             <Image

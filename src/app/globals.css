@@ -385,6 +385,8 @@ html::-webkit-scrollbar {
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 .react-calendar__month-view__weekdays__weekday abbr {

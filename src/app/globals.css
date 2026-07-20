@@ -490,6 +490,11 @@ html::-webkit-scrollbar {
   color: #1f2937 !important;
 }
 
+.react-calendar__month-view__days__day--neighboringMonth,
+.react-calendar__month-view__days__day--neighboringMonth abbr {
+  color: #757575 !important;
+}
+
 .react-calendar__month-view__weekdays {
   text-align: center;
   text-decoration: none !important;

@@ -20,7 +20,7 @@ function DescriptionViewDialog({
     <Dialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 flex w-[531px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-[20px] bg-white p-7">
+        <Dialog.Content className="fixed top-1/2 left-1/2 z-50 flex max-h-[85vh] w-[531px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-[20px] bg-white p-7">
           <div className="flex w-[475px] flex-col gap-6">
             <div className="flex flex-col gap-1">
               <Dialog.Title className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
@@ -31,7 +31,7 @@ function DescriptionViewDialog({
               </Dialog.Description>
             </div>
             <div
-              className="min-h-[120px] w-full rounded-[16px] border border-[#E2E2E2] px-5 py-5 text-[16px] leading-[140%] font-medium break-words whitespace-pre-wrap text-[#474747] [&_a]:text-[#20E86C] [&_a]:underline"
+              className="max-h-[45vh] min-h-[120px] w-full overflow-y-auto rounded-[16px] border border-[#E2E2E2] px-5 py-5 text-[16px] leading-[140%] font-medium break-words whitespace-pre-wrap text-[#474747] [&_a]:text-[#20E86C] [&_a]:underline"
               dangerouslySetInnerHTML={{ __html: convertLinkText(description) }}
             />
             <button

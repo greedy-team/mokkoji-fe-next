@@ -118,7 +118,7 @@ async function MyPage({
           />
           {isAdmin && (
             <div className="mt-6 flex items-center gap-2">
-              <HeaderAdminLink role={userRole} isLoggedIn={!!session} />
+              <HeaderAdminLink isLoggedIn={!!session} />
               <Image src="/nextBlack.svg" alt="" width={8} height={12} />
             </div>
           )}

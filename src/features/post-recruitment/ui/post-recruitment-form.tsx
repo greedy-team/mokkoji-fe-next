@@ -2,8 +2,9 @@
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import { toast } from 'react-toastify';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
@@ -35,7 +36,6 @@ const fields: RecruitmentFormField[] = [
 
 function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(recruitmentFormReducer, initialState);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     imageFiles,
     handleImageChange,
@@ -48,6 +48,30 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const { formData, errors } = state;
   const router = useRouter();
   const universityCode = useUniversityCode();
+  const { mutate, isPending } = useServerAction(postRecruitmentForm, {
+    showSuccessToast: false,
+    onSuccess: async (data) => {
+      const uploadUrls = data?.data?.uploadImageUrls ?? [];
+
+      try {
+        if (uploadUrls.length > 0) {
+          await Promise.all(
+            uploadUrls.map((url: string, index: number) =>
+              ky.put(url, {
+                body: imageFiles[index].file,
+                headers: { 'Content-Type': imageFiles[index].file.type },
+              }),
+            ),
+          );
+        }
+      } catch {
+        toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
+      router.push(`/${universityCode}/club`);
+      toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    },
+  });
 
   const handleChange = (name: keyof RecruitmentFormData, value: string) => {
     dispatch({ type: 'UPDATE_FIELD', name, value });
@@ -59,45 +83,19 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+    if (isPending) return;
 
-    const data = {
-      title: formData.title,
-      content: formData.content,
-      recruitStart: formData.recruitStart,
-      recruitEnd: formData.recruitEnd,
-      recruitForm: formData.recruitForm,
-      imageNames: imageFiles.map((file) => file.imageName),
-    };
-
-    const res = await postRecruitmentForm(data, clubId!);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-
-    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
-
-    try {
-      if (uploadUrls.length > 0) {
-        await Promise.all(
-          uploadUrls.map((url: string, i: number) =>
-            ky.put(url, {
-              body: imageFiles[i].file,
-              headers: { 'Content-Type': imageFiles[i].file.type },
-            }),
-          ),
-        );
-      }
-    } catch (error) {
-      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-      return;
-    }
-    setIsSubmitting(false);
-    router.push(`/${universityCode}/club`);
-    toast.success('모집 공고가 성공적으로 업로드되었습니다!');
+    await mutate(
+      {
+        title: formData.title,
+        content: formData.content,
+        recruitStart: formData.recruitStart,
+        recruitEnd: formData.recruitEnd,
+        recruitForm: formData.recruitForm,
+        imageNames: imageFiles.map((file) => file.imageName),
+      },
+      clubId!,
+    );
   };
 
   const isValid = isFormValid({ formData, errors }, fields);

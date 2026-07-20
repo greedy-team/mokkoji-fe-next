@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import useServerAction from '@/shared/hooks/useServerAction';
 import {
   Dialog,
   DialogTrigger,
@@ -17,20 +17,11 @@ import deleteEmail from '../api/deleteEmail';
 
 export default function EmailDeleteButton() {
   const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(deleteEmail, {
+    onSuccess: () => setOpen(false),
+  });
 
-  const handleDelete = async () => {
-    setSubmitting(true);
-    const response = await deleteEmail();
-    if (!response.ok) {
-      toast.error(response.message);
-      setSubmitting(false);
-      return;
-    }
-    toast.success('이메일이 삭제되었습니다.');
-    setOpen(false);
-    setSubmitting(false);
-  };
+  const handleDelete = () => mutate();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,16 +50,16 @@ export default function EmailDeleteButton() {
           <Button
             variant="outline"
             onClick={() => setOpen(false)}
-            disabled={submitting}
+            disabled={isPending}
           >
             취소
           </Button>
           <Button
             className="bg-red-500 text-white hover:bg-red-600"
             onClick={handleDelete}
-            disabled={submitting}
+            disabled={isPending}
           >
-            {submitting ? '삭제 중…' : '삭제'}
+            {isPending ? '삭제 중…' : '삭제'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,13 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CreateStep } from './types';
 
 function useCreateFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isSubmitting, setSubmitting] = useState(false);
 
   const currentStep =
     (searchParams.get('step') as CreateStep) ?? 'basicInfoCreateStep';
@@ -26,8 +24,6 @@ function useCreateFlow() {
 
   return {
     currentStep,
-    isSubmitting,
-    setSubmitting,
     complete,
     reset,
   };

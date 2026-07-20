@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
+import useServerAction from '@/shared/hooks/useServerAction';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
 import {
@@ -23,23 +23,17 @@ export default function WithdrawButton() {
   const { refresh } = useSession();
   const universityCode = useUniversityCode();
   const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(deleteUser, {
+    onSuccess: async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      refresh();
+      setOpen(false);
+      router.push(`/${universityCode}`);
+      router.refresh();
+    },
+  });
 
-  const handleWithdraw = async () => {
-    setSubmitting(true);
-    const response = await deleteUser();
-    if (!response.ok) {
-      toast.error(response.message);
-      setSubmitting(false);
-      return;
-    }
-    await fetch('/api/auth/logout', { method: 'POST' });
-    refresh();
-    toast.success('회원 탈퇴가 완료되었습니다.');
-    setOpen(false);
-    router.push(`/${universityCode}`);
-    router.refresh();
-  };
+  const handleWithdraw = () => mutate();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -74,16 +68,16 @@ export default function WithdrawButton() {
           <Button
             variant="outline"
             onClick={() => setOpen(false)}
-            disabled={submitting}
+            disabled={isPending}
           >
             취소
           </Button>
           <Button
             className="bg-red-500 text-white hover:bg-red-600"
             onClick={handleWithdraw}
-            disabled={submitting}
+            disabled={isPending}
           >
-            {submitting ? '탈퇴 중…' : '탈퇴'}
+            {isPending ? '탈퇴 중…' : '탈퇴'}
           </Button>
         </DialogFooter>
       </DialogContent>

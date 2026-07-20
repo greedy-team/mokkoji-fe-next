@@ -37,7 +37,7 @@ export default function WithdrawButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-2 flex items-center gap-2 text-sm text-[#FF383C] hover:underline"
+        className="text-gray mt-2 flex items-center gap-2 text-sm hover:underline"
       >
         회원 탈퇴
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />

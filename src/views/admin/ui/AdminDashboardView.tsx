@@ -28,7 +28,7 @@ function AdminDashboardView({
     selectedCode;
 
   return (
-    <div className="flex flex-col gap-8 px-[140px] pt-4 pb-10">
+    <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <h2 className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">

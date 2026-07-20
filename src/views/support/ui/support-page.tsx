@@ -12,10 +12,12 @@ function SupportPage({ universityCode }: SupportPageProps) {
   return (
     <>
       <ScrollProgressBar />
-      <Search />
-      <ClubApplicationButton universityCode={universityCode} />
-      <FAQList />
-      <BugInfoButton />
+      <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
+        <Search />
+        <ClubApplicationButton universityCode={universityCode} />
+        <FAQList />
+        <BugInfoButton />
+      </div>
     </>
   );
 }

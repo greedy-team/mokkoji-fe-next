@@ -1,7 +1,6 @@
 export type {
   Club,
   ClubsResponse,
-  ClubsRawResponse,
   Recruitment,
   RecruitmentResponse,
   RecruitmentPreviewResponse,

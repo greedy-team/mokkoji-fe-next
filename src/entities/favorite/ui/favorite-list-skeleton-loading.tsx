@@ -6,19 +6,19 @@ const SkeletonList = [1, 2, 3, 4, 5, 6];
 function FavoriteListSkeletonLoading() {
   return (
     <>
-      <h1 className="mt-10 mb-5 w-full text-2xl font-bold text-[#00E457]">
-        즐겨찾기 한 동아리 개
+      <h1 className="mt-10 mb-5 w-full text-sm font-bold lg:text-2xl">
+        즐겨찾기 한 동아리 <span className="text-[#00E457]">0개</span>
       </h1>
-      <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
-        <ul className="grid w-auto grid-cols-2 gap-4 sm:h-[480px] sm:grid-cols-2 lg:h-[390px] lg:grid-cols-3">
-          {SkeletonList.map((item) => (
-            <li key={item}>
-              <ClubItemSkeleton />
-            </li>
-          ))}
-        </ul>
+      <ul className="grid w-auto grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-4">
+        {SkeletonList.map((item) => (
+          <li key={item}>
+            <ClubItemSkeleton />
+          </li>
+        ))}
+      </ul>
+      <div className="mt-4 flex items-center justify-center">
+        <PaginationSkeleton />
       </div>
-      <PaginationSkeleton />
     </>
   );
 }

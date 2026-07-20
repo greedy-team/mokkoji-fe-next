@@ -265,13 +265,7 @@ html::-webkit-scrollbar {
   display: none;
 }
 
-@layer utilities {
-  p,
-  h1,
-  h4 {
-    @apply cursor-default;
-  }
-
+@layer base {
   button,
   a {
     @apply cursor-pointer;

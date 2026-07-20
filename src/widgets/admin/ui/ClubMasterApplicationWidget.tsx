@@ -55,6 +55,7 @@ function ClubMasterApplicationWidget({
         universityName: application.universityName,
         applicantName: application.userName,
         status: application.status,
+        rejectReason: application.rejectReason,
         createdAt: application.createdAt,
       }));
     }
@@ -67,6 +68,7 @@ function ClubMasterApplicationWidget({
       universityName: application.universityName,
       applicantName: application.applicantName,
       status: application.status,
+      rejectReason: application.rejectReason,
       createdAt: application.createdAt,
       category: application.category,
       affiliation: application.affiliation,

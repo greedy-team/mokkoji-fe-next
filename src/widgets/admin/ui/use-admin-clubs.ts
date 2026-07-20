@@ -14,6 +14,7 @@ function useAdminClubs() {
 
   return {
     clubs,
+    universityCode: adminMe?.universityCode?.toLowerCase() ?? '',
     isLoading: !adminMe || infiniteQuery.isLoading,
     fetchNextPage: infiniteQuery.fetchNextPage,
     hasNextPage: infiniteQuery.hasNextPage,

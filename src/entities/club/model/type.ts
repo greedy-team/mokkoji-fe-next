@@ -19,14 +19,6 @@ export interface Club {
   recruitmentPreviewResponse: RecruitmentPreviewResponse | null;
 }
 
-export interface ClubRaw extends Omit<Club, 'isFavorite'> {
-  favorite: boolean;
-}
-
-export function mapClub({ favorite, ...rest }: ClubRaw): Club {
-  return { ...rest, isFavorite: favorite };
-}
-
 export interface Recruitment {
   club: Club;
   id: number;
@@ -45,11 +37,6 @@ export interface RecruitmentResponse {
 
 export interface ClubsResponse {
   clubs: Club[];
-  page: Pagination;
-}
-
-export interface ClubsRawResponse {
-  clubs: ClubRaw[];
   page: Pagination;
 }
 

@@ -112,7 +112,7 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
                 onClick={() => setDescriptionOpen(true)}
                 className="cursor-pointer border-b border-[#8B95A1] text-[12px] leading-[100%] font-normal text-[#8B95A1]"
               >
-                한 줄 소개 보기
+                동아리 소개 보기
               </button>
             )}
           </div>

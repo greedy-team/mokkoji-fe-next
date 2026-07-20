@@ -24,7 +24,7 @@ function DescriptionViewDialog({
           <div className="flex w-[475px] flex-col gap-6">
             <div className="flex flex-col gap-1">
               <Dialog.Title className="text-[20px] leading-[140%] font-semibold tracking-[-0.03em] text-[#000000]">
-                한 줄 소개
+                동아리 소개
               </Dialog.Title>
               <Dialog.Description className="text-[16px] leading-[140%] font-medium text-[#8B95A1]">
                 {clubName}

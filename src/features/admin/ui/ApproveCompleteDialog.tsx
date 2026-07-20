@@ -24,8 +24,6 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
               />
               <Dialog.Title className="text-center text-[16px] leading-[140%] font-medium text-[#000000]">
                 승인이 완료되었어요.
-                <br />
-                신청자에게 안내 메일이 발송됩니다.
               </Dialog.Title>
               <Dialog.Description className="sr-only">
                 승인이 완료되었습니다.

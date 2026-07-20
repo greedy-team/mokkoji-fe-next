@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
+import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
@@ -23,6 +24,7 @@ function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { session } = useSession();
+  const queryClient = useQueryClient();
 
   const handleToggle = useMemo(
     () =>
@@ -31,24 +33,19 @@ function FavoriteButton({
           toast.error('로그인 후 이용하실 수 있습니다.');
           return;
         }
-        try {
-          let result;
-          if (!favorite) {
-            result = await postFavorite(Number(clubId));
-          } else {
-            result = await deleteFavorite(Number(clubId));
-          }
-          if (!result.ok) {
-            toast.error(result.message);
-            return;
-          }
-          setFavorite((prev) => !prev);
-        } catch (error) {
-          console.error('즐겨찾기 요청 실패:', error);
+        const result = favorite
+          ? await deleteFavorite(clubId)
+          : await postFavorite(clubId);
+        if (!result.ok) {
+          toast.error(result.message);
+          return;
         }
-      }, 300),
-    [favorite, session, clubId],
+        setFavorite((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      }, 600),
+    [favorite, session, clubId, queryClient],
   );
+
   return (
     <div
       role="button"

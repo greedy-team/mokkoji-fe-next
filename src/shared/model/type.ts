@@ -27,10 +27,6 @@ export interface ClubList {
   clubs: ClubType[];
 }
 
-export interface ClubListRaw {
-  clubs: ClubTypeRaw[];
-}
-
 export interface ClubType {
   id: number;
   name: string;
@@ -71,11 +67,6 @@ export interface FavoriteList {
   pagination: Pagination;
 }
 
-export interface FavoriteListRaw {
-  clubs: ClubTypeRaw[];
-  pagination: Pagination;
-}
-
 export interface FavoriteItemListProps {
   clubs: FavoriteList[];
   totalElements: number;
@@ -83,10 +74,6 @@ export interface FavoriteItemListProps {
 
 export interface ClubSearchResponse {
   clubs: ClubType[];
-}
-
-export interface ClubSearchRawResponse {
-  clubs: ClubTypeRaw[];
   pagination: Pagination;
 }
 

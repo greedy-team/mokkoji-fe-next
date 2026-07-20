@@ -10,9 +10,13 @@ import { Suspense } from 'react';
 
 interface DeskTopHomePageProps {
   universityName: string;
+  universityCode: string;
 }
 
-function DeskTopHomePage({ universityName }: DeskTopHomePageProps) {
+function DeskTopHomePage({
+  universityName,
+  universityCode,
+}: DeskTopHomePageProps) {
   return (
     <>
       <section className="mx-auto mt-4 flex min-h-[calc(100vh-200px)] w-fit flex-col justify-center">
@@ -24,7 +28,10 @@ function DeskTopHomePage({ universityName }: DeskTopHomePageProps) {
       </div>
       <section className="px-[10%]">
         <Suspense fallback={<SharedLoading />}>
-          <ClubCardWidget universityName={universityName} />
+          <ClubCardWidget
+            universityName={universityName}
+            universityCode={universityCode}
+          />
         </Suspense>
       </section>
       <section className="bg-[linear-gradient(to_bottom,_#FFFFFF_0%,_#F8FAFB_5%,_#F8FAFB_95%,_#FFFFFF_100%)] px-[10%]">

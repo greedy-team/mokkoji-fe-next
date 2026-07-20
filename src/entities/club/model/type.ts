@@ -53,11 +53,6 @@ export interface ClubsResponse {
   page: Pagination;
 }
 
-export interface ClubsRawResponse {
-  clubs: ClubRaw[];
-  page: Pagination;
-}
-
 export const RecruitStatusLabel: Record<RecruitStatus, string> = {
   OPEN: '모집중',
   CLOSED: '모집마감',

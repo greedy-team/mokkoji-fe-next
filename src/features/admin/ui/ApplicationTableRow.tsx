@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ApplicationStatus } from '@/features/admin/model/dashboard-types';
 import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
+import RejectReasonViewDialog from '@/shared/ui/RejectReasonViewDialog';
 import TableDataCell from './TableDataCell';
 import RejectReasonDialog from './RejectReasonDialog';
 import ApproveCompleteDialog from './ApproveCompleteDialog';
@@ -13,6 +14,7 @@ interface ApplicationTableRowProps {
   applicantName: string;
   category?: string;
   status: ApplicationStatus;
+  rejectReason: string | null;
   createdAt: string;
   onApprove: (applicationId: number) => void;
   onReject: (applicationId: number, rejectReason?: string) => void;
@@ -24,6 +26,7 @@ function ApplicationTableRow({
   applicantName,
   category,
   status,
+  rejectReason,
   createdAt,
   onApprove,
   onReject,
@@ -74,11 +77,16 @@ function ApplicationTableRow({
               </button>
             </>
           ) : (
-            <span
-              className={`text-[14px] leading-[140%] font-medium tracking-[-0.03em] ${status === 'APPROVED' ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
-            >
-              {status === 'APPROVED' ? '승인됨' : '반려됨'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={`text-[14px] leading-[140%] font-medium tracking-[-0.03em] ${status === 'APPROVED' ? 'text-[#22CF64]' : 'text-[#8B95A1]'}`}
+              >
+                {status === 'APPROVED' ? '승인됨' : '반려됨'}
+              </span>
+              {status === 'REJECTED' && (
+                <RejectReasonViewDialog rejectReason={rejectReason} />
+              )}
+            </div>
           )}
         </div>
       </div>

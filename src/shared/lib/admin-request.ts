@@ -1,3 +1,4 @@
+// API Route Handler 전용 — 관리자 클라이언트 요청을 백엔드로 프록시하는 인증 헬퍼
 import { NextResponse } from 'next/server';
 import ky from 'ky';
 import { getDashboardSession } from '@/shared/lib/dashboard-session';

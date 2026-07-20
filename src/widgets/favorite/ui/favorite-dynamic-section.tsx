@@ -1,17 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { FavoriteDateItem } from '@/entities/favorite/model/type';
+import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import RecruitFavoriteList from '@/entities/favorite/ui/recruit-favorite-list';
 import RecruitDeadlineSoonList from '@/entities/favorite/ui/recruit-dead-line-list';
-import getFavoriteByDate from '../api/getFavoriteByDate';
+import favoriteQueries from '../api/queries';
 
 function FavoriteDynamicSection() {
   const [value, setValue] = useState<Date>(new Date());
-  const [favoriteRecruitments, setFavoriteRecruitments] = useState<
-    FavoriteDateItem[]
-  >([]);
 
   const yearMonth = useMemo(() => {
     const year = value.getFullYear();
@@ -19,20 +16,9 @@ function FavoriteDynamicSection() {
     return `${year}-${month}`;
   }, [value]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getFavoriteByDate({
-        yearMonth,
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      setFavoriteRecruitments(response.data || []);
-    };
-    fetchData();
-  }, [value, yearMonth]);
+  const { data: favoriteRecruitments = [] } = useQuery(
+    favoriteQueries.recruit(yearMonth),
+  );
 
   return (
     <div className="flex flex-col-reverse gap-2 lg:flex-row">

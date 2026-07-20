@@ -18,10 +18,18 @@ const Calendar = dynamic(() => import('react-calendar'), {
 interface CustomCalendarProps {
   value: Date;
   setValue: (value: Date) => void;
+  activeStartDate: Date;
+  setActiveStartDate: (value: Date) => void;
   data: FavoriteDateItem[];
 }
 
-function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
+function CustomCalendar({
+  value,
+  setValue,
+  activeStartDate,
+  setActiveStartDate,
+  data,
+}: CustomCalendarProps) {
   const {
     isModalOpen,
     setIsModalOpen,
@@ -34,9 +42,10 @@ function CustomCalendar({ value, setValue, data }: CustomCalendarProps) {
     <>
       <Calendar
         onChange={(val) => handleDateClick(val as Date)}
-        onActiveStartDateChange={({ activeStartDate }) => {
-          if (activeStartDate) {
-            setValue(activeStartDate);
+        activeStartDate={activeStartDate}
+        onActiveStartDateChange={({ activeStartDate: nextActiveStartDate }) => {
+          if (nextActiveStartDate) {
+            setActiveStartDate(nextActiveStartDate);
           }
         }}
         value={value}

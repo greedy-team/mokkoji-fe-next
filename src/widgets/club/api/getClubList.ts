@@ -16,14 +16,14 @@ async function getClubList({
   category,
   affiliation,
   keyword,
-  universityCode = 'SEJONG',
+  universityCode,
 }: {
   page: number;
   size: number;
   category?: ClubCategory;
   affiliation?: ClubAffiliation;
   keyword?: string;
-  universityCode?: string;
+  universityCode: string;
 }) {
   const session = await getSession();
 

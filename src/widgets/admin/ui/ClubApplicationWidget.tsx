@@ -113,6 +113,7 @@ function ClubApplicationWidget({
               applicantName={application.applicantName}
               category={application.category}
               status={application.status}
+              rejectReason={application.rejectReason}
               createdAt={application.createdAt}
               onApprove={handleApprove}
               onReject={handleReject}

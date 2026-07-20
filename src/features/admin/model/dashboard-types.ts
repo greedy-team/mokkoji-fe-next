@@ -57,6 +57,7 @@ export interface ApplicationCardItem {
   universityName: string;
   applicantName: string;
   status: ApplicationStatus;
+  rejectReason: string | null;
   createdAt: string;
   category?: string;
   affiliation?: string;

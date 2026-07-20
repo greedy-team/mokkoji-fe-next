@@ -17,8 +17,13 @@ interface ClubListProps {
 
 function ClubList({ searchClubQuery }: ClubListProps) {
   const queryClient = useQueryClient();
-  const { clubs, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useAdminClubs();
+  const {
+    clubs,
+    universityCode,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useAdminClubs();
 
   const { mutate: deleteClubMutate, isPending: isDeleting } = useMutation({
     ...deleteClubMutationOptions(),
@@ -69,6 +74,8 @@ function ClubList({ searchClubQuery }: ClubListProps) {
         <ClubManagementRow
           key={club.clubId}
           index={index + 1}
+          clubId={club.clubId}
+          universityCode={universityCode}
           name={club.clubName}
           category={ClubCategoryLabel[club.category]}
           disabled={isDeleting}

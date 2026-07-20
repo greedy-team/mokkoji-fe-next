@@ -5,7 +5,6 @@ import type { ApplicationCardItem } from '@/features/admin/model/dashboard-types
 import { ClubCategoryLabel, ClubCategory } from '@/shared/model/type';
 import RejectReasonViewDialog from '@/shared/ui/RejectReasonViewDialog';
 import RejectReasonDialog from './RejectReasonDialog';
-import ApproveCompleteDialog from './ApproveCompleteDialog';
 import DescriptionViewDialog from './DescriptionViewDialog';
 
 interface ApplicationCardProps {
@@ -148,11 +147,6 @@ function ApplicationCard({ item, onApprove, onReject }: ApplicationCardProps) {
         open={rejectDialogOpen}
         onClose={() => setRejectDialogOpen(false)}
         onConfirm={handleRejectConfirm}
-      />
-
-      <ApproveCompleteDialog
-        open={approveCompleteDialogOpen}
-        onClose={() => setApproveCompleteDialogOpen(false)}
       />
 
       {item.description && (

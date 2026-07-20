@@ -1,3 +1,5 @@
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
+
 export interface ApiResponse<T> {
   ok: boolean;
   message: string | undefined;
@@ -37,6 +39,20 @@ export interface ClubType {
   isFavorite: boolean | undefined;
   isAlwaysRecruiting: boolean;
   recruitStatus: RecruitStatus;
+}
+
+export interface ClubTypeRaw extends Omit<ClubType, 'isFavorite'> {
+  favorite?: boolean;
+}
+
+export function mapClubType({ favorite, ...rest }: ClubTypeRaw): ClubType {
+  return {
+    ...rest,
+    description: rest.description
+      ? stripHtmlTags(rest.description)
+      : rest.description,
+    isFavorite: favorite,
+  };
 }
 
 export interface Pagination {

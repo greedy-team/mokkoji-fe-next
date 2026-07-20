@@ -26,7 +26,7 @@ git diff develop...HEAD --stat
 ```markdown
 ## #️⃣연관된 이슈
 
-> #{이슈번호}
+> closes #{이슈번호}
 
 ## 📝작업 내용
 

@@ -2,6 +2,7 @@
 
 University club information exploration and bookmarking service. Built with Next.js 15 App Router, communicates with external backend API.
 
+
 > For folder structure, layer definitions, and agent pipeline, see `.claude/architecture.md`.
 
 ## Tech Stack

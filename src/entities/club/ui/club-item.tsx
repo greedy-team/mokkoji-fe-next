@@ -45,7 +45,7 @@ function ClubItem({
             <AvatarFallback />
           </Avatar>
 
-          <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex min-w-0 items-center gap-2">
               <h1 className="text-text-primary min-w-0 flex-1 truncate text-[20px] leading-none font-bold">
                 {name}

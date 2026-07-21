@@ -145,8 +145,9 @@ function ClubMasterApplicationWidget({
           isActive={kindFilter === 'clubApplication'}
           onClick={() => setKindFilter('clubApplication')}
         >
-          동아리 생성 &amp; 동아리장
+          동아리 생성
         </SubTabButton>
+
         <SubTabButton
           isActive={kindFilter === 'clubMaster'}
           onClick={() => setKindFilter('clubMaster')}
@@ -154,6 +155,12 @@ function ClubMasterApplicationWidget({
           동아리장
         </SubTabButton>
       </div>
+
+      <p className="text-text-tertiary -mt-2 mb-5 text-sm">
+        {kindFilter === 'clubApplication'
+          ? '동아리의 기본정보를 확인하고 생성 승인을 해주세요. 생성 승인을 하면 신청자에게 동아리장 권한이 바로 부여됩니다.'
+          : '동아리 이름과 동아리장 신청자 이름을 확인하고 동아리장 승인을 해주세요. 승인을 하면 신청자에게 동아리장 권한이 바로 부여됩니다.'}
+      </p>
 
       <div className="flex flex-col gap-6">
         <div className="flex">

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -25,12 +26,17 @@ function FavoriteButton({
   const [favorite, setFavorite] = useState(isFavorite);
   const { session } = useSession();
   const queryClient = useQueryClient();
+  const universityCode = useUniversityCode();
 
   const handleToggle = useMemo(
     () =>
       throttle(async () => {
         if (!session) {
           toast.error('로그인 후 이용하실 수 있습니다.');
+          return;
+        }
+        if (!favorite && session.universityCode !== universityCode) {
+          toast.error('다른 학교의 동아리는 즐겨찾기할 수 없습니다.');
           return;
         }
         const result = favorite
@@ -43,7 +49,7 @@ function FavoriteButton({
         setFavorite((prev) => !prev);
         queryClient.invalidateQueries({ queryKey: ['favorites'] });
       }, 600),
-    [favorite, session, clubId, queryClient],
+    [favorite, session, clubId, queryClient, universityCode],
   );
 
   return (

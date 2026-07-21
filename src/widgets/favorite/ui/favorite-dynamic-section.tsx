@@ -9,12 +9,13 @@ import favoriteQueries from '../api/queries';
 
 function FavoriteDynamicSection() {
   const [value, setValue] = useState<Date>(new Date());
+  const [activeStartDate, setActiveStartDate] = useState<Date>(new Date());
 
   const yearMonth = useMemo(() => {
-    const year = value.getFullYear();
-    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const year = activeStartDate.getFullYear();
+    const month = String(activeStartDate.getMonth() + 1).padStart(2, '0');
     return `${year}-${month}`;
-  }, [value]);
+  }, [activeStartDate]);
 
   const { data: favoriteRecruitments = [] } = useQuery(
     favoriteQueries.recruit(yearMonth),
@@ -25,6 +26,8 @@ function FavoriteDynamicSection() {
       <CustomCalendar
         value={value}
         setValue={setValue}
+        activeStartDate={activeStartDate}
+        setActiveStartDate={setActiveStartDate}
         data={favoriteRecruitments}
       />
       <div className="flex flex-col gap-4 lg:ml-4 lg:w-[400px]">

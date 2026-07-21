@@ -18,7 +18,7 @@ async function FavoritePage() {
   return (
     <>
       <ScrollProgressBar />
-      <div className="mx-auto w-full px-4 sm:w-4xl sm:px-5 lg:w-6xl">
+      <div className="mx-auto w-full px-4 pb-16 sm:w-4xl sm:px-5 lg:w-6xl">
         <AsyncBoundaryWithQuery
           pendingFallback={<FavoriteListSkeletonLoading />}
           rejectedFallback={<ErrorBoundaryUi />}

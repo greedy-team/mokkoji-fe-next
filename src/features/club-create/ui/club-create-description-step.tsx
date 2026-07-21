@@ -15,7 +15,7 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
 
   return (
     <div className="flex flex-col gap-6 py-8">
-      <h2 className="text-base font-bold">동아리 한줄 소개</h2>
+      <h2 className="text-base font-bold">동아리 소개</h2>
 
       <ClubDescriptionEditor
         onChange={(html, empty) => {

@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import { Button } from '@/shared/ui/button';
 
 interface ConfirmDialogProps {
   title: string;
-  description: string;
+  description: ReactNode;
   open: boolean;
   pending?: boolean;
   confirmLabel?: string;

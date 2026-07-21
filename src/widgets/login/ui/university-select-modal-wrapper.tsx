@@ -72,14 +72,16 @@ function UniversitySelectModalWrapper({
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant="none"
+        size="none"
+        className="text-sm text-[#00E457]"
         onClick={() => setIsOpen(true)}
-        className="mt-2 flex items-center gap-2 font-semibold text-gray-600 hover:underline"
       >
         학교 수정하기
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
-      </button>
+      </Button>
 
       <UniversitySelectModal
         isOpen={isOpen}

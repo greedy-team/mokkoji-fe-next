@@ -88,7 +88,7 @@ function FeedbackModal() {
         </div>
       )}
       {isOpen && isVisible && (
-        <div className="fixed right-23 bottom-25 z-50 hidden w-85 sm:block">
+        <div className="fixed right-23 bottom-25 z-50 hidden w-85 sm:block lg:bottom-10">
           {content}
         </div>
       )}

@@ -2,6 +2,7 @@
 
 import api from '@/shared/api/auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import type {
   ClubApplicationCreateResponse,
   ClubCreateFormData,
@@ -11,7 +12,12 @@ async function postCreateClubApplication(
   data: ClubCreateFormData & { applicantName: string },
 ): Promise<ClubApplicationCreateResponse> {
   try {
-    const response = await api.post('club-applications', { json: data });
+    const response = await api.post('club-applications', {
+      json: {
+        ...data,
+        description: sanitizeDescriptionHtml(data.description),
+      },
+    });
     const payload =
       await response.json<ClubApplicationCreateResponse['data']>();
 

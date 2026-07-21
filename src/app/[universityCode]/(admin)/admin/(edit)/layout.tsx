@@ -3,7 +3,7 @@ import Footer from '@/shared/ui/Footer';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { getSession } from '@/shared/lib/cookie-session';
+import getCurrentUserRole from '@/shared/api/getCurrentUserRole';
 import { UserRole } from '@/shared/model/type';
 import AdminHeader from '@/shared/ui/AdminHeader';
 import {
@@ -44,9 +44,10 @@ export default async function AdminLayout({
   children: React.ReactNode;
   params: Promise<{ universityCode: string }>;
 }) {
-  const session = await getSession();
-  const role = session?.role;
   const { universityCode } = await params;
+
+  const { data } = await getCurrentUserRole();
+  const role = data?.role as UserRole | undefined;
 
   if (!role || !ALLOWED_ROLES.includes(role)) {
     redirect(`/${universityCode}`);

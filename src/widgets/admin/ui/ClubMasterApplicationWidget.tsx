@@ -9,6 +9,7 @@ import type {
   ApplicationCardItem,
 } from '@/features/admin/model/dashboard-types';
 import ApplicationCard from '@/features/admin/ui/ApplicationCard';
+import ApproveCompleteDialog from '@/features/admin/ui/ApproveCompleteDialog';
 import SubTabButton from '@/features/admin/ui/SubTabButton';
 import approveClubMasterApplication from '@/features/admin/api/approveClubMasterApplication';
 import rejectClubMasterApplication from '@/features/admin/api/rejectClubMasterApplication';
@@ -40,6 +41,8 @@ function ClubMasterApplicationWidget({
   const [clubMasterApplications, setClubMasterApplications] = useState(
     initialClubMasterApplications,
   );
+  const [approveCompleteDialogOpen, setApproveCompleteDialogOpen] =
+    useState(false);
   const [, startTransition] = useTransition();
 
   const items = useMemo<ApplicationCardItem[]>(() => {
@@ -114,7 +117,7 @@ function ClubMasterApplicationWidget({
       }
 
       updateStatus(item, 'APPROVED');
-      toast.success(result.message);
+      setApproveCompleteDialogOpen(true);
     });
   };
 
@@ -190,6 +193,11 @@ function ClubMasterApplicationWidget({
           )}
         </div>
       </div>
+
+      <ApproveCompleteDialog
+        open={approveCompleteDialogOpen}
+        onClose={() => setApproveCompleteDialogOpen(false)}
+      />
     </div>
   );
 }

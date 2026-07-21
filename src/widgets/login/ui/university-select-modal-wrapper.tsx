@@ -34,7 +34,7 @@ function UniversitySelectModalWrapper({
   const [pendingCode, setPendingCode] = useState<string | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  const applyUniversityChange = async (code: string | null) => {
+  const applyUniversityChange = async (code: string) => {
     setIsLoading(true);
     const response = await patchUniversityCode(code);
     setIsLoading(false);
@@ -47,28 +47,23 @@ function UniversitySelectModalWrapper({
     setIsConfirmOpen(false);
     setIsOpen(false);
 
-    if (code) {
-      router.push(`/${code}`);
-    }
+    router.push(`/${code}`);
     router.refresh();
   };
 
   const handleConfirm = (code: string) => {
-    const normalizedCode = code === 'NONE' ? null : code;
-
-    if (normalizedCode === universityCode) {
+    if (code === universityCode) {
       setIsOpen(false);
       return;
     }
 
-    setPendingCode(normalizedCode);
+    setPendingCode(code);
     setIsConfirmOpen(true);
   };
 
-  const pendingUniversityName = pendingCode
-    ? (universities.find((university) => university.code === pendingCode)
-        ?.name ?? pendingCode)
-    : null;
+  const pendingUniversityName = universities.find(
+    (university) => university.code === pendingCode,
+  )?.name;
 
   return (
     <>
@@ -105,20 +100,11 @@ function UniversitySelectModalWrapper({
               id="university-change-desc"
               className="text-text-secondary text-sm"
             >
-              {pendingUniversityName ? (
-                <>
-                  학교를 변경하게 되면 지금부터 {pendingUniversityName} 모꼬지를
-                  이용하게 되며, 기존 즐겨찾기는 모두 삭제됩니다.
-                  <br />
-                  계속하시겠어요?
-                </>
-              ) : (
-                <>
-                  학교를 변경하게 되면 기존 즐겨찾기는 모두 삭제됩니다.
-                  <br />
-                  계속하시겠어요?
-                </>
-              )}
+              학교를 변경하게 되면 지금부터{' '}
+              {pendingUniversityName ?? pendingCode} 모꼬지를 이용하게 되며,
+              기존 즐겨찾기는 모두 삭제됩니다.
+              <br />
+              계속하시겠어요?
             </DialogDescription>
           </DialogHeader>
 
@@ -137,7 +123,7 @@ function UniversitySelectModalWrapper({
               variant="submit-default"
               className="flex-1"
               disabled={isLoading}
-              onClick={() => applyUniversityChange(pendingCode)}
+              onClick={() => pendingCode && applyUniversityChange(pendingCode)}
             >
               {isLoading ? '변경 중…' : '변경하기'}
             </Button>

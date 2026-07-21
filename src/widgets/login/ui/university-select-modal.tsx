@@ -66,15 +66,6 @@ function UniversitySelectModal({
               </Button>
             );
           })}
-          <Button
-            type="button"
-            variant={selected === 'NONE' ? 'optionsSelected' : 'options'}
-            size="none"
-            onClick={() => setSelected('NONE')}
-            className={`px-4 py-2.5 text-sm ${selected === 'NONE' ? 'border-[#22CF64] text-[#22CF64]' : 'border-[#F8F8F8] bg-[#F8F8F8] text-[#8B95A1]'}`}
-          >
-            학교없음
-          </Button>
         </div>
 
         <Button

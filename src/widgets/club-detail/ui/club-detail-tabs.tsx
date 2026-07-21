@@ -1,8 +1,8 @@
+import { type ReactNode } from 'react';
 import Link from 'next/link';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
-import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { RecruitStatus } from '@/shared/model/type';
 
 interface ActiveRecruitmentData {
@@ -22,10 +22,10 @@ interface ActiveRecruitmentData {
 interface ClubDetailTabsProps {
   activeTab: string;
   recruitData?: ActiveRecruitmentData;
-  recruitHistories?: ClubRecruitments[];
   clubId: number;
   selectedRecruitmentId?: number;
   universityCode: string;
+  historySlot?: ReactNode;
 }
 
 const TABS = [
@@ -37,10 +37,10 @@ const TABS = [
 function ClubDetailTabs({
   activeTab,
   recruitData,
-  recruitHistories,
   clubId,
   selectedRecruitmentId,
   universityCode,
+  historySlot,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
     const queryString = new URLSearchParams();
@@ -51,12 +51,7 @@ function ClubDetailTabs({
 
   const renderContent = () => {
     if (activeTab === 'recruit') {
-      if (
-        !recruitData ||
-        !recruitHistories ||
-        recruitHistories.length < 0 ||
-        !selectedRecruitmentId
-      ) {
+      if (!recruitData || !selectedRecruitmentId) {
         return (
           <p className="text-primary-500 py-20 text-center">
             모집공고가 없습니다.
@@ -66,8 +61,6 @@ function ClubDetailTabs({
 
       return (
         <ClubRecruitWidget
-          clubId={clubId}
-          recruitHistories={recruitHistories}
           selectedRecruitmentId={selectedRecruitmentId}
           recruitDetail={{
             title: recruitData.title,
@@ -80,6 +73,7 @@ function ClubDetailTabs({
             recruitEnd: recruitData.recruitEnd,
             status: recruitData.status,
           }}
+          historySlot={historySlot}
         />
       );
     }

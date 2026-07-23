@@ -1,7 +1,7 @@
 import ky from 'ky';
 
 const clientApi = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_BASE_URL,
+  prefixUrl: '/',
   hooks: {
     beforeRequest: [
       () => {

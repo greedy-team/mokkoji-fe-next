@@ -23,11 +23,18 @@ function Avatar({
 
 function AvatarImage({
   className,
+  src,
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  const optimizedSrc =
+    typeof src === 'string'
+      ? `/_next/image?url=${encodeURIComponent(src)}&w=128&q=75`
+      : src;
+
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
+      src={optimizedSrc}
       className={cn('aspect-square size-full object-cover', className)}
       {...props}
     />

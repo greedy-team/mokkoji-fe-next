@@ -1,7 +1,10 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
@@ -18,6 +21,7 @@ const visibleCount = 10;
 const angleStep = 360 / visibleCount;
 
 function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
+  const universityCode = useUniversityCode();
   const [scrollAngle, setScrollAngle] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(0);
@@ -89,14 +93,14 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/club/${club.id}`}>
+              <Link href={`/${universityCode}/club/${club.id}`}>
                 <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
-                    <Avatar className="size-8 lg:size-10">
+                    <Avatar className="size-8 shrink-0 lg:size-10">
                       <AvatarImage src={club.logo} loading="lazy" />
                       <AvatarFallback>{club.name}</AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-1 flex-col">
+                    <div className="flex min-w-0 flex-1 flex-col">
                       <span className="text-[6px] font-bold text-[#474747] lg:text-[8px]">
                         모집 기간 •{' '}
                         {formatDateDotted(
@@ -107,7 +111,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                           club.recruitmentPreviewResponse?.recruitEnd ?? '',
                         )}
                       </span>
-                      <h1 className="text-xs font-bold lg:text-sm">
+                      <h1 className="truncate text-xs font-bold lg:text-sm">
                         {club.name}
                       </h1>
                     </div>

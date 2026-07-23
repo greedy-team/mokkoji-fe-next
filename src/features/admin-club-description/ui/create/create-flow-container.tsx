@@ -1,19 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
+import { Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
-import { PrevButton } from '@/shared/ui/navigation-button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SharedLoading from '@/shared/ui/loading';
 import useClubRegisterForm from '@/features/admin-club-description/util/useClubRegisterForm';
 import { postClubRegister } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useCreateFlow from './use-create-flow';
 import StepClubRegisterInfo from '../steps/step-club-register-info';
 
-function CreateFlowContainer() {
+function CreateFlowContent() {
   const router = useRouter();
+  const universityCode = useUniversityCode();
   const flow = useCreateFlow();
   const {
     formData,
@@ -23,22 +26,6 @@ function CreateFlowContainer() {
     isRegisterInfoValid,
     validateAll,
   } = useClubRegisterForm();
-
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayStep, setDisplayStep] = useState(flow.currentStep);
-
-  useEffect(() => {
-    if (flow.currentStep !== displayStep) {
-      setIsTransitioning(true);
-      const timer = setTimeout(() => {
-        setDisplayStep(flow.currentStep);
-        setIsTransitioning(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [flow.currentStep, displayStep]);
 
   const handleSubmit = async () => {
     validateAll();
@@ -70,28 +57,23 @@ function CreateFlowContainer() {
     toast.success('동아리가 등록되었습니다!');
   };
 
-  if (displayStep === 'complete') {
+  if (flow.currentStep === 'completeCreateStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">동아리가 성공적으로 등록되었습니다.</p>
-        <Button onClick={() => router.push('/club')}>동아리 확인하기</Button>
+        <Button onClick={() => router.push(`/${universityCode}/club`)}>
+          동아리 확인하기
+        </Button>
       </div>
     );
   }
 
   return (
-    <div
-      className={`px-[8%] transition-opacity duration-300 lg:px-[35%] ${
-        isTransitioning ? 'opacity-0' : 'opacity-100'
-      }`}
-    >
-      {displayStep === 'basicInfo' && (
+    <div className="px-[8%] lg:px-[35%]">
+      {flow.currentStep === 'basicInfoCreateStep' && (
         <div className="flex flex-col gap-2 py-8">
-          <AdminPageHeader
-            title="동아리 기본 정보"
-            onBack={() => router.back()}
-          />
+          <AdminPageHeader title="동아리 기본 정보" />
           <StepClubRegisterInfo
             formData={formData}
             errors={errors}
@@ -115,6 +97,14 @@ function CreateFlowContainer() {
         </div>
       )}
     </div>
+  );
+}
+
+function CreateFlowContainer() {
+  return (
+    <Suspense fallback={<SharedLoading />}>
+      <CreateFlowContent />
+    </Suspense>
   );
 }
 

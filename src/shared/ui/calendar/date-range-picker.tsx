@@ -10,6 +10,7 @@ import {
   isValidDateFormat,
   formatDateToString,
   extractDateOnly,
+  extractDateTimeDisplay,
 } from './date-utils';
 
 type FocusedField = 'start' | 'end' | null;
@@ -70,11 +71,11 @@ function DateRangePicker({
   });
 
   useEffect(() => {
-    setStartInputValue(extractDateOnly(startDate));
+    setStartInputValue(extractDateTimeDisplay(startDate, true));
   }, [startDate]);
 
   useEffect(() => {
-    setEndInputValue(extractDateOnly(endDate));
+    setEndInputValue(extractDateTimeDisplay(endDate, true));
   }, [endDate]);
 
   const handleStartInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,21 +149,23 @@ function DateRangePicker({
     setTimeout(() => {
       if (field === 'start') {
         setStartInputValue((prev) =>
-          isValidDateFormat(prev)
+          isValidDateFormat(prev.slice(0, 10))
             ? prev
-            : extractDateOnly(startDateRef.current),
+            : extractDateTimeDisplay(startDateRef.current, true),
         );
       }
       if (field === 'end') {
         setEndInputValue((prev) =>
-          isValidDateFormat(prev) ? prev : extractDateOnly(endDateRef.current),
+          isValidDateFormat(prev.slice(0, 10))
+            ? prev
+            : extractDateTimeDisplay(endDateRef.current, true),
         );
       }
     }, 100);
   };
 
   return (
-    <fieldset className="relative" ref={calendarRef}>
+    <fieldset className="relative w-full min-w-0" ref={calendarRef}>
       {label && (
         <div className="flex items-center gap-3">
           <label
@@ -214,19 +217,19 @@ function DateRangePicker({
           상시모집
         </div>
       ) : (
-        <div className="mt-1 flex items-center gap-2">
+        <div className="mt-1 flex w-full items-center gap-2">
           <input
             ref={startInputRef}
             type="text"
             id="recruitPeriodStart"
-            placeholder="YYYY-MM-DD"
+            placeholder="YYYY-MM-DD HH:MM"
             value={startInputValue}
             onChange={handleStartInputChange}
             onKeyDown={handleStartInputKeyDown}
             onFocus={handleStartInputFocus}
             onBlur={() => handleInputBlur('start')}
             className={cn(
-              'flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
+              'min-w-0 flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
               focusedField === 'start'
                 ? 'border-[#00D451]'
                 : 'border-transparent',
@@ -238,14 +241,14 @@ function DateRangePicker({
             ref={endInputRef}
             type="text"
             id="recruitPeriodEnd"
-            placeholder="YYYY-MM-DD"
+            placeholder="YYYY-MM-DD HH:MM"
             value={endInputValue}
             onChange={handleEndInputChange}
             onKeyDown={handleEndInputKeyDown}
             onFocus={handleEndInputFocus}
             onBlur={() => handleInputBlur('end')}
             className={cn(
-              'flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
+              'min-w-0 flex-1 rounded-md border-2 bg-[#D9D9D920] px-3 py-3 text-center text-xs text-white transition-colors duration-300 outline-none lg:text-sm',
               focusedField === 'end'
                 ? 'border-[#00D451]'
                 : 'border-transparent',

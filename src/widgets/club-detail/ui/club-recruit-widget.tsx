@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
-import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
-import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import NavigateRecruitForm from '@/features/club-detail/ui/navigate-recruit-form';
 import { RecruitStatus } from '@/shared/model/type';
 
@@ -19,17 +17,15 @@ interface RecruitDetail {
   status: RecruitStatus;
 }
 interface ClubRecruitWidgetProps {
-  clubId: number;
-  recruitHistories: ClubRecruitments[];
   selectedRecruitmentId: number;
   recruitDetail: RecruitDetail;
+  historySlot?: ReactNode;
 }
 
 function ClubRecruitWidget({
-  clubId,
-  recruitHistories,
   selectedRecruitmentId,
   recruitDetail,
+  historySlot,
 }: ClubRecruitWidgetProps) {
   const recruitHistoryRef = useRef<HTMLDivElement>(null);
   const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,15 +65,9 @@ function ClubRecruitWidget({
         content={recruitDetail.content}
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
-        recentRecruitId={recruitHistories[0]?.id ?? selectedRecruitmentId}
+        recentRecruitId={selectedRecruitmentId}
       />
-      <div ref={recruitHistoryRef}>
-        <RecruitHistorySection
-          clubId={clubId}
-          recruitHistories={recruitHistories}
-          selectedRecruitId={selectedRecruitmentId}
-        />
-      </div>
+      <div ref={recruitHistoryRef}>{historySlot}</div>
       {mounted && (
         <div
           className="fixed right-2 bottom-5 z-50 transition-opacity duration-150 lg:right-[calc((100vw-60vw)/2+24px)] lg:bottom-14"

@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import { useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
 import Image from 'next/image';
@@ -40,6 +42,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const router = useRouter();
+  const universityCode = useUniversityCode();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +88,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
         return;
       }
     }
-    router.push('/club');
+    router.push(`/${universityCode}/club`);
     toast.success('등록 성공!');
   };
 

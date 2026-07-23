@@ -9,19 +9,14 @@ import {
   useState,
 } from 'react';
 import { UserRole } from '@/shared/model/type';
-
-interface SessionUser {
-  studentId: number;
-  department: string;
-  name: string;
-  grade: string;
-  email: string;
-}
+import UserInfoType from '@/shared/model/user';
 
 interface SessionData {
-  user: SessionUser;
+  user: UserInfoType;
   role?: UserRole;
   accessToken?: string;
+  universityCode?: string;
+  expiresAt?: number;
 }
 
 interface SessionContextValue {
@@ -65,6 +60,14 @@ export function AppSessionProvider({
   useEffect(() => {
     fetchSession();
   }, [fetchSession]);
+
+  useEffect(() => {
+    if (!session?.expiresAt) return undefined;
+    const delay = session.expiresAt - Date.now();
+    if (delay <= 0) return undefined;
+    const timer = setTimeout(() => window.location.reload(), delay);
+    return () => clearTimeout(timer);
+  }, [session?.expiresAt]);
 
   const value = useMemo(
     () => ({ session, status, refresh: fetchSession }),

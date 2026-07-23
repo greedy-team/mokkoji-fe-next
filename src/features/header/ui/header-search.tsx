@@ -1,5 +1,7 @@
 'use client';
 
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -13,6 +15,7 @@ function HeaderSearch({
   setIsSearchVisible,
 }: HeaderSearchProps) {
   const wrapperRef = useRef<HTMLFormElement>(null);
+  const universityCode = useUniversityCode();
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -35,7 +38,7 @@ function HeaderSearch({
 
   return (
     <form
-      action="/search"
+      action={`/${universityCode}/search`}
       method="GET"
       ref={wrapperRef}
       className="flex items-center"

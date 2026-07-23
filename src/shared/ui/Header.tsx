@@ -6,7 +6,11 @@ import NavButton from './nav-button';
 import HeaderMenuSection from './header-menu-section';
 import ScrollProgressBar from './scroll-progress-bar';
 
-async function Header() {
+interface HeaderProps {
+  universityCode?: string;
+}
+
+async function Header({ universityCode }: HeaderProps) {
   const session = await getSession();
   const role = session?.role;
 
@@ -14,7 +18,7 @@ async function Header() {
     <header className="sticky top-0 right-0 left-0 z-50 flex h-[60px] shrink-0 items-center bg-white px-4 text-base font-semibold sm:px-8 lg:px-[150px]">
       <ScrollProgressBar />
       <Link
-        href="/"
+        href={universityCode ? `/${universityCode}` : '/'}
         className="mr-2 flex flex-shrink-0 items-center gap-1 text-lg font-bold sm:mr-4 sm:gap-1.5 sm:text-xl lg:mr-6 lg:text-2xl"
       >
         <Image
@@ -27,11 +31,16 @@ async function Header() {
         <span>Mokkoji</span>
       </Link>
 
-      <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap lg:flex lg:gap-2 xl:gap-3">
-        <NavButton label="전체 동아리" href="/club" />
-        <NavButton label="즐겨찾기" href="/favorite?page=1&size=6" />
-        <NavButton label="고객센터" href="/support" />
-      </nav>
+      {universityCode && (
+        <nav className="ml-6 hidden h-full flex-1 items-center gap-1 overflow-hidden whitespace-nowrap lg:flex lg:gap-2 xl:gap-3">
+          <NavButton label="전체 동아리" href={`/${universityCode}/club`} />
+          <NavButton
+            label="즐겨찾기"
+            href={`/${universityCode}/favorite?page=1&size=6`}
+          />
+          <NavButton label="고객센터" href={`/${universityCode}/support`} />
+        </nav>
+      )}
       <div className="ml-auto hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
         <HeaderMenuSection role={role} session={session} />
       </div>

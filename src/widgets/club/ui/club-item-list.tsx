@@ -2,10 +2,11 @@ import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { searchParamsCache } from '@/shared/lib/club-search-params';
 import NumberPagination from '@/shared/ui/numberPagination';
+import FeedbackModal from '@/widgets/feedback/ui/feedback-modal';
 import getClubList from '../api/getClubList';
 import ClubItemClientList from './club-item-client-list';
 
-async function ClubItemList() {
+async function ClubItemList({ universityCode }: { universityCode: string }) {
   const page = Number(searchParamsCache.get('page') ?? 1);
   const size = 15;
   const category = searchParamsCache.get('category');
@@ -17,6 +18,7 @@ async function ClubItemList() {
     category: category as ClubCategory,
     affiliation: affiliation as ClubAffiliation,
     keyword,
+    universityCode,
   });
 
   if (!clubListResponse.ok || !clubListResponse.data) {
@@ -25,7 +27,7 @@ async function ClubItemList() {
 
   if (clubListResponse.data.clubs.length === 0) {
     return (
-      <p className="mt-30 w-full text-center text-sm font-bold text-[#00E457]">
+      <p className="my-30 w-full text-center text-sm font-bold text-[#00E457]">
         동아리가 없습니다.
       </p>
     );
@@ -34,6 +36,7 @@ async function ClubItemList() {
   return (
     <div className="mb-8">
       <ClubItemClientList clubs={clubListResponse.data.clubs} />
+      <FeedbackModal />
       <NumberPagination
         page={page}
         totalPages={clubListResponse.data.page.totalPages}

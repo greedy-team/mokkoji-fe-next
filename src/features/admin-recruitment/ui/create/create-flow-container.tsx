@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
+import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
@@ -8,6 +10,7 @@ import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SharedLoading from '@/shared/ui/loading';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import postRecruitmentForm from '@/features/admin-recruitment/api/postRecruitmentForm';
 import StepRecruitmentBasicInfo from '@/features/admin-recruitment/ui/steps/step-recruitment-basic-info';
@@ -21,8 +24,9 @@ interface CreateFlowContainerProps {
   clubInfo: ClubInfoType;
 }
 
-function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
+function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
   const router = useRouter();
+  const universityCode = useUniversityCode();
   const flow = useCreateFlow();
   const {
     formData,
@@ -34,24 +38,9 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
     handleNextStep,
   } = useRecruitmentForm({ onNextStep: flow.nextStep });
 
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayStep, setDisplayStep] = useState(flow.currentStep);
   const [createRecruitmentId, setCreateRecruitmentId] = useState<number>();
 
   const imageUpload = useImageUpload([]);
-
-  useEffect(() => {
-    if (flow.currentStep !== displayStep) {
-      setIsTransitioning(true);
-      const timer = setTimeout(() => {
-        setDisplayStep(flow.currentStep);
-        setIsTransitioning(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [flow.currentStep, displayStep]);
 
   const handleSubmit = async () => {
     flow.setIsSubmitting(true);
@@ -94,14 +83,16 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
     toast.success('모집 공고가 등록되었습니다!');
   };
 
-  if (displayStep === 'complete') {
+  if (flow.currentStep === 'completeCreateStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">등록 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 등록되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?recruit=${createRecruitmentId}`)
+            router.push(
+              `/${universityCode}/club/${clubInfo.id}?recruit=${createRecruitmentId}`,
+            )
           }
         >
           모집글 확인하기
@@ -111,17 +102,10 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
   }
 
   return (
-    <div
-      className={`transition-opacity duration-300 ${
-        isTransitioning ? 'opacity-0' : 'opacity-100'
-      }`}
-    >
-      {displayStep === 'basicInfo' && (
+    <>
+      {flow.currentStep === 'basicInfoCreateStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
-          <AdminPageHeader
-            title="모집글 기본 정보"
-            onBack={() => router.back()}
-          />
+          <AdminPageHeader title="모집글 기본 정보" />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -132,10 +116,7 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
             handleImageChange={imageUpload.handleImageChange}
             handleImageRemove={imageUpload.handleImageRemove}
             inputRef={imageUpload.inputRef}
-            handleDragStart={imageUpload.handleDragStart}
-            handleDragOver={imageUpload.handleDragOver}
-            handleDragEnd={imageUpload.handleDragEnd}
-            draggingId={imageUpload.draggingId}
+            handleSortEnd={imageUpload.handleSortEnd}
             onDragOver={imageUpload.onDragOver}
             onDrop={imageUpload.onDrop}
           />
@@ -152,9 +133,9 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
         </div>
       )}
 
-      {displayStep === 'postInfo' && (
+      {flow.currentStep === 'postInfoCreateStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
-          <AdminPageHeader title="모집공고" onBack={flow.prevStep} />
+          <AdminPageHeader title="모집공고" />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
@@ -177,7 +158,15 @@ function CreateFlowContainer({ clubId, clubInfo }: CreateFlowContainerProps) {
           />
         </div>
       )}
-    </div>
+    </>
+  );
+}
+
+function CreateFlowContainer(props: CreateFlowContainerProps) {
+  return (
+    <Suspense fallback={<SharedLoading />}>
+      <CreateFlowContent {...props} />
+    </Suspense>
   );
 }
 

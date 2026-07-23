@@ -25,22 +25,24 @@ const faqData: FAQItem[] = [
       '메일 알림을 받기 위해서는 이메일 등록이 필요합니다.\n\n[이메일 등록 방법]\n상단 프로필 로고 → 마이페이지 → 이메일 수정하기\n\n원하지 않을 경우 언제든지 이메일 알림을 OFF로 변경하실 수 있어요 :)',
   },
   {
-    question: '동아리 관리 권한을 얻으려면 어떻게 해야하나요?',
-    answerTitle: '동아리 관리 권한을 얻기 위해선 운영자의 승인이 필요합니다.',
+    question: '동아리장을 설정/변경하고 싶어요.',
+    answerTitle:
+      '등록된 동아리장이 없는 경우 [동아리/동아리장 신청하기] 버튼을 통해 신청할 수 있고, 등록된 동아리장이 있는 경우 [마이페이지]에서 위임할 수 있어요.',
     answerBody:
-      '1. [구글폼](https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header)을 통해 동아리장 권한을 요청합니다.\n2. 승인이 완료되면 안내 메일이 발송됩니다.\n3. 안내 메일 확인 후 모꼬지에 로그인하면 관리자 페이지 이용이 가능합니다.',
+      '[동아리장 신청 방법] - 등록된 동아리장이 없는 경우\n1. FAQ 상단의 ‘동아리/동아리장 신청하기’ 버튼을 클릭하세요.\n2. 동아리장 등록 탭에서 필요한 정보를 입력 후 제출하면 검토 후 권한이 부여됩니다. \n\n (🔔 동아리장 권한이 필요합니다.)\n[동아리장 위임 방법] - 등록된 동아리장이 있는 경우\n1. 로그인 후 마이페이지에서 ‘동아리 위임하기’ 버튼을 클릭하세요.\n2. 위임하고자 하는 사용자의 권한 위임 코드를 입력하세요.\n3. 마지막으로 권한 위임하기 버튼을 클릭하면 자동으로 위임됩니다.\n\n ',
   },
   {
-    question: '동아리장을 설정/변경하고 싶어요.',
-    answerTitle: '동아리장 변경을 위해선 구글폼을 통해 요청해주셔야 합니다.',
+    question: '동아리장 권한 위임 코드를 확인하고 싶어요.',
+    answerTitle: '마이페이지에서 확인 가능합니다.',
     answerBody:
-      '1. [구글폼](https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header)을 통해 동아리장 권한을 요청합니다.\n&emsp;[필수 입력 항목]\n&emsp;1. 동아리명\n&emsp;2. 새로 지정할 동아리장 학번\n&emsp;3. 기존 동아리장 학번 (동아리장 변경 시에만 작성)\n\n2. 설정이 완료되면 안내 메일이 발송됩니다.\n3. 안내 메일 확인 후 모꼬지에 로그인하면 관리자가 자동으로 위임됩니다.',
+      '1. 마이페이지 하단에서 권한 위임 코드를 확인할 수 있습니다.\n2. 우측의 복사버튼을 통해 바로 복사 가능합니다.',
   },
   {
     question: '동아리를 등록하고 싶어요.',
-    answerTitle: '동아리 등록을 위해선 구글폼을 통해 요청해주셔야 합니다.',
+    answerTitle:
+      'FAQ 상단의 [동아리/동아리장 신청하기] 버튼을 통해 신청할 수 있어요.',
     answerBody:
-      '1. [구글폼](https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header)을 통해 새 동아리 등록을 요청합니다.\n2. 설정이 완료되면 안내 메일이 발송됩니다.',
+      '[동아리 등록 방법]\n1. ‘동아리/동아리장 신청하기’ 버튼을 클릭합니다.\n2. 동아리 생성 탭에서  필요한 정보를 입력 후 제출하합니다.\n 3. 제출 후 마이페이지에서 대기, 승인, 거부 현황 확인이 가능합니다. ',
   },
   {
     question: '동아리 정보를 수정하고 싶어요.',
@@ -57,11 +59,10 @@ const faqData: FAQItem[] = [
       '(🔔 동아리장 권한이 필요합니다.)\n\n[동아리 모집글 등록 방법]\n1. 로그인 후 동아리 관리(상단 메뉴)를 클릭하세요.\n2. 아래의 경로로 모집글을 등록합니다.\n모집글 생성 클릭 → 모집글 제출\n\n[동아리 모집글 수정/삭제 방법]\n1. 로그인 후 동아리 관리(상단 메뉴)를 클릭하세요.\n2. 아래의 경로로 모집글을 변경합니다.\n모집글 수정 및 삭제 클릭 → 해당 모집글 선택 → 모집글 제출',
   },
   {
-    question:
-      '안내 메일을 받았는데도 권한이 반영되지 않아요. 어떻게 해야 하나요?',
-    answerTitle: '권한이 부여된 후 로그인 해야합니다!',
+    question: 'FAQ에 없는 질문들이 있어요.',
+    answerTitle: '아래 구글폼으로 편하게 알려주세요 :)',
     answerBody:
-      '로그아웃 후 다시 로그인해 시도해보세요.\n그래도 반영되지 않았다면 [구글폼](https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header)으로 편하게 알려주세요 :)',
+      '[구글폼](https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header)',
   },
 ];
 
@@ -91,10 +92,10 @@ function FAQList() {
   }
 
   return (
-    <div className="mt-10 w-full space-y-6">
-      <h2 className="text-primary-500 text-xl font-bold lg:text-2xl">FAQ</h2>
+    <div className="mt-8 w-full space-y-6">
+      <h1 className="text-primary-500 text-xl font-bold lg:text-3xl">FAQ</h1>
       {faqData.map((item, idx) => (
-        <div key={item.question} className="border-b pb-3 lg:pb-4">
+        <div key={item.question} className="border-b pb-3 lg:pb-5">
           <button
             className={cn(
               'hover:text-primary-500 w-full cursor-pointer text-left text-sm font-semibold transition lg:text-lg',
@@ -118,17 +119,6 @@ function FAQList() {
           )}
         </div>
       ))}
-
-      <span className="text-sm font-bold text-[#20E86C] underline lg:text-xl">
-        <a
-          id="bottom"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdYOTZnswSrOIkqXGrqSurvQJgNyeBFVf_CjvyYGetgfq3o7g/viewform?usp=header"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          구글폼 링크
-        </a>
-      </span>
     </div>
   );
 }

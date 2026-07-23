@@ -265,11 +265,10 @@ html::-webkit-scrollbar {
   display: none;
 }
 
-@layer utilities {
-  p,
-  h1,
-  h4 {
-    @apply cursor-default;
+@layer base {
+  button,
+  a {
+    @apply cursor-pointer;
   }
 }
 
@@ -386,6 +385,8 @@ html::-webkit-scrollbar {
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 .react-calendar__month-view__weekdays__weekday abbr {
@@ -491,6 +492,11 @@ html::-webkit-scrollbar {
   color: #1f2937 !important;
 }
 
+.react-calendar__month-view__days__day--neighboringMonth,
+.react-calendar__month-view__days__day--neighboringMonth abbr {
+  color: #757575 !important;
+}
+
 .react-calendar__month-view__weekdays {
   text-align: center;
   text-decoration: none !important;
@@ -546,4 +552,17 @@ html::-webkit-scrollbar {
   .react-calendar__navigation__label {
     font-size: 1.25rem !important;
   }
+}
+
+.tiptap h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.tiptap h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.tiptap h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
 }

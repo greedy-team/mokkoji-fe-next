@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
+import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
@@ -9,6 +11,7 @@ import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import SharedLoading from '@/shared/ui/loading';
 import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
 import deleteRecruitmentForm from '@/features/admin-recruitment/api/deleteRecruitmentForm';
@@ -27,8 +30,9 @@ interface EditFlowContainerProps {
   recruitments: ClubRecruitments[];
 }
 
-function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
+function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
   const router = useRouter();
+  const universityCode = useUniversityCode();
   const flow = useEditFlow();
   const {
     formData,
@@ -45,26 +49,11 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
     useState<RecruitmentDetail | null>(null);
   const [isLoadingRecruitmentDetail, setIsLoadingRecruitmentDetail] =
     useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayStep, setDisplayStep] = useState(flow.currentStep);
   const imageUpload = useImageUpload(recruitmentDetail?.imageUrls ?? []);
   const [isDeleting, setIsDeleting] = useState(false);
   const [localRecruitments, setLocalRecruitments] =
     useState<ClubRecruitments[]>(recruitments);
   const [editRecruitmentId, setEditRecruitmentId] = useState<number>();
-
-  useEffect(() => {
-    if (flow.currentStep !== displayStep) {
-      setIsTransitioning(true);
-      const timer = setTimeout(() => {
-        setDisplayStep(flow.currentStep);
-        setIsTransitioning(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [flow.currentStep, displayStep]);
 
   const handleEdit = async (post: ClubRecruitments) => {
     setIsLoadingRecruitmentDetail(true);
@@ -163,7 +152,7 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
     );
   }
 
-  if (displayStep === 'selectPost') {
+  if (flow.currentStep === 'selectPostEditStep') {
     return (
       <StepSelectPost
         recruitments={localRecruitments}
@@ -174,14 +163,16 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
     );
   }
 
-  if (displayStep === 'complete') {
+  if (flow.currentStep === 'completeEditStep') {
     return (
       <div className="flex flex-col items-center gap-6 py-20">
         <h2 className="text-2xl font-semibold">수정 완료!</h2>
         <p className="text-gray-400">모집 공고가 성공적으로 수정되었습니다.</p>
         <Button
           onClick={() =>
-            router.push(`/club/${clubInfo.id}?recruit=${editRecruitmentId}`)
+            router.push(
+              `/${universityCode}/club/${clubInfo.id}?recruit=${editRecruitmentId}`,
+            )
           }
         >
           모집글 확인하기
@@ -191,17 +182,10 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
   }
 
   return (
-    <div
-      className={`transition-opacity duration-300 ${
-        isTransitioning ? 'opacity-0' : 'opacity-100'
-      }`}
-    >
-      {displayStep === 'basicInfo' && (
+    <>
+      {flow.currentStep === 'basicInfoEditStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[35%]">
-          <AdminPageHeader
-            title="모집글 기본 정보"
-            onBack={flow.goToSelectPost}
-          />
+          <AdminPageHeader title="모집글 기본 정보" />
           <StepRecruitmentBasicInfo
             formData={formData}
             errors={errors}
@@ -212,10 +196,7 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
             handleImageChange={imageUpload.handleImageChange}
             handleImageRemove={imageUpload.handleImageRemove}
             inputRef={imageUpload.inputRef}
-            handleDragStart={imageUpload.handleDragStart}
-            handleDragOver={imageUpload.handleDragOver}
-            handleDragEnd={imageUpload.handleDragEnd}
-            draggingId={imageUpload.draggingId}
+            handleSortEnd={imageUpload.handleSortEnd}
             onDragOver={imageUpload.onDragOver}
             onDrop={imageUpload.onDrop}
           />
@@ -232,9 +213,9 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
         </div>
       )}
 
-      {displayStep === 'postInfo' && (
+      {flow.currentStep === 'postInfoEditStep' && (
         <div className="flex flex-col gap-2 px-[8%] py-8 lg:px-[21%]">
-          <AdminPageHeader title="모집글" onBack={flow.goToSelectPost} />
+          <AdminPageHeader title="모집글" />
           {flow.isSubmitting ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
@@ -258,7 +239,15 @@ function EditFlowContainer({ clubInfo, recruitments }: EditFlowContainerProps) {
           />
         </div>
       )}
-    </div>
+    </>
+  );
+}
+
+function EditFlowContainer(props: EditFlowContainerProps) {
+  return (
+    <Suspense fallback={<SharedLoading />}>
+      <EditFlowContent {...props} />
+    </Suspense>
   );
 }
 

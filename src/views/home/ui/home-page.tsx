@@ -2,15 +2,25 @@ import { cookies } from 'next/headers';
 import DeskTopHomePage from './desktop-home-page';
 import MobileHomePage from './mobile-home-page';
 
-async function HomePage() {
+interface HomePageProps {
+  universityName: string;
+  universityCode: string;
+}
+
+async function HomePage({ universityName, universityCode }: HomePageProps) {
   const cookieStore = await cookies();
   const deviceType = cookieStore.get('x-device-type')?.value;
 
   if (deviceType === 'mobile') {
-    return <MobileHomePage />;
+    return <MobileHomePage universityName={universityName} />;
   }
 
-  return <DeskTopHomePage />;
+  return (
+    <DeskTopHomePage
+      universityName={universityName}
+      universityCode={universityCode}
+    />
+  );
 }
 
 export default HomePage;

@@ -4,15 +4,21 @@ import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { Suspense } from 'react';
 import SearchListSkeletonLoading from '@/entities/search/ui/search-list-skeleton-loading';
 import { searchParamsCache } from '@/shared/lib/search-search-params';
+import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 
-async function SearchPage() {
+async function SearchPage({ universityCode }: { universityCode: string }) {
   const q = searchParamsCache.get('q');
   const category = searchParamsCache.get('category');
   return (
     <div className="flex w-full flex-col items-center">
+      <ScrollProgressBar />
       <SearchInput />
       <Suspense fallback={<SearchListSkeletonLoading />}>
-        <SearchResults keyword={q} category={category} />
+        <SearchResults
+          keyword={q}
+          category={category}
+          universityCode={universityCode}
+        />
       </Suspense>
       <ScrollTopButton />
     </div>

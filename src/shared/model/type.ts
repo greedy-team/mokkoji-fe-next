@@ -1,3 +1,5 @@
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
+
 export interface ApiResponse<T> {
   ok: boolean;
   message: string | undefined;
@@ -25,10 +27,6 @@ export interface ClubList {
   clubs: ClubType[];
 }
 
-export interface ClubListRaw {
-  clubs: ClubTypeRaw[];
-}
-
 export interface ClubType {
   id: number;
   name: string;
@@ -48,7 +46,13 @@ export interface ClubTypeRaw extends Omit<ClubType, 'isFavorite'> {
 }
 
 export function mapClubType({ favorite, ...rest }: ClubTypeRaw): ClubType {
-  return { ...rest, isFavorite: favorite };
+  return {
+    ...rest,
+    description: rest.description
+      ? stripHtmlTags(rest.description)
+      : rest.description,
+    isFavorite: favorite,
+  };
 }
 
 export interface Pagination {
@@ -63,11 +67,6 @@ export interface FavoriteList {
   pagination: Pagination;
 }
 
-export interface FavoriteListRaw {
-  clubs: ClubTypeRaw[];
-  pagination: Pagination;
-}
-
 export interface FavoriteItemListProps {
   clubs: FavoriteList[];
   totalElements: number;
@@ -75,10 +74,6 @@ export interface FavoriteItemListProps {
 
 export interface ClubSearchResponse {
   clubs: ClubType[];
-}
-
-export interface ClubSearchRawResponse {
-  clubs: ClubTypeRaw[];
   pagination: Pagination;
 }
 
@@ -144,6 +139,7 @@ export interface DetailParams {
 
 export interface RecruitmentActionParams {
   params: Promise<{
+    universityCode: string;
     action: 'create' | 'edit';
     id: string;
   }>;

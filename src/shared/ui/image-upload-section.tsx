@@ -1,8 +1,25 @@
 'use client';
 
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { X, Upload } from 'lucide-react';
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import cn from '../lib/utils';
 
 interface ImageItem {
@@ -11,15 +28,59 @@ interface ImageItem {
   previewUrl: string;
 }
 
+function SortableImage({
+  item,
+  onRemove,
+}: {
+  item: ImageItem;
+  onRemove: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    touchAction: 'none' as const,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={cn(
+        'relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md border transition-all sm:h-40 sm:w-40',
+        isDragging && 'scale-95 opacity-50',
+      )}
+    >
+      <img
+        src={item.previewUrl}
+        alt="preview"
+        className="pointer-events-none h-full w-full object-contain"
+      />
+      <X
+        className="absolute top-1 right-1 z-10 h-5 w-5 cursor-pointer transition-colors hover:text-red-600"
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={() => onRemove(item.id)}
+      />
+    </div>
+  );
+}
+
 function ImageUploadSection({
   imageFiles,
   handleImageRemove,
   handleImageChange,
   inputRef,
-  handleDragStart,
-  handleDragOver,
-  handleDragEnd,
-  draggingId,
+  handleSortEnd,
   onDragOver,
   onDrop,
 }: {
@@ -27,52 +88,34 @@ function ImageUploadSection({
   handleImageRemove: (id: string) => void;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  handleDragStart: (id: string) => void;
-  handleDragOver: (
-    e: React.DragEvent<HTMLDivElement>,
-    targetId: string,
-  ) => void;
-  handleDragEnd: () => void;
-  draggingId: string | null;
+  handleSortEnd: (activeId: string, overId: string) => void;
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
 }) {
   const [isDragActive, setIsDragActive] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [activeItem, setActiveItem] = useState<ImageItem | null>(null);
 
-  const stopAutoScroll = () => {
-    if (scrollIntervalRef.current) {
-      clearInterval(scrollIntervalRef.current);
-      scrollIntervalRef.current = null;
-    }
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 250, tolerance: 10 },
+    }),
+  );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const found = imageFiles.find((item) => item.id === event.active.id);
+    setActiveItem(found ?? null);
   };
 
-  const handleAutoScroll = (e: React.DragEvent<HTMLDivElement>) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX;
-    const edgeSize = 60;
-    const scrollSpeed = 8;
-
-    stopAutoScroll();
-
-    if (x < rect.left + edgeSize) {
-      scrollIntervalRef.current = setInterval(() => {
-        container.scrollLeft -= scrollSpeed;
-      }, 16);
-    } else if (x > rect.right - edgeSize) {
-      scrollIntervalRef.current = setInterval(() => {
-        container.scrollLeft += scrollSpeed;
-      }, 16);
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveItem(null);
+    if (over && active.id !== over.id) {
+      handleSortEnd(String(active.id), String(over.id));
     }
   };
-
-  useEffect(() => {
-    return () => stopAutoScroll();
-  }, []);
 
   const handleDragEnter = (e: React.DragEvent<HTMLFieldSetElement>) => {
     e.preventDefault();
@@ -86,9 +129,7 @@ function ImageUploadSection({
     e.preventDefault();
     e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX;
-    const y = e.clientY;
-
+    const { clientX: x, clientY: y } = e;
     if (
       x <= rect.left ||
       x >= rect.right ||
@@ -169,41 +210,38 @@ function ImageUploadSection({
           className="hidden"
         />
         {imageFiles.length > 0 && (
-          <div
-            ref={scrollContainerRef}
-            className="scrollbar-hide mt-4 flex w-full max-w-full gap-3 overflow-x-auto"
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
           >
-            {imageFiles.map((item) => (
-              <div
-                key={item.id}
-                draggable
-                onDragStart={() => handleDragStart(item.id)}
-                onDragOver={(e) => {
-                  handleDragOver(e, item.id);
-                  handleAutoScroll(e);
-                }}
-                onDragEnd={() => {
-                  handleDragEnd();
-                  stopAutoScroll();
-                }}
-                className={cn(
-                  'relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md border transition-all sm:h-40 sm:w-40',
-                  draggingId === item.id && 'scale-95 opacity-50',
-                )}
-              >
-                <img
-                  src={item.previewUrl}
-                  alt="preview"
-                  className="pointer-events-none h-full w-full object-contain"
-                />
-
-                <X
-                  className="absolute top-1 right-1 z-10 h-5 w-5 cursor-pointer transition-colors hover:text-red-600"
-                  onClick={() => handleImageRemove(item.id)}
-                />
+            <SortableContext
+              items={imageFiles.map((item) => item.id)}
+              strategy={horizontalListSortingStrategy}
+            >
+              <div className="scrollbar-hide mt-4 flex w-full max-w-full gap-3 overflow-x-auto">
+                {imageFiles.map((item) => (
+                  <SortableImage
+                    key={item.id}
+                    item={item}
+                    onRemove={handleImageRemove}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+            <DragOverlay>
+              {activeItem && (
+                <div className="h-32 w-32 overflow-hidden rounded-md border opacity-90 shadow-lg sm:h-40 sm:w-40">
+                  <img
+                    src={activeItem.previewUrl}
+                    alt="dragging"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              )}
+            </DragOverlay>
+          </DndContext>
         )}
       </div>
     </fieldset>

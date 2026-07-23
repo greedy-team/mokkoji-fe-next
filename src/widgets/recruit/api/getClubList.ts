@@ -1,9 +1,4 @@
-import {
-  ApiResponse,
-  ClubCategory,
-  ClubListRaw,
-  mapClubType,
-} from '@/shared/model/type';
+import { ApiResponse, ClubCategory, ClubList } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
@@ -15,6 +10,7 @@ interface GetRecruitListParams {
   keyword?: string;
   category?: ClubCategory;
   recruitStatus?: string;
+  universityCode?: string;
 }
 
 async function getClubList(params: GetRecruitListParams) {
@@ -25,6 +21,7 @@ async function getClubList(params: GetRecruitListParams) {
     keyword: params.keyword,
     category: params.category,
     recruitStatus: params.recruitStatus,
+    universityCode: params.universityCode ?? 'SEJONG',
   };
 
   const searchParams = new URLSearchParams();
@@ -43,17 +40,12 @@ async function getClubList(params: GetRecruitListParams) {
 
     const response = await client
       .get('clubs', fetchOptions)
-      .json<ApiResponse<ClubListRaw>>();
+      .json<ApiResponse<ClubList>>();
 
     const responseData = response.data;
     if (!responseData) return { ok: false, message: '데이터 없음' };
 
-    const data = {
-      ...responseData,
-      clubs: responseData.clubs.map(mapClubType),
-    };
-
-    return { ok: true, message: '성공', data, status: 200 };
+    return { ok: true, message: '성공', data: responseData, status: 200 };
   } catch (e) {
     return createErrorResponse(e as Error);
   }

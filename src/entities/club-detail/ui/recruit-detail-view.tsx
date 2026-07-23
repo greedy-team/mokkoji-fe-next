@@ -57,8 +57,8 @@ function RecruitDetailView({
   }
 
   const goLatest = () => {
-    const clubId = params.id;
-    router.push(`/club/${clubId}`);
+    const { universityCode, id: clubId } = params;
+    router.push(`/${universityCode}/club/${clubId}`);
   };
 
   return (

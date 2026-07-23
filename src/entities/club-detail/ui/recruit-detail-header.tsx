@@ -1,4 +1,9 @@
+'use client';
+
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+
 import Link from 'next/link';
+
 import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import {
@@ -37,26 +42,29 @@ function RecruitDetailHeader({
   status,
   isAlwaysRecruiting,
 }: RecruitDetailHeaderProps) {
+  const universityCode = useUniversityCode();
   const [date] = (createdAt || '').split('T');
   const [year, month, day] = date.split('-');
   const formattedDate = `${year}년 ${month}월 ${day}일`;
 
   return (
     <header className="w-full cursor-default">
-      <div className="flex flex-row items-center gap-3.5 lg:mb-5 lg:gap-4">
+      <div className="mb-5 flex flex-row items-center gap-3.5 lg:gap-4">
         <ClickLogo logo={logo} title={title} />
         <div className="flex min-w-0 items-center gap-2">
           <h1 className="text-2xl font-bold whitespace-nowrap lg:text-4xl">
             {title}
           </h1>
           <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
-            <Link href={`/club?category=${ClubCategoryToLabel[category]}`}>
+            <Link
+              href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+            >
               {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
             </Link>
           </p>
         </div>
       </div>
-      <div className="flex flex-col items-start gap-7 lg:flex-row lg:items-center lg:text-xl">
+      <div className="flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:text-xl">
         <RadiusTag
           recruitStatus={status}
           className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-2.5 lg:text-[14px]"

@@ -1,8 +1,8 @@
+import { type ReactNode } from 'react';
 import Link from 'next/link';
 import ClubRecruitWidget from '@/widgets/club-detail/ui/club-recruit-widget';
 import ClubDescriptionWidget from '@/widgets/club-detail/ui/club-description-widget';
 import ClubCommentsWidget from '@/widgets/club-detail/ui/club-comments-widget';
-import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { RecruitStatus } from '@/shared/model/type';
 
 interface ActiveRecruitmentData {
@@ -22,9 +22,10 @@ interface ActiveRecruitmentData {
 interface ClubDetailTabsProps {
   activeTab: string;
   recruitData?: ActiveRecruitmentData;
-  recruitHistories?: ClubRecruitments[];
   clubId: number;
   selectedRecruitmentId?: number;
+  universityCode: string;
+  historySlot?: ReactNode;
 }
 
 const TABS = [
@@ -36,25 +37,21 @@ const TABS = [
 function ClubDetailTabs({
   activeTab,
   recruitData,
-  recruitHistories,
   clubId,
   selectedRecruitmentId,
+  universityCode,
+  historySlot,
 }: ClubDetailTabsProps) {
   const getHref = (key: string) => {
     const queryString = new URLSearchParams();
     queryString.set('recruit', String(selectedRecruitmentId));
     if (key !== 'recruit') queryString.set('tab', key);
-    return `/club/${clubId}?${queryString.toString()}`;
+    return `/${universityCode}/club/${clubId}?${queryString.toString()}`;
   };
 
   const renderContent = () => {
     if (activeTab === 'recruit') {
-      if (
-        !recruitData ||
-        !recruitHistories ||
-        recruitHistories.length < 0 ||
-        !selectedRecruitmentId
-      ) {
+      if (!recruitData || !selectedRecruitmentId) {
         return (
           <p className="text-primary-500 py-20 text-center">
             모집공고가 없습니다.
@@ -64,8 +61,6 @@ function ClubDetailTabs({
 
       return (
         <ClubRecruitWidget
-          clubId={clubId}
-          recruitHistories={recruitHistories}
           selectedRecruitmentId={selectedRecruitmentId}
           recruitDetail={{
             title: recruitData.title,
@@ -78,6 +73,7 @@ function ClubDetailTabs({
             recruitEnd: recruitData.recruitEnd,
             status: recruitData.status,
           }}
+          historySlot={historySlot}
         />
       );
     }
@@ -95,7 +91,7 @@ function ClubDetailTabs({
 
   return (
     <div className="mt-8 lg:mt-12">
-      <div className="mb-8 flex justify-center border-b border-b-[#D6D6D6] pb-3 lg:mb-12">
+      <div className="sticky top-0 z-30 mb-8 flex justify-center border-b border-b-[#D6D6D6] bg-white py-5 pb-3 lg:mb-12">
         {TABS.map((tab) => {
           const isSelected = tab.key === activeTab;
 

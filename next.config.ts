@@ -12,7 +12,6 @@ let nextConfig: NextConfig = {
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
-    domains: [process.env.NEXT_PUBLIC_S3_DOMAIN || ''],
     remotePatterns: [
       {
         protocol: 'https',
@@ -27,6 +26,11 @@ let nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'dev-mokkoji-app-data.s3.ap-northeast-2.amazonaws.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'prod-mokkoji-app-data.s3.ap-northeast-2.amazonaws.com',
         pathname: '**',
       },
     ],

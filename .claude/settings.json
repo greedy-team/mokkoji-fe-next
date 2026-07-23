@@ -1,0 +1,42 @@
+{
+  "includeCoAuthoredBy": false,
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(git:*)",
+      "Bash(cd:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(jq:*)",
+      "Bash(which:*)",
+      "Bash(true)",
+      "PowerShell(git status *)",
+      "PowerShell(git log *)",
+      "PowerShell(git diff *)",
+      "PowerShell(git branch *)",
+      "PowerShell(git stash *)",
+      "Read",
+      "Write",
+      "Edit",
+      "Edit(.claude/CLAUDE.md)",
+      "Glob",
+      "Grep",
+      "Agent",
+      "WebFetch",
+      "WebSearch",
+      "mcp__discord-forum-mcp__list_forum_threads",
+      "mcp__discord-forum-mcp__get_forum_tags",
+      "mcp__discord-forum-mcp__read_messages",
+      "mcp__discord-forum-mcp__send_message",
+      "mcp__discord-forum-mcp__update_forum_post"
+    ]
+  }
+}

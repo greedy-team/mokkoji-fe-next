@@ -17,6 +17,7 @@ interface ClubItemProps {
   recruitStatus?: RecruitStatus;
   isAlwaysRecruiting: boolean;
   height?: number;
+  favoriteButton?: React.ReactNode;
 }
 
 function ClubItem({
@@ -30,6 +31,7 @@ function ClubItem({
   recruitStatus,
   isAlwaysRecruiting,
   height = 150,
+  favoriteButton,
 }: ClubItemProps) {
   return (
     <div
@@ -38,26 +40,29 @@ function ClubItem({
     >
       <div className="flex w-full">
         <div className="flex w-full items-center gap-4">
-          <Avatar className="h-[54px] w-[54px]">
+          <Avatar className="h-[54px] w-[54px] shrink-0">
             <AvatarImage src={logo} alt={logo} />
             <AvatarFallback />
           </Avatar>
 
-          <div className="flex flex-1 flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <h1 className="text-text-primary text-[20px] leading-none font-bold whitespace-nowrap">
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex min-w-0 items-center gap-2">
+              <h1 className="text-text-primary min-w-0 flex-1 truncate text-[20px] leading-none font-bold">
                 {name}
               </h1>
 
-              <FavoriteButton
-                isFavorite={isFavorite}
-                clubId={id}
-                customClass="scale-100 mt-1"
-              />
+              {favoriteButton ?? (
+                <FavoriteButton
+                  isFavorite={isFavorite}
+                  clubId={id}
+                  customClass="scale-100 mt-1"
+                  wrapperClass="shrink-0"
+                />
+              )}
               {recruitStatus && (
                 <RadiusTag
                   recruitStatus={recruitStatus}
-                  className="absolute top-8 right-5 shrink-0 px-3 py-2 text-xs"
+                  className="shrink-0 px-3 py-2 text-xs"
                 />
               )}
             </div>

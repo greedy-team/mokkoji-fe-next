@@ -9,7 +9,7 @@ async function postReport({
   rating,
   content,
 }: PostReportRequest): Promise<void> {
-  await clientApi.post('/api/local/reports', {
+  await clientApi.post('api/local/reports', {
     json: { rating, content },
   });
 }

@@ -5,7 +5,7 @@ async function getClientFavoriteByDate(
   yearMonth: string,
 ): Promise<FavoriteDateItem[]> {
   const json = await clientApi
-    .get('/api/favorites/recruit', {
+    .get('api/favorites/recruit', {
       searchParams: { yearMonth },
     })
     .json<{ data: FavoriteDateItem[] }>();

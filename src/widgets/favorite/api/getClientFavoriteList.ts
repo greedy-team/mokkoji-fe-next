@@ -11,7 +11,7 @@ async function getClientFavoriteList({
   size,
 }: GetClientFavoriteListParams): Promise<FavoriteList> {
   const json = await clientApi
-    .get('/api/favorites', {
+    .get('api/favorites', {
       searchParams: { page: String(page), size: String(size) },
     })
     .json<{ data: FavoriteList }>();

@@ -46,6 +46,7 @@ CSS tokens: `src/app/theme.css` / Animations: `src/app/globals.css`
 7. **No abbreviated naming**: Use full words. (`btn` → `button`, `idx` → `index`)
 8. **Server/Client separation**: Default to Server Component if no interaction. Use `'use client'` if `useState`/`useEffect`/event handlers exist.
 9. **No raw fetch**: Always use ky for HTTP requests. Never use fetch directly.
+10. **No magic strings for fixed value sets**: When a value can only be one of a known fixed set (tab keys, status values, etc.), define it as an `as const` array/object and derive a union type from it, instead of typing the field as plain `string`. Prevents typos from silently passing type checks.
 
 ## Commit Rules
 

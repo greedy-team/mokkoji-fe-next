@@ -1,10 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { parseAsString, useQueryState } from 'nuqs';
 
 function SaveClientInput() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
+  const [query] = useQueryState('q', parseAsString.withDefault(''));
 
   return (
     <input

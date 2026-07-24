@@ -19,6 +19,18 @@ interface ActiveRecruitmentData {
   status: RecruitStatus;
 }
 
+const TABS = [
+  { key: 'recruit', label: '모집공고' },
+  { key: 'about', label: '동아리 소개' },
+  { key: 'comments', label: '댓글' },
+] as const;
+
+type TabKey = (typeof TABS)[number]['key'];
+
+function isTabKey(value: string): value is TabKey {
+  return TABS.some((tab) => tab.key === value);
+}
+
 interface ClubDetailTabsProps {
   activeTab: string;
   recruitData?: ActiveRecruitmentData;
@@ -28,12 +40,6 @@ interface ClubDetailTabsProps {
   historySlot?: ReactNode;
 }
 
-const TABS = [
-  { key: 'recruit', label: '모집공고' },
-  { key: 'about', label: '동아리 소개' },
-  { key: 'comments', label: '댓글' },
-];
-
 function ClubDetailTabs({
   activeTab,
   recruitData,
@@ -42,7 +48,9 @@ function ClubDetailTabs({
   universityCode,
   historySlot,
 }: ClubDetailTabsProps) {
-  const getHref = (key: string) => {
+  const currentTab: TabKey = isTabKey(activeTab) ? activeTab : 'recruit';
+
+  const buildTabHref = (key: TabKey) => {
     const queryString = new URLSearchParams();
     queryString.set('recruit', String(selectedRecruitmentId));
     if (key !== 'recruit') queryString.set('tab', key);
@@ -50,56 +58,58 @@ function ClubDetailTabs({
   };
 
   const renderContent = () => {
-    if (activeTab === 'recruit') {
-      if (!recruitData || !selectedRecruitmentId) {
+    switch (currentTab) {
+      case 'recruit': {
+        if (!recruitData || !selectedRecruitmentId) {
+          return (
+            <p className="text-primary-500 py-20 text-center">
+              모집공고가 없습니다.
+            </p>
+          );
+        }
+
         return (
-          <p className="text-primary-500 py-20 text-center">
-            모집공고가 없습니다.
-          </p>
+          <ClubRecruitWidget
+            selectedRecruitmentId={selectedRecruitmentId}
+            recruitDetail={{
+              title: recruitData.title,
+              clubName: recruitData.clubName,
+              category: recruitData.category,
+              content: recruitData.content,
+              recruitForm: recruitData.recruitForm,
+              imageUrls: recruitData.imageUrls,
+              recruitStart: recruitData.recruitStart,
+              recruitEnd: recruitData.recruitEnd,
+              status: recruitData.status,
+            }}
+            historySlot={historySlot}
+          />
         );
       }
 
-      return (
-        <ClubRecruitWidget
-          selectedRecruitmentId={selectedRecruitmentId}
-          recruitDetail={{
-            title: recruitData.title,
-            clubName: recruitData.clubName,
-            category: recruitData.category,
-            content: recruitData.content,
-            recruitForm: recruitData.recruitForm,
-            imageUrls: recruitData.imageUrls,
-            recruitStart: recruitData.recruitStart,
-            recruitEnd: recruitData.recruitEnd,
-            status: recruitData.status,
-          }}
-          historySlot={historySlot}
-        />
-      );
-    }
+      case 'about':
+        return <ClubDescriptionWidget clubId={clubId} />;
 
-    if (activeTab === 'about') {
-      return <ClubDescriptionWidget clubId={clubId} />;
-    }
+      case 'comments':
+        return <ClubCommentsWidget clubId={clubId} />;
 
-    if (activeTab === 'comments') {
-      return <ClubCommentsWidget clubId={clubId} />;
+      default: {
+        const exhaustiveCheck: never = currentTab;
+        return exhaustiveCheck;
+      }
     }
-
-    return null;
   };
 
   return (
     <div className="mt-8 lg:mt-12">
       <div className="sticky top-0 z-30 mb-8 flex justify-center border-b border-b-[#D6D6D6] bg-white py-5 pb-3 lg:mb-12">
         {TABS.map((tab) => {
-          const isSelected = tab.key === activeTab;
+          const isSelected = tab.key === currentTab;
 
           return (
             <Link
               key={tab.key}
-              href={getHref(tab.key)}
-              prefetch={false}
+              href={buildTabHref(tab.key)}
               className="data-[selected=true]:text-primary-500 relative flex-1 text-center text-sm font-medium text-[#9C9C9C] lg:text-lg"
               data-selected={isSelected}
             >

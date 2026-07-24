@@ -1,45 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import cn from '@/shared/lib/utils';
-
-type PaginationPage = number | 'ellipsis';
-
-function getPaginationPages(
-  currentPage: number,
-  totalPages: number,
-  pageRange = 5,
-): PaginationPage[] {
-  const pages: PaginationPage[] = [];
-  if (totalPages <= pageRange) {
-    for (let page = 1; page <= totalPages; page += 1) pages.push(page);
-    return pages;
-  }
-
-  const halfRange = Math.floor(pageRange / 2);
-  let startPage = currentPage - halfRange;
-  let endPage = currentPage + halfRange;
-
-  if (startPage < 1) {
-    startPage = 1;
-    endPage = pageRange;
-  }
-  if (endPage > totalPages) {
-    endPage = totalPages;
-    startPage = totalPages - pageRange + 1;
-  }
-
-  if (startPage > 1) pages.push(1);
-  if (startPage > 2) pages.push('ellipsis');
-
-  for (let page = startPage; page <= endPage; page += 1) pages.push(page);
-
-  if (endPage < totalPages - 1) pages.push('ellipsis');
-  if (endPage < totalPages) pages.push(totalPages);
-
-  return pages;
-}
+import useNumberPagination from '@/shared/hooks/useNumberPagination';
 
 type Props = {
   page: number;
@@ -52,25 +15,8 @@ export default function NumberPagination({
   totalPages,
   pageRange = 5,
 }: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const safeTotalPages = Math.max(1, totalPages);
-  const safePage = Math.min(Math.max(1, page), safeTotalPages);
-  const pages = getPaginationPages(safePage, safeTotalPages, pageRange);
-
-  const moveToPage = (nextPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    params.delete('page');
-    params.set('page', String(nextPage));
-    router.push(`?${params.toString()}`, { scroll: true });
-  };
-
-  const canGoPrev = safePage > 1;
-  const canGoNext = safePage < safeTotalPages;
-
-  let ellipsisIndex = 0;
+  const { pages, safePage, canGoPrev, canGoNext, moveToPage } =
+    useNumberPagination({ page, totalPages, pageRange });
 
   return (
     <nav
@@ -93,13 +39,9 @@ export default function NumberPagination({
 
       <div className="flex items-center gap-4 text-3xl">
         {pages.map((pageItem) => {
-          if (pageItem === 'ellipsis') {
-            ellipsisIndex += 1;
+          if (pageItem === 'ellipsis-start' || pageItem === 'ellipsis-end') {
             return (
-              <span
-                key={`ellipsis-${ellipsisIndex}`}
-                className="text-base text-[#BDBDBD]"
-              >
+              <span key={pageItem} className="text-base text-[#BDBDBD]">
                 <img src="/pagination/ellipses.svg" alt="말줄임" />
               </span>
             );

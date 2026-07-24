@@ -8,7 +8,7 @@ import {
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import useUrlParams from '@/shared/model/useUrlParams';
 
 const categories: ClubCategory[] = [
   ClubCategory.CULTURAL_ART,
@@ -20,23 +20,7 @@ const categories: ClubCategory[] = [
 ];
 
 function ClubCategoryButtonSection() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const active = searchParams.get('category') ?? '';
-
-  const changeCategory = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (value === '') {
-      params.delete('category');
-    } else {
-      params.set('category', value);
-    }
-
-    params.set('page', '1');
-
-    router.push(`?${params.toString()}`);
-  };
+  const { active, handleChange: changeCategory } = useUrlParams('category');
 
   return (
     <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-1 sm:gap-2">

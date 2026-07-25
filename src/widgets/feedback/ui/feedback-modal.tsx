@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import useScrollUp from '@/shared/model/useScrollUp';
 import { toast } from 'react-toastify';
-import postReport from '../api/postReport';
 import postDiscordWebhook from '../api/postDiscordWebhook';
+import postFeedback from '../api/postFeedback';
 
 function FeedbackModal() {
   const [rating, setRating] = useState(0);
@@ -16,7 +16,7 @@ function FeedbackModal() {
   const handleSubmit = async () => {
     try {
       await postDiscordWebhook({ rating, comment });
-      await postReport({ rating, content: comment });
+      await postFeedback({ rating, content: comment });
       toast.success('의견 감사합니다!', { autoClose: 2000 });
       setRating(0);
       setComment('');

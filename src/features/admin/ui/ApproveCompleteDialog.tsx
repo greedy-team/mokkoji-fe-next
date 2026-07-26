@@ -24,8 +24,6 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
               />
               <Dialog.Title className="text-center text-[16px] leading-[140%] font-medium text-[#000000]">
                 승인이 완료되었어요.
-                <br />
-                신청자에게 안내 메일이 발송됩니다.
               </Dialog.Title>
               <Dialog.Description className="sr-only">
                 승인이 완료되었습니다.
@@ -34,7 +32,7 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex h-[51px] w-full items-center justify-center rounded-[12px] bg-[#4AF38A] text-[16px] leading-[140%] font-medium text-[#474747] transition-colors hover:bg-[#22CF64]"
+              className="flex h-[51px] w-full cursor-pointer items-center justify-center rounded-[12px] bg-[#4AF38A] text-[16px] leading-[140%] font-medium text-[#474747] transition-colors hover:bg-[#22CF64]"
             >
               완료
             </button>

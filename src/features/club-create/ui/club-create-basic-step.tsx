@@ -205,7 +205,7 @@ function ClubCreateBasicStep({
         <Input
           className="rounded-lg border border-[#D6D6D6] bg-white px-4 py-3 text-sm placeholder:text-[#C0C0C0]"
           id="club-instagram"
-          placeholder="@mokkoji"
+          placeholder="https://www.instagram.com/mokkoji"
           value={formData.instagram}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, instagram: e.target.value }))

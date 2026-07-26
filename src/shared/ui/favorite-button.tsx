@@ -3,7 +3,10 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
+import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -23,6 +26,8 @@ function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { session } = useSession();
+  const queryClient = useQueryClient();
+  const universityCode = useUniversityCode();
 
   const handleToggle = useMemo(
     () =>
@@ -31,24 +36,26 @@ function FavoriteButton({
           toast.error('로그인 후 이용하실 수 있습니다.');
           return;
         }
-        try {
-          let result;
-          if (!favorite) {
-            result = await postFavorite(Number(clubId));
-          } else {
-            result = await deleteFavorite(Number(clubId));
-          }
-          if (!result.ok) {
-            toast.error(result.message);
-            return;
-          }
-          setFavorite((prev) => !prev);
-        } catch (error) {
-          console.error('즐겨찾기 요청 실패:', error);
+        if (
+          !favorite &&
+          session.universityCode !== urlCodeToApiCode(universityCode)
+        ) {
+          toast.error('다른 학교의 동아리는 즐겨찾기할 수 없습니다.');
+          return;
         }
-      }, 300),
-    [favorite, session, clubId],
+        const result = favorite
+          ? await deleteFavorite(clubId)
+          : await postFavorite(clubId);
+        if (!result.ok) {
+          toast.error(result.message);
+          return;
+        }
+        setFavorite((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      }, 600),
+    [favorite, session, clubId, queryClient, universityCode],
   );
+
   return (
     <div
       role="button"

@@ -16,7 +16,7 @@ interface HeaderMenuSectionProps {
 function HeaderMenuSection({ role, session }: HeaderMenuSectionProps) {
   return (
     <>
-      <HeaderAdminLink role={role} isLoggedIn={!!session} />
+      <HeaderAdminLink isLoggedIn={!!session} />
       <MobileHeader
         sessionRole={role}
         manageClubInfo={session?.manageClubInfo || []}

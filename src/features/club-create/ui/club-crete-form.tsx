@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import ky from 'ky';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
@@ -35,6 +36,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
     description: '',
   });
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
@@ -44,6 +46,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
     const file = e.target.files?.[0];
     if (!file) return;
     setLogoPreview(URL.createObjectURL(file));
+    setLogoFile(file);
     setFormData((prev) => ({ ...prev, logo: file.name }));
   };
 
@@ -58,20 +61,36 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
       description,
       applicantName: session?.user.name ?? '',
     });
-    setIsSubmitting(false);
-    if (result.ok) {
-      toast.success(
-        <span>
-          제출되었습니다.
-          <br />
-          마이페이지에서 현황을 확인하실 수 있습니다.
-        </span>,
-      );
-      router.push(`/${universityCode}/my`);
-    } else {
+
+    if (!result.ok) {
+      setIsSubmitting(false);
       toast.error(result.message);
       router.push(`/${universityCode}`);
+      return;
     }
+
+    const uploadLogoUrl = result.data?.data?.uploadLogoUrl;
+    if (logoFile && uploadLogoUrl) {
+      const uploadLogoResult = await ky.put(uploadLogoUrl, {
+        body: logoFile,
+        headers: { 'Content-Type': logoFile.type },
+      });
+      if (!uploadLogoResult.ok) {
+        setIsSubmitting(false);
+        toast.error('로고 업로드에 실패했습니다.');
+        return;
+      }
+    }
+
+    setIsSubmitting(false);
+    toast.success(
+      <span>
+        제출되었습니다.
+        <br />
+        마이페이지에서 현황을 확인하실 수 있습니다.
+      </span>,
+    );
+    router.push(`/${universityCode}/my`);
   };
 
   return (

@@ -15,10 +15,6 @@ export interface ClubDetail {
   status: RecruitStatus;
 }
 
-export interface ClubDetailRaw extends Omit<ClubDetail, 'isFavorite'> {
-  favorite: boolean;
-}
-
 export interface ClubDetailData {
   data: ClubDetail;
 }
@@ -40,11 +36,6 @@ export interface RecruitmentDetail {
   clubName: string;
   logo: string;
   isAlwaysRecruiting: boolean;
-}
-
-export interface RecruitmentDetailRaw
-  extends Omit<RecruitmentDetail, 'isFavorite'> {
-  favorite: boolean;
 }
 
 export interface RecruitmentDetailResponse {
@@ -74,18 +65,4 @@ export interface ClubComment {
   isModified: boolean;
   time: string;
   isWriter: boolean;
-}
-
-export function mapRecruitmentDetail({
-  favorite,
-  ...rest
-}: RecruitmentDetailRaw): RecruitmentDetail {
-  return { ...rest, isFavorite: favorite };
-}
-
-export function mapClubDetail({
-  favorite,
-  ...rest
-}: ClubDetailRaw): ClubDetail {
-  return { ...rest, isFavorite: favorite };
 }

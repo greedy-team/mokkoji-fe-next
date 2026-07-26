@@ -4,15 +4,10 @@ import api from '@/shared/api/auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
 import { revalidateTag } from 'next/cache';
 
-async function patchUniversityCode(universityCode: string | null) {
-  const body =
-    universityCode === null
-      ? { clearUniversityCode: true }
-      : { universityCode };
-
+async function patchUniversityCode(universityCode: string) {
   try {
     const response = await api.patch('users', {
-      json: body,
+      json: { universityCode },
     });
 
     const data = await response.json();

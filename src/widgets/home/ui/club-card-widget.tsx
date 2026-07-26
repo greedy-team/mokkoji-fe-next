@@ -7,12 +7,17 @@ import getClubList from '@/widgets/club/api/getClubList';
 
 interface ClubCardWidgetProps {
   universityName: string;
+  universityCode: string;
 }
 
-async function ClubCardWidget({ universityName }: ClubCardWidgetProps) {
+async function ClubCardWidget({
+  universityName,
+  universityCode,
+}: ClubCardWidgetProps) {
   const clubListResponse = await getClubList({
     page: 1,
     size: 10,
+    universityCode,
   });
   if (!clubListResponse.ok || !clubListResponse.data) {
     return <ErrorBoundaryUi />;

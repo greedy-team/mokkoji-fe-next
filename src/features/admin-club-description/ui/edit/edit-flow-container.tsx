@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
@@ -22,6 +23,7 @@ interface ClubEditFlowContainerProps {
 
 function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const router = useRouter();
+  const universityCode = useUniversityCode();
   const flow = useEditFlow();
   const initialFormData = {
     name: clubInfo.name,
@@ -135,7 +137,11 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
         </p>
         <Button
           onClick={() =>
-            router.push(completedClubId ? `/club/${completedClubId}` : '/club')
+            router.push(
+              completedClubId
+                ? `/${universityCode}/club/${completedClubId}`
+                : `/${universityCode}/club`,
+            )
           }
         >
           동아리 확인하기

@@ -30,7 +30,7 @@ function AdminUniversitySelectWidget({
 
   return (
     <Select value={selectedCode} onValueChange={changeUniversity}>
-      <SelectTrigger className="w-[200px]">
+      <SelectTrigger className="w-[200px] cursor-pointer">
         <SelectValue placeholder="학교를 선택해주세요" />
       </SelectTrigger>
       <SelectContent>

@@ -1,160 +1,181 @@
-name: GitHub → Discord (Enhanced Embed Style)
+name: Discord PR Notifications
 
 on:
-  issues:
-    types: [opened, reopened, closed]
   pull_request:
-    types: [opened, reopened, closed]
-  push:
-    branches: ['**']
-  release:
-    types: [published]
+    types: [opened]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+  issues: write
 
 jobs:
-  discord-notification:
+  pr-opened:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Send Enhanced Discord Notification
-        shell: bash
+      - name: Send PR notification and create thread
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
 
-          # jq 설치
-          if ! command -v jq >/dev/null; then
-            sudo apt-get update -y && sudo apt-get install -y jq
-          fi
+          PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+          PR_TITLE=$(jq -r '.pull_request.title // "(no title)"' "$GITHUB_EVENT_PATH")
+          PR_URL=$(jq -r '.pull_request.html_url' "$GITHUB_EVENT_PATH")
+          HEAD=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")
+          BASE=$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")
+          AUTHOR=$(jq -r '.pull_request.user.login' "$GITHUB_EVENT_PATH")
+          AVATAR=$(jq -r '.pull_request.user.avatar_url' "$GITHUB_EVENT_PATH")
+          REPO="$GITHUB_REPOSITORY"
 
-          # 포크 PR 등 시크릿 미노출 시 스킵
-          if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
-            echo "::warning:: DISCORD_WEBHOOK_URL is empty. Skipping."
-            exit 0
-          fi
-
-          EVENT_NAME="$GITHUB_EVENT_NAME"
-          REPO_NAME="$GITHUB_REPOSITORY"
-          AUTHOR_NAME="$GITHUB_ACTOR"
-          AUTHOR_AVATAR="$(jq -r '.sender.avatar_url' "$GITHUB_EVENT_PATH")"
-
-          COLOR=9807270
-          EMOJI=""
-          TITLE=""
-          URL=""
-          DESCRIPTION=""
-
-          # 멀티라인 200자 트림(개행 유지)
-          trim_body () { awk -v max=200 '{out=out $0 ORS} END{ if (length(out)>max){ print substr(out,1,max-3) "..."} else { printf "%s", out }}'; }
-
-          case "$EVENT_NAME" in
-            issues)
-              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
-              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
-              number=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
-              ititle=$(jq -r '.issue.title // "(no title)"' "$GITHUB_EVENT_PATH")
-              ibody=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
-              URL=$(jq -r '.issue.html_url' "$GITHUB_EVENT_PATH")
-
-              COLOR=15965202
-              if [ "$action" = "opened" ]; then
-                EMOJI="🆕"; TITLE="새로운 이슈가 생성되었습니다!"
-              else
-                EMOJI="🔄"; TITLE="이슈가 다시 열렸습니다"
-              fi
-
-              DESCRIPTION="$(printf '**#%s %s**\n\n%s' "$number" "$ititle" "$ibody")"
-              ;;
-
-            pull_request)
-              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
-              [ "$action" = "opened" ] || [ "$action" = "reopened" ] || exit 0
-              number=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
-              ptitle=$(jq -r '.pull_request.title // "(no title)"' "$GITHUB_EVENT_PATH")
-              pbody=$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
-              head=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")
-              base=$(jq -r '.pull_request.base.ref' "$GITHUB_EVENT_PATH")
-              URL=$(jq -r '.pull_request.html_url' "$GITHUB_EVENT_PATH")
-
-              COLOR=3066993
-              if [ "$action" = "opened" ]; then
-                EMOJI="🔀"; TITLE="새로운 Pull Request가 생성되었습니다!"
-              else
-                EMOJI="🔄"; TITLE="Pull Request가 다시 열렸습니다"
-              fi
-
-              DESCRIPTION="$(printf '**#%s %s**\n\n`%s` → `%s`\n\n%s' "$number" "$ptitle" "$head" "$base" "$pbody")"
-              ;;
-
-            push)
-              branch="$GITHUB_REF_NAME"
-              commit_message="$(jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" | trim_body)"
-              commit_author="$(jq -r '.head_commit.author.name // ""' "$GITHUB_EVENT_PATH")"
-              [ -n "$commit_author" ] || commit_author="$AUTHOR_NAME"
-              URL="$(jq -r '.compare' "$GITHUB_EVENT_PATH")"
-
-              COLOR=3447003
-              EMOJI="📝"
-              TITLE="새로운 커밋이 푸시되었습니다!"
-              # ✅ 실제 줄바꿈(printf) 사용
-              DESCRIPTION="$(printf '브랜치: %s\n커밋: %s\n작성자: %s' "$branch" "$commit_message" "$commit_author")"
-              ;;
-
-            release)
-              action=$(jq -r '.action' "$GITHUB_EVENT_PATH")
-              [ "$action" = "published" ] || exit 0
-              tag=$(jq -r '.release.tag_name' "$GITHUB_EVENT_PATH")
-              rname=$(jq -r '.release.name // ""' "$GITHUB_EVENT_PATH")
-              rbody=$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
-              URL=$(jq -r '.release.html_url' "$GITHUB_EVENT_PATH")
-
-              COLOR=16766720
-              EMOJI="🚀"
-              TITLE="새로운 릴리즈가 발행되었습니다!"
-              DESCRIPTION="$(printf '**%s - %s**\n\n%s' "$tag" "$rname" "$rbody")"
-              ;;
-
-            *) exit 0;;
-          esac
-
-          ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          trim_body() {
+            awk -v max=200 '{out=out $0 ORS} END{
+              if (length(out)>max) print substr(out,1,max-3) "..."
+              else printf "%s", out
+            }'
+          }
+          PR_BODY=$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
 
           payload=$(jq -n \
-            --arg t "${EMOJI} ${TITLE}" \
-            --arg d "$DESCRIPTION" \
-            --arg url "$URL" \
-            --arg name "$AUTHOR_NAME" \
-            --arg icon "$AUTHOR_AVATAR" \
-            --arg repo "$REPO_NAME" \
-            --arg ev "$EVENT_NAME" \
-            --arg ts "$ts" \
-            --arg footer "GitHub → Discord" \
-            --arg footer_icon "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
-            --arg repo_url "https://github.com/$REPO_NAME" \
-            --argjson color "$COLOR" \
+            --arg title "🔀 새로운 Pull Request가 생성되었습니다!" \
+            --arg desc "$(printf '**#%s %s**\n\n`%s` → `%s`\n\n%s' "$PR_NUMBER" "$PR_TITLE" "$HEAD" "$BASE" "$PR_BODY")" \
+            --arg url "$PR_URL" \
+            --arg author "$AUTHOR" \
+            --arg avatar "$AVATAR" \
+            --arg repo "$REPO" \
+            --arg repo_url "https://github.com/$REPO" \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             '{
               embeds: [{
-                title: $t,
-                description: $d,
+                title: $title,
+                description: $desc,
                 url: $url,
-                color: $color,
-                author: { name: $name, icon_url: $icon },
+                color: 3066993,
+                author: { name: $author, icon_url: $avatar },
                 fields: [
-                  { name: "Repository", value: ("[`" + $repo + "`](" + $repo_url + ")"), inline: true },
-                  { name: "Event",      value: ("`" + $ev + "`"), inline: true }
+                  { name: "Repository", value: ("[`" + $repo + "`](" + $repo_url + ")"), inline: true }
                 ],
-                footer: { text: $footer, icon_url: $footer_icon },
+                footer: { text: "GitHub → Discord", icon_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" },
                 timestamp: $ts
               }]
             }')
 
-          code=$(curl -sS -o /tmp/resp.txt -w "%{http_code}" \
+          response=$(curl -sS -w "\n%{http_code}" \
             -H "Content-Type: application/json" \
             --data "$payload" \
-            "$DISCORD_WEBHOOK_URL")
+            "${DISCORD_WEBHOOK_URL}?wait=true")
 
-          echo "Discord HTTP $code"
-          if [ "$code" != "204" ]; then
-            echo "::error:: Discord webhook failed"
-            cat /tmp/resp.txt || true
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | sed '$d')
+
+          if [ "$http_code" != "200" ]; then
+            echo "::error::Discord webhook failed with $http_code"
+            echo "$body"
+            exit 1
+          fi
+
+          MESSAGE_ID=$(echo "$body" | jq -r '.id')
+          CHANNEL_ID=$(echo "$body" | jq -r '.channel_id')
+
+          thread_name=$(printf '#%s %s' "$PR_NUMBER" "$PR_TITLE" | cut -c1-100)
+          thread_response=$(curl -sS -w "\n%{http_code}" \
+            -X POST "https://discord.com/api/v10/channels/${CHANNEL_ID}/messages/${MESSAGE_ID}/threads" \
+            -H "Authorization: Bot ${DISCORD_BOT_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$(jq -n --arg name "$thread_name" '{ name: $name, auto_archive_duration: 1440 }')")
+
+          thread_http=$(echo "$thread_response" | tail -1)
+          thread_body=$(echo "$thread_response" | sed '$d')
+
+          if [ "$thread_http" != "201" ] && [ "$thread_http" != "200" ]; then
+            echo "::error::Thread creation failed with $thread_http"
+            echo "$thread_body"
+            exit 1
+          fi
+
+          THREAD_ID=$(echo "$thread_body" | jq -r '.id')
+
+          gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
+            -f body="<!-- discord-thread-id:${THREAD_ID} -->"
+
+  pr-comment:
+    if: >
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       github.actor != 'github-actions[bot]') ||
+      github.event_name == 'pull_request_review_comment'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send comment to PR thread
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          REPO="$GITHUB_REPOSITORY"
+          AUTHOR=$(jq -r '.comment.user.login' "$GITHUB_EVENT_PATH")
+
+          if [ "$AUTHOR" = "github-actions[bot]" ]; then
+            exit 0
+          fi
+
+          if [ "$GITHUB_EVENT_NAME" = "issue_comment" ]; then
+            PR_NUMBER=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+          else
+            PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+          fi
+
+          AVATAR=$(jq -r '.comment.user.avatar_url' "$GITHUB_EVENT_PATH")
+          COMMENT_URL=$(jq -r '.comment.html_url' "$GITHUB_EVENT_PATH")
+
+          trim_body() {
+            awk -v max=300 '{out=out $0 ORS} END{
+              if (length(out)>max) print substr(out,1,max-3) "..."
+              else printf "%s", out
+            }'
+          }
+          COMMENT_BODY=$(jq -r '.comment.body // ""' "$GITHUB_EVENT_PATH" | trim_body)
+
+          THREAD_ID=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" --paginate \
+            | jq -r '[.[] | select(.body | test("discord-thread-id:")) | .body] | last // empty' \
+            | sed -n 's/.*discord-thread-id:\([0-9]*\).*/\1/p')
+
+          if [ -z "$THREAD_ID" ]; then
+            echo "::warning::No Discord thread found for PR #${PR_NUMBER}"
+            exit 0
+          fi
+
+          payload=$(jq -n \
+            --arg title "💬 새로운 코멘트" \
+            --arg desc "$COMMENT_BODY" \
+            --arg url "$COMMENT_URL" \
+            --arg author "$AUTHOR" \
+            --arg avatar "$AVATAR" \
+            --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{
+              embeds: [{
+                title: $title,
+                description: $desc,
+                url: $url,
+                color: 7506394,
+                author: { name: $author, icon_url: $avatar },
+                timestamp: $ts
+              }]
+            }')
+
+          code=$(curl -sS -o /dev/null -w "%{http_code}" \
+            -H "Content-Type: application/json" \
+            --data "$payload" \
+            "${DISCORD_WEBHOOK_URL}?thread_id=${THREAD_ID}")
+
+          if [ "$code" != "204" ] && [ "$code" != "200" ]; then
+            echo "::error::Discord thread message failed with $code"
             exit 1
           fi

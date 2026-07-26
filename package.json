@@ -65,6 +65,7 @@
     "react-intersection-observer": "^9.16.0",
     "react-toastify": "^11.0.5",
     "require-in-the-middle": "^7.5.2",
+    "sanitize-html": "^2.17.6",
     "tailwind-merge": "^3.3.1",
     "to-do-pin": "0.0.41",
     "web-vitals": "^5.1.0"
@@ -90,6 +91,7 @@
     "@types/node": "^20.19.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.1",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "autoprefixer": "^10.4.21",

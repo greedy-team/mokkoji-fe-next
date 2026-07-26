@@ -1,11 +1,16 @@
+'use client';
+
 import Image from 'next/image';
+import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 function HomeSearchBar() {
+  const universityCode = useUniversityCode();
+
   return (
     <div className="mb-5 flex flex-col items-center py-5 lg:mb-[15px]">
       <div className="group relative w-[65%] lg:w-[80%]">
         <form
-          action="/search"
+          action={`/${universityCode}/search`}
           method="GET"
           className="flex items-center justify-between gap-1 pb-2 text-xs lg:text-xl"
         >

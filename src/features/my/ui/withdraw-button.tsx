@@ -6,16 +6,7 @@ import Image from 'next/image';
 import useServerAction from '@/shared/hooks/useServerAction';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/shared/ui/dialog';
-import { Button } from '@/shared/ui/button';
+import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import deleteUser from '../api/deleteUser';
 
 export default function WithdrawButton() {
@@ -36,24 +27,20 @@ export default function WithdrawButton() {
   const handleWithdraw = () => mutate();
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button
-          type="button"
-          className="mt-2 flex items-center gap-2 text-[#FF383C] hover:underline"
-        >
-          회원 탈퇴
-          <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
-        </button>
-      </DialogTrigger>
-
-      <DialogContent
-        aria-describedby="withdraw-desc"
-        className="w-[400px] rounded-2xl"
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="text-gray mt-2 flex items-center gap-2 text-sm hover:underline"
       >
-        <DialogHeader>
-          <DialogTitle className="font-semibold">회원 탈퇴</DialogTitle>
-          <DialogDescription id="withdraw-desc" className="text-sm">
+        회원 탈퇴
+        <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
+      </button>
+
+      <ConfirmDialog
+        title="회원 탈퇴"
+        description={
+          <>
             탈퇴 시 계정과 관련된{' '}
             <span className="font-semibold underline">
               모든 데이터가 삭제되며 복구할 수 없습니다.

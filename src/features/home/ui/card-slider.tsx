@@ -67,16 +67,16 @@ function CardSlider({ clubs }: CardSliderProps) {
               <div className="h-[70%] w-[70%] rounded-md bg-[#fefefe] p-4 shadow-xl transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(0,0,0,0.2)] lg:h-full lg:w-full">
                 <div className="mb-4 flex items-center gap-4">
                   <Avatar
-                    className={`${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
+                    className={`shrink-0 ${isActive ? 'size-10 lg:size-12' : 'size-8 lg:size-10'}`}
                   >
                     <AvatarImage src={club.logo} loading="lazy" />
                     <AvatarFallback />
                   </Avatar>
-                  <div className="flex flex-col">
+                  <div className="flex min-w-0 flex-col">
                     <h1
                       className={cn(
                         isActive ? 'text-md lg:text-lg' : 'text-xs lg:text-sm',
-                        'font-bold transition-all duration-500',
+                        'truncate font-bold transition-all duration-500',
                       )}
                     >
                       {club.name}

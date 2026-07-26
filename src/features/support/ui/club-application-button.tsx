@@ -23,7 +23,7 @@ function ClubApplicationButton({ universityCode }: ClubApplicationButtonProps) {
     <Link
       href={`/${universityCode}/club-application`}
       onClick={handleClick}
-      className="bg-gray4 mt-6 flex w-full items-center justify-between rounded-md p-4"
+      className="bg-gray4 mt-6 flex w-full items-center justify-between rounded-md p-4 sm:w-[300px]"
     >
       <span className="text-text-primary text-sm lg:text-base">
         동아리/동아리장 신청하기

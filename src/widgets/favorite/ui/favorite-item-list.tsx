@@ -1,34 +1,27 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
-
 import Link from 'next/link';
-import Image from 'next/image';
 import cn from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button';
 import { ClubType } from '@/shared/model/type';
 import ClubItem from '@/entities/club/ui/club-item';
-import { useBreakpoint } from '@/shared/hooks/useMediaQuery';
-
-import useFavoriteItems from '../util/useFavoriteItems';
+import Pagination from '@/shared/ui/pagination';
+import ClientFavoriteButton from './ClientFavoriteButton';
 
 interface FavoriteItemListProps {
   clubs: ClubType[];
   totalElements: number;
+  page: number;
+  size: number;
 }
 
-const MOBILE_SIZE = 3;
-const DESKTOP_SIZE = 6;
-
-function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
+function FavoriteItemList({
+  clubs,
+  totalElements,
+  page,
+  size,
+}: FavoriteItemListProps) {
   const universityCode = useUniversityCode();
-  const isDesktopView = useBreakpoint('lg');
-  const viewSize = isDesktopView ? DESKTOP_SIZE : MOBILE_SIZE;
-  const { currentPage, viewData, handleNext, handlePrev, viewTotalPages } =
-    useFavoriteItems({
-      clubs,
-      viewSize,
-    });
 
   return (
     <>
@@ -48,8 +41,8 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
           clubs.length === 0 && 'hidden',
         )}
       >
-        {viewData.map((item) => (
-          <li key={`mobile-${item.id}`}>
+        {clubs.map((item) => (
+          <li key={item.id}>
             <Link href={`/${universityCode}/club/${item.id}`}>
               <ClubItem
                 name={item.name}
@@ -62,47 +55,20 @@ function FavoriteItemList({ clubs, totalElements }: FavoriteItemListProps) {
                 recruitStatus={item.recruitStatus}
                 isAlwaysRecruiting={item.isAlwaysRecruiting}
                 height={150}
+                favoriteButton={
+                  <ClientFavoriteButton
+                    isFavorite={item.isFavorite || false}
+                    clubId={item.id}
+                    customClass="scale-100 mt-1"
+                  />
+                }
               />
             </Link>
           </li>
         ))}
       </ul>
-      <div className="mt-4 flex items-center justify-center gap-4">
-        <Button
-          type="button"
-          onClick={handlePrev}
-          disabled={currentPage === 0}
-          className={cn(
-            'h-[40px] w-[40px] rounded-full border border-[#CFCFCF] bg-white',
-            currentPage === 0 && 'cursor-not-allowed opacity-50',
-          )}
-        >
-          <Image
-            src="/favorite/prev.svg"
-            alt="prev"
-            width={60}
-            height={60}
-            className="scale-125"
-          />
-        </Button>
-        <Button
-          type="button"
-          onClick={() => handleNext()}
-          disabled={currentPage >= viewTotalPages - 1}
-          className={cn(
-            'h-[40px] w-[40px] rounded-full border border-[#CFCFCF] bg-white',
-            currentPage >= viewTotalPages - 1 &&
-              'cursor-not-allowed opacity-50',
-          )}
-        >
-          <Image
-            src="/favorite/next.svg"
-            alt="next"
-            width={60}
-            height={60}
-            className="scale-125"
-          />
-        </Button>
+      <div className="mt-4 flex items-center justify-center">
+        <Pagination page={page} size={size} total={totalElements} />
       </div>
     </>
   );

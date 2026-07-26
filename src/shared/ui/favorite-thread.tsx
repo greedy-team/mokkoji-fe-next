@@ -1,7 +1,6 @@
 'use client';
 
 import { useOptimistic, startTransition } from 'react';
-import { StarIcon, Star } from 'lucide-react';
 import Image from 'next/image';
 
 function FavoriteThread({

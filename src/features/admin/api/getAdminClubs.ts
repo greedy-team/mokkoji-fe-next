@@ -15,7 +15,7 @@ interface Params {
 
 interface AdminClubsResponse {
   clubs: AdminClub[];
-  pagination: PaginationMeta;
+  page: PaginationMeta;
 }
 
 async function getAdminClubs(params: Params) {

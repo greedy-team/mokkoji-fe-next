@@ -10,9 +10,15 @@ async function Page({
   params: Promise<{ universityCode: string }>;
 }) {
   const { universityCode } = await params;
-  const universityName = getUniversityName(urlCodeToApiCode(universityCode));
+  const apiUniversityCode = urlCodeToApiCode(universityCode);
+  const universityName = getUniversityName(apiUniversityCode);
 
-  return <HomePage universityName={universityName} />;
+  return (
+    <HomePage
+      universityName={universityName}
+      universityCode={apiUniversityCode}
+    />
+  );
 }
 
 export default Page;

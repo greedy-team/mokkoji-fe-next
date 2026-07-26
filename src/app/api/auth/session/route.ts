@@ -8,6 +8,10 @@ export async function GET() {
     return NextResponse.json(null);
   }
 
+  if (session.expiresAt && Date.now() >= session.expiresAt) {
+    return NextResponse.json(null);
+  }
+
   return NextResponse.json({
     user: session.user,
     role: session.role,

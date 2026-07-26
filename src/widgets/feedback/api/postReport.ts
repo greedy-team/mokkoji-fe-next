@@ -1,4 +1,4 @@
-import ky from 'ky';
+import clientApi from '@/shared/api/client-api';
 
 interface PostReportRequest {
   rating: number;
@@ -9,7 +9,7 @@ async function postReport({
   rating,
   content,
 }: PostReportRequest): Promise<void> {
-  await ky.post('/api/local/reports', {
+  await clientApi.post('api/local/reports', {
     json: { rating, content },
   });
 }

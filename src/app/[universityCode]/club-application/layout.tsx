@@ -24,7 +24,7 @@ export default async function Layout({
   return (
     <div className="flex flex-col">
       <Header universityCode={universityCode} />
-      <main className="flex px-4 py-7 pb-[calc(1.75rem+85px)] lg:pb-7">
+      <main className="flex justify-center px-4 py-7 pb-[calc(1.75rem+85px)] lg:pb-7">
         {children}
       </main>
       <BottomNav />

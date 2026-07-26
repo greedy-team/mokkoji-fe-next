@@ -47,7 +47,9 @@ function UniversitySelectModal({
           학교 선택하기
         </h1>
         <p className="text-text-secondary mb-6 text-center text-xs">
-          학교를 변경하면 기존 즐겨찾기가 모두 삭제돼요.
+          {universityCode === null
+            ? '이용할 학교를 선택해주세요.'
+            : '학교를 변경하면 기존 즐겨찾기가 모두 삭제돼요.'}
         </p>
 
         <div className="mb-30 flex flex-wrap gap-3">

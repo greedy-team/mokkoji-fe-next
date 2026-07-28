@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 type PaginationPage = number | 'ellipsis-start' | 'ellipsis-end';
@@ -53,6 +53,7 @@ function useNumberPagination({
 }: Params) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
 
   const safeTotalPages = Math.max(1, totalPages);
   const safePage = Math.min(Math.max(1, page), safeTotalPages);
@@ -61,13 +62,16 @@ function useNumberPagination({
   const canGoPrev = safePage > 1;
   const canGoNext = safePage < safeTotalPages;
 
-  const buildPageUrl = (nextPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const buildPageUrl = useCallback(
+    (nextPage: number) => {
+      const params = new URLSearchParams(searchParamsString);
 
-    params.delete('page');
-    params.set('page', String(nextPage));
-    return `?${params.toString()}`;
-  };
+      params.delete('page');
+      params.set('page', String(nextPage));
+      return `?${params.toString()}`;
+    },
+    [searchParamsString],
+  );
 
   const moveToPage = (nextPage: number) => {
     router.push(buildPageUrl(nextPage), { scroll: true });
@@ -77,8 +81,7 @@ function useNumberPagination({
     if (prefetchNext && canGoNext) {
       router.prefetch(buildPageUrl(safePage + 1));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [safePage, canGoNext, prefetchNext]);
+  }, [safePage, canGoNext, prefetchNext, buildPageUrl, router]);
 
   return { pages, safePage, canGoPrev, canGoNext, moveToPage };
 }

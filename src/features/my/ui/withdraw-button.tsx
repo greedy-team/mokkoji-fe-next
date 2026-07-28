@@ -48,26 +48,15 @@ export default function WithdrawButton() {
             <br />
             <br />
             정말 탈퇴하시겠습니까?
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setOpen(false)}
-            disabled={isPending}
-          >
-            취소
-          </Button>
-          <Button
-            className="bg-red-500 text-white hover:bg-red-600"
-            onClick={handleWithdraw}
-            disabled={isPending}
-          >
-            {isPending ? '탈퇴 중…' : '탈퇴'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </>
+        }
+        confirmLabel="탈퇴"
+        pendingLabel="탈퇴 중…"
+        open={open}
+        pending={isPending}
+        onOpenChange={setOpen}
+        onConfirm={handleWithdraw}
+      />
+    </>
   );
 }

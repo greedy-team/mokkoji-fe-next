@@ -1,32 +1,31 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
 import { useState, useEffect } from 'react';
 
 function ClubPageSearchbar() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useQueryState(
+    'keyword',
+    parseAsString
+      .withDefault('')
+      .withOptions({ shallow: false, history: 'push' }),
+  );
+  const [, setPage] = useQueryState(
+    'page',
+    parseAsInteger.withOptions({ shallow: false, history: 'push' }),
+  );
+  const [inputValue, setInputValue] = useState(keyword);
 
   useEffect(() => {
-    setKeyword(searchParams.get('keyword') ?? '');
-  }, [searchParams]);
+    setInputValue(keyword);
+  }, [keyword]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const params = new URLSearchParams(searchParams);
-
-    const q = keyword.trim();
-    if (!q) {
-      params.delete('keyword');
-    } else {
-      params.set('keyword', q);
-    }
-
-    params.set('page', '1');
-
-    router.push(`?${params.toString()}`);
+    const q = inputValue.trim();
+    setKeyword(q || null);
+    setPage(1);
   };
 
   return (
@@ -38,8 +37,8 @@ function ClubPageSearchbar() {
         >
           <input
             type="text"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             name="keyword"
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] text-xs placeholder-gray-300 outline-none sm:text-base"

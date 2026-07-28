@@ -2,32 +2,17 @@
 
 import React from 'react';
 import { ClubAffiliation, ClubAffiliationLabel } from '@/shared/model/type';
-import { useRouter, useSearchParams } from 'next/navigation';
+import useUrlParams from '@/shared/model/useUrlParams';
 
 function AffiliationNavSelect() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const active = searchParams.get('affiliation') ?? '';
+  const { active, handleChange: changeAffiliation } =
+    useUrlParams('affiliation');
 
   const affiliations = [
     ClubAffiliation.CENTRAL_CLUB,
     ClubAffiliation.DEPARTMENT_CLUB,
     ClubAffiliation.SMALL_GROUP,
   ];
-
-  const changeAffiliation = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (value === '') {
-      params.delete('affiliation');
-    } else {
-      params.set('affiliation', value);
-    }
-
-    params.set('page', '1');
-
-    router.push(`?${params.toString()}`);
-  };
 
   return (
     <div className="mb-5 flex gap-4 text-sm sm:mb-12 sm:text-base">

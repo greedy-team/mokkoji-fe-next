@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import { useSession } from '@/shared/lib/session-context';
@@ -27,7 +28,14 @@ function ClubDetailCommentEdit({
 }: ClubDetailCommentEditProps) {
   const [commentContent, setCommentContent] = useState(content);
   const [rating, setRating] = useState(rate);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(patchComment, {
+    onSuccess: async () => {
+      setCommentContent('');
+      setRating(0);
+      onCancel();
+      await onCommentChange();
+    },
+  });
   const { session } = useSession();
 
   const handleCommentContentChange = (
@@ -44,24 +52,7 @@ function ClubDetailCommentEdit({
       return;
     }
 
-    setIsSubmitting(true);
-    const response = await patchComment(
-      clubId,
-      commentId,
-      commentContent,
-      rating,
-    );
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
-
-    toast.success(response.message);
-    setCommentContent('');
-    setRating(0);
-    onCancel();
-    setIsSubmitting(false);
-    await onCommentChange();
+    await mutate(clubId, commentId, commentContent, rating);
   };
 
   return (
@@ -93,7 +84,7 @@ function ClubDetailCommentEdit({
           type="submit"
           size="none"
           className="w-[50%] px-5 py-2"
-          disabled={!commentContent || rating === 0 || isSubmitting}
+          disabled={!commentContent || rating === 0 || isPending}
         >
           수정
         </Button>

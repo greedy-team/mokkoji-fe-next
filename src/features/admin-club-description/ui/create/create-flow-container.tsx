@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
+import useServerAction from '@/shared/hooks/useServerAction';
 import useClubRegisterForm from '@/features/admin-club-description/util/useClubRegisterForm';
 import { postClubRegister } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
@@ -27,6 +28,10 @@ function CreateFlowContent() {
     validateAll,
   } = useClubRegisterForm();
 
+  const { mutate, isPending } = useServerAction(postClubRegister, {
+    onSuccess: () => flow.complete(),
+  });
+
   const handleSubmit = async () => {
     validateAll();
 
@@ -35,26 +40,12 @@ function CreateFlowContent() {
       return;
     }
 
-    flow.setSubmitting(true);
-
-    const data = {
+    await mutate({
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
       clubMasterStudentId: formData.clubMasterStudentId,
-    };
-
-    const res = await postClubRegister(data);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      flow.setSubmitting(false);
-      return;
-    }
-
-    flow.setSubmitting(false);
-    flow.complete();
-    toast.success('동아리가 등록되었습니다!');
+    });
   };
 
   if (flow.currentStep === 'completeCreateStep') {
@@ -80,7 +71,7 @@ function CreateFlowContent() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {flow.isSubmitting ? (
+          {isPending ? (
             <DotsPulseLoader wrapperClassName="flex justify-center flex-col items-center mt-4" />
           ) : (
             <Button

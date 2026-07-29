@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
+import useServerAction from '@/shared/hooks/useServerAction';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
@@ -14,23 +14,17 @@ export default function WithdrawButton() {
   const { refresh } = useSession();
   const universityCode = useUniversityCode();
   const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(deleteUser, {
+    onSuccess: async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      refresh();
+      setOpen(false);
+      router.push(`/${universityCode}`);
+      router.refresh();
+    },
+  });
 
-  const handleWithdraw = async () => {
-    setSubmitting(true);
-    const response = await deleteUser();
-    if (!response.ok) {
-      toast.error(response.message);
-      setSubmitting(false);
-      return;
-    }
-    await fetch('/api/auth/logout', { method: 'POST' });
-    refresh();
-    toast.success('회원 탈퇴가 완료되었습니다.');
-    setOpen(false);
-    router.push(`/${universityCode}`);
-    router.refresh();
-  };
+  const handleWithdraw = () => mutate();
 
   return (
     <>
@@ -59,7 +53,7 @@ export default function WithdrawButton() {
         confirmLabel="탈퇴"
         pendingLabel="탈퇴 중…"
         open={open}
-        pending={submitting}
+        pending={isPending}
         onOpenChange={setOpen}
         onConfirm={handleWithdraw}
       />

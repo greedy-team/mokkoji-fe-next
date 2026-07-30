@@ -7,6 +7,7 @@ const favoriteQueries = {
     queryOptions({
       queryKey: ['favorites', params.page, params.size],
       queryFn: () => getClientFavoriteList(params),
+      staleTime: 60 * 1000,
     }),
   recruit: (yearMonth: string) =>
     queryOptions({

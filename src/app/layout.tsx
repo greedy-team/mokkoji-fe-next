@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-import localFont from 'next/font/local';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
@@ -10,16 +9,6 @@ import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-
-const pretendard = localFont({
-  src: [
-    {
-      path: '../shared/fonts/PretendardVariable.woff2',
-    },
-  ],
-  variable: '--font-pretendard',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
@@ -78,7 +67,7 @@ export default function RootLayout({
         </Script>
         <ClarityProvider />
       </head>
-      <body className={`${pretendard.className} scrollbar-hide`}>
+      <body className="scrollbar-hide">
         <NuqsAdapter>
           <MSWProvider>
             <AppSessionProvider>

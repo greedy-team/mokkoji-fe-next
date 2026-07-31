@@ -57,6 +57,11 @@ function UniversitySelectModalWrapper({
       return;
     }
 
+    if (universityCode === null) {
+      applyUniversityChange(code);
+      return;
+    }
+
     setPendingCode(code);
     setIsConfirmOpen(true);
   };

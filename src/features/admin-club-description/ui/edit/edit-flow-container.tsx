@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import convertImageToWebp, {
+  LOGO_MAX_DIMENSION,
+} from '@/shared/lib/convertImageToWebp';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
@@ -50,14 +53,15 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [completedClubId, setCompletedClubId] = useState<number | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
+    const webpFile = await convertImageToWebp(file, LOGO_MAX_DIMENSION);
+    const imageUrl = URL.createObjectURL(webpFile);
     setPreview(imageUrl);
-    setLogoFile(file);
-    handleChange('logo', file.name);
+    setLogoFile(webpFile);
+    handleChange('logo', webpFile.name);
   };
 
   const handleLogoClick = () => {

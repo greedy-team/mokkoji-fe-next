@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import { toast } from 'react-toastify';
+import convertImageToWebp, {
+  RECRUITMENT_IMAGE_MAX_DIMENSION,
+} from '../lib/convertImageToWebp';
 
 interface ImageItem {
   id: string;
@@ -70,7 +73,7 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files) return;
     const fileArray = Array.from(files);
@@ -80,12 +83,21 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
       return;
     }
 
-    const newItems: ImageItem[] = fileArray.map((file) => ({
-      id: crypto.randomUUID(),
-      file,
-      previewUrl: URL.createObjectURL(file),
-      imageName: file.name,
-    }));
+    const newItems: ImageItem[] = await Promise.all(
+      fileArray.map(async (file) => {
+        const webpFile = await convertImageToWebp(
+          file,
+          RECRUITMENT_IMAGE_MAX_DIMENSION,
+        );
+
+        return {
+          id: crypto.randomUUID(),
+          file: webpFile,
+          previewUrl: URL.createObjectURL(webpFile),
+          imageName: webpFile.name,
+        };
+      }),
+    );
 
     setImageFiles((prev) => [...prev, ...newItems]);
   };

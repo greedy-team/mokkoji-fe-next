@@ -12,6 +12,9 @@ import {
   ClubInfoType,
 } from '@/shared/model/type';
 import getKeyByValue from '@/shared/lib/getKeyByValue';
+import convertImageToWebp, {
+  LOGO_MAX_DIMENSION,
+} from '@/shared/lib/convertImageToWebp';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
@@ -114,16 +117,17 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
+    const webpFile = await convertImageToWebp(file, LOGO_MAX_DIMENSION);
+    const imageUrl = URL.createObjectURL(webpFile);
     setPreview(imageUrl);
 
-    setLogoFile(file);
+    setLogoFile(webpFile);
 
-    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: file.name });
+    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: webpFile.name });
   };
 
   const handleClick = () => {

@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import AdminMainView from '@/views/admin/ui/AdminMainView';
@@ -54,20 +53,18 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense>
-        <AdminMainView
-          adminUniversityCode={adminUniversityCode ?? undefined}
-          dashboardContent={
-            <AdminDashboardView
-              clubMasterApplications={clubMasterApplications}
-              clubApplications={clubApplications}
-              role={adminInfo.role}
-              universities={universities}
-              selectedCode={universityCode ?? ''}
-            />
-          }
-        />
-      </Suspense>
+      <AdminMainView
+        adminUniversityCode={adminUniversityCode ?? undefined}
+        dashboardContent={
+          <AdminDashboardView
+            clubMasterApplications={clubMasterApplications}
+            clubApplications={clubApplications}
+            role={adminInfo.role}
+            universities={universities}
+            selectedCode={universityCode ?? ''}
+          />
+        }
+      />
     </HydrationBoundary>
   );
 }

@@ -13,17 +13,18 @@ import deleteClubMutationOptions from '@/features/admin/api/mutations';
 
 interface ClubListProps {
   searchClubQuery: string;
+  universityCode?: string;
 }
 
-function ClubList({ searchClubQuery }: ClubListProps) {
+function ClubList({ searchClubQuery, universityCode }: ClubListProps) {
   const queryClient = useQueryClient();
   const {
     clubs,
-    universityCode,
+    universityCode: clubLinkUniversityCode,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useAdminClubs();
+  } = useAdminClubs(universityCode);
 
   const { mutate: deleteClubMutate, isPending: isDeleting } = useMutation({
     ...deleteClubMutationOptions(),
@@ -75,7 +76,7 @@ function ClubList({ searchClubQuery }: ClubListProps) {
           key={club.clubId}
           index={index + 1}
           clubId={club.clubId}
-          universityCode={universityCode}
+          universityCode={clubLinkUniversityCode}
           name={club.clubName}
           category={ClubCategoryLabel[club.category]}
           disabled={isDeleting}
@@ -102,7 +103,11 @@ function ClubList({ searchClubQuery }: ClubListProps) {
   );
 }
 
-function ClubManagementWidget() {
+interface ClubManagementWidgetProps {
+  universityCode?: string;
+}
+
+function ClubManagementWidget({ universityCode }: ClubManagementWidgetProps) {
   const [searchClubQuery, setSearchClubQuery] = useState('');
 
   return (
@@ -145,7 +150,10 @@ function ClubManagementWidget() {
             </div>
           }
         >
-          <ClubList searchClubQuery={searchClubQuery} />
+          <ClubList
+            searchClubQuery={searchClubQuery}
+            universityCode={universityCode}
+          />
         </AsyncBoundaryWithQuery>
       </div>
     </div>

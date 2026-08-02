@@ -1,14 +1,7 @@
-import { queryOptions, infiniteQueryOptions } from '@tanstack/react-query';
-import getAdminMe from './getAdminMe';
+import { infiniteQueryOptions } from '@tanstack/react-query';
 import getManagementClubs from './getManagementClubs';
 
 const adminQueries = {
-  me: () =>
-    queryOptions({
-      queryKey: ['admin', 'me'],
-      queryFn: getAdminMe,
-    }),
-
   clubs: (universityCode?: string) =>
     infiniteQueryOptions({
       queryKey: ['admin', 'clubs', universityCode],

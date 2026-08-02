@@ -5,11 +5,15 @@ import ClubManagementWidget from '@/widgets/admin/ui/ClubManagementWidget';
 
 interface AdminMainViewProps {
   dashboardContent: React.ReactNode;
+  adminUniversityCode?: string;
 }
 
 type Tab = 'dashboard' | 'clubs';
 
-function AdminMainView({ dashboardContent }: AdminMainViewProps) {
+function AdminMainView({
+  dashboardContent,
+  adminUniversityCode,
+}: AdminMainViewProps) {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   return (
@@ -51,7 +55,7 @@ function AdminMainView({ dashboardContent }: AdminMainViewProps) {
               동아리를 등록 및 삭제할 수 있어요.
             </p>
           </div>
-          <ClubManagementWidget />
+          <ClubManagementWidget universityCode={adminUniversityCode} />
         </div>
       )}
     </div>

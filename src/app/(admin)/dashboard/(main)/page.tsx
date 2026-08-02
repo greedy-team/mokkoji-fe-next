@@ -34,6 +34,7 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
   return (
     <Suspense>
       <AdminMainView
+        adminUniversityCode={adminInfo.universityCode ?? undefined}
         dashboardContent={
           <AdminDashboardView
             clubMasterApplications={clubMasterApplications}

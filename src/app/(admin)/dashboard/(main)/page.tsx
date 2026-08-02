@@ -27,29 +27,29 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
   }
 
   const adminInfo = adminInfoResult.data;
-
-  const { universityCode: selectedFromUrl } = await searchParams;
-  const {
-    universities,
-    universityCode,
-    clubMasterApplications,
-    clubApplications,
-  } = await getDashboardData(adminInfo, selectedFromUrl);
-
-  const queryClient = getServerQueryClient();
   const adminUniversityCode = adminInfo.universityCode;
 
-  if (adminUniversityCode) {
-    await queryClient.prefetchInfiniteQuery({
-      ...adminQueries.clubs(adminUniversityCode),
-      queryFn: ({ pageParam }) =>
-        getServerManagementClubs({
-          page: pageParam as number,
-          size: ADMIN_CLUBS_PAGE_SIZE,
-          universityCode: adminUniversityCode,
-        }),
-    });
-  }
+  const { universityCode: selectedFromUrl } = await searchParams;
+  const queryClient = getServerQueryClient();
+
+  const adminClubsPrefetch = adminUniversityCode
+    ? queryClient.prefetchInfiniteQuery({
+        ...adminQueries.clubs(adminUniversityCode),
+        queryFn: ({ pageParam }) =>
+          getServerManagementClubs({
+            page: pageParam as number,
+            size: ADMIN_CLUBS_PAGE_SIZE,
+            universityCode: adminUniversityCode,
+          }),
+      })
+    : null;
+
+  const [
+    { universities, universityCode, clubMasterApplications, clubApplications },
+  ] = await Promise.all([
+    getDashboardData(adminInfo, selectedFromUrl),
+    adminClubsPrefetch,
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

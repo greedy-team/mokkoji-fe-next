@@ -1,9 +1,15 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getDashboardData from '@/features/admin/api/getDashboardData';
+import getServerQueryClient from '@/shared/lib/get-query-client';
+import adminQueries, {
+  ADMIN_CLUBS_PAGE_SIZE,
+} from '@/entities/admin/api/queries';
+import getServerManagementClubs from '@/entities/admin/api/getServerManagementClubs';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,21 +37,38 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
     clubApplications,
   } = await getDashboardData(adminInfo, selectedFromUrl);
 
+  const queryClient = getServerQueryClient();
+  const adminUniversityCode = adminInfo.universityCode;
+
+  if (adminUniversityCode) {
+    await queryClient.prefetchInfiniteQuery({
+      ...adminQueries.clubs(adminUniversityCode),
+      queryFn: ({ pageParam }) =>
+        getServerManagementClubs({
+          page: pageParam as number,
+          size: ADMIN_CLUBS_PAGE_SIZE,
+          universityCode: adminUniversityCode,
+        }),
+    });
+  }
+
   return (
-    <Suspense>
-      <AdminMainView
-        adminUniversityCode={adminInfo.universityCode ?? undefined}
-        dashboardContent={
-          <AdminDashboardView
-            clubMasterApplications={clubMasterApplications}
-            clubApplications={clubApplications}
-            role={adminInfo.role}
-            universities={universities}
-            selectedCode={universityCode ?? ''}
-          />
-        }
-      />
-    </Suspense>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense>
+        <AdminMainView
+          adminUniversityCode={adminUniversityCode ?? undefined}
+          dashboardContent={
+            <AdminDashboardView
+              clubMasterApplications={clubMasterApplications}
+              clubApplications={clubApplications}
+              role={adminInfo.role}
+              universities={universities}
+              selectedCode={universityCode ?? ''}
+            />
+          }
+        />
+      </Suspense>
+    </HydrationBoundary>
   );
 }
 

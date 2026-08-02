@@ -8,7 +8,7 @@ interface Params {
   universityCode?: string;
 }
 
-interface AdminClubsData {
+export interface AdminClubsData {
   clubs: AdminClub[];
   page: Pagination;
 }

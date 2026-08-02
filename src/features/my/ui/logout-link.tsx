@@ -27,7 +27,7 @@ export default function LogoutLink() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-2 flex items-center gap-2 text-sm text-[#FF383C] hover:underline"
+        className="mt-2 flex items-center gap-2 text-sm font-bold text-[#FF383C] hover:underline"
       >
         로그아웃
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />

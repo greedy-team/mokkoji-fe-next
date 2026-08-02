@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { ApiResponse, UserRole } from '@/shared/model/type';
+import cn from '@/shared/lib/utils';
 
 interface HeaderAdminLinkProps {
   isLoggedIn: boolean;
+  className?: string;
 }
 
 const ALLOWED_ROLES = [
@@ -17,7 +19,7 @@ const ALLOWED_ROLES = [
   UserRole.CLUB_MASTER,
 ];
 
-function HeaderAdminLink({ isLoggedIn }: HeaderAdminLinkProps) {
+function HeaderAdminLink({ isLoggedIn, className }: HeaderAdminLinkProps) {
   const universityCode = useUniversityCode();
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(false);
@@ -53,7 +55,7 @@ function HeaderAdminLink({ isLoggedIn }: HeaderAdminLinkProps) {
   return (
     <Link
       href={`/${universityCode}/admin`}
-      className="flex items-center font-semibold"
+      className={cn('flex items-center font-semibold', className)}
       onClick={handleClick}
     >
       동아리 관리

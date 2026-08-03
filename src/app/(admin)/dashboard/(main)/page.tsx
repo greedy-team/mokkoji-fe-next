@@ -5,10 +5,7 @@ import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getDashboardData from '@/features/admin/api/getDashboardData';
 import getServerQueryClient from '@/shared/lib/get-query-client';
-import adminQueries, {
-  ADMIN_CLUBS_PAGE_SIZE,
-} from '@/entities/admin/api/queries';
-import getServerManagementClubs from '@/entities/admin/api/getServerManagementClubs';
+import prefetchAdminClubs from '@/entities/admin/api/prefetchAdminClubs';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,23 +29,11 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
   const { universityCode: selectedFromUrl } = await searchParams;
   const queryClient = getServerQueryClient();
 
-  const adminClubsPrefetch = adminUniversityCode
-    ? queryClient.prefetchInfiniteQuery({
-        ...adminQueries.clubs(adminUniversityCode),
-        queryFn: ({ pageParam }) =>
-          getServerManagementClubs({
-            page: pageParam as number,
-            size: ADMIN_CLUBS_PAGE_SIZE,
-            universityCode: adminUniversityCode,
-          }),
-      })
-    : null;
-
   const [
     { universities, universityCode, clubMasterApplications, clubApplications },
   ] = await Promise.all([
     getDashboardData(adminInfo, selectedFromUrl),
-    adminClubsPrefetch,
+    prefetchAdminClubs(queryClient, adminUniversityCode),
   ]);
 
   return (

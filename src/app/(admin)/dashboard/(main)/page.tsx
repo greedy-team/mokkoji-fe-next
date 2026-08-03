@@ -1,9 +1,11 @@
-import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import AdminMainView from '@/views/admin/ui/AdminMainView';
 import AdminDashboardView from '@/views/admin/ui/AdminDashboardView';
 import getAdminInfo from '@/features/admin/api/getAdminInfo';
 import getDashboardData from '@/features/admin/api/getDashboardData';
+import getServerQueryClient from '@/shared/lib/get-query-client';
+import prefetchAdminClubs from '@/entities/admin/api/prefetchAdminClubs';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,18 +24,22 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
   }
 
   const adminInfo = adminInfoResult.data;
+  const adminUniversityCode = adminInfo.universityCode;
 
   const { universityCode: selectedFromUrl } = await searchParams;
-  const {
-    universities,
-    universityCode,
-    clubMasterApplications,
-    clubApplications,
-  } = await getDashboardData(adminInfo, selectedFromUrl);
+  const queryClient = getServerQueryClient();
+
+  const [
+    { universities, universityCode, clubMasterApplications, clubApplications },
+  ] = await Promise.all([
+    getDashboardData(adminInfo, selectedFromUrl),
+    prefetchAdminClubs(queryClient, adminUniversityCode),
+  ]);
 
   return (
-    <Suspense>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <AdminMainView
+        adminUniversityCode={adminUniversityCode ?? undefined}
         dashboardContent={
           <AdminDashboardView
             clubMasterApplications={clubMasterApplications}
@@ -44,7 +50,7 @@ async function DashboardPage({ searchParams }: DashboardPageProps) {
           />
         }
       />
-    </Suspense>
+    </HydrationBoundary>
   );
 }
 

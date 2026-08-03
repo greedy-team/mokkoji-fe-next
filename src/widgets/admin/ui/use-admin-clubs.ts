@@ -1,21 +1,17 @@
 'use client';
 
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import adminQueries from '@/entities/admin/api/queries';
 
-function useAdminClubs() {
-  const { data: adminMe } = useQuery(adminQueries.me());
-
-  const infiniteQuery = useInfiniteQuery(
-    adminQueries.clubs(adminMe?.universityCode),
-  );
+function useAdminClubs(universityCode?: string) {
+  const infiniteQuery = useInfiniteQuery(adminQueries.clubs(universityCode));
 
   const clubs = infiniteQuery.data?.pages.flatMap((page) => page.clubs) ?? [];
 
   return {
     clubs,
-    universityCode: adminMe?.universityCode?.toLowerCase() ?? '',
-    isLoading: !adminMe || infiniteQuery.isLoading,
+    universityCode: universityCode?.toLowerCase() ?? '',
+    isLoading: infiniteQuery.isLoading,
     fetchNextPage: infiniteQuery.fetchNextPage,
     hasNextPage: infiniteQuery.hasNextPage,
     isFetchingNextPage: infiniteQuery.isFetchingNextPage,

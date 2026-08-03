@@ -53,7 +53,7 @@ function ClubApplicationStatus({
 
   return (
     <div className="mb-10 flex flex-col gap-3">
-      <div className="font-semibold">신청 현황</div>
+      <div className="text-sm font-bold">신청 현황</div>
       <div className="flex flex-col gap-5">
         <ApplicationSection
           title={APPLICATION_SECTION.master.title}

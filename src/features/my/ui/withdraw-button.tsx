@@ -1,26 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import useServerAction from '@/shared/hooks/useServerAction';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import { useSession } from '@/shared/lib/session-context';
+import useLogout from '@/shared/hooks/useLogout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import deleteUser from '../api/deleteUser';
 
 export default function WithdrawButton() {
-  const router = useRouter();
-  const { refresh } = useSession();
-  const universityCode = useUniversityCode();
+  const logout = useLogout();
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useServerAction(deleteUser, {
     onSuccess: async () => {
-      await fetch('/api/auth/logout', { method: 'POST' });
-      refresh();
       setOpen(false);
-      router.push(`/${universityCode}`);
-      router.refresh();
+      await logout();
     },
   });
 
@@ -31,7 +24,7 @@ export default function WithdrawButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-gray mt-2 flex items-center gap-2 text-sm hover:underline"
+        className="text-gray mt-2 flex items-center gap-2 text-sm font-bold hover:underline"
       >
         회원 탈퇴
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />

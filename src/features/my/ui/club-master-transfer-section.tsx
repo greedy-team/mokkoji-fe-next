@@ -64,7 +64,7 @@ function ClubMasterTransferSection({ clubs }: ClubMasterTransferSectionProps) {
           onClick={() => setSelectedClub(club)}
           className="bg-gray4 flex items-center justify-between rounded-lg px-4 py-3.5 text-left"
         >
-          <span className="text-text-secondary text-sm font-medium">
+          <span className="text-text-secondary text-sm font-bold">
             {`'${club.clubName}' 동아리장 위임하기`}
           </span>
           <Image src="/nextBlack.svg" alt="" width={8} height={12} />

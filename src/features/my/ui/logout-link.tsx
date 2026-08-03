@@ -1,25 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import { useSession } from '@/shared/lib/session-context';
+import useLogout from '@/shared/hooks/useLogout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 export default function LogoutLink() {
-  const router = useRouter();
-  const { refresh } = useSession();
-  const universityCode = useUniversityCode();
+  const logout = useLogout();
   const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    refresh();
     setOpen(false);
-    router.push(`/${universityCode}`);
-    router.refresh();
+    await logout();
   };
 
   return (
@@ -27,7 +20,7 @@ export default function LogoutLink() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-2 flex items-center gap-2 text-sm text-[#FF383C] hover:underline"
+        className="mt-2 flex items-center gap-2 text-sm font-bold text-[#FF383C] hover:underline"
       >
         로그아웃
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />

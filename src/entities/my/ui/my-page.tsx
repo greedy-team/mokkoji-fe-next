@@ -74,7 +74,9 @@ async function MyPage({
       <ScrollProgressBar />
       <div className="mx-auto w-full px-4 sm:w-lg">
         <div className="mb-8 flex flex-col gap-2">
-          <div className="text-text-secondary">{user.name}</div>
+          <div className="text-text-secondary text-sm font-bold">
+            {user.name}
+          </div>
           <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
             <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
             <span className="text-sm text-neutral-900">카카오 로그인</span>
@@ -128,7 +130,10 @@ async function MyPage({
             </InfoRow>
             {isAdmin && (
               <div className="mt-6 flex items-center gap-2">
-                <HeaderAdminLink isLoggedIn={!!session} />
+                <HeaderAdminLink
+                  isLoggedIn={!!session}
+                  className="text-sm font-bold"
+                />
                 <Image src="/nextBlack.svg" alt="" width={8} height={12} />
               </div>
             )}

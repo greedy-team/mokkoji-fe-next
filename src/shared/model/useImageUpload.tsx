@@ -5,6 +5,8 @@ import convertImageToWebp, {
   RECRUITMENT_IMAGE_MAX_DIMENSION,
 } from '../lib/convertImageToWebp';
 
+const CONVERT_CONCURRENCY = 3;
+
 interface ImageItem {
   id: string;
   file: File;
@@ -83,23 +85,33 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
       return;
     }
 
-    const newItems: ImageItem[] = await Promise.all(
-      fileArray.map(async (file) => {
-        const webpFile = await convertImageToWebp(
-          file,
-          RECRUITMENT_IMAGE_MAX_DIMENSION,
-        );
+    for (
+      let index = 0;
+      index < fileArray.length;
+      index += CONVERT_CONCURRENCY
+    ) {
+      const batch = fileArray.slice(index, index + CONVERT_CONCURRENCY);
 
-        return {
-          id: crypto.randomUUID(),
-          file: webpFile,
-          previewUrl: URL.createObjectURL(webpFile),
-          imageName: webpFile.name,
-        };
-      }),
-    );
+      // 한 번에 전부 변환하면 원본 비트맵이 동시에 메모리에 올라와 모바일에서 탭이 죽는다
+      // eslint-disable-next-line no-await-in-loop
+      const convertedBatch: ImageItem[] = await Promise.all(
+        batch.map(async (file) => {
+          const webpFile = await convertImageToWebp(
+            file,
+            RECRUITMENT_IMAGE_MAX_DIMENSION,
+          );
 
-    setImageFiles((prev) => [...prev, ...newItems]);
+          return {
+            id: crypto.randomUUID(),
+            file: webpFile,
+            previewUrl: URL.createObjectURL(webpFile),
+            imageName: webpFile.name,
+          };
+        }),
+      );
+
+      setImageFiles((prev) => [...prev, ...convertedBatch]);
+    }
   };
 
   const handleImageRemove = (id: string) => {

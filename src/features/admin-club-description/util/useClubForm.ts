@@ -2,6 +2,7 @@
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
+import isRichTextEmpty from '@/shared/lib/isRichTextEmpty';
 import clubDescriptionFormReducer, {
   initialState,
 } from '../model/reducer/clubFormReducer';
@@ -41,7 +42,7 @@ function useClubForm({ onNextStep, initialData }: UseClubFormOptions) {
 
   const isDescriptionValid = () => {
     return DESCRIPTION_FIELDS.every(
-      (field) => formData[field] && !errors[field],
+      (field) => !isRichTextEmpty(formData[field] as string) && !errors[field],
     );
   };
 

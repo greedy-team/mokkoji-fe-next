@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
@@ -71,7 +72,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
-      description: formData.description,
+      description: sanitizeDescriptionHtml(formData.description),
       instagram: formData.instagram,
       logo: formData.logo ?? '',
     };
@@ -199,7 +200,6 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
             formData={formData}
             errors={errors}
             onChange={handleChange}
-            onBlur={handleBlur}
           />
         </div>
       )}

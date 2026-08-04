@@ -1,18 +1,16 @@
-import Textarea from '@/shared/ui/textarea';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 import { ClubFormData } from '../../model/type';
 
 interface StepClubDescriptionProps {
   formData: ClubFormData;
   errors: Partial<Record<keyof ClubFormData, string>>;
   onChange: (name: keyof ClubFormData, value: string) => void;
-  onBlur: (name: keyof ClubFormData) => void;
 }
 
 function StepClubDescription({
   formData,
   errors,
   onChange,
-  onBlur,
 }: StepClubDescriptionProps) {
   return (
     <>
@@ -26,21 +24,10 @@ function StepClubDescription({
           </p>
         )}
       </label>
-      <Textarea
-        id="description"
-        name="description"
-        value={formData.description}
-        onChange={(e) => onChange('description', e.target.value)}
-        variant={errors.description ? 'blackError' : 'blackDefault'}
-        maxLength={5000}
-        placeholder="5000자 이내로 작성해주세요!"
-        className="min-h-[55vh] transition-colors duration-300"
-        onBlur={() => onBlur('description')}
+      <RichTextEditor
+        initialContent={formData.description}
+        onChange={(html) => onChange('description', html)}
       />
-      <p className="text-end text-xs text-[#474747]">
-        {formData.description.length}{' '}
-        <span className="text-[#CCCCCC]">/ 5000자</span>
-      </p>
     </>
   );
 }

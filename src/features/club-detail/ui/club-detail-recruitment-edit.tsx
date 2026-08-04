@@ -2,8 +2,9 @@
 
 import SafeForm from '@/shared/ui/safe-form';
 import Input from '@/shared/ui/input';
-import Textarea from '@/shared/ui/textarea';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import recruitmentFormReducer from '@/features/post-recruitment/model/reducer/recruitmentFormReducer';
 import { useReducer } from 'react';
 import {
@@ -75,7 +76,7 @@ function ClubDetailRecruitmentEdit({
 
     const data = {
       title: formData.title,
-      content: formData.content,
+      content: sanitizeDescriptionHtml(formData.content),
       recruitStart: formData.recruitStart,
       recruitEnd: formData.recruitEnd,
       recruitForm: formData.recruitForm,
@@ -129,12 +130,9 @@ function ClubDetailRecruitmentEdit({
       <label htmlFor="content" className="indent-1 text-xl font-bold">
         모집 공고
       </label>
-      <Textarea
-        id="content"
-        name="content"
-        value={formData.content}
-        onChange={(e) => handleChange('content', e.target.value)}
-        maxLength={5000}
+      <RichTextEditor
+        initialContent={formData.content}
+        onChange={(html) => handleChange('content', html)}
       />
       <label htmlFor="recruitForm" className="indent-1 text-xl font-bold">
         모집폼 URL

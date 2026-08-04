@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import ClubDescriptionEditor from '@/shared/ui/ClubDescriptionEditor';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 
 interface Props {
   onSubmit: (description: string) => void;
@@ -17,7 +17,7 @@ function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
     <div className="flex flex-col gap-6 py-8">
       <h2 className="text-base font-bold">동아리 소개</h2>
 
-      <ClubDescriptionEditor
+      <RichTextEditor
         onChange={(html, empty) => {
           setContent(html);
           setIsEmpty(empty);

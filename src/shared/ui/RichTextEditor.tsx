@@ -78,11 +78,17 @@ const ALIGN_OPTIONS = [
   { icon: AlignRight, value: 'right' },
 ];
 
-interface ClubDescriptionEditorProps {
+interface RichTextEditorProps {
+  initialContent?: string;
+  placeholder?: string;
   onChange?: (html: string, isEmpty: boolean) => void;
 }
 
-function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
+function RichTextEditor({
+  initialContent,
+  placeholder = '동아리에 대한 내용을 구체적으로 적어주세요.',
+  onChange,
+}: RichTextEditorProps) {
   const [styleOpen, setStyleOpen] = useState(false);
   const [alignOpen, setAlignOpen] = useState(false);
   const [, rerender] = useState(0);
@@ -95,7 +101,7 @@ function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
       TextStyle,
       FontSize,
     ],
-    content: '',
+    content: initialContent ?? '',
     onTransaction: ({ editor: currentEditor }) => {
       rerender((v) => v + 1);
       onChange?.(currentEditor.getHTML(), currentEditor.isEmpty);
@@ -231,7 +237,7 @@ function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
       <div className="relative min-h-[400px]">
         {isEmpty && (
           <p className="pointer-events-none absolute top-4 left-4 text-sm text-[#C0C0C0] select-none">
-            동아리에 대한 내용을 구체적으로 적어주세요.
+            {placeholder}
           </p>
         )}
         <EditorContent editor={editor} />
@@ -240,4 +246,4 @@ function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
   );
 }
 
-export default ClubDescriptionEditor;
+export default RichTextEditor;

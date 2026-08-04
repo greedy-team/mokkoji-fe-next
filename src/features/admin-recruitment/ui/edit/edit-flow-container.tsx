@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
@@ -99,6 +100,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
 
     const data = {
       ...formData,
+      content: sanitizeDescriptionHtml(formData.content),
       recruitStart: formData.isAlwaysRecruiting ? '' : formData.recruitStart,
       recruitEnd: formData.isAlwaysRecruiting ? '' : formData.recruitEnd,
       imageNames: imageUpload.imageFiles.map((f) => f.imageName),
@@ -235,7 +237,6 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
             formData={formData}
             errors={errors}
             onChange={handleChange}
-            onBlur={handleBlur}
           />
         </div>
       )}

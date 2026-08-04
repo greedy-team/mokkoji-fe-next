@@ -1,4 +1,4 @@
-import Textarea from '@/shared/ui/textarea';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 import { RecruitmentFormData } from '../../model/type';
 
 interface StepRecruitmentPostInfoProps {
@@ -8,14 +8,12 @@ interface StepRecruitmentPostInfoProps {
     field: K,
     value: RecruitmentFormData[K],
   ) => void;
-  onBlur: (field: keyof RecruitmentFormData) => void;
 }
 
 function StepRecruitmentPostInfo({
   formData,
   errors,
   onChange,
-  onBlur,
 }: StepRecruitmentPostInfoProps) {
   return (
     <>
@@ -26,21 +24,11 @@ function StepRecruitmentPostInfo({
           </p>
         )}
       </label>
-      <Textarea
-        id="content"
-        name="content"
-        value={formData.content}
-        onChange={(e) => onChange('content', e.target.value)}
-        variant={errors.content ? 'blackError' : 'blackDefault'}
-        maxLength={5000}
+      <RichTextEditor
+        initialContent={formData.content}
         placeholder="5000자 이내로 작성해주세요!"
-        className="min-h-[55vh] transition-colors duration-300"
-        onBlur={() => onBlur('content')}
+        onChange={(html) => onChange('content', html)}
       />
-      <p className="text-end text-xs text-[#474747]">
-        {formData.content.length}{' '}
-        <span className="text-[#CCCCCC]">/ 5000자</span>
-      </p>
     </>
   );
 }

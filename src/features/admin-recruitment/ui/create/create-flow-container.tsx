@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
 import { ClubInfoType } from '@/shared/model/type';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
@@ -47,6 +48,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
 
     const data = {
       ...formData,
+      content: sanitizeDescriptionHtml(formData.content),
       imageNames: imageUpload.imageFiles.map((f) => f.imageName),
     };
 
@@ -154,7 +156,6 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
             formData={formData}
             errors={errors}
             onChange={handleChange}
-            onBlur={handleBlur}
           />
         </div>
       )}

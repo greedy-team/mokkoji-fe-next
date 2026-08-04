@@ -2,6 +2,7 @@
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
+import isRichTextEmpty from '@/shared/lib/isRichTextEmpty';
 import adminRecruitmentFormReducer, {
   initialState,
 } from '../model/reducer/recruitmentFormReducer';
@@ -46,7 +47,9 @@ function useRecruitmentForm({ onNextStep }: UseRecruitmentFormOptions) {
   };
 
   const isContentValid = () => {
-    return CONTENT_FIELDS.every((field) => formData[field] && !errors[field]);
+    return CONTENT_FIELDS.every(
+      (field) => !isRichTextEmpty(formData[field] as string) && !errors[field],
+    );
   };
 
   const handleNextStep = () => {

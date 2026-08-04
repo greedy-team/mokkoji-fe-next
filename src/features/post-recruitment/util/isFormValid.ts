@@ -1,3 +1,4 @@
+import isRichTextEmpty from '@/shared/lib/isRichTextEmpty';
 import { RecruitmentFormField, RecruitmentFormState } from '../model/type';
 
 export default function isFormValid(
@@ -11,7 +12,13 @@ export default function isFormValid(
       return val.length > 0;
     }
 
-    return typeof val === 'string' && val.trim() !== '';
+    if (typeof val !== 'string') return false;
+
+    if (field.type === 'textarea') {
+      return !isRichTextEmpty(val);
+    }
+
+    return val.trim() !== '';
   });
 
   const noErrors = Object.values(errors).every((msg) => !msg);

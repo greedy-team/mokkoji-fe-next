@@ -7,11 +7,12 @@ import { toast } from 'react-toastify';
 import useServerAction from '@/shared/hooks/useServerAction';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
-import Textarea from '@/shared/ui/textarea';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
 import { RecruitmentFormField, RecruitmentFormData } from '../model/type';
@@ -88,7 +89,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     await mutate(
       {
         title: formData.title,
-        content: formData.content,
+        content: sanitizeDescriptionHtml(formData.content),
         recruitStart: formData.recruitStart,
         recruitEnd: formData.recruitEnd,
         recruitForm: formData.recruitForm,
@@ -141,21 +142,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
           </p>
         )}
       </label>
-      <p className="text-xs text-[#00D451]">5000자 이내로 작성해주세요!</p>
-      <Textarea
-        id="content"
-        name="content"
-        value={formData.content}
-        onChange={(e) => handleChange('content', e.target.value)}
-        variant={errors.content ? 'error' : 'default'}
-        maxLength={5000}
-        className="transition-colors duration-300"
-        onBlur={() => handleBlur('content')}
-      />
-      <p className="text-end text-xs text-[#474747]">
-        {formData.content.length}{' '}
-        <span className="text-[#CCCCCC]">/ 5000자</span>
-      </p>
+      <RichTextEditor onChange={(html) => handleChange('content', html)} />
       <label htmlFor="recruitForm" className="mt-4 flex gap-2 font-bold">
         모집 폼 링크
         {errors.recruitForm && (

@@ -6,7 +6,7 @@ function ClarityProvider() {
   return (
     <Script
       id="microsoft-clarity-init"
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       dangerouslySetInnerHTML={{
         __html: `
                 (function(c,l,a,r,i,t,y){

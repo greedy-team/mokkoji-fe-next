@@ -1,5 +1,3 @@
-'use client';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { RecruitStatus } from '@/shared/model/type';

@@ -35,7 +35,10 @@ async function ClubItemList({ universityCode }: { universityCode: string }) {
 
   return (
     <div className="mb-8">
-      <ClubItemClientList clubs={clubListResponse.data.clubs} />
+      <ClubItemClientList
+        clubs={clubListResponse.data.clubs}
+        universityCode={universityCode}
+      />
       <FeedbackModal />
       <NumberPagination
         page={page}

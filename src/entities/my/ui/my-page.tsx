@@ -16,6 +16,7 @@ import {
   toCreateCardItem,
   toMasterCardItem,
 } from '@/entities/my/lib/application-card';
+import ClubApplicationBanner from '@/shared/ui/ClubApplicationBanner';
 import InfoRow from '@/entities/my/ui/info-row';
 import EmailChangeDialog from '@/features/my/ui/email-change-dialog';
 import EmailDeleteButton from '@/features/my/ui/email-delete-button';
@@ -81,6 +82,10 @@ async function MyPage({
             <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
             <span className="text-sm text-neutral-900">카카오 로그인</span>
           </div>
+        </div>
+
+        <div className="mb-8">
+          <ClubApplicationBanner universityCode={universityCode} />
         </div>
 
         <ClubMasterTransferSection clubs={managedClubs} />

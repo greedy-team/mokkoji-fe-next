@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
 import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
+import convertImageToWebp, {
+  LOGO_MAX_DIMENSION,
+} from '@/shared/lib/convertImageToWebp';
 import type { University } from '@/entities/university/model/type';
 import postCreateClubApplication from '../api/postCreateClubApplication';
 import type { ClubCreateFormData } from '../model/type';
@@ -42,12 +45,14 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const [step, setStep] = useState<Step>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLogoPreview(URL.createObjectURL(file));
-    setLogoFile(file);
-    setFormData((prev) => ({ ...prev, logo: file.name }));
+
+    const webpFile = await convertImageToWebp(file, LOGO_MAX_DIMENSION);
+    setLogoPreview(URL.createObjectURL(webpFile));
+    setLogoFile(webpFile);
+    setFormData((prev) => ({ ...prev, logo: webpFile.name }));
   };
 
   const handleNext = () => {

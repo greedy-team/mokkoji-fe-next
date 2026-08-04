@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import ClubItem from '@/entities/club/ui/club-item';
-import ClubApplicationBanner from './club-application-banner';
+import ClubApplicationBanner from '@/shared/ui/ClubApplicationBanner';
 import { Club } from '../model/type';
 
 const BANNER_INTERVAL = 4;

@@ -1,7 +1,7 @@
 import Search from '@/features/support/ui/search';
 import FAQList from '@/widgets/support/faq-list';
 import BugInfoButton from '@/features/support/ui/bug-info-button';
-import ClubApplicationButton from '@/features/support/ui/club-application-button';
+import ClubApplicationBanner from '@/shared/ui/ClubApplicationBanner';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 
 interface SupportPageProps {
@@ -14,7 +14,10 @@ function SupportPage({ universityCode }: SupportPageProps) {
       <ScrollProgressBar />
       <div className="mx-auto w-full sm:w-4xl lg:w-6xl">
         <Search />
-        <ClubApplicationButton universityCode={universityCode} />
+        <ClubApplicationBanner
+          universityCode={universityCode}
+          className="mt-6 sm:w-[300px]"
+        />
         <FAQList />
         <BugInfoButton />
       </div>

@@ -12,6 +12,7 @@ import {
   ClubInfoType,
 } from '@/shared/model/type';
 import getKeyByValue from '@/shared/lib/getKeyByValue';
+import sanitizeDescriptionHtml from '@/shared/lib/sanitizeDescriptionHtml';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
@@ -56,7 +57,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
-      description: formData.description,
+      description: sanitizeDescriptionHtml(formData.description),
       instagram: formData.instagram,
       logo: formData.logo ?? '',
     };

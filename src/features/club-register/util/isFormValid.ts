@@ -1,3 +1,4 @@
+import isRichTextEmpty from '@/shared/lib/isRichTextEmpty';
 import { ClubRegisterFormField, ClubRegisterFormState } from '../model/type';
 
 export default function isFormValid(
@@ -8,7 +9,13 @@ export default function isFormValid(
     .filter((field) => field.name !== 'instagram')
     .every((field) => {
       const val = formData[field.name as keyof typeof formData];
-      return typeof val === 'string' && val.trim() !== '';
+      if (typeof val !== 'string') return false;
+
+      if (field.type === 'textarea') {
+        return !isRichTextEmpty(val);
+      }
+
+      return val.trim() !== '';
     });
 
   const noErrors = Object.values(errors).every((msg) => !msg);

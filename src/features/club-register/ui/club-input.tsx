@@ -1,7 +1,7 @@
 'use client';
 
 import Input from '@/shared/ui/input';
-import Textarea from '@/shared/ui/textarea';
+import RichTextEditor from '@/shared/ui/RichTextEditor';
 import { Button } from '@/shared/ui/button';
 import { ClubAffiliationLabel, ClubCategoryLabel } from '@/shared/model/type';
 import { ClubInputProps } from '../model/type';
@@ -42,22 +42,10 @@ function ClubInput({
       )}
 
       {type === 'textarea' && (
-        <>
-          <p className="text-xs text-[#00D451]">5000자 이내로 작성해주세요!</p>
-          <Textarea
-            id={name}
-            name={name}
-            value={value}
-            onChange={(e) => onChange(name, e.target.value)}
-            variant={error ? 'error' : 'default'}
-            maxLength={5000}
-            className="transition-colors duration-300"
-            onBlur={() => onBlur(name)}
-          />
-          <p className="text-end text-xs text-[#474747]">
-            {value.length} <span className="text-[#CCCCCC]">/ 5000자</span>
-          </p>
-        </>
+        <RichTextEditor
+          initialContent={value}
+          onChange={(html) => onChange(name, html)}
+        />
       )}
 
       {type === 'options' && (

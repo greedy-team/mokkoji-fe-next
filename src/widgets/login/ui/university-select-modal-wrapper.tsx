@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import type { University } from '@/entities/university/model/type';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
+import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -47,7 +48,7 @@ function UniversitySelectModalWrapper({
     setIsConfirmOpen(false);
     setIsOpen(false);
 
-    router.push(`/${code}`);
+    router.push(`/${toUrlCode(code)}`);
     router.refresh();
   };
 

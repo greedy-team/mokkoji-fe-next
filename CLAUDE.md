@@ -47,6 +47,22 @@ CSS tokens: `src/app/theme.css` / Animations: `src/app/globals.css`
 8. **Server/Client separation**: Default to Server Component if no interaction. Use `'use client'` if `useState`/`useEffect`/event handlers exist.
 9. **No raw fetch**: Always use ky for HTTP requests. Never use fetch directly.
 10. **No magic strings for fixed value sets**: When a value can only be one of a known fixed set (tab keys, status values, etc.), define it as an `as const` array/object and derive a union type from it, instead of typing the field as plain `string`. Prevents typos from silently passing type checks.
+11. **Lowercase URL codes, always via converter**: Codes appear in two casings — API/enum codes are uppercase (`SEJONG`, `CULTURAL_ART`), URL codes are lowercase (`/sejong/club?category=cultural_art`). Anything that ends up in a URL — path segment, query param, canonical/OG URL — must be lowercase. Never interpolate an API/enum code into a URL directly, and never call `toLowerCase()` / `toUpperCase()` on a code at the call site. Always go through `toUrlCode` / `toApiCode` from `@/shared/lib/urlCodeConverter` — this is the only place either casing conversion may happen.
+
+    ```ts
+    // Forbidden — enum code leaks into the URL
+    href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+    // Forbidden — ad-hoc conversion scattered across call sites
+    router.push(`/${university.code.toLowerCase()}`);
+
+    // Correct
+    href={`/${universityCode}/club?category=${toUrlCode(ClubCategoryToLabel[category])}`}
+    router.push(`/${toUrlCode(university.code)}`);
+    ```
+
+    This applies to every enum-backed code that travels through a URL — university codes, `ClubCategory`, `ClubAffiliation`, and any future one. Do not add domain-specific casing wrappers; they duplicate the converter.
+
+    Inside `[universityCode]` routes, `useUniversityCode()` already returns the URL code — use it as is. Convert only when handing the value to the API.
 
 ## Commit Rules
 

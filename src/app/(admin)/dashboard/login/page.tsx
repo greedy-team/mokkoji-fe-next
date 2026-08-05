@@ -107,8 +107,8 @@ export default function DashboardLoginPage() {
           )}
 
           {isSubmitting ? (
-            <div className="flex h-11 items-center justify-center">
-              <DotsPulseLoader className="mr-3" text="로그인 중..." />
+            <div className="flex min-h-11 items-center justify-center">
+              <DotsPulseLoader text="로그인 중..." />
             </div>
           ) : (
             <Button

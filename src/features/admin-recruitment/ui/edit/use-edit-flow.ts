@@ -1,74 +1,63 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { parseAsStringLiteral, useQueryState } from 'nuqs';
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { EditStep } from './types';
 
-const EDIT_STEPS: EditStep[] = [
+const EDIT_STEPS = [
   'selectPostEditStep',
   'basicInfoEditStep',
   'postInfoEditStep',
   'completeEditStep',
-];
+] as const satisfies readonly EditStep[];
 const DEFAULT_STEP: EditStep = 'selectPostEditStep';
 
+const stepParser = parseAsStringLiteral(EDIT_STEPS).withDefault(DEFAULT_STEP);
+
+// nuqs는 Next 라우터 대신 브라우저 history API로 URL을 바꾼다.
+// RSC 요청이 없으므로 스텝 전환이 즉시 일어난다.
 function useEditFlow() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [currentStep, setCurrentStep] = useQueryState('step', stepParser);
   const [selectedPost, setSelectedPost] = useState<
     ClubRecruitments | undefined
   >(undefined);
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const currentStep = (searchParams.get('step') as EditStep) ?? DEFAULT_STEP;
+  const goToStep = (step: EditStep, history: 'push' | 'replace' = 'push') => {
+    setCurrentStep(step, { history });
+  };
 
   const startEdit = (post: ClubRecruitments) => {
     setSelectedPost(post);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'basicInfoEditStep');
-    router.push(`?${params.toString()}`);
+    goToStep('basicInfoEditStep');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const nextStep = () => {
-    const idx = EDIT_STEPS.indexOf(currentStep);
-    if (idx < EDIT_STEPS.length - 1) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('step', EDIT_STEPS[idx + 1]);
-      router.push(`?${params.toString()}`);
+    const index = EDIT_STEPS.indexOf(currentStep);
+    if (index < EDIT_STEPS.length - 1) {
+      goToStep(EDIT_STEPS[index + 1]);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const prevStep = () => {
-    const idx = EDIT_STEPS.indexOf(currentStep);
-    if (idx > 0) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('step', EDIT_STEPS[idx - 1]);
-      router.push(`?${params.toString()}`);
+    const index = EDIT_STEPS.indexOf(currentStep);
+    if (index > 0) {
+      goToStep(EDIT_STEPS[index - 1]);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const goToSelectPost = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'selectPostEditStep');
-    router.push(`?${params.toString()}`);
+    goToStep('selectPostEditStep');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const complete = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('step', 'completeEditStep');
-    router.replace(`?${params.toString()}`);
-  };
+  const complete = () => goToStep('completeEditStep', 'replace');
 
-  const reset = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('step', DEFAULT_STEP);
-    router.replace(`?${params.toString()}`);
-  };
+  const reset = () => goToStep(DEFAULT_STEP, 'replace');
 
   return {
     currentStep,

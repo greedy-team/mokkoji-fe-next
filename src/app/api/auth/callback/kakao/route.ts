@@ -8,7 +8,7 @@ import {
 import UserInfoType from '@/entities/my/model/type';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import { buildSessionCookie, CookieSession } from '@/shared/lib/cookie-session';
-import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       // role 조회 실패해도 로그인은 성공 처리
     }
 
-    const apiUniversityCode = urlCodeToApiCode(
+    const apiUniversityCode = toApiCode(
       userResponseBody.data.universityCode ?? 'SEJONG',
     );
 

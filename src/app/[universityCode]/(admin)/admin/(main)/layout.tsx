@@ -6,10 +6,8 @@ import { redirect } from 'next/navigation';
 import getCurrentUserRole from '@/shared/api/getCurrentUserRole';
 import { UserRole } from '@/shared/model/type';
 import AdminHeader from '@/shared/ui/AdminHeader';
-import {
-  getUniversityName,
-  urlCodeToApiCode,
-} from '@/shared/lib/universityMeta';
+import { getUniversityName } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 export async function generateMetadata({
   params,
@@ -17,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ universityCode: string }>;
 }): Promise<Metadata> {
   const { universityCode } = await params;
-  const universityName = getUniversityName(urlCodeToApiCode(universityCode));
+  const universityName = getUniversityName(universityCode);
 
   return {
     title: `모꼬지 | ${universityName} 동아리 모집 플랫폼`,

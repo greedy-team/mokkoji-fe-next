@@ -1,7 +1,6 @@
-import Link from 'next/link';
-
 import ClubItem from '@/entities/club/ui/club-item';
 import ClubApplicationBanner from '@/shared/ui/ClubApplicationBanner';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import { Club } from '../model/type';
 
 const BANNER_INTERVAL = 4;
@@ -22,7 +21,7 @@ function ClubItemClientList({
   const items: React.ReactNode[] = [];
   uniqueClubs.forEach((item, index) => {
     items.push(
-      <Link
+      <HoverPrefetchLink
         key={item.id}
         href={`/${universityCode}/club/${item.id}`}
         className="block"
@@ -41,7 +40,7 @@ function ClubItemClientList({
           }
           height={150}
         />
-      </Link>,
+      </HoverPrefetchLink>,
     );
 
     if ((index + 1) % BANNER_INTERVAL === 0) {

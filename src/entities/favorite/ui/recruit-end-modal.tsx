@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog';
-import Link from 'next/link';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
 interface RecruitEndModalProps {
   modalOpen: boolean;
@@ -39,12 +39,12 @@ function RecruitEndModal({
           {selectedClubs.length > 0 ? (
             selectedClubs.map((club) => (
               <li key={club.clubId}>
-                <Link
+                <HoverPrefetchLink
                   href={`/${universityCode}/club/${club.clubId}`}
                   className="mr-2 text-[#00E457] underline"
                 >
                   {club.clubName}
-                </Link>{' '}
+                </HoverPrefetchLink>{' '}
                 모집 마감
               </li>
             ))

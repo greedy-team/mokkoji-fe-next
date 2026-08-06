@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import WebVitalProvider from '@/_providers/webvital-provider';
-import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import { ToDoPinProvider } from 'to-do-pin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
@@ -60,7 +59,6 @@ export default function RootLayout({
     gtag('config', 'G-85PSBEJKQ2');
   `}
         </Script>
-        <ClarityProvider />
       </head>
       <body className="scrollbar-hide">
         <NuqsAdapter>

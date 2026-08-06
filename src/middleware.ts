@@ -267,8 +267,10 @@ export default async function middleware(req: NextRequest) {
   return response;
 }
 
+// 정적 자산은 인증과 무관하므로 제외한다. 특히 폰트는 페이지당 수십 개가
+// 동시에 요청되어, 통과시키면 요청마다 토큰 갱신 fetch가 발생할 수 있다.
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|images|favicon.ico|mockServiceWorker.js|.*\\.svg$|.*\\.png$|.*\\.gif$|sitemap\\.xml|robots\\.txt|ads\\.txt).*)',
+    '/((?!api|_next/static|_next/image|images|favicon.ico|mockServiceWorker.js|.*\\.svg$|.*\\.png$|.*\\.gif$|.*\\.woff2$|sitemap\\.xml|robots\\.txt|ads\\.txt).*)',
   ],
 };

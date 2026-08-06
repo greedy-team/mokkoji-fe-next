@@ -3,17 +3,29 @@
 University club information exploration and bookmarking service. Built with Next.js 15 App Router, communicates with external backend API.
 
 > For folder structure, layer definitions, and agent pipeline, see `.claude/architecture.md`.
+> For API clients, error handling, Server Actions, Route Handlers, and react-query, see `.claude/api-conventions.md`.
+
+@.claude/forbidden.md
 
 ## Tech Stack
 
-- Next.js 15 + React 19 + TypeScript
-- Tailwind CSS v4 (@theme pattern)
-- class-variance-authority (cva) — variant components
-- clsx + tailwind-merge (cn function, `@/shared/lib/utils`)
-- ky — HTTP client
-- nuqs — URL search params state management
-- dayjs — date handling
-- @radix-ui — accessible UI primitives
+Sanctioned choice per concern. The full dependency list is `package.json` — this section records the decision, not the inventory. Bans live in `.claude/forbidden.md`.
+
+| Concern | Use |
+|---|---|
+| Framework | Next.js 15 App Router + React 19 + TypeScript |
+| HTTP | ky — preconfigured instances in `shared/api/` |
+| Client cache | @tanstack/react-query — keys in `{domain}/api/queries.ts` |
+| URL state | nuqs |
+| Styling | Tailwind CSS v4 `@theme` tokens + cva + `cn` (`@/shared/lib/utils`) |
+| UI primitives | @radix-ui |
+| Async UI | react-error-boundary via `shared/ui/AsyncBoundary` |
+| User feedback | react-toastify — through `useServerAction` |
+| Icons | lucide-react |
+| Rich text | @tiptap — `shared/ui/ClubDescriptionEditor` |
+| Date | dayjs |
+| E2E / mocking | Playwright / MSW |
+| Error tracking | @sentry/nextjs |
 
 ## Architecture: FSD (Feature-Sliced Design)
 
@@ -37,16 +49,19 @@ CSS tokens: `src/app/theme.css` / Animations: `src/app/globals.css`
 
 ## Development Principles
 
-1. **No raw colors**: Never use hex/rgba directly. Always use CSS variable tokens.
-2. **Typography classes first**: Use `description-semibold` style classes instead of direct font-size/weight.
+Rationale, examples, and exceptions for every forbidden item live in `.claude/forbidden.md`.
+
+1. **No raw colors** — CSS variable tokens only, never hex/rgba.
+2. **Typography classes first** — `description-semibold` and friends, not ad-hoc font-size/weight.
 3. **Auto-generate states**: Apply design-system skill's "-1 step" rule for hover/active.
-4. **Respect layer dependency direction**: Reverse imports absolutely forbidden.
-5. **One-way props**: widgets and features/ui must not fetch internally. Pass data from views or page.
-6. **No comments**: Exception only for complex, non-obvious logic.
-7. **No abbreviated naming**: Use full words. (`btn` → `button`, `idx` → `index`)
+4. **Respect layer dependency direction** — reverse and cross-domain imports forbidden.
+5. **One-way props** — widgets and features/ui must not fetch internally. Data comes from views or page.
+6. **No comments** — only when the *why* is non-obvious.
+7. **No abbreviated naming** — full words (`btn` → `button`, `idx` → `index`).
 8. **Server/Client separation**: Default to Server Component if no interaction. Use `'use client'` if `useState`/`useEffect`/event handlers exist.
-9. **No raw fetch**: Always use ky for HTTP requests. Never use fetch directly.
-10. **No magic strings for fixed value sets**: When a value can only be one of a known fixed set (tab keys, status values, etc.), define it as an `as const` array/object and derive a union type from it, instead of typing the field as plain `string`. Prevents typos from silently passing type checks.
+9. **No raw fetch** — use a preconfigured ky instance from `shared/api/`.
+10. **No magic strings for fixed value sets** — `as const` array plus a derived union type.
+11. **Lowercase URL codes, always via converter** — `toUrlCode` / `toApiCode` from `@/shared/lib/urlCodeConverter` is the only place casing may convert.
 
 ## Commit Rules
 
@@ -54,3 +69,5 @@ Separate commits by work type (feature, refactor, fix, config, etc.), not by FSD
 
 - Never combine different types of work in a single commit.
 - Do not use `git add -A` / `git add .`. Always specify files explicitly.
+
+See `.claude/forbidden.md` for details.

@@ -32,7 +32,7 @@ export default function DotsPulseLoader({
   } as React.CSSProperties;
 
   return (
-    <div className={wrapperClassName}>
+    <div className={`flex flex-col items-center ${wrapperClassName ?? ''}`}>
       <div
         className={`dots-loader ${className ?? ''}`}
         role="status"

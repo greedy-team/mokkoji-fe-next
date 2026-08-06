@@ -1,6 +1,6 @@
 import ClubPage from '@/views/club/ui/club-page';
 import { type SearchParams } from 'nuqs/server';
-import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import { searchParamsCache } from './search-params';
 
 type PageProps = {
@@ -11,7 +11,7 @@ type PageProps = {
 async function Page({ params, searchParams }: PageProps) {
   const { universityCode } = await params;
   await searchParamsCache.parse(searchParams);
-  return <ClubPage universityCode={urlCodeToApiCode(universityCode)} />;
+  return <ClubPage universityCode={toApiCode(universityCode)} />;
 }
 
 export default Page;

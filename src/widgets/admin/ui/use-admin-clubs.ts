@@ -2,6 +2,7 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import adminQueries from '@/entities/admin/api/queries';
+import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 
 function useAdminClubs(universityCode?: string) {
   const infiniteQuery = useInfiniteQuery(adminQueries.clubs(universityCode));
@@ -10,7 +11,7 @@ function useAdminClubs(universityCode?: string) {
 
   return {
     clubs,
-    universityCode: universityCode?.toLowerCase() ?? '',
+    universityCode: universityCode ? toUrlCode(universityCode) : '',
     isLoading: infiniteQuery.isLoading,
     fetchNextPage: infiniteQuery.fetchNextPage,
     hasNextPage: infiniteQuery.hasNextPage,

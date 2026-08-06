@@ -5,6 +5,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { ClubCategoryToLabel, RecruitStatus } from '@/shared/model/type';
+import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import Link from 'next/link';
 import ClickLogo from '@/shared/ui/click-logo';
 
@@ -44,7 +45,7 @@ function ClubDetailHeader({
         <h1 className="text-xl font-bold lg:text-4xl">{title}</h1>
         <p className="text-lg font-bold text-[#9C9C9C] lg:text-3xl">
           <Link
-            href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+            href={`/${universityCode}/club?category=${toUrlCode(ClubCategoryToLabel[category])}`}
           >
             {category} 동아리
           </Link>

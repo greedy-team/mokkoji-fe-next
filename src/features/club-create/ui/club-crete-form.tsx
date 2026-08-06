@@ -7,7 +7,7 @@ import ky from 'ky';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { useSession } from '@/shared/lib/session-context';
-import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import convertImageToWebp, {
   LOGO_MAX_DIMENSION,
 } from '@/shared/lib/convertImageToWebp';
@@ -31,7 +31,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const universityCode = useUniversityCode();
   const [formData, setFormData] = useState<ClubCreateFormData>({
     clubName: '',
-    universityCode: urlCodeToApiCode(universityCode),
+    universityCode: toApiCode(universityCode),
     clubCategory: '',
     clubAffiliation: '',
     logo: '',

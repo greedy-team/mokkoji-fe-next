@@ -3,10 +3,8 @@ import { Suspense } from 'react';
 import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
 import { type Metadata } from 'next';
 import getClubDetail from '@/views/club/api/getClubDetail';
-import {
-  getUniversityName,
-  urlCodeToApiCode,
-} from '@/shared/lib/universityMeta';
+import { getUniversityName } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 interface PageProps {
   params: Promise<{ universityCode: string; id: string }>;
@@ -18,7 +16,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { universityCode, id } = await params;
   const result = await getClubDetail(Number(id));
-  const universityName = getUniversityName(urlCodeToApiCode(universityCode));
+  const universityName = getUniversityName(universityCode);
 
   if (!result.ok || !result.data) {
     return {

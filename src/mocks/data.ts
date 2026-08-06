@@ -184,4 +184,5 @@ export interface University {
 export const universities: University[] = [
   { id: 1, name: '세종대학교', universityCode: 'SEJONG' },
   { id: 2, name: '건국대학교', universityCode: 'KONKUK' },
+  { id: 3, name: '한양대학교', universityCode: 'HANYANG' },
 ];

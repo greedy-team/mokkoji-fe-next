@@ -14,6 +14,7 @@ import {
   parseDashboardSessionCookie,
 } from '@/shared/lib/dashboard-session';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
+import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import { publicRoutes } from '../route';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -73,31 +74,49 @@ function applySetCookie(req: NextRequest, res: NextResponse): void {
 }
 
 const NON_UNIVERSITY_PREFIXES = new Set(['admin', 'api', 'test', '_next']);
+const DEFAULT_UNIVERSITY_CODE = 'sejong';
 
-function stripUniversityCodePrefix(pathname: string): string {
-  const segments = pathname.split('/');
-  const firstSegment = segments[1];
+/**
+ * 첫 세그먼트가 학교 코드 자리면 그대로 반환한다. 아니면 null.
+ * 대문자도 인식해야 정규화 리다이렉트로 넘길 수 있어 대소문자를 가리지 않는다.
+ */
+function getUniversitySegment(pathname: string): string | null {
+  const firstSegment = pathname.split('/')[1];
   if (
     firstSegment &&
-    !NON_UNIVERSITY_PREFIXES.has(firstSegment) &&
-    /^[a-z]+$/.test(firstSegment)
-  ) {
-    return `/${segments.slice(2).join('/')}` || '/';
-  }
-  return pathname;
-}
-
-function extractUniversityCode(pathname: string): string {
-  const segments = pathname.split('/');
-  const firstSegment = segments[1];
-  if (
-    firstSegment &&
-    !NON_UNIVERSITY_PREFIXES.has(firstSegment) &&
-    /^[a-z]+$/.test(firstSegment)
+    !NON_UNIVERSITY_PREFIXES.has(toUrlCode(firstSegment)) &&
+    /^[a-zA-Z]+$/.test(firstSegment)
   ) {
     return firstSegment;
   }
-  return 'sejong';
+  return null;
+}
+
+/**
+ * 대문자 학교 코드로 들어오면 소문자 경로로 리다이렉트한다.
+ * 정규화하지 않으면 공개 경로 판별이 실패해 /sejong/login으로 튕긴다.
+ * 이미 소문자면 null을 반환하므로 리다이렉트 루프는 없다.
+ */
+function normalizeUniversityCodeCasing(req: NextRequest): NextResponse | null {
+  const segment = getUniversitySegment(req.nextUrl.pathname);
+  if (!segment || segment === toUrlCode(segment)) return null;
+
+  const url = req.nextUrl.clone();
+  const segments = url.pathname.split('/');
+  segments[1] = toUrlCode(segment);
+  url.pathname = segments.join('/');
+
+  return NextResponse.redirect(url);
+}
+
+function stripUniversityCodePrefix(pathname: string): string {
+  if (!getUniversitySegment(pathname)) return pathname;
+  return `/${pathname.split('/').slice(2).join('/')}` || '/';
+}
+
+function extractUniversityCode(pathname: string): string {
+  const segment = getUniversitySegment(pathname);
+  return segment ? toUrlCode(segment) : DEFAULT_UNIVERSITY_CODE;
 }
 
 /**
@@ -145,6 +164,10 @@ export default async function middleware(req: NextRequest) {
   const dashboardResponse = handleDashboardAuth(req);
   if (dashboardResponse) return dashboardResponse;
 
+  // 아래 경로 판별이 소문자 코드를 전제하므로 세션 처리 전에 정규화한다
+  const casingRedirect = normalizeUniversityCodeCasing(req);
+  if (casingRedirect) return casingRedirect;
+
   const { nextUrl } = req;
   const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)?.value;
   let session: CookieSession | null = parseSessionCookie(sessionCookie);
@@ -177,7 +200,9 @@ export default async function middleware(req: NextRequest) {
 
   // ── 3) 라우팅 결정 ──
   if (nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/sejong', nextUrl));
+    return NextResponse.redirect(
+      new URL(`/${DEFAULT_UNIVERSITY_CODE}`, nextUrl),
+    );
   }
 
   const isNowLoggedIn = !!session?.accessToken;

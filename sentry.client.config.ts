@@ -4,10 +4,24 @@ if (process.env.NEXT_PUBLIC_SENTRY_REPLAY_DSN) {
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_REPLAY_DSN,
 
-    integrations: [Sentry.replayIntegration()],
-    // Session Replay
-    replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-    replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+    integrations: [
+      // 세션 리플레이 녹화 시 개인정보가 그대로 찍히지 않도록 전부 가림
+      Sentry.replayIntegration({
+        maskAllText: true, // 모든 텍스트를 ●●● 형태로 마스킹
+        maskAllInputs: true, // 입력값(이메일, 비밀번호 등) 마스킹
+        blockAllMedia: true, // 이미지/영상은 녹화에서 제외 (용량 절감 + 유출 방지)
+      }),
+    ],
+
+    // 에러 직전 사용자 행동(클릭, URL 이동 등) 기록 개수.
+    // 재현은 세션 리플레이로 하므로 기본값 100에서 절반으로 줄여 전송량을 아낌
+    maxBreadcrumbs: 50,
+
+    // 에러 없는 일반 세션도 1%만 표본으로 녹화.
+    // 예외가 안 던져지는 문제(무한 로딩, 이탈 등)를 보기 위한 최소한의 표본
+    replaysSessionSampleRate: 0.01,
+    // 에러가 발생한 세션은 100% 녹화 (버그 재현용)
+    replaysOnErrorSampleRate: 1.0,
 
     beforeSend(event, hint) {
       const error = hint.originalException;

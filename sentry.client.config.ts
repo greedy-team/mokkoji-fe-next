@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/nextjs';
 
-if (process.env.NEXT_PUBLIC_SENTRY_REPLAY_DSN) {
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
-    dsn: process.env.NEXT_PUBLIC_SENTRY_REPLAY_DSN,
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
     integrations: [
       // 세션 리플레이 녹화 시 개인정보가 그대로 찍히지 않도록 전부 가림

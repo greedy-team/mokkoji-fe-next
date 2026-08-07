@@ -1,6 +1,7 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
@@ -27,23 +28,23 @@ function ClubRegisterForm() {
   const universityCode = useUniversityCode();
   const { formData, errors } = state;
 
+  const { mutate: registerClub } = useServerAction(postClubRegister, {
+    showSuccessToast: false,
+    onSuccess: () => {
+      toast.success('등록 성공!');
+      router.push(`/${universityCode}/club`);
+    },
+  });
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = {
+    await registerClub({
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
       clubMasterStudentId: formData.clubMasterStudentId,
-    };
-
-    const res = await postClubRegister(data);
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-    toast.success('등록 성공!');
-    router.push(`/${universityCode}/club`);
+    });
   };
 
   const handleChange = (name: keyof ClubFormData, value: string) => {

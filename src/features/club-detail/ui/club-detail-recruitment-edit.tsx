@@ -15,6 +15,7 @@ import ky from 'ky';
 import patchRecruitmentForm from '@/features/club-detail/api/patchRecruitment';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
+import useServerAction from '@/shared/hooks/useServerAction';
 
 interface RecruitDetailEditProps {
   title: string;
@@ -70,44 +71,45 @@ function ClubDetailRecruitmentEdit({
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
+  const { mutate: updateRecruitment } = useServerAction(patchRecruitmentForm, {
+    showSuccessToast: false,
+    onSuccess: async (data) => {
+      const uploadUrls = data?.data?.uploadImageUrls ?? [];
+
+      try {
+        if (uploadUrls.length > 0) {
+          await Promise.all(
+            uploadUrls.map((url: string, i: number) =>
+              ky.put(url, {
+                body: imageFiles[i].file,
+                headers: { 'Content-Type': imageFiles[i].file.type },
+              }),
+            ),
+          );
+        }
+      } catch {
+        toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
+      setIsEditing(false);
+      toast.success('모집 공고가 성공적으로 수정되었습니다!');
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      title: formData.title,
-      content: formData.content,
-      recruitStart: formData.recruitStart,
-      recruitEnd: formData.recruitEnd,
-      recruitForm: formData.recruitForm,
-      imageNames: imageFiles.map((file) => file.imageName),
-    };
-
-    const res = await patchRecruitmentForm(data, clubId!);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-
-    const uploadUrls = res.data?.data?.uploadImageUrls ?? [];
-
-    try {
-      if (uploadUrls.length > 0) {
-        await Promise.all(
-          uploadUrls.map((url: string, i: number) =>
-            ky.put(url, {
-              body: imageFiles[i].file,
-              headers: { 'Content-Type': imageFiles[i].file.type },
-            }),
-          ),
-        );
-      }
-    } catch (error) {
-      toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-      return;
-    }
-    setIsEditing(false);
-    toast.success('모집 공고가 성공적으로 수정되었습니다!');
+    await updateRecruitment(
+      {
+        title: formData.title,
+        content: formData.content,
+        recruitStart: formData.recruitStart,
+        recruitEnd: formData.recruitEnd,
+        recruitForm: formData.recruitForm,
+        imageNames: imageFiles.map((file) => file.imageName),
+      },
+      clubId!,
+    );
   };
 
   return (

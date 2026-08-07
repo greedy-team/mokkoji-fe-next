@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
 import type { University } from '@/entities/university/model/type';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import { Button } from '@/shared/ui/button';
 import {
@@ -31,25 +31,27 @@ function UniversitySelectModalWrapper({
 }: UniversitySelectModalWrapperProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [isLoading, setIsLoading] = useState(false);
   const [pendingCode, setPendingCode] = useState<string | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const appliedCodeRef = useRef<string | null>(null);
 
-  const applyUniversityChange = async (code: string) => {
-    setIsLoading(true);
-    const response = await patchUniversityCode(code);
-    setIsLoading(false);
+  const { mutate: changeUniversity, isPending: isLoading } = useServerAction(
+    patchUniversityCode,
+    {
+      showSuccessToast: false,
+      onSuccess: () => {
+        setIsConfirmOpen(false);
+        setIsOpen(false);
 
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
+        router.push(`/${toUrlCode(appliedCodeRef.current!)}`);
+        router.refresh();
+      },
+    },
+  );
 
-    setIsConfirmOpen(false);
-    setIsOpen(false);
-
-    router.push(`/${toUrlCode(code)}`);
-    router.refresh();
+  const applyUniversityChange = (code: string) => {
+    appliedCodeRef.current = code;
+    changeUniversity(code);
   };
 
   const handleConfirm = (code: string) => {

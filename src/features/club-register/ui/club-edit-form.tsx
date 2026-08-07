@@ -1,6 +1,7 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 
 import { useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
@@ -47,6 +48,34 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const router = useRouter();
   const universityCode = useUniversityCode();
 
+  const { mutate: updateClubInfo } = useServerAction(patchClubInfo, {
+    showSuccessToast: false,
+    onSuccess: async (data) => {
+      if (logoFile && data?.data?.updateLogo) {
+        const resUpdateLogo = await ky.put(data.data.updateLogo, {
+          body: logoFile,
+          headers: {
+            'Content-Type': logoFile.type,
+          },
+        });
+        if (!resUpdateLogo.ok) {
+          toast.error('로고 업데이트 실패!');
+          return;
+        }
+      }
+
+      if (data?.data?.deleteLogo) {
+        const resDeleteLogo = await ky.delete(data.data.deleteLogo);
+        if (!resDeleteLogo.ok) {
+          toast.error('로고 삭제 실패!');
+          return;
+        }
+      }
+      router.push(`/${universityCode}/club`);
+      toast.success('등록 성공!');
+    },
+  });
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -55,44 +84,14 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       return;
     }
 
-    const data = {
+    await updateClubInfo(clubId, {
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
       description: formData.description,
       instagram: formData.instagram,
       logo: formData.logo ?? '',
-    };
-
-    const res = await patchClubInfo(clubId, data);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-
-    if (logoFile && res.data && res.data.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
-        body: logoFile,
-        headers: {
-          'Content-Type': logoFile.type,
-        },
-      });
-      if (!resUpdateLogo.ok) {
-        toast.error('로고 업데이트 실패!');
-        return;
-      }
-    }
-
-    if (res.data && res.data.data?.deleteLogo) {
-      const resDeleteLogo = await ky.delete(res.data.data.deleteLogo);
-      if (!resDeleteLogo.ok) {
-        toast.error('로고 삭제 실패!');
-        return;
-      }
-    }
-    router.push(`/${universityCode}/club`);
-    toast.success('등록 성공!');
+    });
   };
 
   useEffect(() => {

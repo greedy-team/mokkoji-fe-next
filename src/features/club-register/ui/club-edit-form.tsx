@@ -4,6 +4,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import {
@@ -72,12 +73,10 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     }
 
     if (logoFile && res.data && res.data.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
-        body: logoFile,
-        headers: {
-          'Content-Type': logoFile.type,
-        },
-      });
+      const resUpdateLogo = await uploadToPresignedUrl(
+        res.data.data.updateLogo,
+        logoFile,
+      );
       if (!resUpdateLogo.ok) {
         toast.error('로고 업데이트 실패!');
         return;

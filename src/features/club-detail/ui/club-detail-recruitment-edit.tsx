@@ -11,7 +11,7 @@ import {
   RecruitmentFormState,
 } from '@/features/post-recruitment/model/type';
 import { toast } from 'react-toastify';
-import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import patchRecruitmentForm from '@/features/club-detail/api/patchRecruitment';
 import useImageUpload from '@/shared/model/useImageUpload';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
@@ -95,10 +95,7 @@ function ClubDetailRecruitmentEdit({
       if (uploadUrls.length > 0) {
         await Promise.all(
           uploadUrls.map((url: string, i: number) =>
-            ky.put(url, {
-              body: imageFiles[i].file,
-              headers: { 'Content-Type': imageFiles[i].file.type },
-            }),
+            uploadToPresignedUrl(url, imageFiles[i].file),
           ),
         );
       }

@@ -5,7 +5,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
 import { Button } from '@/shared/ui/button';
@@ -64,10 +64,7 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
       if (uploadUrls.length > 0) {
         await Promise.all(
           uploadUrls.map((url: string, i: number) =>
-            ky.put(url, {
-              body: imageUpload.imageFiles[i].file,
-              headers: { 'Content-Type': imageUpload.imageFiles[i].file.type },
-            }),
+            uploadToPresignedUrl(url, imageUpload.imageFiles[i].file),
           ),
         );
       }

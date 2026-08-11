@@ -3,9 +3,10 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { useSession } from '@/shared/lib/session-context';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import convertImageToWebp, {
@@ -43,7 +44,36 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { mutate: createClubApplication, isPending: isSubmitting } =
+    useServerAction(postCreateClubApplication, {
+      showSuccessToast: false,
+      onError: () => {
+        router.push(`/${universityCode}`);
+      },
+      onSuccess: async (data) => {
+        const uploadLogoUrl = data?.data?.uploadLogoUrl;
+        if (logoFile && uploadLogoUrl) {
+          const uploadLogoResult = await uploadToPresignedUrl(
+            uploadLogoUrl,
+            logoFile,
+          );
+          if (!uploadLogoResult.ok) {
+            toast.error('로고 업로드에 실패했습니다.');
+            return;
+          }
+        }
+
+        toast.success(
+          <span>
+            제출되었습니다.
+            <br />
+            마이페이지에서 현황을 확인하실 수 있습니다.
+          </span>,
+        );
+        router.push(`/${universityCode}/my`);
+      },
+    });
 
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,42 +90,11 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   };
 
   const handleSubmit = async (description: string) => {
-    setIsSubmitting(true);
-    const result = await postCreateClubApplication({
+    await createClubApplication({
       ...formData,
       description,
       applicantName: session?.user.name ?? '',
     });
-
-    if (!result.ok) {
-      setIsSubmitting(false);
-      toast.error(result.message);
-      router.push(`/${universityCode}`);
-      return;
-    }
-
-    const uploadLogoUrl = result.data?.data?.uploadLogoUrl;
-    if (logoFile && uploadLogoUrl) {
-      const uploadLogoResult = await ky.put(uploadLogoUrl, {
-        body: logoFile,
-        headers: { 'Content-Type': logoFile.type },
-      });
-      if (!uploadLogoResult.ok) {
-        setIsSubmitting(false);
-        toast.error('로고 업로드에 실패했습니다.');
-        return;
-      }
-    }
-
-    setIsSubmitting(false);
-    toast.success(
-      <span>
-        제출되었습니다.
-        <br />
-        마이페이지에서 현황을 확인하실 수 있습니다.
-      </span>,
-    );
-    router.push(`/${universityCode}/my`);
   };
 
   return (

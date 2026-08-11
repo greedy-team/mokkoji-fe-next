@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
 import { ManageClub } from '@/shared/model/type';
+import useServerAction from '@/shared/hooks/useServerAction';
 import {
   Dialog,
   DialogContent,
@@ -25,34 +25,30 @@ function ClubMasterTransferSection({ clubs }: ClubMasterTransferSectionProps) {
   const router = useRouter();
   const [selectedClub, setSelectedClub] = useState<ManageClub | null>(null);
   const [code, setCode] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  if (clubs.length === 0) {
-    return null;
-  }
 
   const closeDialog = () => {
     setSelectedClub(null);
     setCode('');
   };
 
-  const handleTransfer = async () => {
+  const { mutate: transferClubMaster, isPending: isSubmitting } =
+    useServerAction(postClubMasterTransfer, {
+      onSuccess: () => {
+        closeDialog();
+        router.refresh();
+      },
+    });
+
+  if (clubs.length === 0) {
+    return null;
+  }
+
+  const handleTransfer = () => {
     if (!selectedClub) {
       return;
     }
 
-    setIsSubmitting(true);
-    const response = await postClubMasterTransfer(selectedClub.clubId, code);
-    setIsSubmitting(false);
-
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
-
-    toast.success(response.message);
-    closeDialog();
-    router.refresh();
+    transferClubMaster(selectedClub.clubId, code);
   };
 
   return (

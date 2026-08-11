@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { useSession } from '@/shared/lib/session-context';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import { Button } from '@/shared/ui/button';
@@ -30,7 +31,6 @@ function ClubMasterApplicationForm({
   const universityCode = useUniversityCode();
   const { session } = useSession();
   const [isClubsLoading, setIsClubsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [selectedUniversityCode, setSelectedUniversityCode] = useState(
     toApiCode(universityCode),
@@ -59,26 +59,29 @@ function ClubMasterApplicationForm({
   const isValid =
     selectedUniversityCode !== '' && selectedClubId !== '' && isConfirmed;
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    const result = await postClubMasterApplication({
+  const { mutate: applyClubMaster, isPending: isSubmitting } = useServerAction(
+    postClubMasterApplication,
+    {
+      showSuccessToast: false,
+      onSuccess: () => {
+        toast.success(
+          <span>
+            제출되었습니다.
+            <br />
+            마이페이지에서 현황을 확인하실 수 있습니다.
+          </span>,
+        );
+        router.push(`/${universityCode}/my`);
+      },
+    },
+  );
+
+  const handleSubmit = () => {
+    applyClubMaster({
       universityCode: selectedUniversityCode,
       clubId: Number(selectedClubId),
       userName: session?.user?.name ?? null,
     });
-    setIsSubmitting(false);
-    if (result.ok) {
-      toast.success(
-        <span>
-          제출되었습니다.
-          <br />
-          마이페이지에서 현황을 확인하실 수 있습니다.
-        </span>,
-      );
-      router.push(`/${universityCode}/my`);
-    } else {
-      toast.error(result.message);
-    }
   };
 
   return (

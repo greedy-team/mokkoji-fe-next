@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { toast } from 'react-toastify';
 import timeAgo from '@/entities/club-detail/util/timeAgo';
 import { ClubComment } from '@/entities/club-detail/model/type';
 import StarRating from '@/entities/club-detail/ui/review-star';
 import { deleteComment } from '@/features/club-detail/api/comment-api';
+import useServerAction from '@/shared/hooks/useServerAction';
 
 interface CommentItemProps {
   clubId: number;
@@ -18,7 +18,11 @@ export default function CommentItem({
   onEdit,
   onCommentChange,
 }: CommentItemProps) {
-  const handleDeleteComment = async (
+  const { mutate: removeComment } = useServerAction(deleteComment, {
+    onSuccess: onCommentChange,
+  });
+
+  const handleDeleteComment = (
     e: React.MouseEvent<HTMLButtonElement>,
     commentId: number,
   ) => {
@@ -26,13 +30,7 @@ export default function CommentItem({
     const confirmDelete = window.confirm('댓글을 삭제하시겠습니까?');
     if (!confirmDelete) return;
 
-    const response = await deleteComment(clubId, commentId);
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
-    toast.success(response.message);
-    await onCommentChange();
+    removeComment(clubId, commentId);
   };
 
   return (

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { HTTPError } from 'ky';
 
 function getHttpErrorMessage(status: number) {
@@ -39,6 +40,12 @@ async function createErrorResponse(
 ) {
   if (error instanceof HTTPError) {
     const { status } = error.response;
+
+    // 4xx는 비로그인·없는 리소스처럼 정상 흐름인 경우가 대부분이라 제외한다
+    if (status >= 500) {
+      Sentry.captureException(error);
+    }
+
     const serverMessage = await readServerMessage(error);
     if (serverMessage) {
       return { ok: false, message: serverMessage, data: undefined, status };
@@ -53,6 +60,8 @@ async function createErrorResponse(
       status,
     };
   }
+  // HTTPError가 아니면 네트워크 단절, JSON 파싱 실패 등 예상하지 못한 상황이다
+  Sentry.captureException(error);
   return {
     ok: false,
     message: '알 수 없는 오류가 발생했습니다.',

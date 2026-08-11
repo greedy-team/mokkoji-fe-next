@@ -51,10 +51,10 @@ let nextConfig: NextConfig = {
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   nextConfig = withSentryConfig(nextConfig, {
     // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
-    org: 'sejong',
+    org: 'mokkoji-4m',
 
     // Sentry 프로젝트 이름 – 오류가 기록될 프로젝트
-    project: 'mokkoji-next-js',
+    project: 'mokkoji',
 
     // CI 환경이 아닐 때는 소스맵 업로드 관련 로그를 출력하지 않음 (로컬 빌드 시 출력 줄이기)
     silent: !process.env.CI,

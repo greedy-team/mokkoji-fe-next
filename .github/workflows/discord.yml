@@ -106,10 +106,10 @@ jobs:
 
   pr-comment:
     if: >
-      (github.event_name == 'issue_comment' &&
-       github.event.issue.pull_request &&
-       github.actor != 'github-actions[bot]') ||
-      github.event_name == 'pull_request_review_comment'
+      !endsWith(github.actor, '[bot]') &&
+      ((github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request) ||
+      github.event_name == 'pull_request_review_comment')
     runs-on: ubuntu-latest
     steps:
       - name: Send comment to PR thread
@@ -122,7 +122,7 @@ jobs:
           REPO="$GITHUB_REPOSITORY"
           AUTHOR=$(jq -r '.comment.user.login' "$GITHUB_EVENT_PATH")
 
-          if [ "$AUTHOR" = "github-actions[bot]" ]; then
+          if [[ "$AUTHOR" == *"[bot]" ]]; then
             exit 0
           fi
 

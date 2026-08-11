@@ -15,6 +15,10 @@
   --color-darkmode-line: #43e780; /* 다크모드 시 LINE */
   --color-darkmode-tag: #1ae166; /* 다크모드 시 TAG */
   --color-lightmode-tag: #4af38a; /* 라이트모드 시 TAG */
+
+  /* ✅ Typography */
+  --font-sans:
+    'Pretendard Variable', 'Pretendard Fallback', system-ui, sans-serif;
 }
 
 @utility bg-gradient-primary {

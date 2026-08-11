@@ -1,9 +1,11 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useServerAction from '@/shared/hooks/useServerAction';
 
 import { useEffect, useReducer, useRef, useState } from 'react';
 import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import {
@@ -12,6 +14,9 @@ import {
   ClubInfoType,
 } from '@/shared/model/type';
 import getKeyByValue from '@/shared/lib/getKeyByValue';
+import convertImageToWebp, {
+  LOGO_MAX_DIMENSION,
+} from '@/shared/lib/convertImageToWebp';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import ClubInput from './club-input';
@@ -44,6 +49,32 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const router = useRouter();
   const universityCode = useUniversityCode();
 
+  const { mutate: updateClubInfo } = useServerAction(patchClubInfo, {
+    showSuccessToast: false,
+    onSuccess: async (data) => {
+      if (logoFile && data?.data?.updateLogo) {
+        const resUpdateLogo = await uploadToPresignedUrl(
+          data.data.updateLogo,
+          logoFile,
+        );
+        if (!resUpdateLogo.ok) {
+          toast.error('로고 업데이트 실패!');
+          return;
+        }
+      }
+
+      if (data?.data?.deleteLogo) {
+        const resDeleteLogo = await ky.delete(data.data.deleteLogo);
+        if (!resDeleteLogo.ok) {
+          toast.error('로고 삭제 실패!');
+          return;
+        }
+      }
+      router.push(`/${universityCode}/club`);
+      toast.success('등록 성공!');
+    },
+  });
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -52,44 +83,14 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
       return;
     }
 
-    const data = {
+    await updateClubInfo(clubId, {
       name: formData.name,
       category: formData.category,
       affiliation: formData.affiliation,
       description: formData.description,
       instagram: formData.instagram,
       logo: formData.logo ?? '',
-    };
-
-    const res = await patchClubInfo(clubId, data);
-
-    if (!res.ok) {
-      toast.error(res.message);
-      return;
-    }
-
-    if (logoFile && res.data && res.data.data?.updateLogo) {
-      const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
-        body: logoFile,
-        headers: {
-          'Content-Type': logoFile.type,
-        },
-      });
-      if (!resUpdateLogo.ok) {
-        toast.error('로고 업데이트 실패!');
-        return;
-      }
-    }
-
-    if (res.data && res.data.data?.deleteLogo) {
-      const resDeleteLogo = await ky.delete(res.data.data.deleteLogo);
-      if (!resDeleteLogo.ok) {
-        toast.error('로고 삭제 실패!');
-        return;
-      }
-    }
-    router.push(`/${universityCode}/club`);
-    toast.success('등록 성공!');
+    });
   };
 
   useEffect(() => {
@@ -114,16 +115,17 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     dispatch({ type: 'UPDATE_FIELD', name, value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
+    const webpFile = await convertImageToWebp(file, LOGO_MAX_DIMENSION);
+    const imageUrl = URL.createObjectURL(webpFile);
     setPreview(imageUrl);
 
-    setLogoFile(file);
+    setLogoFile(webpFile);
 
-    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: file.name });
+    dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: webpFile.name });
   };
 
   const handleClick = () => {

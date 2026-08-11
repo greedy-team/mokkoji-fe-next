@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import useServerAction from '@/shared/hooks/useServerAction';
 import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
@@ -23,7 +24,14 @@ function ClubDetailCommentInput({
   const [commentContent, setCommentContent] = useState('');
   const [rating, setRating] = useState(0);
   const { session } = useSession();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(postComment, {
+    showSuccessToast: false,
+    onSuccess: async () => {
+      setCommentContent('');
+      setRating(0);
+      await onCommentChange();
+    },
+  });
 
   const handleCommentContentChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -42,16 +50,7 @@ function ClubDetailCommentInput({
       toast.warn('댓글을 작성해주세요!');
       return;
     }
-    setIsSubmitting(true);
-    const response = await postComment(clubId, commentContent, rating);
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
-    setCommentContent('');
-    setRating(0);
-    setIsSubmitting(false);
-    await onCommentChange();
+    await mutate(clubId, commentContent, rating);
   };
 
   if (!session) {
@@ -79,7 +78,7 @@ function ClubDetailCommentInput({
           variant="submit-default"
           type="submit"
           className="h-[43px] w-[113px]"
-          disabled={(!commentContent.trim() && rating === 0) || isSubmitting}
+          disabled={(!commentContent.trim() && rating === 0) || isPending}
         >
           댓글 남기기
         </Button>

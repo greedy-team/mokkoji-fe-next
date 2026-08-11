@@ -4,8 +4,8 @@ import { getUniversityName } from '@/shared/lib/universityMeta';
 function Page() {
   return (
     <HomePage
-      universityName={getUniversityName('SEJONG')}
-      universityCode="SEJONG"
+      universityName={getUniversityName('sejong')}
+      universityCode="sejong"
     />
   );
 }

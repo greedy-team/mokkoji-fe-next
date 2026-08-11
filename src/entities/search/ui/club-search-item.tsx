@@ -4,7 +4,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { ClubType } from '@/shared/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import Link from 'next/link';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
 interface ClubItemProps {
   club: ClubType;
@@ -14,7 +14,7 @@ function ClubSearchItem({ club }: ClubItemProps) {
   const universityCode = useUniversityCode();
 
   return (
-    <Link href={`/${universityCode}/club/${club.id}`}>
+    <HoverPrefetchLink href={`/${universityCode}/club/${club.id}`}>
       <article className="mb-3 flex cursor-pointer items-center gap-6 rounded-lg border-2 border-gray-100 bg-white p-4 transition-colors hover:bg-gray-50">
         <Avatar className="size-12 lg:size-14">
           <AvatarImage src={club.logo} alt={club.logo} />
@@ -36,7 +36,7 @@ function ClubSearchItem({ club }: ClubItemProps) {
           </p>
         </div>
       </article>
-    </Link>
+    </HoverPrefetchLink>
   );
 }
 

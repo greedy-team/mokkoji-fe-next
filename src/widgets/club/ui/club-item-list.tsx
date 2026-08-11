@@ -1,6 +1,7 @@
 import { ClubAffiliation, ClubCategory } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import { searchParamsCache } from '@/shared/lib/club-search-params';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import NumberPagination from '@/shared/ui/numberPagination';
 import FeedbackModal from '@/widgets/feedback/ui/feedback-modal';
 import getClubList from '../api/getClubList';
@@ -9,8 +10,8 @@ import ClubItemClientList from './club-item-client-list';
 async function ClubItemList({ universityCode }: { universityCode: string }) {
   const page = Number(searchParamsCache.get('page') ?? 1);
   const size = 15;
-  const category = searchParamsCache.get('category');
-  const affiliation = searchParamsCache.get('affiliation');
+  const category = toApiCode(searchParamsCache.get('category'));
+  const affiliation = toApiCode(searchParamsCache.get('affiliation'));
   const keyword = searchParamsCache.get('keyword');
   const clubListResponse = await getClubList({
     page,
@@ -35,7 +36,10 @@ async function ClubItemList({ universityCode }: { universityCode: string }) {
 
   return (
     <div className="mb-8">
-      <ClubItemClientList clubs={clubListResponse.data.clubs} />
+      <ClubItemClientList
+        clubs={clubListResponse.data.clubs}
+        universityCode={universityCode}
+      />
       <FeedbackModal />
       <NumberPagination
         page={page}

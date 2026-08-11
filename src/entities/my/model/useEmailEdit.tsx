@@ -1,5 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
+import useServerAction from '@/shared/hooks/useServerAction';
 import putEmail from '../../../features/my/api/putEmail';
 
 interface UseEmailEditProps {
@@ -10,7 +10,9 @@ interface UseEmailEditProps {
 function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(putEmail, {
+    onSuccess: () => setIsDialogOpen(false),
+  });
 
   const isValidEmail = useMemo(() => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +25,6 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
 
   const resetState = () => {
     setEmail(initialEmail ?? '');
-    setIsSubmitting(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -34,17 +35,8 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
     if (!isValidEmail) {
       return;
     }
-    setIsSubmitting(true);
     const isNewEmail = !initialEmail;
-    const response = await putEmail(email, isNewEmail ? true : isEmailOn);
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
-    }
-    toast.success(response.message);
-    setIsDialogOpen(false);
-
-    setIsSubmitting(false);
+    await mutate(email, isNewEmail ? true : isEmailOn);
   };
 
   return {
@@ -52,7 +44,7 @@ function useEmailEdit({ initialEmail, isEmailOn }: UseEmailEditProps) {
     setIsDialogOpen,
     email,
     setEmail,
-    isSubmitting,
+    isSubmitting: isPending,
     isValidEmail,
     helperText,
     resetState,

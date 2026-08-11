@@ -4,9 +4,9 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';
-import Link from 'next/link';
 import { useMemo } from 'react';
 import Image from 'next/image';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
   const universityCode = useUniversityCode();
@@ -43,9 +43,11 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
                 {formatDate(club.recruitStart)} ~ {formatDate(club.recruitEnd)}
               </span>
               <span>
-                <Link href={`/${universityCode}/club/${club.clubId}`}>
+                <HoverPrefetchLink
+                  href={`/${universityCode}/club/${club.clubId}`}
+                >
                   {club.clubName}
-                </Link>
+                </HoverPrefetchLink>
               </span>
             </li>
           ))}

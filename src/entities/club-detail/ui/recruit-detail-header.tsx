@@ -13,6 +13,7 @@ import {
   ClubCategory,
 } from '@/shared/model/type';
 import ClickLogo from '@/shared/ui/click-logo';
+import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import PeriodSection from '@/entities/club-detail/ui/period-section';
 
 interface RecruitDetailHeaderProps {
@@ -57,7 +58,7 @@ function RecruitDetailHeader({
           </h1>
           <p className="truncate text-2xl font-bold whitespace-nowrap text-[#9C9C9C] lg:text-4xl">
             <Link
-              href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
+              href={`/${universityCode}/club?category=${toUrlCode(ClubCategoryToLabel[category])}`}
             >
               {ClubCategoryToStringLabel[category as ClubCategory]} 동아리
             </Link>

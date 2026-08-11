@@ -9,6 +9,7 @@ import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import Image from 'next/image';
 import useClickOutside from '@/shared/model/useClickOutside';
 import { useSession } from '@/shared/lib/session-context';
+import useLogout from '@/shared/hooks/useLogout';
 import {
   ChevronIcon,
   UserIcon,
@@ -27,12 +28,13 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
     status === 'authenticated' || (status === 'loading' && !!userName);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const universityCode = useUniversityCode();
+  const logout = useLogout();
 
   useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleSignOut = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    window.location.href = `/${universityCode}`;
+    setIsLogoutDialogOpen(false);
+    await logout();
   };
 
   return (

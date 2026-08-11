@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import DeleteIcon from '@/shared/ui/icons/delete-icon';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
 interface ClubManagementRowProps {
   index: number;
@@ -25,12 +25,12 @@ function ClubManagementRow({
       <span className="w-[80px] text-[14px] leading-[140%] font-medium text-[#474747]">
         {index}
       </span>
-      <Link
+      <HoverPrefetchLink
         href={`/${universityCode}/club/${clubId}`}
         className="flex-1 text-[14px] leading-[140%] font-medium text-[#474747] hover:underline"
       >
         {name}
-      </Link>
+      </HoverPrefetchLink>
       <span className="w-[160px] text-[14px] leading-[140%] font-medium text-[#474747]">
         {category}
       </span>

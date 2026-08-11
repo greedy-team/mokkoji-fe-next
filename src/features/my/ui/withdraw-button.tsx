@@ -1,43 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import { useSession } from '@/shared/lib/session-context';
+import useServerAction from '@/shared/hooks/useServerAction';
+import useLogout from '@/shared/hooks/useLogout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import deleteUser from '../api/deleteUser';
 
 export default function WithdrawButton() {
-  const router = useRouter();
-  const { refresh } = useSession();
-  const universityCode = useUniversityCode();
+  const logout = useLogout();
   const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const { mutate, isPending } = useServerAction(deleteUser, {
+    onSuccess: async () => {
+      setOpen(false);
+      await logout();
+    },
+  });
 
-  const handleWithdraw = async () => {
-    setSubmitting(true);
-    const response = await deleteUser();
-    if (!response.ok) {
-      toast.error(response.message);
-      setSubmitting(false);
-      return;
-    }
-    await fetch('/api/auth/logout', { method: 'POST' });
-    refresh();
-    toast.success('회원 탈퇴가 완료되었습니다.');
-    setOpen(false);
-    router.push(`/${universityCode}`);
-    router.refresh();
-  };
+  const handleWithdraw = () => mutate();
 
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-gray mt-2 flex items-center gap-2 text-sm hover:underline"
+        className="text-gray mt-2 flex items-center gap-2 text-sm font-bold hover:underline"
       >
         회원 탈퇴
         <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
@@ -59,7 +46,7 @@ export default function WithdrawButton() {
         confirmLabel="탈퇴"
         pendingLabel="탈퇴 중…"
         open={open}
-        pending={submitting}
+        pending={isPending}
         onOpenChange={setOpen}
         onConfirm={handleWithdraw}
       />

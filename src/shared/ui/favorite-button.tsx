@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import { urlCodeToApiCode } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -36,10 +36,7 @@ function FavoriteButton({
           toast.error('로그인 후 이용하실 수 있습니다.');
           return;
         }
-        if (
-          !favorite &&
-          session.universityCode !== urlCodeToApiCode(universityCode)
-        ) {
+        if (!favorite && session.universityCode !== toApiCode(universityCode)) {
           toast.error('다른 학교의 동아리는 즐겨찾기할 수 없습니다.');
           return;
         }

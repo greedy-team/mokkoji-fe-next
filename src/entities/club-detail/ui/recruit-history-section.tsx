@@ -3,9 +3,9 @@
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -107,12 +107,12 @@ function RecruitHistorySection({
                       const href = `/${universityCode}/club/${clubId}?${queryString.toString()}`;
 
                       return (
-                        <Link key={recruitment.id} href={href}>
+                        <HoverPrefetchLink key={recruitment.id} href={href}>
                           <RecruitHistoryCard
                             recruitHistories={recruitment}
                             isSelected={selectedRecruitId === recruitment.id}
                           />
-                        </Link>
+                        </HoverPrefetchLink>
                       );
                     })}
                   </div>
@@ -163,12 +163,12 @@ function RecruitHistorySection({
                 style={{ width: desktopItemWidth }}
                 className="shrink-0 px-2"
               >
-                <Link href={href}>
+                <HoverPrefetchLink href={href}>
                   <RecruitHistoryCard
                     recruitHistories={recruitment}
                     isSelected={selectedRecruitId === recruitment.id}
                   />
-                </Link>
+                </HoverPrefetchLink>
               </div>
             );
           })}

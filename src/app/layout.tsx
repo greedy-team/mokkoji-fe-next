@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-import localFont from 'next/font/local';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
@@ -9,16 +8,7 @@ import { ToDoPinProvider } from 'to-do-pin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
-
-const pretendard = localFont({
-  src: [
-    {
-      path: '../shared/fonts/PretendardVariable.woff2',
-    },
-  ],
-  variable: '--font-pretendard',
-  display: 'swap',
-});
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
@@ -59,11 +49,6 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2782954397492984"
-          strategy="lazyOnload"
-          crossOrigin="anonymous"
-        />
-        <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-85PSBEJKQ2"
           strategy="afterInteractive"
         />
@@ -77,23 +62,25 @@ export default function RootLayout({
         </Script>
         <ClarityProvider />
       </head>
-      <body className={`${pretendard.className} scrollbar-hide`}>
-        <MSWProvider>
-          <AppSessionProvider>
-            <ToDoPinProvider>
-              <WebVitalProvider />
-              <ToastContainer
-                autoClose={2000}
-                hideProgressBar
-                closeOnClick
-                pauseOnHover={false}
-                newestOnTop
-                limit={1}
-              />
-              {children}
-            </ToDoPinProvider>
-          </AppSessionProvider>
-        </MSWProvider>
+      <body className="scrollbar-hide">
+        <NuqsAdapter>
+          <MSWProvider>
+            <AppSessionProvider>
+              <ToDoPinProvider>
+                <WebVitalProvider />
+                <ToastContainer
+                  autoClose={2000}
+                  hideProgressBar
+                  closeOnClick
+                  pauseOnHover={false}
+                  newestOnTop
+                  limit={1}
+                />
+                {children}
+              </ToDoPinProvider>
+            </AppSessionProvider>
+          </MSWProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

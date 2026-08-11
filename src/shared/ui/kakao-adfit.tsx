@@ -1,21 +1,42 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function KakaoAdFit() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = '//t1.daumcdn.net/kas/static/ba.min.js';
-    script.async = true;
-    document.body.appendChild(script);
+    const container = containerRef.current;
+    if (!container) return undefined;
+
+    let script: HTMLScriptElement | null = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+
+        script = document.createElement('script');
+        script.src = '//t1.daumcdn.net/kas/static/ba.min.js';
+        script.async = true;
+        document.body.appendChild(script);
+
+        observer.disconnect();
+      },
+      { rootMargin: '200px' },
+    );
+
+    observer.observe(container);
 
     return () => {
-      document.body.removeChild(script);
+      observer.disconnect();
+      if (script) {
+        document.body.removeChild(script);
+      }
     };
   }, []);
 
   return (
-    <>
+    <div ref={containerRef}>
       <div className="flex justify-center py-2 sm:hidden">
         <ins
           className="kakao_ad_area"
@@ -34,6 +55,6 @@ export default function KakaoAdFit() {
           data-ad-height="90"
         />
       </div>
-    </>
+    </div>
   );
 }

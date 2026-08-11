@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cn from '@/shared/lib/utils';
 import Link from 'next/link';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
 interface NavLinkProps extends React.ComponentProps<typeof Link> {
   isActive?: boolean;
@@ -10,7 +11,7 @@ interface NavLinkProps extends React.ComponentProps<typeof Link> {
 
 function NavLink({ href, isActive, translateX, children }: NavLinkProps) {
   return (
-    <Link
+    <HoverPrefetchLink
       href={href}
       className={cn(
         'absolute transition-all duration-500 ease-in-out',
@@ -21,7 +22,7 @@ function NavLink({ href, isActive, translateX, children }: NavLinkProps) {
       style={{ transform: `translateX(${translateX}px)` }}
     >
       {children}
-    </Link>
+    </HoverPrefetchLink>
   );
 }
 

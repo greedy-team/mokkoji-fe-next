@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import ClubItem from '@/entities/club/ui/club-item';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import { Club } from '../model/type';
 
 interface ClubItemClientListProps {
@@ -19,7 +18,7 @@ function ClubItemClientList({
   return (
     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
       {uniqueClubs.map((item) => (
-        <Link
+        <HoverPrefetchLink
           key={item.id}
           href={`/${universityCode}/club/${item.id}`}
           className="block"
@@ -38,7 +37,7 @@ function ClubItemClientList({
             }
             height={150}
           />
-        </Link>
+        </HoverPrefetchLink>
       ))}
     </div>
   );

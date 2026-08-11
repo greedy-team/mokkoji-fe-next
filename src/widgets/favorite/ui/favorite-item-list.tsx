@@ -1,11 +1,11 @@
 'use client';
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import Link from 'next/link';
 import cn from '@/shared/lib/utils';
 import { ClubType } from '@/shared/model/type';
 import ClubItem from '@/entities/club/ui/club-item';
 import Pagination from '@/shared/ui/pagination';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import ClientFavoriteButton from './ClientFavoriteButton';
 
 interface FavoriteItemListProps {
@@ -43,7 +43,7 @@ function FavoriteItemList({
       >
         {clubs.map((item) => (
           <li key={item.id}>
-            <Link href={`/${universityCode}/club/${item.id}`}>
+            <HoverPrefetchLink href={`/${universityCode}/club/${item.id}`}>
               <ClubItem
                 name={item.name}
                 startDate={item.recruitStartDate}
@@ -63,7 +63,7 @@ function FavoriteItemList({
                   />
                 }
               />
-            </Link>
+            </HoverPrefetchLink>
           </li>
         ))}
       </ul>

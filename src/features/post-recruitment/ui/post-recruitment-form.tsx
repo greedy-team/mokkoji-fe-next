@@ -9,7 +9,7 @@ import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
 import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
-import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import useImageUpload from '@/shared/model/useImageUpload';
@@ -57,10 +57,7 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         if (uploadUrls.length > 0) {
           await Promise.all(
             uploadUrls.map((url: string, index: number) =>
-              ky.put(url, {
-                body: imageFiles[index].file,
-                headers: { 'Content-Type': imageFiles[index].file.type },
-              }),
+              uploadToPresignedUrl(url, imageFiles[index].file),
             ),
           );
         }

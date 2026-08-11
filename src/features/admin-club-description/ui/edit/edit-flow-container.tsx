@@ -4,6 +4,7 @@ import { Suspense, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import convertImageToWebp, {
@@ -90,12 +91,10 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
 
     if (logoFile && res.data && res.data.data?.updateLogo) {
       try {
-        const resUpdateLogo = await ky.put(res.data.data.updateLogo, {
-          body: logoFile,
-          headers: {
-            'Content-Type': logoFile.type,
-          },
-        });
+        const resUpdateLogo = await uploadToPresignedUrl(
+          res.data.data.updateLogo,
+          logoFile,
+        );
         if (!resUpdateLogo.ok) {
           toast.error('로고 업데이트 실패!');
           flow.setSubmitting(false);

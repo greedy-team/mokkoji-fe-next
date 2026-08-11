@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import ky from 'ky';
+import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import useServerAction from '@/shared/hooks/useServerAction';
@@ -54,10 +54,10 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
       onSuccess: async (data) => {
         const uploadLogoUrl = data?.data?.uploadLogoUrl;
         if (logoFile && uploadLogoUrl) {
-          const uploadLogoResult = await ky.put(uploadLogoUrl, {
-            body: logoFile,
-            headers: { 'Content-Type': logoFile.type },
-          });
+          const uploadLogoResult = await uploadToPresignedUrl(
+            uploadLogoUrl,
+            logoFile,
+          );
           if (!uploadLogoResult.ok) {
             toast.error('로고 업로드에 실패했습니다.');
             return;

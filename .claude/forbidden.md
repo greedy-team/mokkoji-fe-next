@@ -1,6 +1,6 @@
 # Forbidden Conventions — mokkoji
 
-Hard rules. Each entry states what is banned, why, and the only accepted alternative. `CLAUDE.md` carries the one-line summaries; this file is the detail.
+Hard rules. Each entry states what is banned, why, and the only accepted alternative. This file is the single source for every ban — `CLAUDE.md` imports it rather than restating it, so add a rule here, not there.
 
 ## Styling
 

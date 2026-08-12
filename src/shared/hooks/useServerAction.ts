@@ -11,6 +11,7 @@ type ServerActionResult<TData> = {
 
 interface UseServerActionOptions<TData> {
   onSuccess?: (data?: TData, message?: string) => void | Promise<void>;
+  onError?: (message?: string) => void | Promise<void>;
   showErrorToast?: boolean;
   showSuccessToast?: boolean;
 }
@@ -29,6 +30,7 @@ export default function useServerAction<TArgs extends unknown[], TData>(
         if (options?.showErrorToast !== false) {
           toast.error(response.message);
         }
+        await options?.onError?.(response.message);
         return;
       }
       if (options?.showSuccessToast !== false && response.message) {

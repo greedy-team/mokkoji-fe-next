@@ -3,9 +3,9 @@
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
 import { Club } from '@/entities/club/model/type';
@@ -93,7 +93,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                 transform: `rotateX(${rotateX}deg) translateZ(${currentRadius}px)`,
               }}
             >
-              <Link href={`/${universityCode}/club/${club.id}`}>
+              <HoverPrefetchLink href={`/${universityCode}/club/${club.id}`}>
                 <div className="relative mx-auto h-[104px] w-[195px] rounded-lg bg-white p-4 shadow-[0_0_8px_rgba(0,0,0,0.2)] lg:h-[160px] lg:w-[300px]">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <Avatar className="size-8 shrink-0 lg:size-10">
@@ -126,7 +126,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                     {club.description}
                   </p>
                 </div>
-              </Link>
+              </HoverPrefetchLink>
             </div>
           );
         })}

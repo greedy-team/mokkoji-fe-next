@@ -1,8 +1,6 @@
 import HomePage from '@/views/home/ui/home-page';
-import {
-  getUniversityName,
-  urlCodeToApiCode,
-} from '@/shared/lib/universityMeta';
+import { getUniversityName } from '@/shared/lib/universityMeta';
+import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 async function Page({
   params,
@@ -10,7 +8,7 @@ async function Page({
   params: Promise<{ universityCode: string }>;
 }) {
   const { universityCode } = await params;
-  const apiUniversityCode = urlCodeToApiCode(universityCode);
+  const apiUniversityCode = toApiCode(universityCode);
   const universityName = getUniversityName(apiUniversityCode);
 
   return (

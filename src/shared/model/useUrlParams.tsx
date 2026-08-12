@@ -1,6 +1,7 @@
 'use client';
 
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
+import { toApiCode, toUrlCode } from '@/shared/lib/urlCodeConverter';
 
 function useUrlParams(key: string) {
   const [rawActive, setRawActive] = useQueryState(
@@ -14,10 +15,10 @@ function useUrlParams(key: string) {
     parseAsInteger.withOptions({ shallow: false, history: 'push' }),
   );
 
-  const active = rawActive.toUpperCase();
+  const active = toApiCode(rawActive);
 
   const handleChange = (value: string) => {
-    setRawActive(value === 'ALL' || value === '' ? null : value.toLowerCase());
+    setRawActive(value === 'ALL' || value === '' ? null : toUrlCode(value));
     setPage(1);
   };
 

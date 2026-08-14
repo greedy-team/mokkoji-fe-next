@@ -1,7 +1,7 @@
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
-import KakaoAdFit from '@/shared/ui/kakao-adfit';
+import GoogleAdSense from '@/shared/ui/GoogleAdSense';
 import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';
@@ -52,7 +52,7 @@ export default async function MainLayout({
           <Header universityCode={universityCode} />
         </div>
         <main className="flex-1">{children}</main>
-        <KakaoAdFit />
+        <GoogleAdSense slotName="mainLayoutBottom" />
         <Footer />
         <BottomNav />
       </div>

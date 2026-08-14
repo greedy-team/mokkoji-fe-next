@@ -1,0 +1,61 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import {
+  ADSENSE_CLIENT_ID,
+  ADSENSE_SLOT,
+  type AdSenseSlotName,
+} from '@/shared/lib/adsense';
+
+declare global {
+  interface Window {
+    adsbygoogle?: Record<string, unknown>[];
+  }
+}
+
+export default function GoogleAdSense({
+  slotName,
+}: {
+  slotName: AdSenseSlotName;
+}) {
+  const slot = ADSENSE_SLOT[slotName];
+  const containerRef = useRef<HTMLModElement>(null);
+  const hasRequestedRef = useRef(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        if (hasRequestedRef.current) return;
+
+        hasRequestedRef.current = true;
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+      },
+      { rootMargin: '200px' },
+    );
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (!slot) return null;
+
+  return (
+    <div className="flex justify-center py-2">
+      <ins
+        ref={containerRef}
+        className="adsbygoogle block w-full max-w-[728px]"
+        data-ad-client={ADSENSE_CLIENT_ID}
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+}

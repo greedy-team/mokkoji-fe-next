@@ -48,7 +48,7 @@ Always check this list before creating new components to prevent duplication.
 | `navigation-button.tsx` | Generic navigation button |
 | `affiliation-nav-select.tsx` | Affiliation navigation selector |
 | `manage-modal.tsx` | Management modal |
-| `kakao-adfit.tsx` | Kakao AdFit advertisement |
+| `GoogleAdSense.tsx` | Google AdSense advertisement unit |
 | `kakao-icon.tsx` | Kakao icon |
 | `error-boundary-ui-story.tsx` | Error boundary Storybook story |
 

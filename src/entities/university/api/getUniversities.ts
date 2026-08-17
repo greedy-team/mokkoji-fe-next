@@ -6,7 +6,10 @@ import { UniversitiesResponse } from '../model/type';
 async function getUniversities() {
   try {
     const response = await serverApi
-      .get('universities', { next: { tags: ['universities'] } })
+      .get('universities', {
+        cache: 'force-cache',
+        next: { tags: ['universities'] },
+      })
       .json<ApiResponse<UniversitiesResponse>>();
 
     const responseData = response.data;

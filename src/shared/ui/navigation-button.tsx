@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import cn from '@/shared/lib/utils';
+import nextIcon from '@/shared/assets/images/next.svg';
+import previousIcon from '@/shared/assets/images/prev.svg';
 
 interface NavigationButtonProps {
   onClick?: () => void;
@@ -22,7 +24,7 @@ export function PrevButton({
         className,
       )}
     >
-      <Image src="/prev.svg" alt="prev" width={7} height={12} />
+      <Image src={previousIcon} alt="prev" width={7} height={12} />
       {children}
     </button>
   );
@@ -44,7 +46,7 @@ export function NextButton({
       )}
     >
       {children}
-      <Image src="/next.svg" alt="next" width={7} height={12} />
+      <Image src={nextIcon} alt="next" width={7} height={12} />
     </button>
   );
 }

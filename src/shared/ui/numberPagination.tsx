@@ -3,6 +3,9 @@
 import React from 'react';
 import cn from '@/shared/lib/utils';
 import useNumberPagination from '@/shared/hooks/useNumberPagination';
+import paginationEllipsesIcon from '@/shared/assets/images/pagination/ellipses.svg';
+import paginationNextIcon from '@/shared/assets/images/pagination/next.svg';
+import paginationPreviousIcon from '@/shared/assets/images/pagination/prev.svg';
 
 type Props = {
   page: number;
@@ -34,7 +37,7 @@ export default function NumberPagination({
           !canGoPrev && 'cursor-not-allowed opacity-30',
         )}
       >
-        <img src="/pagination/prev.svg" alt="이전페이지" />
+        <img src={paginationPreviousIcon.src} alt="이전페이지" />
       </button>
 
       <div className="flex items-center gap-4 text-3xl">
@@ -42,7 +45,7 @@ export default function NumberPagination({
           if (pageItem === 'ellipsis-start' || pageItem === 'ellipsis-end') {
             return (
               <span key={pageItem} className="text-base text-[#BDBDBD]">
-                <img src="/pagination/ellipses.svg" alt="말줄임" />
+                <img src={paginationEllipsesIcon.src} alt="말줄임" />
               </span>
             );
           }
@@ -76,7 +79,7 @@ export default function NumberPagination({
           !canGoNext && 'cursor-not-allowed opacity-30',
         )}
       >
-        <img src="/pagination/next.svg" alt="다음페이지" />
+        <img src={paginationNextIcon.src} alt="다음페이지" />
       </button>
     </nav>
   );

@@ -3,6 +3,7 @@
 import cn from '@/shared/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';
+import calenderPreviousIcon from '@/shared/assets/images/calenderPrev.svg';
 import { WEEKDAYS } from './constants';
 import getDateGrid from './getDateGrid';
 import TimePicker from './time-picker';
@@ -89,7 +90,7 @@ function CalendarBody({
           onClick={() => handleMonthChange(-1)}
         >
           <Image
-            src="/calenderPrev.svg"
+            src={calenderPreviousIcon}
             alt="저번달"
             width={20}
             height={20}
@@ -105,7 +106,7 @@ function CalendarBody({
           onClick={() => handleMonthChange(1)}
         >
           <Image
-            src="/calenderPrev.svg"
+            src={calenderPreviousIcon}
             alt="다음달"
             width={20}
             height={20}

@@ -6,6 +6,7 @@ import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { useEffect, useState } from 'react';
 
 import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
+import pinIcon from '@/shared/assets/images/pin.svg';
 import RecruitHistoryCard from './recruit-history-card';
 
 interface RecruitHistorySectionProps {
@@ -76,7 +77,7 @@ function RecruitHistorySection({
   return (
     <div className="mb-11">
       <div className="mt-8 flex items-center gap-2 lg:gap-3">
-        <img src="/pin.svg" alt="pin" className="w-8" />
+        <img src={pinIcon.src} alt="pin" className="w-8" />
         <span className="font-bold lg:text-xl">전체 모집 공고</span>
       </div>
 

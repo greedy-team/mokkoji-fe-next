@@ -1,4 +1,10 @@
+import type { StaticImageData } from 'next/image';
 import stripHtmlTags from '@/shared/lib/stripHtmlTags';
+import categoryAcademicCulturalIcon from '@/shared/assets/images/category/학술교양.svg';
+import categoryCulturalArtIcon from '@/shared/assets/images/category/문화예술.svg';
+import categoryReligiousIcon from '@/shared/assets/images/category/종교.svg';
+import categorySportsIcon from '@/shared/assets/images/category/체육.svg';
+import categoryVolunteerSocialIcon from '@/shared/assets/images/category/봉사사회.svg';
 
 export interface ApiResponse<T> {
   ok: boolean;
@@ -86,13 +92,13 @@ export const ClubCategoryLabel: Record<ClubCategory, string> = {
   [ClubCategory.OTHER]: '기타',
 };
 
-export const ClubCategoryIcon: Record<ClubCategory, string> = {
-  [ClubCategory.CULTURAL_ART]: '/category/문화예술.svg',
-  [ClubCategory.ACADEMIC_CULTURAL]: '/category/학술교양.svg',
-  [ClubCategory.VOLUNTEER_SOCIAL]: '/category/봉사사회.svg',
-  [ClubCategory.SPORTS]: '/category/체육.svg',
-  [ClubCategory.RELIGIOUS]: '/category/종교.svg',
-  [ClubCategory.OTHER]: '',
+export const ClubCategoryIcon: Record<ClubCategory, StaticImageData | null> = {
+  [ClubCategory.CULTURAL_ART]: categoryCulturalArtIcon,
+  [ClubCategory.ACADEMIC_CULTURAL]: categoryAcademicCulturalIcon,
+  [ClubCategory.VOLUNTEER_SOCIAL]: categoryVolunteerSocialIcon,
+  [ClubCategory.SPORTS]: categorySportsIcon,
+  [ClubCategory.RELIGIOUS]: categoryReligiousIcon,
+  [ClubCategory.OTHER]: null,
 };
 
 export const ClubCategoryToLabel: Record<string, ClubCategory> = {

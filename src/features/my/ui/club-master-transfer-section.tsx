@@ -15,6 +15,7 @@ import {
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import Input from '@/shared/ui/input';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import postClubMasterTransfer from '../api/postClubMasterTransfer';
 
 type ClubMasterTransferSectionProps = {
@@ -63,7 +64,7 @@ function ClubMasterTransferSection({ clubs }: ClubMasterTransferSectionProps) {
           <span className="text-text-secondary text-sm font-bold">
             {`'${club.clubName}' 동아리장 위임하기`}
           </span>
-          <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+          <Image src={nextBlackIcon} alt="" width={8} height={12} />
         </button>
       ))}
 

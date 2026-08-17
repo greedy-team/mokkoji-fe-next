@@ -7,6 +7,7 @@ import formatDate from '@/entities/favorite/util/format-date';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
+import favoriteCalendarIcon from '@/shared/assets/images/favorite/calendar.svg';
 
 function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
   const universityCode = useUniversityCode();
@@ -24,7 +25,7 @@ function RecruitFavoriteList({ data }: { data: FavoriteDateItem[] }) {
     <div className="flex w-full flex-col space-y-2 rounded-xl bg-[#FBFBFB] p-6 text-xl font-medium lg:p-10">
       <h2 className="flex items-center gap-2 text-sm font-bold lg:text-2xl">
         <Image
-          src="/favorite/calendar.svg"
+          src={favoriteCalendarIcon}
           alt="모집 일정"
           width={24}
           height={24}

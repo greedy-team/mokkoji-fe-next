@@ -15,6 +15,7 @@ import {
   UserIcon,
   LogoutIcon,
 } from '@/shared/ui/icons/header-icons';
+import headerProfileIcon from '@/shared/assets/images/header/profile.svg';
 
 interface HeaderLoginProps {
   userName: string;
@@ -49,7 +50,7 @@ function HeaderLogin({ userName }: HeaderLoginProps) {
               className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-all hover:bg-[#e6e6e6]"
             >
               <Image
-                src="/header/profile.svg"
+                src={headerProfileIcon}
                 alt="프로필"
                 width={21}
                 height={22}

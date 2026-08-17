@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import mobilePreviousIcon from '@/shared/assets/images/mobile-prev.svg';
 
 interface HeaderMobileProps {
   pageTitle: string;
@@ -14,7 +15,7 @@ function HeaderMobile({ pageTitle }: HeaderMobileProps) {
     <header className="flex items-center gap-2 px-5 py-5 lg:hidden">
       <button onClick={() => router.back()} className="p-1">
         <Image
-          src="/mobile-prev.svg"
+          src={mobilePreviousIcon}
           alt="뒤로가기 버튼"
           width={12}
           height={16}

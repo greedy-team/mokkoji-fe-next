@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import adminArrowIcon from '@/shared/assets/images/admin/arrow.svg';
 
 interface MenuButtonProps {
   label: string;
@@ -16,7 +17,7 @@ function MenuButton({ label, onClick }: MenuButtonProps) {
     >
       <span className="text-base font-bold lg:text-2xl">{label}</span>
       <Image
-        src="/admin/arrow.svg"
+        src={adminArrowIcon}
         alt="바로가기"
         width={18}
         height={14}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
 import { getSession } from '@/shared/lib/cookie-session';
+import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 import NavButton from './nav-button';
 import HeaderMenuSection from './header-menu-section';
 import ScrollProgressBar from './scroll-progress-bar';
@@ -22,7 +23,7 @@ async function Header({ universityCode }: HeaderProps) {
         className="mr-2 flex flex-shrink-0 items-center gap-1 text-lg font-bold sm:mr-4 sm:gap-1.5 sm:text-xl lg:mr-6 lg:text-2xl"
       >
         <Image
-          src="/header/mokkojiLogo.svg"
+          src={headerMokkojiLogoIcon}
           alt="모꼬지 로고"
           width={24}
           height={24}

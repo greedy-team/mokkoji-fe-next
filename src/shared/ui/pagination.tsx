@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import favoriteNextIcon from '@/shared/assets/images/favorite/next.svg';
+import favoritePreviousIcon from '@/shared/assets/images/favorite/prev.svg';
 import { Button } from './button';
 
 interface PaginationProps {
@@ -22,7 +24,7 @@ export default function Pagination({ page, size, total }: PaginationProps) {
         >
           <Link href={`?page=${page - 1}&size=${size}`} className="text-2xl">
             <Image
-              src="/favorite/prev.svg"
+              src={favoritePreviousIcon}
               alt="prev"
               width={60}
               height={60}
@@ -36,7 +38,7 @@ export default function Pagination({ page, size, total }: PaginationProps) {
           className="h-[40px] w-[40px] cursor-not-allowed rounded-full border-1 border-[#CFCFCF] bg-white text-2xl opacity-50"
         >
           <Image
-            src="/favorite/prev.svg"
+            src={favoritePreviousIcon}
             alt="prev"
             width={60}
             height={60}
@@ -52,7 +54,7 @@ export default function Pagination({ page, size, total }: PaginationProps) {
         >
           <Link href={`?page=${page + 1}&size=${size}`} className="text-2xl">
             <Image
-              src="/favorite/next.svg"
+              src={favoriteNextIcon}
               alt="next"
               width={60}
               height={60}
@@ -66,7 +68,7 @@ export default function Pagination({ page, size, total }: PaginationProps) {
           className="h-[40px] w-[40px] cursor-not-allowed rounded-full border border-[#CFCFCF] bg-white opacity-50"
         >
           <Image
-            src="/favorite/next.svg"
+            src={favoriteNextIcon}
             alt="next"
             width={60}
             height={60}

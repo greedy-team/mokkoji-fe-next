@@ -9,6 +9,8 @@ import DateNavigation from '@/entities/favorite/ui/format-navigation';
 import SharedLoading from '@/shared/ui/loading';
 import cn from '@/shared/lib/utils';
 import Image from 'next/image';
+import favoriteNextIcon from '@/shared/assets/images/favorite/next.svg';
+import favoritePreviousIcon from '@/shared/assets/images/favorite/prev.svg';
 import getWeekdays from '../util/get-week-days';
 import useCalendarDeadline from '../model/useCalendarDeadline';
 
@@ -75,7 +77,7 @@ function CustomCalendar({
             nextLabel={
               <div className="flex items-center justify-center">
                 <Image
-                  src="/favorite/next.svg"
+                  src={favoriteNextIcon}
                   alt="다음달"
                   width={12}
                   height={23}
@@ -86,7 +88,7 @@ function CustomCalendar({
             prevLabel={
               <div className="flex items-center justify-center">
                 <Image
-                  src="/favorite/prev.svg"
+                  src={favoritePreviousIcon}
                   alt="저번달"
                   width={12}
                   height={23}

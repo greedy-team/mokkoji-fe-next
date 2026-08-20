@@ -2,6 +2,8 @@
 
 import { useOptimistic, startTransition } from 'react';
 import Image from 'next/image';
+import favoriteHeartFillIcon from '@/shared/assets/images/favorite/heartFill.svg';
+import favoriteHeartIcon from '@/shared/assets/images/favorite/heart.svg';
 
 function FavoriteThread({
   favorite,
@@ -36,14 +38,14 @@ function FavoriteThread({
     >
       {optimisticFavorite ? (
         <Image
-          src="/favorite/heartFill.svg"
+          src={favoriteHeartFillIcon}
           alt="채워진하트"
           width={20}
           height={19}
         />
       ) : (
         <Image
-          src="/favorite/heart.svg"
+          src={favoriteHeartIcon}
           alt="비워진하트"
           width={20}
           height={19}

@@ -16,6 +16,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/shared/ui/dialog';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import UniversitySelectModal from './university-select-modal';
 
 interface UniversitySelectModalWrapperProps {
@@ -83,7 +84,7 @@ function UniversitySelectModalWrapper({
         onClick={() => setIsOpen(true)}
       >
         학교 수정하기
-        <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
+        <Image src={nextBlackIcon} alt="arrow" width={8} height={12} />
       </Button>
 
       <UniversitySelectModal

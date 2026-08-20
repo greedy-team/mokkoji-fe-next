@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import mainDownArrowIcon from '@/shared/assets/images/main/downArrow.svg';
 
 function HomeDownButton() {
   const handleScroll = () => {
@@ -13,7 +14,7 @@ function HomeDownButton() {
   return (
     <button onClick={handleScroll}>
       <Image
-        src="/main/downArrow.svg"
+        src={mainDownArrowIcon}
         alt="아래 스크롤"
         width={46}
         height={12}

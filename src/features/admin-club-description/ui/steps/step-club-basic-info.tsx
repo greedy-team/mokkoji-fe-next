@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Input from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { ClubAffiliationLabel, ClubCategoryLabel } from '@/shared/model/type';
+import clubRegisterCameraIcon from '@/shared/assets/images/club-register/cameraIcon.svg';
 import { ClubFormData } from '../../model/type';
 
 interface StepClubBasicInfoProps {
@@ -148,7 +149,7 @@ function StepClubBasicInfo({
             />
           ) : (
             <Image
-              src="/club-register/cameraIcon.svg"
+              src={clubRegisterCameraIcon}
               alt="이미지 등록"
               width={20}
               height={16}

@@ -2,6 +2,8 @@ import CategoryTextCard from '@/entities/home/ui/category-text-card';
 import CommentTextCard from '@/entities/home/ui/comment-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
+import mainSampleCategoryImage from '@/shared/assets/images/main/sampleCategory.png';
+import mainSampleCommentImage from '@/shared/assets/images/main/sampleComment.png';
 
 function FeatureIntroduceMobileWidget() {
   return (
@@ -10,7 +12,7 @@ function FeatureIntroduceMobileWidget() {
         <CommentTextCard />
         <AnimateOnView animation="reveal">
           <Image
-            src="/main/sampleComment.png"
+            src={mainSampleCommentImage}
             alt="댓글 이미지"
             width={449}
             height={150}
@@ -21,7 +23,7 @@ function FeatureIntroduceMobileWidget() {
         <CategoryTextCard />
         <AnimateOnView animation="reveal">
           <Image
-            src="/main/sampleCategory.png"
+            src={mainSampleCategoryImage}
             alt="카테고리 이미지"
             width={341}
             height={96}

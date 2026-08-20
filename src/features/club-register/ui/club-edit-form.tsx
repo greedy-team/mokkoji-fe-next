@@ -19,6 +19,7 @@ import convertImageToWebp, {
 } from '@/shared/lib/convertImageToWebp';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
+import clubRegisterCameraIcon from '@/shared/assets/images/club-register/cameraIcon.svg';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
 import { patchClubInfo } from '../api/postClubRegister';
@@ -182,7 +183,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
             />
           ) : (
             <Image
-              src="/club-register/cameraIcon.svg"
+              src={clubRegisterCameraIcon}
               alt="이미지 등록"
               width={20}
               height={16}

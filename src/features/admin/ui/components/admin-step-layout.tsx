@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import adminMainLogoImage from '@/shared/assets/images/admin/main_logo.png';
 
 interface AdminStepLayoutProps {
   clubName?: string;
@@ -12,7 +13,7 @@ function AdminStepLayout({ clubName, children }: AdminStepLayoutProps) {
     <div className="flex min-h-[calc(100vh-134px)] w-full flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-2 pt-10">
         <Image
-          src="/admin/main_logo.png"
+          src={adminMainLogoImage}
           alt="logo"
           width={329}
           height={119}

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import headerSearchIcon from '@/shared/assets/images/header/search.svg';
 
 function HomeSearchBar() {
   const universityCode = useUniversityCode();
@@ -23,7 +24,7 @@ function HomeSearchBar() {
           />
           <button type="submit">
             <Image
-              src="/header/search.svg"
+              src={headerSearchIcon}
               alt="검색"
               width={25}
               height={25}

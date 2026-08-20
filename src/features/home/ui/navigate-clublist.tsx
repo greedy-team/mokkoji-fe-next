@@ -5,6 +5,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import mainArrowIcon from '@/shared/assets/images/main/arrow.svg';
 
 function NavigateClubList() {
   const universityCode = useUniversityCode();
@@ -22,7 +23,7 @@ function NavigateClubList() {
       >
         동아리 찾아보기
         <Image
-          src="/main/arrow.svg"
+          src={mainArrowIcon}
           alt="동아리 찾아보기 버튼"
           width={15}
           height={12}

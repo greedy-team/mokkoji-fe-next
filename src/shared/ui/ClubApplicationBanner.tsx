@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import cn from '@/shared/lib/utils';
+import clubApplicationArrowRightIcon from '@/shared/assets/images/club-application/arrowRight.svg';
 
 interface ClubApplicationBannerProps {
   universityCode: string;
@@ -37,7 +38,7 @@ function ClubApplicationBanner({
         동아리/동아리장 신청하기
       </span>
       <Image
-        src="/club-application/arrowRight.svg"
+        src={clubApplicationArrowRightIcon}
         alt=""
         width={8}
         height={12}

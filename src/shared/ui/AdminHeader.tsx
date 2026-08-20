@@ -5,6 +5,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import headerMokkojiLogoWhiteIcon from '@/shared/assets/images/header/mokkojiLogoWhite.svg';
 import ScrollProgressBar from './scroll-progress-bar';
 
 function AdminHeader() {
@@ -19,7 +20,7 @@ function AdminHeader() {
           className="flex flex-shrink-0 items-center gap-1 text-lg font-bold sm:gap-1.5 sm:text-xl lg:text-2xl"
         >
           <Image
-            src="/header/mokkojiLogoWhite.svg"
+            src={headerMokkojiLogoWhiteIcon}
             alt="모꼬지 로고"
             width={24}
             height={24}

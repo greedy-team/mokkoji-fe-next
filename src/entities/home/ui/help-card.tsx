@@ -1,5 +1,6 @@
 import AnimateOnView from '@/shared/ui/animate-on-view';
 import Image from 'next/image';
+import mainHelpIcon from '@/shared/assets/images/main/help.svg';
 
 function HelpCard() {
   return (
@@ -7,7 +8,7 @@ function HelpCard() {
       <div className="relative flex h-[260px] w-[400px] scale-80 items-end justify-center rounded-2xl bg-[#D2FBD9] lg:scale-100">
         <AnimateOnView animation="laptop">
           <Image
-            src="/main/help.svg"
+            src={mainHelpIcon}
             alt="고객센터 페이지"
             width={366}
             height={250}

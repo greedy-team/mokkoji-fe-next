@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 
 function DashboardHeader() {
   const router = useRouter();
@@ -19,7 +20,7 @@ function DashboardHeader() {
         className="flex flex-shrink-0 items-center gap-1.5 text-2xl font-bold text-[#000000]"
       >
         <Image
-          src="/header/mokkojiLogo.svg"
+          src={headerMokkojiLogoIcon}
           alt="모꼬지 로고"
           width={24}
           height={24}

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import { UserRole } from '@/shared/model/type';
 
+import adminArrowIcon from '@/shared/assets/images/admin/arrow.svg';
 import type { AdminClubInfo } from '../../model/types';
 
 interface StepSelectClubProps {
@@ -38,7 +39,7 @@ function StepSelectClub({ clubs, role, onNext }: StepSelectClubProps) {
               동아리 등록하기
             </span>
             <Image
-              src="/admin/arrow.svg"
+              src={adminArrowIcon}
               alt="바로가기"
               width={18}
               height={14}

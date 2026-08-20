@@ -11,6 +11,8 @@ import {
 import { Button } from '@/shared/ui/button';
 import convertLinkText from '@/entities/club-detail/util/convertLinkText';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import detailLinkIcon from '@/shared/assets/images/detail/link.svg';
+import detailSpeakerIcon from '@/shared/assets/images/detail/speaker.svg';
 
 interface RecruitDetailViewProps {
   title: string;
@@ -68,9 +70,9 @@ function RecruitDetailView({
           onClick={goLatest}
           className="border-primary-500 -mt-5 mb-10 ml-auto flex cursor-pointer items-center gap-3 border-b text-sm text-[#22CF64]"
         >
-          <Image src="/detail/speaker.svg" alt="알림" width={16} height={16} />
+          <Image src={detailSpeakerIcon} alt="알림" width={16} height={16} />
           <span>최신 모집 공고 바로가기</span>
-          <Image src="/detail/link.svg" alt="링크" width={16} height={16} />
+          <Image src={detailLinkIcon} alt="링크" width={16} height={16} />
         </button>
       )}
       <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>

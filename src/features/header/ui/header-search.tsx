@@ -4,6 +4,7 @@ import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import headerSearchIcon from '@/shared/assets/images/header/search.svg';
 
 interface HeaderSearchProps {
   isSearchVisible: boolean;
@@ -62,7 +63,7 @@ function HeaderSearch({
         className="flex items-center justify-center"
       >
         <Image
-          src="/header/search.svg"
+          src={headerSearchIcon}
           alt="검색"
           width={20}
           height={20}

@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import chatIcon from '@/shared/assets/images/chatIcon.svg';
+import headerMokkojiLogoPrimaryIcon from '@/shared/assets/images/header/mokkojiLogoPrimary.svg';
 
 export default function KakaoLoginPage() {
   const universityCode = useUniversityCode();
@@ -17,7 +19,7 @@ export default function KakaoLoginPage() {
     <div className="mx-auto flex h-full w-full flex-col bg-white sm:w-lg">
       <main className="flex flex-1 flex-col items-center justify-center gap-6 px-8">
         <Image
-          src="/header/mokkojiLogoPrimary.svg"
+          src={headerMokkojiLogoPrimaryIcon}
           alt="Mokkoji 로고"
           width={64}
           height={64}
@@ -42,7 +44,7 @@ export default function KakaoLoginPage() {
           onClick={handleKakaoLogin}
           className="relative flex w-full items-center justify-center rounded-2xl bg-[#FEE500] py-4 transition-all active:scale-[0.985] active:bg-[#F0D900]"
         >
-          <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
+          <Image src={chatIcon} alt="챗아이콘" width={16} height={16} />
           <span className="text-base font-semibold tracking-tight text-neutral-900">
             카카오톡으로 시작하기
           </span>

@@ -13,6 +13,7 @@ import {
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import deleteEmail from '../api/deleteEmail';
 
 export default function EmailDeleteButton() {
@@ -28,7 +29,7 @@ export default function EmailDeleteButton() {
       <DialogTrigger asChild>
         <Button variant="none" size="none" className="text-sm text-red-500">
           이메일 삭제
-          <Image src="/nextBlack.svg" alt="edit" width={8} height={12} />
+          <Image src={nextBlackIcon} alt="edit" width={8} height={12} />
         </Button>
       </DialogTrigger>
 

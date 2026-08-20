@@ -2,6 +2,7 @@
 
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
 import { useState, useEffect } from 'react';
+import clubSearchIcon from '@/shared/assets/images/club/search.svg';
 
 function ClubPageSearchbar() {
   const [keyword, setKeyword] = useQueryState(
@@ -48,7 +49,7 @@ function ClubPageSearchbar() {
             className="mr-5 flex items-center justify-center"
           >
             <img
-              src="/club/search.svg"
+              src={clubSearchIcon.src}
               alt="검색"
               width={24}
               height={24}

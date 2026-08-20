@@ -17,6 +17,7 @@ import {
 } from '@/shared/model/type';
 import type { University } from '@/entities/university/model/type';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
+import clubApplicationCameraIcon from '@/shared/assets/images/club-application/camera.svg';
 import type { ClubCreateFormData } from './club-crete-form';
 
 interface ClubCreateBasicStepProps {
@@ -171,7 +172,7 @@ function ClubCreateBasicStep({
               />
             ) : (
               <Image
-                src="/club-application/camera.svg"
+                src={clubApplicationCameraIcon}
                 alt="이미지등록"
                 width={20}
                 height={16}

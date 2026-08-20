@@ -4,6 +4,7 @@ import { ClubComment } from '@/entities/club-detail/model/type';
 import StarRating from '@/entities/club-detail/ui/review-star';
 import { deleteComment } from '@/features/club-detail/api/comment-api';
 import useServerAction from '@/shared/hooks/useServerAction';
+import detailCommentCorrectionIcon from '@/shared/assets/images/detail/comment/correction.svg';
 
 interface CommentItemProps {
   clubId: number;
@@ -47,7 +48,7 @@ export default function CommentItem({
               }}
             >
               <Image
-                src="/detail/comment/correction.svg"
+                src={detailCommentCorrectionIcon}
                 alt="수정 이미지"
                 width={12}
                 height={12}

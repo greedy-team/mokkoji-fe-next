@@ -1,4 +1,7 @@
 import Image from 'next/image';
+import detailCommentStarEmptyIcon from '@/shared/assets/images/detail/comment/starEmpty.svg';
+import detailCommentStarFilledIcon from '@/shared/assets/images/detail/comment/starFilled.svg';
+import detailCommentStarHalfIcon from '@/shared/assets/images/detail/comment/starHalf.svg';
 
 interface StarRatingProps {
   rate: number;
@@ -16,7 +19,7 @@ function StarRating({ rate }: StarRatingProps) {
         .map((_) => (
           <Image
             key={crypto.randomUUID()}
-            src="/detail/comment/starFilled.svg"
+            src={detailCommentStarFilledIcon}
             alt="꽉찬 별"
             width={16}
             height={14}
@@ -24,7 +27,7 @@ function StarRating({ rate }: StarRatingProps) {
         ))}
       {isHalfStar && (
         <Image
-          src="/detail/comment/starHalf.svg"
+          src={detailCommentStarHalfIcon}
           alt="반 별"
           width={16}
           height={14}
@@ -35,7 +38,7 @@ function StarRating({ rate }: StarRatingProps) {
         .map((_) => (
           <Image
             key={crypto.randomUUID()}
-            src="/detail/comment/starEmpty.svg"
+            src={detailCommentStarEmptyIcon}
             alt="빈 별"
             width={16}
             height={14}

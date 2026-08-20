@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import checkIcon from '@/shared/assets/images/check.svg';
 import putEmail from '../api/putEmail';
 
 type MailNotificationToggleProps = {
@@ -55,7 +56,7 @@ export default function MailNotificationToggle({
             enabled ? 'translate-x-7' : 'translate-x-0'
           }`}
         >
-          <Image src="/check.svg" alt="" width={11} height={10} />
+          <Image src={checkIcon} alt="" width={11} height={10} />
         </span>
       </button>
       <span className="text-gray-600">{enabled ? 'ON' : 'OFF'}</span>

@@ -3,70 +3,46 @@
 University club information exploration and bookmarking service. Built with Next.js 15 App Router, communicates with external backend API.
 
 > For folder structure, layer definitions, and agent pipeline, see `.claude/architecture.md`.
+> For API clients, error handling, Server Actions, Route Handlers, and react-query, see `.claude/api-conventions.md`.
+
+@.claude/forbidden.md
 
 ## Tech Stack
 
-- Next.js 15 + React 19 + TypeScript
-- Tailwind CSS v4 (@theme pattern)
-- class-variance-authority (cva) — variant components
-- clsx + tailwind-merge (cn function, `@/shared/lib/utils`)
-- ky — HTTP client
-- nuqs — URL search params state management
-- dayjs — date handling
-- @radix-ui — accessible UI primitives
+Sanctioned choice per concern. The full dependency list is `package.json` — this section records the decision, not the inventory.
+
+| Concern | Use |
+|---|---|
+| Framework | Next.js 15 App Router + React 19 + TypeScript |
+| HTTP | ky — preconfigured instances in `shared/api/` |
+| Client cache | @tanstack/react-query — keys in `{domain}/api/queries.ts` |
+| URL state | nuqs |
+| Styling | Tailwind CSS v4 `@theme` tokens + cva + `cn` (`@/shared/lib/utils`) |
+| UI primitives | @radix-ui |
+| Async UI | react-error-boundary via `shared/ui/AsyncBoundary` |
+| User feedback | react-toastify — through `useServerAction` |
+| Icons | lucide-react |
+| Rich text | @tiptap — `shared/ui/ClubDescriptionEditor` |
+| Date | dayjs |
+| E2E / mocking | Playwright / MSW |
+| Error tracking | @sentry/nextjs |
 
 ## Architecture: FSD (Feature-Sliced Design)
 
-Dependency direction (violation forbidden):
+Dependency direction:
+
 ```
 app → views → widgets → features → entities → shared
 ```
-- Reverse imports absolutely forbidden
-- No cross-domain imports in the same layer
-- widgets may only import features from the same domain
 
 ## Design System
 
 CSS tokens: `src/app/theme.css` / Animations: `src/app/globals.css`
+
+Hover and active states are derived, not designed — apply the design-system skill's "-1 step" rule.
 
 ## File Structure Rules
 
 - Folder names: kebab-case
 - New file names: PascalCase (preserve existing style when modifying existing files)
 - `shared/ui/` — single file without subfolders
-
-## Development Principles
-
-1. **No raw colors**: Never use hex/rgba directly. Always use CSS variable tokens.
-2. **Typography classes first**: Use `description-semibold` style classes instead of direct font-size/weight.
-3. **Auto-generate states**: Apply design-system skill's "-1 step" rule for hover/active.
-4. **Respect layer dependency direction**: Reverse imports absolutely forbidden.
-5. **One-way props**: widgets and features/ui must not fetch internally. Pass data from views or page.
-6. **No comments**: Exception only for complex, non-obvious logic.
-7. **No abbreviated naming**: Use full words. (`btn` → `button`, `idx` → `index`)
-8. **Server/Client separation**: Default to Server Component if no interaction. Use `'use client'` if `useState`/`useEffect`/event handlers exist.
-9. **No raw fetch**: Always use ky for HTTP requests. Never use fetch directly.
-10. **No magic strings for fixed value sets**: When a value can only be one of a known fixed set (tab keys, status values, etc.), define it as an `as const` array/object and derive a union type from it, instead of typing the field as plain `string`. Prevents typos from silently passing type checks.
-11. **Lowercase URL codes, always via converter**: Codes appear in two casings — API/enum codes are uppercase (`SEJONG`, `CULTURAL_ART`), URL codes are lowercase (`/sejong/club?category=cultural_art`). Anything that ends up in a URL — path segment, query param, canonical/OG URL — must be lowercase. Never interpolate an API/enum code into a URL directly, and never call `toLowerCase()` / `toUpperCase()` on a code at the call site. Always go through `toUrlCode` / `toApiCode` from `@/shared/lib/urlCodeConverter` — this is the only place either casing conversion may happen.
-
-    ```ts
-    // Forbidden — enum code leaks into the URL
-    href={`/${universityCode}/club?category=${ClubCategoryToLabel[category]}`}
-    // Forbidden — ad-hoc conversion scattered across call sites
-    router.push(`/${university.code.toLowerCase()}`);
-
-    // Correct
-    href={`/${universityCode}/club?category=${toUrlCode(ClubCategoryToLabel[category])}`}
-    router.push(`/${toUrlCode(university.code)}`);
-    ```
-
-    This applies to every enum-backed code that travels through a URL — university codes, `ClubCategory`, `ClubAffiliation`, and any future one. Do not add domain-specific casing wrappers; they duplicate the converter.
-
-    Inside `[universityCode]` routes, `useUniversityCode()` already returns the URL code — use it as is. Convert only when handing the value to the API.
-
-## Commit Rules
-
-Separate commits by work type (feature, refactor, fix, config, etc.), not by FSD layer.
-
-- Never combine different types of work in a single commit.
-- Do not use `git add -A` / `git add .`. Always specify files explicitly.

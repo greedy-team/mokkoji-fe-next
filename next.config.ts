@@ -13,6 +13,9 @@ let nextConfig: NextConfig = {
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
+    // [#709] Vercel 이미지 최적화 임시 비활성화 — 변환 쿼터 초과.
+    // 쿼터/요금제 정리 후 아래 unoptimized 라인만 제거하면 복구된다.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

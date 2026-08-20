@@ -20,7 +20,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import adminImageUploadImage from '@/shared/assets/images/admin/Image_upload.png';
+import adminImageUploadImage from '@/shared/assets/images/admin/Image_upload.webp';
 import cn from '../lib/utils';
 
 interface ImageItem {

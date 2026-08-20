@@ -1,7 +1,7 @@
 import HelpTextCard from '@/entities/home/ui/help-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
-import mainSampleFaqImage from '@/shared/assets/images/main/sampleFaq.png';
+import mainSampleFaqImage from '@/shared/assets/images/main/sampleFaq.webp';
 
 function HelpCardMobileWidget() {
   return (

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import supportGhostImage from '@/shared/assets/images/support/ghost.gif';
+import supportGhostImage from '@/shared/assets/images/support/ghost.webp';
 
 function Search() {
   return (

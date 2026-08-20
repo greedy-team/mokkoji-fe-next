@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import adminMainLogoImage from '@/shared/assets/images/admin/main_logo.png';
+import adminMainLogoImage from '@/shared/assets/images/admin/main_logo.webp';
 
 interface AdminStepLayoutProps {
   clubName?: string;

@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import WebVitalProvider from '@/_providers/webvital-provider';
 import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
-import { ToDoPinProvider } from 'to-do-pin';
+import DevToDoPin from '@/shared/ui/DevToDoPin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
@@ -72,7 +72,7 @@ export default function RootLayout({
         <NuqsAdapter>
           <MSWProvider>
             <AppSessionProvider>
-              <ToDoPinProvider>
+              <DevToDoPin>
                 <WebVitalProvider />
                 <ToastContainer
                   autoClose={2000}
@@ -83,7 +83,7 @@ export default function RootLayout({
                   limit={1}
                 />
                 {children}
-              </ToDoPinProvider>
+              </DevToDoPin>
             </AppSessionProvider>
           </MSWProvider>
         </NuqsAdapter>

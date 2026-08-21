@@ -1,6 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '@/shared/ui/Footer';
-import 'to-do-pin/index.css';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import getCurrentUserRole from '@/shared/api/getCurrentUserRole';

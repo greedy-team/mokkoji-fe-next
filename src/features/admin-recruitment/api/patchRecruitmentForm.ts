@@ -8,6 +8,7 @@ import { RecruitmentFormData, RecruitmentPatchResponse } from '../model/type';
 async function patchRecruitmentForm(
   data: RecruitmentFormData,
   recruitmentId: number,
+  clubId: number,
 ): Promise<RecruitmentPatchResponse> {
   try {
     const response = await api.patch(`recruitments/${recruitmentId}`, {
@@ -16,7 +17,7 @@ async function patchRecruitmentForm(
 
     const payload = await response.json<RecruitmentPatchResponse['data']>();
 
-    revalidateTag('recruitments');
+    revalidateTag(String(clubId));
     return { ok: true, message: '수정이 완료되었습니다.', data: payload };
   } catch (e) {
     return createErrorResponse(e as Error);

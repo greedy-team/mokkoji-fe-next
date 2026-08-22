@@ -81,7 +81,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
 
   const handleDelete = async (post: ClubRecruitments) => {
     setIsDeleting(true);
-    const result = await deleteRecruitmentForm(post.id);
+    const result = await deleteRecruitmentForm(post.id, clubInfo.id);
 
     if (result.ok) {
       toast.success('모집 공고가 삭제되었습니다.');
@@ -106,7 +106,7 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
 
     let res;
     try {
-      res = await patchRecruitmentForm(data, recruitmentDetail.id);
+      res = await patchRecruitmentForm(data, recruitmentDetail.id, clubInfo.id);
     } catch {
       toast.error('모집글 수정에 실패했습니다.');
       flow.setSubmitting(false);

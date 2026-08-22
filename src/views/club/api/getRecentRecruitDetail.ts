@@ -15,7 +15,7 @@ async function getRecentRecruitDetail(id: number) {
       response = await serverApi
         .get(`recruitments/club/recent/${id}`, {
           cache: 'force-cache',
-          next: { tags: ['recruitments'], revalidate: 3600 },
+          next: { tags: [String(id)], revalidate: 3600 },
         })
         .json();
     }

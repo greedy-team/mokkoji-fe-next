@@ -149,7 +149,13 @@ The vocabulary is fixed. Do not invent a tag without adding it here:
 
 A mutation may burst several at once — `patchRecruitment` bursts both `recruitments` and `String(clubId)`.
 
-Time-based revalidation uses `next: { revalidate: seconds }` instead, for data with no mutation path to hang an invalidation off (`sitemap.ts`, recent-recruitment lookups).
+`next: { revalidate: seconds }` alone is for data with **no** mutation path — `sitemap.ts`, the university list. If any Server Action bursts a tag that covers the resource, the read must carry that tag too. `revalidate` and `tags` combine; time-based expiry is not a substitute for invalidation.
+
+Before attaching a cache policy to a `serverApi` read, check three things:
+
+1. Does a Server Action mutate this resource? If yes, `tags` is mandatory — `revalidate` alone serves stale data until it expires, no matter what the mutation does.
+2. Does that action actually call `revalidateTag` with the same tag? Verify both directions; each half is silent when its pair is missing.
+3. If only `revalidate` is set, is the resource genuinely fine to serve up to that many seconds stale?
 
 > **Known gap:** in Next 15 a fetch with `next: { tags }` but no `cache` or `revalidate` falls into `autoNoCache`, so no cache entry is created and the paired `revalidateTag` has nothing to burst. Existing tagged reads need `cache: 'force-cache'` (or a `revalidate` value) added. Tracked separately — do not copy the current call sites verbatim.
 

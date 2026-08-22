@@ -15,7 +15,7 @@ async function getRecruitDetail(recruitmentId: number) {
       response = await serverApi
         .get(`recruitments/${recruitmentId}`, {
           cache: 'force-cache',
-          next: { revalidate: 3600 },
+          next: { tags: ['recruitments'], revalidate: 3600 },
         })
         .json();
     }

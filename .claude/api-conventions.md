@@ -141,13 +141,14 @@ The vocabulary is fixed. Do not invent a tag without adding it here:
 | Tag             | Covers                                     |
 | --------------- | ------------------------------------------ |
 | `clubs`         | club lists and club detail                 |
-| `recruitments`  | recruitment postings                       |
 | `users`         | user profile and account settings          |
 | `universities`  | the university list                        |
 | `clubs-search`  | club search results                        |
-| `String(clubId)` | one club's detail, for per-resource bursts |
+| `String(clubId)` | everything scoped to one club — its detail and all of its recruitment reads |
 
-A mutation may burst several at once — `patchRecruitment` bursts both `recruitments` and `String(clubId)`.
+A mutation may burst several at once — `postClubRegister` bursts both `clubs` and `clubs-search`.
+
+Recruitment mutations burst only `String(clubId)`, never a global `recruitments` tag. A global tag would clear every club's cache on every posting edit, which costs the most exactly during recruiting season when traffic peaks. Reads that cannot see a clubId take one as a parameter for this reason — see `getRecruitDetail`.
 
 `next: { revalidate: seconds }` alone is for data with **no** mutation path — `sitemap.ts`, the university list. If any Server Action bursts a tag that covers the resource, the read must carry that tag too. `revalidate` and `tags` combine; time-based expiry is not a substitute for invalidation.
 

@@ -5,8 +5,6 @@ import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import type { RecruitmentDetail } from '@/entities/club-detail/model/type';
 
-// clubId는 요청에 쓰이지 않는다. 공고 무효화가 동아리 단위로만 일어나므로
-// 캐시 태그의 스코프를 맞추기 위해서만 받는다.
 async function getRecruitDetail(recruitmentId: number, clubId: number) {
   const session = await getSession();
   try {

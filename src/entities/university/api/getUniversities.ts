@@ -8,7 +8,7 @@ async function getUniversities() {
     const response = await serverApi
       .get('universities', {
         cache: 'force-cache',
-        next: { tags: ['universities'] },
+        next: { tags: ['universities'], revalidate: 3600 },
       })
       .json<ApiResponse<UniversitiesResponse>>();
 

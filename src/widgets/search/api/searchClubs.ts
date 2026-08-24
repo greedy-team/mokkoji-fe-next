@@ -34,7 +34,7 @@ async function searchClubs(params: SearchClubsParams) {
       .get('clubs/search', {
         searchParams,
         cache: 'force-cache',
-        next: { tags: ['clubs-search'] },
+        next: { tags: ['clubs-search'], revalidate: 3600 },
       })
       .json<{ data: ClubSearchResponse }>();
 

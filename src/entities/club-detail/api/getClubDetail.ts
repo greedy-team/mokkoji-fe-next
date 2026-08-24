@@ -15,7 +15,7 @@ async function getClubDetail(id: number) {
       response = await serverApi
         .get(`clubs/${id}`, {
           cache: 'force-cache',
-          next: { tags: ['clubs', String(id)] },
+          next: { tags: ['clubs', String(id)], revalidate: 3600 },
         })
         .json();
     }

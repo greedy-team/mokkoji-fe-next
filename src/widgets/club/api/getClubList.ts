@@ -51,7 +51,7 @@ async function getClubList({
       : {
           searchParams,
           cache: 'force-cache' as const,
-          next: { tags: ['clubs'] },
+          next: { tags: ['clubs'], revalidate: 3600 },
         };
 
     const response = await client

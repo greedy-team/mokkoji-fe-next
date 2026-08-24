@@ -130,7 +130,7 @@ async function MyPage({
               }
             >
               <UniversitySelectModalWrapper
-                defaultOpen={isNewUser}
+                defaultOpen={isNewUser && !user.universityCode}
                 universityCode={user.universityCode}
                 universities={universities}
               />

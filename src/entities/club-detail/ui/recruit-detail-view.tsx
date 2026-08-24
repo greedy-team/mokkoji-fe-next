@@ -93,6 +93,7 @@ function RecruitDetailView({
                   src={imgsrc}
                   alt="동아리 이미지"
                   fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 20vw, 16vw"
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity group-hover:opacity-100" />

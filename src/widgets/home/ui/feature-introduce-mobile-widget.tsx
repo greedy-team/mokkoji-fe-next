@@ -2,8 +2,8 @@ import CategoryTextCard from '@/entities/home/ui/category-text-card';
 import CommentTextCard from '@/entities/home/ui/comment-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
-import mainSampleCategoryImage from '@/shared/assets/images/main/sampleCategory.png';
-import mainSampleCommentImage from '@/shared/assets/images/main/sampleComment.png';
+import mainSampleCategoryImage from '@/shared/assets/images/main/sampleCategory.webp';
+import mainSampleCommentImage from '@/shared/assets/images/main/sampleComment.webp';
 
 function FeatureIntroduceMobileWidget() {
   return (

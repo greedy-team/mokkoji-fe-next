@@ -1,8 +1,8 @@
 import AnimateOnView from '@/shared/ui/animate-on-view';
 import Image from 'next/image';
-import mainInsomniaGoatImage from '@/shared/assets/images/main/불면증염소.png';
-import mainMartialArtsFighterImage from '@/shared/assets/images/main/격투기선수.png';
-import mainSleepyLionImage from '@/shared/assets/images/main/졸린사자.png';
+import mainInsomniaGoatImage from '@/shared/assets/images/main/불면증염소.webp';
+import mainMartialArtsFighterImage from '@/shared/assets/images/main/격투기선수.webp';
+import mainSleepyLionImage from '@/shared/assets/images/main/졸린사자.webp';
 
 function CommentCard() {
   return (

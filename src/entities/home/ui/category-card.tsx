@@ -1,6 +1,6 @@
 import AnimateOnView from '@/shared/ui/animate-on-view';
 import Image from 'next/image';
-import mainCategoryImage from '@/shared/assets/images/main/category.png';
+import mainCategoryImage from '@/shared/assets/images/main/category.webp';
 
 function CategoryCard() {
   return (

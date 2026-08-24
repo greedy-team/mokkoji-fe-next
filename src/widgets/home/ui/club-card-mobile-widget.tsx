@@ -2,9 +2,9 @@ import ClubTextCard from '@/entities/home/ui/club-text-card';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
-import mainClubCardImage from '@/shared/assets/images/main/clubcard.png';
-import mainSampleClubCardImage from '@/shared/assets/images/main/sampleClubCard.png';
-import mainSampleRecruitmentImage from '@/shared/assets/images/main/sampleRecruitment.png';
+import mainClubCardImage from '@/shared/assets/images/main/clubcard.webp';
+import mainSampleClubCardImage from '@/shared/assets/images/main/sampleClubCard.webp';
+import mainSampleRecruitmentImage from '@/shared/assets/images/main/sampleRecruitment.webp';
 
 interface ClubCardMobileWidgetProps {
   universityName: string;

@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const loginResponse = await serverApi.post('users/auth/kakao', {
-      json: { code },
+      json: { code, universityCode: toApiCode(state) },
       headers: { Origin: process.env.NEXT_PUBLIC_BASE_URL },
     });
 

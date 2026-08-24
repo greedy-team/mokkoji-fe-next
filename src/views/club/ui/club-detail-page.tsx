@@ -29,7 +29,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
   if (!recent.ok) return <ErrorBoundaryUi />;
 
   const recruitmentId = Number(recruit) || recent.data.id;
-  const selected = await getRecruitDetail(recruitmentId);
+  const selected = await getRecruitDetail(recruitmentId, Number(id));
 
   const historySlot =
     recruitHistoriesResult.status === 'rejected' ||

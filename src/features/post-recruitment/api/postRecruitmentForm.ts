@@ -16,7 +16,7 @@ async function postRecruitmentForm(
 
     const payload = await response.json<RecruitmentResponse['data']>();
 
-    revalidateTag('recruitments');
+    revalidateTag(String(clubId));
     return { ok: true, message: '등록이 완료되었습니다.', data: payload };
   } catch (e) {
     return createErrorResponse(e as Error);

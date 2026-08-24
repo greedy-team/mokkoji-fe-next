@@ -20,6 +20,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import adminImageUploadImage from '@/shared/assets/images/admin/Image_upload.webp';
 import cn from '../lib/utils';
 
 interface ImageItem {
@@ -184,7 +185,7 @@ function ImageUploadSection({
         >
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D9D9D930]">
             <Image
-              src="/admin/Image_upload.png"
+              src={adminImageUploadImage}
               alt="이미지 업로드"
               width={20}
               height={20}

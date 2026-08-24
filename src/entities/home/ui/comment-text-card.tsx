@@ -1,6 +1,7 @@
 import AnimateOnView from '@/shared/ui/animate-on-view';
 import Image from 'next/image';
 import Link from 'next/link';
+import mainCommentIcon from '@/shared/assets/images/main/comment.svg';
 
 function CommentTextCard() {
   return (
@@ -8,7 +9,7 @@ function CommentTextCard() {
       <AnimateOnView animation="animate-fade-left">
         <h1 className="mb-2 flex gap-2 text-sm font-bold text-[#00E457] lg:text-2xl">
           <Image
-            src="/main/comment.svg"
+            src={mainCommentIcon}
             alt="댓글 아이콘"
             width={26}
             height={24}

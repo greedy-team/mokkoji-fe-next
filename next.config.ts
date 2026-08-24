@@ -1,9 +1,10 @@
-import { withSentryConfig } from '@sentry/nextjs';
+// [#707] Sentry 임시 비활성화 — 쿼터/비용 초과. 복구 시 아래 블록과 함께 주석 해제
+// import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-// eslint-disable-next-line import/no-mutable-exports
+// eslint-disable-next-line import/no-mutable-exports, prefer-const
 let nextConfig: NextConfig = {
   reactStrictMode: false,
   transpilePackages: ['msw', 'next-auth'],
@@ -12,6 +13,9 @@ let nextConfig: NextConfig = {
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],
   images: {
+    // [#709] Vercel 이미지 최적화 임시 비활성화 — 변환 쿼터 초과.
+    // 쿼터/요금제 정리 후 아래 unoptimized 라인만 제거하면 복구된다.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -47,30 +51,33 @@ let nextConfig: NextConfig = {
   },
 };
 
-// Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용
-if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-  nextConfig = withSentryConfig(nextConfig, {
-    // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
-    org: 'mokkoji-4m',
-
-    // Sentry 프로젝트 이름 – 오류가 기록될 프로젝트
-    project: 'mokkoji',
-
-    // CI 환경이 아닐 때는 소스맵 업로드 관련 로그를 출력하지 않음 (로컬 빌드 시 출력 줄이기)
-    silent: !process.env.CI,
-
-    // 클라이언트에 대한 더 많은 소스맵을 업로드하여 오류 스택트레이스를 더 예쁘게 보여줌 (빌드 시간이 증가할 수 있음)
-    widenClientFileUpload: true,
-
-    // 클라이언트에서 Sentry로의 요청을 Next.js 서버를 통해 프록시함
-    // - 광고 차단기 회피 가능
-    // - 서버 부하 및 비용 증가 가능성 있음
-    tunnelRoute: '/monitoring',
-
-    // 콘솔에 찍히는 Sentry 관련 디버그 로그를 제거하여 번들 크기 절감
-    disableLogger: true,
-  });
-}
+// [#707] Sentry 임시 비활성화 — 쿼터/비용 초과로 이벤트 수집 중단
+// 복구 조건: Sentry 쿼터/요금제 정리 후 아래 블록과 최상단 import 주석 해제.
+//           nextConfig 재할당이 살아나므로 prefer-const 예외도 함께 제거할 것
+// // Sentry 설정은 프로덕션(SENTRY=true)일 때만 적용
+// if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+//   nextConfig = withSentryConfig(nextConfig, {
+//     // Sentry 조직 슬러그 – Sentry 프로젝트가 속한 조직의 ID
+//     org: 'mokkoji-4m',
+//
+//     // Sentry 프로젝트 이름 – 오류가 기록될 프로젝트
+//     project: 'mokkoji',
+//
+//     // CI 환경이 아닐 때는 소스맵 업로드 관련 로그를 출력하지 않음 (로컬 빌드 시 출력 줄이기)
+//     silent: !process.env.CI,
+//
+//     // 클라이언트에 대한 더 많은 소스맵을 업로드하여 오류 스택트레이스를 더 예쁘게 보여줌 (빌드 시간이 증가할 수 있음)
+//     widenClientFileUpload: true,
+//
+//     // 클라이언트에서 Sentry로의 요청을 Next.js 서버를 통해 프록시함
+//     // - 광고 차단기 회피 가능
+//     // - 서버 부하 및 비용 증가 가능성 있음
+//     tunnelRoute: '/monitoring',
+//
+//     // 콘솔에 찍히는 Sentry 관련 디버그 로그를 제거하여 번들 크기 절감
+//     disableLogger: true,
+//   });
+// }
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

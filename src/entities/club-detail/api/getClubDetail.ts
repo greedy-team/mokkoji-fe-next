@@ -14,6 +14,7 @@ async function getClubDetail(id: number) {
     } else {
       response = await serverApi
         .get(`clubs/${id}`, {
+          cache: 'force-cache',
           next: { tags: ['clubs', String(id)] },
         })
         .json();

@@ -7,6 +7,7 @@ import Input from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
+import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 
 export default function DashboardLoginPage() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function DashboardLoginPage() {
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex items-center gap-1.5">
             <Image
-              src="/header/mokkojiLogo.svg"
+              src={headerMokkojiLogoIcon}
               alt="모꼬지 로고"
               width={28}
               height={28}

@@ -26,6 +26,8 @@ import WithdrawButton from '@/features/my/ui/withdraw-button';
 import ClubApplicationStatus from '@/features/my/ui/club-application-status';
 import ClubMasterTransferSection from '@/features/my/ui/club-master-transfer-section';
 import ClubMasterTransferCodeSection from '@/features/my/ui/club-master-transfer-code-section';
+import chatIcon from '@/shared/assets/images/chatIcon.svg';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 
 async function MyPage({
   universityCode,
@@ -79,7 +81,7 @@ async function MyPage({
             {user.name}
           </div>
           <div className="flex w-[130px] items-center gap-2 rounded-full bg-[#FEE500] px-3 py-2.5">
-            <Image src="/chatIcon.svg" alt="챗아이콘" width={16} height={16} />
+            <Image src={chatIcon} alt="챗아이콘" width={16} height={16} />
             <span className="text-sm text-neutral-900">카카오 로그인</span>
           </div>
         </div>
@@ -139,7 +141,7 @@ async function MyPage({
                   isLoggedIn={!!session}
                   className="text-sm font-bold"
                 />
-                <Image src="/nextBlack.svg" alt="" width={8} height={12} />
+                <Image src={nextBlackIcon} alt="" width={8} height={12} />
               </div>
             )}
             <div className="pt-6">

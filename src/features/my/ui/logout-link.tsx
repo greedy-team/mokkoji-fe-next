@@ -5,6 +5,7 @@ import useLogout from '@/shared/hooks/useLogout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 
 import Image from 'next/image';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 
 export default function LogoutLink() {
   const logout = useLogout();
@@ -23,7 +24,7 @@ export default function LogoutLink() {
         className="mt-2 flex items-center gap-2 text-sm font-bold text-[#FF383C] hover:underline"
       >
         로그아웃
-        <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
+        <Image src={nextBlackIcon} alt="arrow" width={8} height={12} />
       </button>
 
       <ConfirmDialog

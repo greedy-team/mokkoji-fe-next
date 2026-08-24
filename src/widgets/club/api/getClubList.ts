@@ -48,7 +48,11 @@ async function getClubList({
     const client = isAuthenticated ? api : serverApi;
     const fetchOptions = isAuthenticated
       ? { searchParams, cache: 'no-store' as const }
-      : { searchParams, next: { tags: ['clubs'] } };
+      : {
+          searchParams,
+          cache: 'force-cache' as const,
+          next: { tags: ['clubs'] },
+        };
 
     const response = await client
       .get('clubs', fetchOptions)

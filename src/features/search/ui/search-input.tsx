@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import headerSearchIcon from '@/shared/assets/images/header/search.svg';
 import SaveClientInput from './save-client-input';
 
 function SearchInput() {
@@ -22,7 +23,7 @@ function SearchInput() {
             className="absolute top-1/2 right-2 -translate-y-1/2 pb-2"
           >
             <Image
-              src="/header/search.svg"
+              src={headerSearchIcon}
               alt="검색"
               width={20}
               height={20}

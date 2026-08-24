@@ -5,6 +5,7 @@ import Image from 'next/image';
 import useServerAction from '@/shared/hooks/useServerAction';
 import useLogout from '@/shared/hooks/useLogout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import deleteUser from '../api/deleteUser';
 
 export default function WithdrawButton() {
@@ -27,7 +28,7 @@ export default function WithdrawButton() {
         className="text-gray mt-2 flex items-center gap-2 text-sm font-bold hover:underline"
       >
         회원 탈퇴
-        <Image src="/nextBlack.svg" alt="arrow" width={8} height={12} />
+        <Image src={nextBlackIcon} alt="arrow" width={8} height={12} />
       </button>
 
       <ConfirmDialog

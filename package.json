@@ -67,7 +67,6 @@
     "require-in-the-middle": "^7.5.2",
     "sanitize-html": "^2.17.6",
     "tailwind-merge": "^3.3.1",
-    "to-do-pin": "0.0.41",
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
@@ -114,6 +113,7 @@
     "prettier-plugin-tailwindcss": "0.6.11",
     "storybook": "8.6.14",
     "tailwindcss": "^4",
+    "to-do-pin": "0.0.41",
     "tsx": "^4.20.5",
     "tw-animate-css": "^1.3.5",
     "typescript": "^5.8.3",

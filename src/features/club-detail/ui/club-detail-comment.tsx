@@ -3,8 +3,30 @@
 import { useState } from 'react';
 import { ClubComment } from '@/entities/club-detail/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import type { StaticImageData } from 'next/image';
+import chatProfile1Image from '@/shared/assets/images/chat/profile-1.webp';
+import chatProfile2Image from '@/shared/assets/images/chat/profile-2.webp';
+import chatProfile3Image from '@/shared/assets/images/chat/profile-3.webp';
+import chatProfile4Image from '@/shared/assets/images/chat/profile-4.webp';
+import chatProfile5Image from '@/shared/assets/images/chat/profile-5.webp';
+import chatProfile6Image from '@/shared/assets/images/chat/profile-6.webp';
+import chatProfile7Image from '@/shared/assets/images/chat/profile-7.webp';
+import chatProfile8Image from '@/shared/assets/images/chat/profile-8.webp';
+import chatProfile9Image from '@/shared/assets/images/chat/profile-9.webp';
 import ClubDetailCommentEdit from './club-detail-comment-edit';
 import CommentItem from './comment-item';
+
+const chatProfileImagesByNumber: Record<number, StaticImageData> = {
+  1: chatProfile1Image,
+  2: chatProfile2Image,
+  3: chatProfile3Image,
+  4: chatProfile4Image,
+  5: chatProfile5Image,
+  6: chatProfile6Image,
+  7: chatProfile7Image,
+  8: chatProfile8Image,
+  9: chatProfile9Image,
+};
 
 interface ClubDetailCommentProps {
   clubId: number;
@@ -31,7 +53,9 @@ export default function ClubDetailComment({
           >
             <Avatar className="size-12">
               <AvatarImage
-                src={`/chat/profile-${Math.max(comment.id % 10, 1)}.png`}
+                src={
+                  chatProfileImagesByNumber[Math.max(comment.id % 10, 1)].src
+                }
                 className="rounded-full"
                 alt="채팅 프로필"
               />

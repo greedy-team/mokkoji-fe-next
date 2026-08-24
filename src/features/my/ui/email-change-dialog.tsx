@@ -13,6 +13,7 @@ import { Button } from '@/shared/ui/button';
 import Input from '@/shared/ui/input';
 import cn from '@/shared/lib/utils';
 import Image from 'next/image';
+import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import useEmailEdit from '../../../entities/my/model/useEmailEdit';
 
 type EmailChangeDialogProps = {
@@ -50,7 +51,7 @@ export default function EmailChangeDialog({
       >
         <Button className={cn(triggerClassName)} variant="none" size="none">
           {triggerLabel}
-          <Image src="/nextBlack.svg" alt="edit" width={8} height={12} />
+          <Image src={nextBlackIcon} alt="edit" width={8} height={12} />
         </Button>
       </DialogTrigger>
 

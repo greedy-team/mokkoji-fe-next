@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import * as Dialog from '@radix-ui/react-dialog';
+import dashboardApproveCheckIcon from '@/shared/assets/images/dashboard/approve-check.svg';
 
 interface ApproveCompleteDialogProps {
   open: boolean;
@@ -17,7 +18,7 @@ function ApproveCompleteDialog({ open, onClose }: ApproveCompleteDialogProps) {
           <div className="flex w-[337px] flex-col items-center gap-6">
             <div className="flex flex-col items-center gap-[17px]">
               <Image
-                src="/dashboard/approve-check.svg"
+                src={dashboardApproveCheckIcon}
                 alt="승인 완료"
                 width={40}
                 height={40}

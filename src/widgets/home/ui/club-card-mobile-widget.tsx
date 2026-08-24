@@ -2,6 +2,9 @@ import ClubTextCard from '@/entities/home/ui/club-text-card';
 import RecruitTextCard from '@/entities/home/ui/recruit-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
+import mainClubCardImage from '@/shared/assets/images/main/clubcard.webp';
+import mainSampleClubCardImage from '@/shared/assets/images/main/sampleClubCard.webp';
+import mainSampleRecruitmentImage from '@/shared/assets/images/main/sampleRecruitment.webp';
 
 interface ClubCardMobileWidgetProps {
   universityName: string;
@@ -17,7 +20,7 @@ function ClubCardMobileWidget({ universityName }: ClubCardMobileWidgetProps) {
         <ClubTextCard universityName={universityName} />
         <AnimateOnView animation="reveal">
           <Image
-            src="/main/clubcard.png"
+            src={mainClubCardImage}
             alt="전체동아리 이미지"
             width={257}
             height={514}
@@ -28,7 +31,7 @@ function ClubCardMobileWidget({ universityName }: ClubCardMobileWidgetProps) {
         <RecruitTextCard />
         <AnimateOnView animation="reveal">
           <Image
-            src="/main/sampleClubCard.png"
+            src={mainSampleClubCardImage}
             alt="샘플카드 이미지"
             width={246}
             height={110}
@@ -36,7 +39,7 @@ function ClubCardMobileWidget({ universityName }: ClubCardMobileWidgetProps) {
         </AnimateOnView>
         <AnimateOnView animation="reveal">
           <Image
-            src="/main/sampleRecruitment.png"
+            src={mainSampleRecruitmentImage}
             alt="샘플모집공고 이미지"
             width={245}
             height={489}

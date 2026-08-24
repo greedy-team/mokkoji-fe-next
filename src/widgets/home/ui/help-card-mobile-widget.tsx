@@ -1,6 +1,7 @@
 import HelpTextCard from '@/entities/home/ui/help-text-card';
 import AnimateOnView from '@/features/home/util/animate-viewport';
 import Image from 'next/image';
+import mainSampleFaqImage from '@/shared/assets/images/main/sampleFaq.webp';
 
 function HelpCardMobileWidget() {
   return (
@@ -8,7 +9,7 @@ function HelpCardMobileWidget() {
       <HelpTextCard />
       <AnimateOnView animation="reveal">
         <Image
-          src="/main/sampleFaq.png"
+          src={mainSampleFaqImage}
           alt="faq 이미지"
           width={245}
           height={496}

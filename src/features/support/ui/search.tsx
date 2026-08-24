@@ -1,11 +1,12 @@
 import Image from 'next/image';
+import supportGhostImage from '@/shared/assets/images/support/ghost.webp';
 
 function Search() {
   return (
     <div className="flex w-full flex-col items-center">
       <header className="mb-20 flex items-center gap-2">
         <Image
-          src="/support/ghost.gif"
+          src={supportGhostImage}
           alt="고객센터"
           width={49}
           height={49}

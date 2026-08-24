@@ -5,7 +5,7 @@ import { getSession } from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import type { RecruitmentDetail } from '@/entities/club-detail/model/type';
 
-async function getRecruitDetail(recruitmentId: number) {
+async function getRecruitDetail(recruitmentId: number, clubId: number) {
   const session = await getSession();
   try {
     let response: ApiResponse<RecruitmentDetail>;
@@ -15,7 +15,7 @@ async function getRecruitDetail(recruitmentId: number) {
       response = await serverApi
         .get(`recruitments/${recruitmentId}`, {
           cache: 'force-cache',
-          next: { revalidate: 3600 },
+          next: { tags: [String(clubId)], revalidate: 3600 },
         })
         .json();
     }

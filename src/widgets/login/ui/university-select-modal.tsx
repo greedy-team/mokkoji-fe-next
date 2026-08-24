@@ -62,7 +62,7 @@ function UniversitySelectModal({
                 variant={isSelected ? 'optionsSelected' : 'options'}
                 size="none"
                 onClick={() => setSelected(code)}
-                className={`px-4 py-2.5 text-sm ${isSelected ? 'border-[#22CF64] text-[#22CF64]' : 'border-[#F8F8F8] bg-[#F8F8F8] text-[#8B95A1]'}`}
+                className={`px-4 py-2.5 text-sm ${isSelected ? 'border-primary-500 text-primary-500' : 'border-gray4 bg-gray4 text-gray'}`}
               >
                 {name}
               </Button>

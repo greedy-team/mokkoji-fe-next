@@ -33,8 +33,7 @@ async function searchClubs(params: SearchClubsParams) {
     const response = await serverApi
       .get('clubs/search', {
         searchParams,
-        cache: 'force-cache',
-        next: { tags: ['clubs-search'] },
+        cache: 'no-store',
       })
       .json<{ data: ClubSearchResponse }>();
 

@@ -21,17 +21,16 @@ All HTTP goes through a preconfigured ky instance in `shared/api/`.
 
 The question is not "does this endpoint need a token" but **"is this response shareable across users"**. The backend returns extra per-user fields when a token is present — `ClubType.isFavorite` is the canonical example — so the same endpoint yields shareable data anonymously and personal data authenticated.
 
-Endpoints that serve both audiences branch on the session and pick the cache policy to match:
+Endpoints that serve both audiences branch on the session to pick the client:
 
 ```ts
 const isAuthenticated = !!session?.accessToken;
 const client = isAuthenticated ? api : serverApi;
-const fetchOptions = isAuthenticated
-  ? { searchParams, cache: 'no-store' as const }
-  : { searchParams, next: { tags: ['clubs'] } };
 ```
 
-Personal responses are never cached — `cache: 'no-store'`. Anonymous responses are the only ones allowed into the shared cache. Reads that are personal by nature (`entities/my/*`) use `auth-api` + `no-store` unconditionally.
+Personal responses are never cached — `cache: 'no-store'`. Anonymous responses are the only ones *allowed* into the shared cache, but being allowed is not a reason to cache: see §5 for what disqualifies a read. Reads that are personal by nature (`entities/my/*`) use `auth-api` + `no-store` unconditionally.
+
+**The two branches must land on the same cache policy.** If the anonymous branch caches and the authenticated one does not, the same resource renders differently depending on whether the visitor is logged in. `getClubList` shipped that split in #706 and served stale recruitment status to logged-out users until #724 put both branches back on `no-store`.
 
 Reference: [getClubList.ts](../src/widgets/club/api/getClubList.ts).
 
@@ -140,25 +139,31 @@ The vocabulary is fixed. Do not invent a tag without adding it here:
 
 | Tag             | Covers                                     |
 | --------------- | ------------------------------------------ |
-| `clubs`         | club lists and club detail                 |
+| `clubs`         | club detail and the sitemap's club id sweep |
 | `users`         | user profile and account settings          |
 | `universities`  | the university list                        |
-| `clubs-search`  | club search results                        |
 | `String(clubId)` | everything scoped to one club — its detail and all of its recruitment reads |
 
-A mutation may burst several at once — `postClubRegister` bursts both `clubs` and `clubs-search`.
+The club list and club search are **not** on this table. They are `no-store` on both branches — see below.
 
 Recruitment mutations burst only `String(clubId)`, never a global `recruitments` tag. A global tag would clear every club's cache on every posting edit, which costs the most exactly during recruiting season when traffic peaks. Reads that cannot see a clubId take one as a parameter for this reason — see `getRecruitDetail`.
 
 `next: { revalidate: seconds }` alone is for data with **no** mutation path — `sitemap.ts`, the university list. If any Server Action bursts a tag that covers the resource, the read must carry that tag too. `revalidate` and `tags` combine; time-based expiry is not a substitute for invalidation.
 
-Before attaching a cache policy to a `serverApi` read, check three things:
+### Server-derived fields disqualify a read from caching
 
-1. Does a Server Action mutate this resource? If yes, `tags` is mandatory — `revalidate` alone serves stale data until it expires, no matter what the mutation does.
-2. Does that action actually call `revalidateTag` with the same tag? Verify both directions; each half is silent when its pair is missing.
-3. If only `revalidate` is set, is the resource genuinely fine to serve up to that many seconds stale?
+If any field in the response is computed by the backend from the **current time**, no tag can keep it correct. Nothing mutates when a deadline passes, so no `revalidateTag` fires, and the cached value stays frozen at whatever the clock said when it was first fetched.
 
-> **Known gap:** in Next 15 a fetch with `next: { tags }` but no `cache` or `revalidate` falls into `autoNoCache`, so no cache entry is created and the paired `revalidateTag` has nothing to burst. Existing tagged reads need `cache: 'force-cache'` (or a `revalidate` value) added. Tracked separately — do not copy the current call sites verbatim.
+`recruitStatus` is the case that bit us: `IMMINENT` and `CLOSED` are derived from `recruitEnd` versus now. A cached club list kept advertising closed recruitments as open. `no-store` is the fix, not a shorter `revalidate` — a bounded window still shows a closed posting as open for the length of that window, and the user who clicks through in that window is the one being harmed.
+
+Before attaching a cache policy to a `serverApi` read, check four things:
+
+1. Does any field derive from the current time? If yes, stop — the read is `no-store`.
+2. Does a Server Action mutate this resource? If yes, `tags` is mandatory — `revalidate` alone serves stale data until it expires, no matter what the mutation does.
+3. Does that action actually call `revalidateTag` with the same tag? Verify both directions; each half is silent when its pair is missing.
+4. If only `revalidate` is set, is the resource genuinely fine to serve up to that many seconds stale?
+
+> **Next 15 footgun:** a fetch with `next: { tags }` but no `cache` or `revalidate` falls into `autoNoCache`, so no cache entry is created and the paired `revalidateTag` has nothing to burst. When you find one, the fix is to answer the four questions above — not to reflexively add `cache: 'force-cache'`. #706 did the latter and turned a read that was silently uncached into a permanently cached one, which is how #724 happened.
 
 ## 6. react-query: keys live in `queries.ts`
 

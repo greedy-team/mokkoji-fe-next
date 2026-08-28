@@ -27,7 +27,6 @@ export async function postClubRegister(data: ClubRegisterRequest) {
       json: data,
     });
     revalidateTag('clubs');
-    revalidateTag('clubs-search');
 
     return { ok: true, message: '등록이 완료되었습니다.', status: 200 };
   } catch (e) {
@@ -47,7 +46,6 @@ export async function patchClubInfo(
     const payload = await response.json<ClubEditResponse['data']>();
 
     revalidateTag('clubs');
-    revalidateTag('clubs-search');
 
     return {
       ok: true,

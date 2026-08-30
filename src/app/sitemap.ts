@@ -30,7 +30,7 @@ function fetchClubPage(universityCode: string, page: number) {
 
 async function getClubIds(universityCode: string): Promise<number[]> {
   try {
-    const firstPageResponse = await fetchClubPage(universityCode, 0);
+    const firstPageResponse = await fetchClubPage(universityCode, 1);
     if (!firstPageResponse.data) return [];
 
     const { clubs, page } = firstPageResponse.data;
@@ -38,7 +38,7 @@ async function getClubIds(universityCode: string): Promise<number[]> {
 
     const remainingPages = Array.from(
       { length: page.totalPages - 1 },
-      (_, index) => index + 1,
+      (_, index) => index + 2,
     );
 
     const remainingPageResponses = await Promise.all(

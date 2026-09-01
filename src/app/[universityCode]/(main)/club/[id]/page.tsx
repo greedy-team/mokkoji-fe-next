@@ -18,10 +18,15 @@ export async function generateMetadata({
   const result = await getClubDetail(Number(id));
   const universityName = getUniversityName(universityCode);
 
+  // 상위 club/layout.tsx의 canonical(목록 URL)이 상속되므로 여기서 덮지 않으면
+  // 상세 페이지 전부가 색인에서 빠진다. 쿼리를 빼야 ?tab= 변형도 이 URL로 모인다.
+  const canonical = `https://mokkoji.site/${universityCode}/club/${id}`;
+
   if (!result.ok || !result.data) {
     return {
       title: `모꼬지 | ${universityName} 동아리`,
       description: `${universityName} 동아리 통합 플랫폼`,
+      alternates: { canonical },
     };
   }
 
@@ -33,10 +38,11 @@ export async function generateMetadata({
   return {
     title: `모꼬지 | ${club.name}`,
     description,
+    alternates: { canonical },
     openGraph: {
       title: `모꼬지 | ${club.name}`,
       description,
-      url: `https://mokkoji.site/${universityCode}/club/${id}`,
+      url: canonical,
       images: club.logo ? [club.logo] : ['/mokkojiBanner.png'],
     },
   };

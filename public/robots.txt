@@ -1,6 +1,6 @@
+# 비색인 페이지는 각 layout의 metadata.robots로 처리한다.
+# Disallow로 막으면 크롤러가 그 noindex를 읽지 못해 URL만 색인에 남는다.
 User-agent: *
-Disallow: /*/search
-Disallow: /*/club-register
-Disallow: /*/post-recruitment
+Allow: /
 
 Sitemap: https://mokkoji.site/sitemap.xml

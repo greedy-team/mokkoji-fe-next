@@ -2,6 +2,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import BottomNav from '@/shared/ui/bottom-nav';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function LoginLayout({
   children,

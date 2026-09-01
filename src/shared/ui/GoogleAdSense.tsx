@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Script from 'next/script';
 import {
   ADSENSE_CLIENT_ID,
   ADSENSE_SLOT,
@@ -48,6 +49,13 @@ export default function GoogleAdSense({
 
   return (
     <div className="flex justify-center py-2">
+      {/* 루트에서 전역 로드하면 로그인·마이페이지 등 콘텐츠 없는 화면까지 광고가 붙는다 */}
+      <Script
+        id="google-adsense"
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+      />
       <ins
         ref={containerRef}
         className="adsbygoogle block w-full max-w-[728px]"

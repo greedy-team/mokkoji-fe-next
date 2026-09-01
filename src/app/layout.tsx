@@ -9,7 +9,6 @@ import { AppSessionProvider } from '@/shared/lib/session-context';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { ADSENSE_CLIENT_ID } from '@/shared/lib/adsense';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 세종대 동아리',
@@ -61,11 +60,6 @@ export default function RootLayout({
     gtag('config', 'G-85PSBEJKQ2');
   `}
         </Script>
-        <Script
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-          strategy="lazyOnload"
-          crossOrigin="anonymous"
-        />
         <ClarityProvider />
       </head>
       <body className="scrollbar-hide">

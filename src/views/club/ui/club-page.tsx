@@ -4,6 +4,7 @@ import ItemListSkeletonLoading from '@/shared/ui/item-list-skeleton-loading';
 import ClubHeader from '@/widgets/club/ui/club-header';
 import ClubItemList from '@/widgets/club/ui/club-item-list';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
+import GoogleAdSense from '@/shared/ui/GoogleAdSense';
 
 function ClubPage({ universityCode }: { universityCode: string }) {
   return (
@@ -17,6 +18,7 @@ function ClubPage({ universityCode }: { universityCode: string }) {
           </Suspense>
         </div>
       </div>
+      <GoogleAdSense slotName="clubContentBottom" />
       <ScrollTopButton />
     </>
   );

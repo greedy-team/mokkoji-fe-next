@@ -1,7 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
-import GoogleAdSense from '@/shared/ui/GoogleAdSense';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';
 import QueryProvider from '@/shared/lib/QueryProvider';
@@ -51,7 +50,6 @@ export default async function MainLayout({
           <Header universityCode={universityCode} />
         </div>
         <main className="flex-1">{children}</main>
-        <GoogleAdSense slotName="mainLayoutBottom" />
         <Footer />
         <BottomNav />
       </div>

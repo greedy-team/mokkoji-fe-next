@@ -1,0 +1,8 @@
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
+
+[mcp_servers.discord-forum-mcp]
+command = "node"
+args = ["scripts/discord-forum-mcp.mjs"]
+startup_timeout_sec = 30

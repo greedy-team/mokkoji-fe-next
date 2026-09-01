@@ -1,3 +1,8 @@
+---
+name: design-system
+description: Mokkoji color tokens, typography classes, and state-color derivation. Use when writing or reviewing any color, typography, or hover/active/focus className in this repo — resolving a Figma color to a theme.css token, picking a typography class instead of a text-size/font-weight pair, or deriving hover and pressed states with the "one step lower" rule.
+---
+
 # Design System — Mokkoji Tokens & Rules
 
 Token definition location: `src/app/theme.css` (@theme block)

@@ -1,3 +1,8 @@
+---
+name: tailwind-css-patterns
+description: Tailwind CSS v4 implementation patterns established in this repo — @theme token usage, the cn helper, cva variants, mobile-first responsive, transitions, accessibility, overflow, and dark mode. Use when writing Tailwind classNames and the repo's existing pattern for the case is not obvious.
+---
+
 # Tailwind CSS Patterns — Implementation Pattern Reference
 
 This skill is a collection of patterns to reference when implementing with Tailwind CSS v4.

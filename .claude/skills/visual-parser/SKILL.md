@@ -1,3 +1,8 @@
+---
+name: visual-parser
+description: Turns a Figma export into an implementation plan. Use when a PNG mockup or Figma "Copy as CSS" text is the input for a component — parsing overall structure, identifying element types, inferring variants and unshown hover/focus states, and converting Figma px/rgba values into Tailwind tokens.
+---
+
 # Visual Parser — PNG + CSS Analysis Rules
 
 ## Input File Types

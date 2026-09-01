@@ -1,3 +1,8 @@
+---
+name: widget-composer
+description: FSD assembly rules for composing shared/ui into features/{domain}/ui Blocks and widgets/{domain}/ui Widgets. Use when deciding which FSD layer a component belongs to, mapping a Figma frame onto that hierarchy, designing Block vs Widget props, or handling loading/error/empty states in a widget.
+---
+
 # Widget Composer — FSD Hierarchical Assembly Rules
 
 ## 1. FSD 3-Layer Composite Structure

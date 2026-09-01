@@ -1,3 +1,8 @@
+---
+name: component-codegen
+description: Code generation standard for React components in this repo. Use when creating or modifying any .tsx component — deciding Server vs Client Component, writing a cva variant component, placing the file in the right FSD layer, naming it, and avoiding the repo's forbidden patterns.
+---
+
 # Component Codegen — Code Generation Standard
 
 ## 1. Server Component vs Client Component

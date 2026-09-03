@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import NavLink from '@/shared/ui/nav-Item';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 
 import { Club } from '@/entities/club/model/type';
 
@@ -89,7 +90,7 @@ function CardSlider({ clubs }: CardSliderProps) {
                     'line-clamp-2 overflow-hidden text-ellipsis text-gray-600 transition-all duration-500',
                   )}
                 >
-                  {club.description}
+                  {stripHtmlTags(club.description)}
                 </div>
               </div>
             </NavLink>

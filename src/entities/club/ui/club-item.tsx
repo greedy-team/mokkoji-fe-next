@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { RecruitStatus } from '@/shared/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 import PeriodSection from '../../club-detail/ui/period-section';
 
 interface ClubItemProps {
@@ -77,7 +78,7 @@ function ClubItem({
       </div>
 
       <p className="weight-600 overflow-hidden text-[14px] break-words text-ellipsis whitespace-nowrap text-[#474747]">
-        {description}
+        {stripHtmlTags(description)}
       </p>
     </div>
   );

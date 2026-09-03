@@ -22,6 +22,7 @@ Before modifying application code, read the rules that apply to the task:
 | Async UI | `react-error-boundary` through `shared/ui/AsyncBoundary` |
 | User feedback | `react-toastify` through `useServerAction` |
 | Testing | Playwright and MSW |
+| Deploy | Vercel for both production and previews; `Dockerfile` and `deploy-*docker*` workflows are unused |
 
 ## Architecture
 

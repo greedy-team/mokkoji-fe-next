@@ -1,7 +1,6 @@
 ---
-description: PR을 생성한다 (--draft 옵션으로 draft PR 가능)
-argument-hint: [--draft (선택)]
-allowed-tools: Bash, Read, Grep, Glob
+name: create-pr
+description: Draft and create a mokkoji-fe-next pull request from the current branch after explicit approval.
 ---
 
 # PR 생성 워크플로우
@@ -19,7 +18,7 @@ git log --oneline develop..HEAD
 git diff develop...HEAD --stat
 ```
 
-- 커밋되지 않은 변경사항이 있으면 사용자에게 알리고 `/commit`을 먼저 실행할지 확인한다.
+- 커밋되지 않은 변경사항이 있으면 사용자에게 알리고 `$commit`을 먼저 실행할지 확인한다.
 - `develop..HEAD`가 비어 있으면 PR로 만들 커밋이 없다는 뜻이다. 멈추고 알린다.
 
 ## 2. PR 본문 작성 — 레포 템플릿을 그대로 따른다
@@ -67,13 +66,13 @@ perf: 정적 자산을 해시 URL로 전환해 영구 캐싱 적용
 
 **제목과 본문 초안을 사용자에게 보여주고 멈춘다.** 수정 요청이 오면 반영해 다시 보여준다.
 
-승인되면:
+승인되면 먼저 브랜치를 push한다:
 
 ```bash
 git push -u origin {현재브랜치명}
 ```
 
-`$ARGUMENTS`에 `--draft`가 있으면 `--draft`를 붙여 생성한다:
+사용자가 스킬 호출과 함께 전달한 인수에 `--draft`가 있으면 draft로 생성한다. 사용 가능한 GitHub 연동을 우선 사용하고, 없으면 아래 `gh` 명령을 사용한다:
 
 ```bash
 gh pr create --repo greedy-team/mokkoji-fe-next --base develop \
@@ -91,4 +90,4 @@ EOF
 - `git push --force`는 절대 사용하지 않는다.
 - PR 생성 전 반드시 사용자의 승인을 받는다.
 - base 브랜치는 항상 `develop`이다. `main`으로 PR을 열지 않는다.
-- `gh` 인증이 안 되어 있으면(`gh auth status` 실패) 사용자에게 `gh auth login`을 안내하고 멈춘다.
+- GitHub 연동을 사용할 수 없고 `gh` 인증도 실패하면 사용자에게 `gh auth login`을 안내하고 멈춘다.

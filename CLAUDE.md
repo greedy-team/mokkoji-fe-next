@@ -26,6 +26,7 @@ Sanctioned choice per concern. The full dependency list is `package.json` — th
 | Date | dayjs |
 | E2E / mocking | Playwright / MSW |
 | Error tracking | @sentry/nextjs |
+| Deploy | Vercel — 프로덕션·프리뷰 모두. `Dockerfile`과 `deploy-*docker*` 워크플로는 미사용 |
 
 ## Architecture: FSD (Feature-Sliced Design)
 

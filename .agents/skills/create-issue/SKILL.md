@@ -1,23 +1,22 @@
 ---
-description: GitHub 이슈를 생성하고 연결된 브랜치를 만든다
-argument-hint: [이슈 제목 초안 (선택)]
-allowed-tools: Bash, Read
+name: create-issue
+description: Draft a repository-template GitHub issue and create its linked branch after explicit approval.
 ---
 
 # GitHub 이슈 생성 + 브랜치 연결 워크플로우
 
 - 레포지토리: `greedy-team/mokkoji-fe-next`
 - 브랜치 컨벤션: `{이슈번호}-{타입}-{짧은-영문-설명}` (예: `541-feat-club-bookmark-api`)
-- **브랜치 베이스**: 항상 `develop`에서 분기한다. (별도의 사용자 요청이 없다면, 현재 체크아웃된 브랜치나 `main`에서 분기하지 않는다)
+- **기본 브랜치 베이스**: `develop`. 사용자가 다른 베이스를 명시하면 해당 브랜치를 확인한 뒤 그 요청을 우선한다.
 
 ## 컨텍스트 확인
 
 이 커맨드는 두 가지 방식으로 실행된다:
 
-1. **단독 실행** — 사용자가 `/create_issue`를 직접 입력한 경우. 이슈 제목·내용·브랜치 타입을 대화로 수집한다.
+1. **단독 실행** — 사용자가 `$create-issue`를 직접 입력한 경우. 이슈 제목·내용·브랜치 타입을 대화로 수집한다.
 2. **plan_from_discord / plan_from_qa 연계** — 대화 컨텍스트에 이미 플랜이 있는 경우. 해당 플랜 내용을 그대로 활용한다.
 
-`$ARGUMENTS`가 있으면 이슈 제목 초안으로 사용한다.
+`사용자가 스킬 호출과 함께 전달한 인수`가 있으면 이슈 제목 초안으로 사용한다.
 
 ## 1. 템플릿 선택
 
@@ -43,13 +42,16 @@ allowed-tools: Bash, Read
 템플릿별 채우는 법:
 
 - **feature_request** — `## 어떤 작업인가요?`에 작업 목적을 1~3줄로. `## 작업 상세 내용`은 `- [ ]` 체크박스로 쪼갠다. 체크박스는 **검증 가능한 단위**로 나눈다 (파일 단위가 아니라 작업 단위).
-- **bug_report** — `## 어떤 상황에서 발생한 버그인가요?`는 가능하면 Given-When-Then으로. `## 예상 결과`에 정상 동작을 쓴다.
+- **bug_report** — `## 어떤 버그인가요?`에 증상을 요약한다. `## 어떤 상황에서 발생한 버그인가요?`는 가능하면 Given-When-Then으로 쓰고, `## 예상 결과`에 정상 동작을 쓴다.
 
+## 3. 이슈 제목 작성
+
+제목은 `{type}: {한국어 요약}` 형식으로 작성하며 이슈 번호를 붙이지 않는다.
 
 ```
 # 올바른 예
 fix: 동아리 목록 캐시로 인한 모집 상태 불일치 수정
-refactor: Claude Code 커맨드를 레포 템플릿 기준으로 정비
+refactor: Codex 하네스를 레포 템플릿 기준으로 정비
 
 # 잘못된 예
 [#724] fix: 캐시 수정     ← 브랜치 번호를 이슈에 쓰지 않는다
@@ -60,7 +62,7 @@ refactor: Claude Code 커맨드를 레포 템플릿 기준으로 정비
 
 ## 4. 이슈 생성
 
-승인되면 실행한다:
+승인되면 사용 가능한 GitHub 연동의 이슈 생성 기능을 우선 사용한다. 해당 기능이 없으면 아래 `gh` 명령을 사용한다:
 
 ```bash
 gh issue create --repo greedy-team/mokkoji-fe-next \
@@ -91,21 +93,21 @@ EOF
 - `{이슈번호}-{타입}-{짧은-영문-설명}` 형식의 브랜치명을 제안한다.
   - 영문 설명은 kebab-case, 3단어 이내로 (예: `club-bookmark-api`)
 - 사용자에게 보여주고 확인받는다.
-- 승인되면 **반드시 `develop`에서 분기**한다 (최신 상태로 갱신 후 생성):
+- 승인되면 선택된 베이스 브랜치에서 분기한다. 기본값이 `develop`이면 최신 상태로 갱신 후 생성한다:
   ```bash
-  git checkout develop
+  git switch develop
   git pull origin develop
-  git checkout -b {브랜치명}
+  git switch -c {브랜치명}
   ```
 - 브랜치 생성 및 전환 완료를 알린다.
 
-> 이후 `/commit`은 이 브랜치명에서 이슈 번호를 뽑아 `[#{이슈번호}] {type}: {subject}` 헤더를 만든다.
+> 이후 `$commit`은 이 브랜치명에서 이슈 번호를 뽑아 `[#{이슈번호}] {type}: {subject}` 헤더를 만든다.
 > 브랜치명이 컨벤션을 벗어나면 커밋 컨벤션도 함께 깨지므로 형식을 지킨다.
 
 ## 안전 규칙
 
-- `gh issue create`와 `git checkout -b`는 **사용자의 명시적 확인 없이는 절대 실행하지 않는다.**
-- 브랜치는 **항상 `develop`에서 분기한다.** 다른 브랜치에서 분기하면 머지되지 않은 커밋이 섞이므로 금지.
+- GitHub 이슈 생성과 `git switch -c`는 **사용자의 명시적 확인 없이는 절대 실행하지 않는다.**
+- 기본적으로 `develop`에서 분기한다. 사용자가 다른 베이스를 명시한 경우에만 그 브랜치에서 분기한다.
 - 이미 같은 이름의 브랜치가 존재하면 사용자에게 알리고 다른 이름을 제안한다.
-- 커밋되지 않은 변경사항이 있는 상태에서 `git checkout develop`을 하면 작업이 섞일 수 있다. `git status`로 먼저 확인하고, 변경사항이 있으면 사용자에게 알린다.
-- `gh` 인증이 안 되어 있으면(`gh auth status` 실패) 사용자에게 `gh auth login`을 안내하고 멈춘다.
+- 커밋되지 않은 변경사항이 있는 상태에서 `git switch develop`을 하면 작업이 섞일 수 있다. `git status`로 먼저 확인하고, 변경사항이 있으면 사용자에게 알린다.
+- GitHub 연동을 사용할 수 없고 `gh` 인증도 실패하면 사용자에게 `gh auth login`을 안내하고 멈춘다.

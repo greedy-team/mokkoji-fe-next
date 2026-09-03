@@ -14,7 +14,7 @@ for (const line of readFileSync(resolve(root, ".env.discord"), "utf8").split("\n
 const child = spawn(
   process.execPath,
   [resolve(root, "node_modules/discord-forum-mcp/build/index.js")],
-  { env: { ...process.env, ...env }, stdio: "inherit" }
+  { env: { ...process.env, ...env }, stdio: "inherit" },
 );
 
 child.on("exit", (code) => process.exit(code ?? 0));

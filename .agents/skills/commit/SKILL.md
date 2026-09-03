@@ -1,7 +1,6 @@
 ---
-description: 변경사항을 커밋한다
-argument-hint: [커밋 대상 힌트 (선택)]
-allowed-tools: Bash, Read, Grep, Glob
+name: commit
+description: Create repository-compliant git commits when the user asks to commit changes in mokkoji-fe-next.
 ---
 
 # 커밋 워크플로우
@@ -21,7 +20,7 @@ git log --oneline -5
 
 - `git add -A`나 `git add .`는 **절대 사용하지 않는다.** 항상 파일을 명시해서 스테이징한다.
 - 변경된 파일을 분석해 **작업 단위별로** 스테이징한다.
-- `.env*`, `credentials`, `.claude/settings.local.json` 등 민감·개인 파일은 제외한다.
+- `.env*`, `credentials`, 개인 에이전트 설정 파일 등 민감·개인 파일은 제외한다.
 
 ## 3. 커밋 메시지 작성
 
@@ -90,4 +89,4 @@ EOF
 - 커밋 전 반드시 `git status`로 스테이징 내용을 확인한다.
 - hook 실패 시 원인을 파악하고 수정한 뒤 **새 커밋**을 만든다. `--amend`하지 않는다.
 - `--no-verify`는 사용하지 않는다.
-- `develop`·`main`에 직접 커밋하지 않는다. 해당 브랜치라면 사용자에게 알리고 `/create_issue`로 브랜치를 먼저 만든다.
+- `develop`·`main`에 직접 커밋하지 않는다. 해당 브랜치라면 사용자에게 알리고 `$create-issue`로 브랜치를 먼저 만든다.

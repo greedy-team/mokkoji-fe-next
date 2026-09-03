@@ -2,7 +2,7 @@
   "mcpServers": {
     "discord-forum-mcp": {
       "command": "node",
-      "args": [".claude/discord-forum-mcp.mjs"]
+      "args": ["scripts/discord-forum-mcp.mjs"]
     }
   }
 }

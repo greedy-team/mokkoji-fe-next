@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable import/no-extraneous-dependencies */
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -80,12 +80,17 @@ const ALIGN_OPTIONS = [
 
 interface ClubDescriptionEditorProps {
   onChange?: (html: string, isEmpty: boolean) => void;
+  initialContent?: string;
 }
 
-function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
+function ClubDescriptionEditor({
+  onChange,
+  initialContent,
+}: ClubDescriptionEditorProps) {
   const [styleOpen, setStyleOpen] = useState(false);
   const [alignOpen, setAlignOpen] = useState(false);
   const [, rerender] = useState(0);
+  const hasAppliedInitialContent = useRef(false);
 
   const editor = useEditor({
     extensions: [
@@ -106,6 +111,13 @@ function ClubDescriptionEditor({ onChange }: ClubDescriptionEditorProps) {
       },
     },
   });
+
+  useEffect(() => {
+    if (!editor || hasAppliedInitialContent.current || !initialContent) return;
+
+    hasAppliedInitialContent.current = true;
+    editor.commands.setContent(initialContent);
+  }, [editor, initialContent]);
 
   const isEmpty = !editor || editor.isEmpty;
 

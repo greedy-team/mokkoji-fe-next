@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
 import useServerAction from '@/shared/hooks/useServerAction';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import useClubRegisterForm from '@/features/admin-club-description/util/useClubRegisterForm';
 import { postClubRegister } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
@@ -26,10 +27,20 @@ function CreateFlowContent() {
     handleBlur,
     isRegisterInfoValid,
     validateAll,
+    setFormData,
   } = useClubRegisterForm();
 
+  const clearDraft = useFormDraft({
+    key: 'admin-club-description-create',
+    value: formData,
+    onRestore: setFormData,
+  });
+
   const { mutate, isPending } = useServerAction(postClubRegister, {
-    onSuccess: () => flow.complete(),
+    onSuccess: () => {
+      clearDraft();
+      flow.complete();
+    },
   });
 
   const handleSubmit = async () => {

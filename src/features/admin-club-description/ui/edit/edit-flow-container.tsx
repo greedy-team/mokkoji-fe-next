@@ -7,6 +7,12 @@ import ky from 'ky';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useFormDraft from '@/shared/hooks/useFormDraft';
+import {
+  deserializeFile,
+  serializeFile,
+  type SerializedFile,
+} from '@/shared/lib/formDraftStorage';
 import convertImageToWebp, {
   LOGO_MAX_DIMENSION,
 } from '@/shared/lib/convertImageToWebp';
@@ -23,6 +29,11 @@ import StepClubDescription from '../steps/step-club-description';
 interface ClubEditFlowContainerProps {
   clubInfo: ClubInfoType;
   clubId: number;
+}
+
+interface ClubDescriptionEditDraft {
+  formData: ReturnType<typeof useClubForm>['formData'];
+  logo: SerializedFile | null;
 }
 
 function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
@@ -45,6 +56,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
     isBasicInfoValid,
     isDescriptionValid,
     handleNextStep,
+    setFormData,
   } = useClubForm({
     onNextStep: flow.nextStep,
     initialData: initialFormData,
@@ -52,7 +64,23 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(clubInfo.logo ?? null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoDraft, setLogoDraft] = useState<SerializedFile | null>(null);
   const [completedClubId, setCompletedClubId] = useState<number | null>(null);
+
+  const clearDraft = useFormDraft<ClubDescriptionEditDraft>({
+    key: `admin-club-description-edit:${clubId}`,
+    value: { formData, logo: logoDraft },
+    onRestore: (draft) => {
+      setFormData(draft.formData);
+
+      if (draft.logo) {
+        const file = deserializeFile(draft.logo);
+        setLogoDraft(draft.logo);
+        setLogoFile(file);
+        setPreview(URL.createObjectURL(file));
+      }
+    },
+  });
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -62,6 +90,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
     const imageUrl = URL.createObjectURL(webpFile);
     setPreview(imageUrl);
     setLogoFile(webpFile);
+    setLogoDraft(await serializeFile(webpFile));
     handleChange('logo', webpFile.name);
   };
 
@@ -126,6 +155,7 @@ function EditFlowContent({ clubInfo, clubId }: ClubEditFlowContainerProps) {
       setCompletedClubId(res.data.data.id);
     }
 
+    clearDraft();
     flow.setSubmitting(false);
     flow.complete();
     toast.success('동아리 정보가 수정되었습니다!');

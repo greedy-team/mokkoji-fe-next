@@ -7,20 +7,29 @@ import ClubDescriptionEditor from '@/shared/ui/ClubDescriptionEditor';
 interface Props {
   onSubmit: (description: string) => void;
   isSubmitting: boolean;
+  initialContent?: string;
+  onContentChange?: (html: string) => void;
 }
 
-function ClubCreateDescriptionStep({ onSubmit, isSubmitting }: Props) {
-  const [content, setContent] = useState('');
-  const [isEmpty, setIsEmpty] = useState(true);
+function ClubCreateDescriptionStep({
+  onSubmit,
+  isSubmitting,
+  initialContent,
+  onContentChange,
+}: Props) {
+  const [content, setContent] = useState(initialContent ?? '');
+  const [isEmpty, setIsEmpty] = useState(!initialContent);
 
   return (
     <div className="flex flex-col gap-6 py-8">
       <h2 className="text-base font-bold">동아리 소개</h2>
 
       <ClubDescriptionEditor
+        initialContent={initialContent}
         onChange={(html, empty) => {
           setContent(html);
           setIsEmpty(empty);
+          onContentChange?.(html);
         }}
       />
 

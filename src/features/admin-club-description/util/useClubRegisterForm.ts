@@ -31,6 +31,16 @@ function useClubRegisterForm() {
     REGISTER_FIELDS.forEach(handleBlur);
   };
 
+  const setFormData = (data: Partial<ClubFormData>) => {
+    Object.entries(data).forEach(([name, value]) => {
+      dispatch({
+        type: 'UPDATE_FIELD',
+        name: name as keyof ClubFormData,
+        value: value as string,
+      });
+    });
+  };
+
   return {
     formData,
     errors,
@@ -38,6 +48,7 @@ function useClubRegisterForm() {
     handleBlur,
     isRegisterInfoValid,
     validateAll,
+    setFormData,
   };
 }
 

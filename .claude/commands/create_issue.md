@@ -91,21 +91,23 @@ EOF
 - `{이슈번호}-{타입}-{짧은-영문-설명}` 형식의 브랜치명을 제안한다.
   - 영문 설명은 kebab-case, 3단어 이내로 (예: `club-bookmark-api`)
 - 사용자에게 보여주고 확인받는다.
-- 승인되면 **반드시 `develop`에서 분기**한다 (최신 상태로 갱신 후 생성):
+- 승인되면 **`gh issue develop`으로 이슈에 연결된 브랜치를 만든다.** `git checkout -b`를 쓰지 않는다:
   ```bash
-  git checkout develop
-  git pull origin develop
-  git checkout -b {브랜치명}
+  gh issue develop {이슈번호} --repo greedy-team/mokkoji-fe-next \
+    --base develop --name {브랜치명} --checkout
   ```
 - 브랜치 생성 및 전환 완료를 알린다.
+
+> `git checkout -b`로 만든 브랜치는 이름이 같아도 이슈에 연결되지 않는다. 이슈 화면에 개발 내역이 뜨지 않고, PR과 이슈의 연결도 나중에 수동으로 붙여야 한다.
+> 이미 연결 없이 만들어버렸다면 커밋 전에 `git branch -D`로 지우고 `gh issue develop`으로 다시 만든다.
 
 > 이후 `/commit`은 이 브랜치명에서 이슈 번호를 뽑아 `[#{이슈번호}] {type}: {subject}` 헤더를 만든다.
 > 브랜치명이 컨벤션을 벗어나면 커밋 컨벤션도 함께 깨지므로 형식을 지킨다.
 
 ## 안전 규칙
 
-- `gh issue create`와 `git checkout -b`는 **사용자의 명시적 확인 없이는 절대 실행하지 않는다.**
-- 브랜치는 **항상 `develop`에서 분기한다.** 다른 브랜치에서 분기하면 머지되지 않은 커밋이 섞이므로 금지.
+- `gh issue create`와 `gh issue develop`은 **사용자의 명시적 확인 없이는 절대 실행하지 않는다.**
+- 브랜치는 **항상 `develop`에서 분기한다** (`--base develop`). 다른 브랜치에서 분기하면 머지되지 않은 커밋이 섞이므로 금지.
 - 이미 같은 이름의 브랜치가 존재하면 사용자에게 알리고 다른 이름을 제안한다.
-- 커밋되지 않은 변경사항이 있는 상태에서 `git checkout develop`을 하면 작업이 섞일 수 있다. `git status`로 먼저 확인하고, 변경사항이 있으면 사용자에게 알린다.
+- 커밋되지 않은 변경사항이 있는 상태에서 `--checkout`으로 브랜치를 전환하면 작업이 섞일 수 있다. `git status`로 먼저 확인하고, 변경사항이 있으면 사용자에게 알린다.
 - `gh` 인증이 안 되어 있으면(`gh auth status` 실패) 사용자에게 `gh auth login`을 안내하고 멈춘다.

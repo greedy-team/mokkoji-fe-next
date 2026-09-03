@@ -8,8 +8,8 @@ import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 const BASE_URL = 'https://mokkoji.site';
 const CLUB_PAGE_SIZE = 100;
 
-// Dockerfile이 NEXT_PUBLIC_API_URL을 빌드 ARG로 받지 않아, 빌드 타임 생성이면
-// clubs 조회가 전부 실패해 동아리 상세 URL이 통째로 누락된다.
+// 기본값인 빌드 타임 생성이면 빌드 한 번의 clubs 조회 실패가 빈 sitemap으로 굳어
+// 다음 배포까지 복구되지 않는다. 요청 시점 생성으로 두어 스스로 복구되게 한다.
 export const dynamic = 'force-dynamic';
 
 const UNIVERSITY_STATIC_PATHS = [

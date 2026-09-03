@@ -8,16 +8,11 @@ import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 const BASE_URL = 'https://mokkoji.site';
 const CLUB_PAGE_SIZE = 100;
 
-// 기본값인 빌드 타임 생성이면 빌드 한 번의 clubs 조회 실패가 빈 sitemap으로 굳어
-// 다음 배포까지 복구되지 않는다. 요청 시점 생성으로 두어 스스로 복구되게 한다.
-export const dynamic = 'force-dynamic';
-
 const UNIVERSITY_STATIC_PATHS = [
   { path: '', changeFrequency: 'daily', priority: 1.0 },
   { path: '/club', changeFrequency: 'daily', priority: 1.0 },
 ] as const;
 
-// 학교와 무관하게 본문이 같아, 각 페이지의 canonical이 가리키는 사본만 싣는다
 const DEDUPED_STATIC_PATHS = [
   { path: '/support', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/privacy-policy', changeFrequency: 'monthly', priority: 0.5 },
@@ -38,7 +33,6 @@ function fetchClubPage(universityCode: string, page: number) {
     .json<ApiResponse<ClubsResponse>>();
 }
 
-// 모집공고가 없으면 상세 페이지가 본문 없이 안내 문구만 렌더하므로 색인 요청 대상에서 뺀다
 function hasRecruitment(club: Club): boolean {
   return club.recruitmentPreviewResponse !== null;
 }
@@ -116,6 +110,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
-  // 루트는 미들웨어가 기본 학교 홈으로 리다이렉트하므로 최종 URL만 싣는다
   return [...universityPages, ...dedupedPages];
 }

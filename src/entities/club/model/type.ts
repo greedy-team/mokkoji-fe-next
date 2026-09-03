@@ -1,5 +1,4 @@
 import { RecruitStatus, Pagination } from '@/shared/model/type';
-import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 
 export type RecruitmentStatus = 'BEFORE' | 'CLOSED' | 'OPEN';
 
@@ -18,18 +17,6 @@ export interface Club {
   logo?: string;
   isFavorite: boolean;
   recruitmentPreviewResponse: RecruitmentPreviewResponse | null;
-}
-
-export interface ClubRaw extends Omit<Club, 'isFavorite'> {
-  favorite: boolean;
-}
-
-export function mapClub({ favorite, ...rest }: ClubRaw): Club {
-  return {
-    ...rest,
-    description: stripHtmlTags(rest.description),
-    isFavorite: favorite,
-  };
 }
 
 export interface Recruitment {

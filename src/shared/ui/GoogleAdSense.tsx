@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Script from 'next/script';
 import {
   ADSENSE_CLIENT_ID,
   ADSENSE_SLOT,
@@ -48,6 +49,12 @@ export default function GoogleAdSense({
 
   return (
     <div className="flex justify-center py-2">
+      <Script
+        id="google-adsense"
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+      />
       <ins
         ref={containerRef}
         className="adsbygoogle block w-full max-w-[728px]"

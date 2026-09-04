@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /*/search
-Disallow: /*/club-register
-Disallow: /*/post-recruitment
+Allow: /
 
 Sitemap: https://mokkoji.site/sitemap.xml

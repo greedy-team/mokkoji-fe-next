@@ -13,6 +13,7 @@ export async function generateMetadata({
   return {
     title: `모꼬지 | ${universityName} 동아리 고객센터`,
     description: `${universityName} 동아리 고객센터`,
+    alternates: { canonical: 'https://mokkoji.site/sejong/support' },
     openGraph: {
       title: `모꼬지 | ${universityName} 동아리 고객센터`,
       description: `${universityName} 동아리 고객센터`,

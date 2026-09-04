@@ -18,10 +18,13 @@ export async function generateMetadata({
   const result = await getClubDetail(Number(id));
   const universityName = getUniversityName(universityCode);
 
+  const canonical = `https://mokkoji.site/${universityCode}/club/${id}`;
+
   if (!result.ok || !result.data) {
     return {
       title: `모꼬지 | ${universityName} 동아리`,
       description: `${universityName} 동아리 통합 플랫폼`,
+      alternates: { canonical },
     };
   }
 
@@ -33,10 +36,11 @@ export async function generateMetadata({
   return {
     title: `모꼬지 | ${club.name}`,
     description,
+    alternates: { canonical },
     openGraph: {
       title: `모꼬지 | ${club.name}`,
       description,
-      url: `https://mokkoji.site/${universityCode}/club/${id}`,
+      url: canonical,
       images: club.logo ? [club.logo] : ['/mokkojiBanner.png'],
     },
   };

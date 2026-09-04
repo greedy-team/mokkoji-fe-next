@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { ApiResponse } from '@/shared/model/type';
-import { ClubsResponse } from '@/widgets/club/model/type';
+import { Club, ClubsResponse } from '@/widgets/club/model/type';
 import serverApi from '@/shared/api/server-api';
 import { universityDisplayName } from '@/shared/lib/universityMeta';
 import { toUrlCode } from '@/shared/lib/urlCodeConverter';
@@ -11,9 +11,14 @@ const CLUB_PAGE_SIZE = 100;
 const UNIVERSITY_STATIC_PATHS = [
   { path: '', changeFrequency: 'daily', priority: 1.0 },
   { path: '/club', changeFrequency: 'daily', priority: 1.0 },
+] as const;
+
+const DEDUPED_STATIC_PATHS = [
   { path: '/support', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/privacy-policy', changeFrequency: 'monthly', priority: 0.5 },
 ] as const;
+
+const CANONICAL_UNIVERSITY_CODE = 'sejong';
 
 function fetchClubPage(universityCode: string, page: number) {
   return serverApi
@@ -28,13 +33,17 @@ function fetchClubPage(universityCode: string, page: number) {
     .json<ApiResponse<ClubsResponse>>();
 }
 
+function hasRecruitment(club: Club): boolean {
+  return club.recruitmentPreviewResponse !== null;
+}
+
 async function getClubIds(universityCode: string): Promise<number[]> {
   try {
     const firstPageResponse = await fetchClubPage(universityCode, 1);
     if (!firstPageResponse.data) return [];
 
     const { clubs, page } = firstPageResponse.data;
-    const allIds = clubs.map((club) => club.id);
+    const allIds = clubs.filter(hasRecruitment).map((club) => club.id);
 
     const remainingPages = Array.from(
       { length: page.totalPages - 1 },
@@ -48,11 +57,14 @@ async function getClubIds(universityCode: string): Promise<number[]> {
     );
 
     remainingPageResponses.forEach((pageResponse) => {
-      pageResponse.data?.clubs.forEach((club) => allIds.push(club.id));
+      pageResponse.data?.clubs
+        .filter(hasRecruitment)
+        .forEach((club) => allIds.push(club.id));
     });
 
     return allIds;
-  } catch {
+  } catch (error) {
+    console.error(`[sitemap] ${universityCode} 동아리 목록 조회 실패`, error);
     return [];
   }
 }
@@ -89,13 +101,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [...staticPages, ...clubPages];
   });
 
-  return [
-    {
-      url: `${BASE_URL}/`,
+  const dedupedPages: MetadataRoute.Sitemap = DEDUPED_STATIC_PATHS.map(
+    ({ path, changeFrequency, priority }) => ({
+      url: `${BASE_URL}/${CANONICAL_UNIVERSITY_CODE}${path}`,
       lastModified,
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    ...universityPages,
-  ];
+      changeFrequency,
+      priority,
+    }),
+  );
+
+  return [...universityPages, ...dedupedPages];
 }

@@ -5,6 +5,7 @@ import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ClubDetailTabs from '@/widgets/club-detail/ui/club-detail-tabs';
 import getRecentRecruitDetail from '@/views/club/api/getRecentRecruitDetail';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
+import GoogleAdSense from '@/shared/ui/GoogleAdSense';
 import getClubRecruitments from '../api/getClubRecruitments';
 import getRecruitDetail from '../api/getRecruitDetail';
 
@@ -69,6 +70,7 @@ async function ClubDetailPage({ params, searchParams }: ClubDetailPageProps) {
           universityCode={universityCode}
           historySlot={historySlot}
         />
+        <GoogleAdSense slotName="clubContentBottom" />
       </div>
     </>
   );

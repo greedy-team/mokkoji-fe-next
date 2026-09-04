@@ -3,6 +3,7 @@ import QueryProvider from '@/shared/lib/QueryProvider';
 
 export const metadata: Metadata = {
   title: '모꼬지 | 총동연 대시보드',
+  robots: { index: false, follow: false },
 };
 
 const adminQueryOptions = {

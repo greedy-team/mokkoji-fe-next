@@ -13,9 +13,7 @@ export async function generateMetadata({
   return {
     title: `모꼬지 | ${universityName} 동아리 즐겨찾기`,
     description: `${universityName} 동아리 즐겨찾기`,
-    alternates: {
-      canonical: `https://mokkoji.site/${universityCode}/favorite`,
-    },
+    robots: { index: false, follow: false },
     openGraph: {
       title: `모꼬지 | ${universityName} 동아리 즐겨찾기`,
       description: `${universityName} 동아리 즐겨찾기`,

@@ -14,6 +14,7 @@ export async function generateMetadata({
   return {
     title: `모꼬지 | ${universityName} 동아리 모집 공고 작성`,
     description: `${universityName} 동아리 모집 공고 작성 페이지`,
+    robots: { index: false, follow: false },
     openGraph: {
       title: `모꼬지 | ${universityName} 동아리 모집 공고 작성`,
       description: `${universityName} 동아리 모집 공고 작성 페이지`,

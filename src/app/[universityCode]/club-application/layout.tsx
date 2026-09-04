@@ -6,6 +6,7 @@ import { type ReactNode } from 'react';
 export const metadata: Metadata = {
   title: '모꼬지 | 동아리 신청',
   description: '세종대 동아리 신청 페이지',
+  robots: { index: false, follow: false },
   openGraph: {
     title: '모꼬지 | 동아리 신청',
     description: '세종대 동아리 신청 페이지',

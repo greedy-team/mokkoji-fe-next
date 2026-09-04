@@ -1,6 +1,10 @@
 import Link from 'next/link';
 
-function Footer() {
+interface FooterProps {
+  universityCode: string;
+}
+
+function Footer({ universityCode }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -17,7 +21,10 @@ function Footer() {
         >
           버그 제보
         </a>
-        <Link href="/privacy-policy" className="text-primary-500 underline">
+        <Link
+          href={`/${universityCode}/privacy-policy`}
+          className="text-primary-500 underline"
+        >
           개인정보처리방침
         </Link>
       </div>

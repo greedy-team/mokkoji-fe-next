@@ -58,7 +58,7 @@ export default async function AdminLayout({
       <main className="scrollbar-hide relative flex w-full flex-grow items-center justify-center px-[23%] pt-[100px] pb-[100px] text-white lg:px-0">
         {children}
       </main>
-      <Footer />
+      <Footer universityCode={universityCode} />
     </div>
   );
 }

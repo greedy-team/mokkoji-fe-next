@@ -8,16 +8,20 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function LoginLayout({
+export default async function LoginLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ universityCode: string }>;
 }) {
+  const { universityCode } = await params;
+
   return (
     <div className="flex h-screen w-full flex-col">
       <Header />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer universityCode={universityCode} />
       <BottomNav />
     </div>
   );

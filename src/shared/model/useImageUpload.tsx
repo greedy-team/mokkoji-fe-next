@@ -44,6 +44,7 @@ function useImageUpload(
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDraftRestored, setIsDraftRestored] = useState(!draftKey);
   const hasDraftRef = useRef(false);
+  const hasWarnedDraftFailureRef = useRef(false);
   const serializedCacheRef = useRef(new Map<string, SerializedFile>());
 
   useEffect(() => {
@@ -76,7 +77,7 @@ function useImageUpload(
 
     const timer = setTimeout(async () => {
       const cache = serializedCacheRef.current;
-      const draft: DraftImageItem[] = await Promise.all(
+      const isSaved = await Promise.all(
         imageFiles.map(async (item) => {
           const cached = cache.get(item.id);
           const serialized = cached ?? (await serializeFile(item.file));
@@ -84,9 +85,21 @@ function useImageUpload(
 
           return { id: item.id, imageName: item.imageName, serialized };
         }),
-      );
+      )
+        .then((draft: DraftImageItem[]) => writeDraft(draftKey, draft))
+        .catch(() => false);
 
-      writeDraft(draftKey, draft);
+      if (isSaved) {
+        hasWarnedDraftFailureRef.current = false;
+        return;
+      }
+
+      if (hasWarnedDraftFailureRef.current) return;
+
+      hasWarnedDraftFailureRef.current = true;
+      toast.warn(
+        '이미지 용량이 커서 임시 저장되지 않았습니다. 새로고침하면 이미지가 사라질 수 있습니다.',
+      );
     }, DRAFT_WRITE_DELAY_MS);
 
     const flush = () => {

@@ -5,6 +5,7 @@ import { RecruitStatus } from '@/shared/model/type';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import FavoriteButton from '@/shared/ui/favorite-button';
 import RadiusTag from '@/shared/ui/radius-tag';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 
 interface FavoriteItemProps {
   title: string;
@@ -68,7 +69,7 @@ function FavoriteItem({
 
       <div className="flex flex-row justify-between">
         <div className="line-clamp-2 overflow-hidden pr-7 text-sm break-words lg:text-xs lg:text-[12px]">
-          {description || '동아리 소개 정보가 없습니다.'}
+          {stripHtmlTags(description) || '동아리 소개 정보가 없습니다.'}
         </div>
       </div>
     </div>

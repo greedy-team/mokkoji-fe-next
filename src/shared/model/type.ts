@@ -1,5 +1,4 @@
 import type { StaticImageData } from 'next/image';
-import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 import categoryAcademicCulturalIcon from '@/shared/assets/images/category/학술교양.svg';
 import categoryCulturalArtIcon from '@/shared/assets/images/category/문화예술.svg';
 import categoryReligiousIcon from '@/shared/assets/images/category/종교.svg';
@@ -45,20 +44,6 @@ export interface ClubType {
   isFavorite: boolean | undefined;
   isAlwaysRecruiting: boolean;
   recruitStatus: RecruitStatus;
-}
-
-export interface ClubTypeRaw extends Omit<ClubType, 'isFavorite'> {
-  favorite?: boolean;
-}
-
-export function mapClubType({ favorite, ...rest }: ClubTypeRaw): ClubType {
-  return {
-    ...rest,
-    description: rest.description
-      ? stripHtmlTags(rest.description)
-      : rest.description,
-    isFavorite: favorite,
-  };
 }
 
 export interface Pagination {

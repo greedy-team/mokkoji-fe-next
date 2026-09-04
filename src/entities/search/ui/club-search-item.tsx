@@ -3,6 +3,7 @@
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { ClubType } from '@/shared/model/type';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 
@@ -32,7 +33,7 @@ function ClubSearchItem({ club }: ClubItemProps) {
             </div>
           </header>
           <p className="line-clamp-2 cursor-pointer overflow-hidden text-sm leading-relaxed break-words text-gray-600">
-            {club.description}
+            {stripHtmlTags(club.description)}
           </p>
         </div>
       </article>

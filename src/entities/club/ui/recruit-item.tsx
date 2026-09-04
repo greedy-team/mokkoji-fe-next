@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import RadiusTag from '@/shared/ui/radius-tag';
 import { RecruitStatus } from '@/shared/model/type';
 import FavoriteButton from '@/shared/ui/favorite-button';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 import PeriodSection from '../../club-detail/ui/period-section';
 
 interface RecruitItemProps {
@@ -62,7 +63,7 @@ function RecruitItem({
           [{title}]
         </h2>
         <p className="overflow-hidden pr-7 text-[12px] break-words text-ellipsis whitespace-nowrap lg:text-xs">
-          {description}
+          {stripHtmlTags(description)}
         </p>
       </div>
       <FavoriteButton

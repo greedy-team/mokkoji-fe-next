@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import HoverPrefetchLink from '@/shared/ui/HoverPrefetchLink';
 import FadeEdge from '@/shared/ui/fade-edge';
 import cn from '@/shared/lib/utils';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 import { Club } from '@/entities/club/model/type';
 import { formatDateDotted } from '@/entities/club/util/getDateUtil';
 import RadiusTag from '@/shared/ui/radius-tag';
@@ -123,7 +124,7 @@ function RecruitVerticalCarousel({ clubs }: CardSliderProps) {
                     )}
                   </div>
                   <p className="line-clamp-1 h-[20px] overflow-hidden p-1 text-[10px] text-ellipsis text-gray-600 lg:text-xs">
-                    {club.description}
+                    {stripHtmlTags(club.description)}
                   </p>
                 </div>
               </HoverPrefetchLink>

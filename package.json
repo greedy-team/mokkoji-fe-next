@@ -54,7 +54,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.548.0",
     "next": "15.3.6",
-    "next-fetch-logger": "^1.0.12",
+    "next-fetch-logger": "^1.1.0",
     "nuqs": "^2.7.1",
     "pnpm": "^10.9.0",
     "prettier": "^3.6.2",

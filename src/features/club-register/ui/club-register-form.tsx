@@ -7,6 +7,7 @@ import { useReducer } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';
@@ -28,9 +29,17 @@ function ClubRegisterForm() {
   const universityCode = useUniversityCode();
   const { formData, errors } = state;
 
+  const clearDraft = useFormDraft<ClubFormData>({
+    key: 'club-register',
+    value: formData,
+    onRestore: (draft) =>
+      dispatch({ type: 'UPDATE_MULTIPLE_FIELDS', payload: draft }),
+  });
+
   const { mutate: registerClub } = useServerAction(postClubRegister, {
     showSuccessToast: false,
     onSuccess: () => {
+      clearDraft();
       toast.success('등록 성공!');
       router.push(`/${universityCode}/club`);
     },

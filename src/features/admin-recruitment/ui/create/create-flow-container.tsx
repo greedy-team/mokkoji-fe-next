@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
@@ -36,11 +37,19 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
     isBasicInfoValid,
     isContentValid,
     handleNextStep,
+    setFormData,
   } = useRecruitmentForm({ onNextStep: flow.nextStep });
 
   const [createRecruitmentId, setCreateRecruitmentId] = useState<number>();
 
-  const imageUpload = useImageUpload([]);
+  const draftKey = `admin-recruitment-create:${clubId}`;
+  const imageUpload = useImageUpload([], 20, `${draftKey}:images`);
+
+  const clearDraft = useFormDraft({
+    key: draftKey,
+    value: formData,
+    onRestore: setFormData,
+  });
 
   const handleSubmit = async () => {
     flow.setIsSubmitting(true);
@@ -74,6 +83,8 @@ function CreateFlowContent({ clubId, clubInfo }: CreateFlowContainerProps) {
       return;
     }
 
+    clearDraft();
+    imageUpload.clearImageDraft();
     setCreateRecruitmentId(res.data.data.id);
     flow.setIsSubmitting(false);
     flow.complete();

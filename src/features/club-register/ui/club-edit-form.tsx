@@ -19,6 +19,12 @@ import convertImageToWebp, {
 } from '@/shared/lib/convertImageToWebp';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
+import useFormDraft from '@/shared/hooks/useFormDraft';
+import {
+  deserializeFile,
+  serializeFile,
+  type SerializedFile,
+} from '@/shared/lib/formDraftStorage';
 import clubRegisterCameraIcon from '@/shared/assets/images/club-register/cameraIcon.svg';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
@@ -41,14 +47,37 @@ interface ClubInfoProp {
   clubId?: number;
 }
 
+interface ClubEditDraft {
+  formData: ClubFormData;
+  logo: SerializedFile | null;
+}
+
 function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [state, dispatch] = useReducer(clubRegisterFormReducer, initialState);
   const { formData, errors } = state;
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoDraft, setLogoDraft] = useState<SerializedFile | null>(null);
+  const hasDraftRef = useRef(false);
   const router = useRouter();
   const universityCode = useUniversityCode();
+
+  const clearDraft = useFormDraft<ClubEditDraft>({
+    key: `club-edit:${clubId ?? 'new'}`,
+    value: { formData, logo: logoDraft },
+    onRestore: (draft) => {
+      hasDraftRef.current = true;
+      dispatch({ type: 'UPDATE_MULTIPLE_FIELDS', payload: draft.formData });
+
+      if (draft.logo) {
+        const file = deserializeFile(draft.logo);
+        setLogoDraft(draft.logo);
+        setLogoFile(file);
+        setPreview(URL.createObjectURL(file));
+      }
+    },
+  });
 
   const { mutate: updateClubInfo } = useServerAction(patchClubInfo, {
     showSuccessToast: false,
@@ -71,6 +100,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
           return;
         }
       }
+      clearDraft();
       router.push(`/${universityCode}/club`);
       toast.success('등록 성공!');
     },
@@ -95,7 +125,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
   };
 
   useEffect(() => {
-    if (clubInfo) {
+    if (clubInfo && !hasDraftRef.current) {
       dispatch({
         type: 'UPDATE_MULTIPLE_FIELDS',
         payload: {
@@ -125,6 +155,7 @@ function ClubEditForm({ clubInfo, clubId }: ClubInfoProp) {
     setPreview(imageUrl);
 
     setLogoFile(webpFile);
+    setLogoDraft(await serializeFile(webpFile));
 
     dispatch({ type: 'UPDATE_FIELD', name: 'logo', value: webpFile.name });
   };

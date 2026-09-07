@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import useServerAction from '@/shared/hooks/useServerAction';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import { useSession } from '@/shared/lib/session-context';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import { Button } from '@/shared/ui/button';
@@ -24,6 +25,12 @@ interface ClubMasterApplicationFormProps {
   universities: University[];
 }
 
+interface ClubMasterApplicationDraft {
+  selectedUniversityCode: string;
+  selectedClubId: string;
+  isConfirmed: boolean;
+}
+
 function ClubMasterApplicationForm({
   universities,
 }: ClubMasterApplicationFormProps) {
@@ -39,21 +46,27 @@ function ClubMasterApplicationForm({
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clubs, setClubs] = useState<ClubSummary[]>([]);
 
+  const clearDraft = useFormDraft<ClubMasterApplicationDraft>({
+    key: 'club-master-application',
+    value: { selectedUniversityCode, selectedClubId, isConfirmed },
+    onRestore: (draft) => {
+      setSelectedUniversityCode(draft.selectedUniversityCode);
+      setSelectedClubId(draft.selectedClubId);
+      setIsConfirmed(draft.isConfirmed);
+    },
+  });
+
   useEffect(() => {
-    getClubsByUniversity(toApiCode(universityCode)).then((result) => {
+    setIsClubsLoading(true);
+    getClubsByUniversity(selectedUniversityCode).then((result) => {
       setClubs(result);
       setIsClubsLoading(false);
     });
-  }, [universityCode]);
+  }, [selectedUniversityCode]);
 
   const handleUniversityChange = (value: string) => {
     setSelectedUniversityCode(value);
     setSelectedClubId('');
-    setIsClubsLoading(true);
-    getClubsByUniversity(value).then((result) => {
-      setClubs(result);
-      setIsClubsLoading(false);
-    });
   };
 
   const isValid =
@@ -64,6 +77,7 @@ function ClubMasterApplicationForm({
     {
       showSuccessToast: false,
       onSuccess: () => {
+        clearDraft();
         toast.success(
           <span>
             제출되었습니다.

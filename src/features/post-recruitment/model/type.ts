@@ -36,6 +36,7 @@ export type RecruitmentFormAction =
     }
   | { type: 'VALIDATE_FIELD'; name: keyof RecruitmentFormData }
   | { type: 'UPDATE_IMAGE'; file: File }
+  | { type: 'RESTORE_DRAFT'; formData: RecruitmentFormData }
   | { type: 'RESET_FORM' };
 
 export interface RecruitmentResponse {

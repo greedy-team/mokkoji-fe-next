@@ -2,12 +2,13 @@
 
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
 import useImageUpload from '@/shared/model/useImageUpload';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
@@ -49,7 +50,25 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
     useState<RecruitmentDetail | null>(null);
   const [isLoadingRecruitmentDetail, setIsLoadingRecruitmentDetail] =
     useState(false);
-  const imageUpload = useImageUpload(recruitmentDetail?.imageUrls ?? []);
+  const hasDraftRef = useRef(false);
+
+  const draftKey = `admin-recruitment-edit:${flow.selectedPostId ?? 'none'}`;
+  const imageUpload = useImageUpload(
+    recruitmentDetail?.imageUrls ?? [],
+    20,
+    flow.selectedPostId ? `${draftKey}:images` : undefined,
+  );
+
+  const clearDraft = useFormDraft({
+    key: draftKey,
+    value: formData,
+    enabled: flow.selectedPostId !== null,
+    onRestore: (draft) => {
+      hasDraftRef.current = true;
+      setFormData(draft);
+    },
+  });
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [localRecruitments, setLocalRecruitments] =
     useState<ClubRecruitments[]>(recruitments);
@@ -78,6 +97,40 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
     setIsLoadingRecruitmentDetail(false);
     flow.startEdit(post);
   };
+
+  const restoreRef = useRef({ flow, setFormData });
+  restoreRef.current = { flow, setFormData };
+
+  const { selectedPostId } = flow;
+
+  useEffect(() => {
+    if (!selectedPostId || recruitmentDetail) return;
+
+    setIsLoadingRecruitmentDetail(true);
+    getRecruitmentDetail(selectedPostId).then((detail) => {
+      if (!detail) {
+        toast.error('모집글 정보를 불러오는데 실패했습니다.');
+        restoreRef.current.flow.goToSelectPost();
+        setIsLoadingRecruitmentDetail(false);
+        return;
+      }
+
+      setRecruitmentDetail(detail);
+
+      if (!hasDraftRef.current) {
+        restoreRef.current.setFormData({
+          title: detail.title,
+          content: detail.content,
+          recruitStart: detail.recruitStart,
+          recruitEnd: detail.recruitEnd,
+          recruitForm: detail.recruitForm,
+          isAlwaysRecruiting: detail.isAlwaysRecruiting,
+        });
+      }
+
+      setIsLoadingRecruitmentDetail(false);
+    });
+  }, [selectedPostId, recruitmentDetail]);
 
   const handleDelete = async (post: ClubRecruitments) => {
     setIsDeleting(true);
@@ -135,6 +188,8 @@ function EditFlowContent({ clubInfo, recruitments }: EditFlowContainerProps) {
       return;
     }
 
+    clearDraft();
+    imageUpload.clearImageDraft();
     setEditRecruitmentId(res.data.data.id);
     flow.setSubmitting(false);
     flow.complete();

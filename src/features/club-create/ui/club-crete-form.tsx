@@ -3,6 +3,12 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import useFormDraft from '@/shared/hooks/useFormDraft';
+import {
+  deserializeFile,
+  serializeFile,
+  type SerializedFile,
+} from '@/shared/lib/formDraftStorage';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
@@ -21,6 +27,15 @@ import ClubCreateBasicStep from './club-create-basic-step';
 export type { ClubCreateFormData };
 
 type Step = 'basic' | 'description';
+
+const DRAFT_KEY = 'club-create';
+
+interface ClubCreateDraft {
+  formData: ClubCreateFormData;
+  step: Step;
+  isConfirmed: boolean;
+  logo: SerializedFile | null;
+}
 
 interface ClubCreateFormProps {
   universities: University[];
@@ -44,6 +59,24 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [step, setStep] = useState<Step>('basic');
+  const [logoDraft, setLogoDraft] = useState<SerializedFile | null>(null);
+
+  const clearDraft = useFormDraft<ClubCreateDraft>({
+    key: DRAFT_KEY,
+    value: { formData, step, isConfirmed, logo: logoDraft },
+    onRestore: (draft) => {
+      setFormData(draft.formData);
+      setStep(draft.step);
+      setIsConfirmed(draft.isConfirmed);
+
+      if (draft.logo) {
+        const file = deserializeFile(draft.logo);
+        setLogoDraft(draft.logo);
+        setLogoFile(file);
+        setLogoPreview(URL.createObjectURL(file));
+      }
+    },
+  });
 
   const { mutate: createClubApplication, isPending: isSubmitting } =
     useServerAction(postCreateClubApplication, {
@@ -64,6 +97,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
           }
         }
 
+        clearDraft();
         toast.success(
           <span>
             제출되었습니다.
@@ -83,6 +117,7 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
     setLogoPreview(URL.createObjectURL(webpFile));
     setLogoFile(webpFile);
     setFormData((prev) => ({ ...prev, logo: webpFile.name }));
+    setLogoDraft(await serializeFile(webpFile));
   };
 
   const handleNext = () => {
@@ -95,6 +130,10 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
       description,
       applicantName: session?.user.name ?? '',
     });
+  };
+
+  const handleDescriptionChange = (description: string) => {
+    setFormData((prev) => ({ ...prev, description }));
   };
 
   return (
@@ -116,6 +155,8 @@ function ClubCreateForm({ universities }: ClubCreateFormProps) {
         <ClubCreateDescriptionStep
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
+          initialContent={formData.description}
+          onContentChange={handleDescriptionChange}
         />
       )}
     </>

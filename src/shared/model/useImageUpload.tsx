@@ -1,11 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import { toast } from 'react-toastify';
+import {
+  clearDraft,
+  deserializeFile,
+  readDraft,
+  serializeFile,
+  writeDraft,
+  type SerializedFile,
+} from '../lib/formDraftStorage';
 import convertImageToWebp, {
   RECRUITMENT_IMAGE_MAX_DIMENSION,
 } from '../lib/convertImageToWebp';
 
 const CONVERT_CONCURRENCY = 3;
+const DRAFT_WRITE_DELAY_MS = 600;
 
 interface ImageItem {
   id: string;
@@ -14,17 +23,112 @@ interface ImageItem {
   imageName: string;
 }
 
+interface DraftImageItem {
+  id: string;
+  imageName: string;
+  serialized: SerializedFile;
+}
+
 async function urlToFile(url: string, fileName: string): Promise<File> {
   const res = await fetch(url);
   const blob = await res.blob();
   return new File([blob], fileName, { type: blob.type });
 }
 
-function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
+function useImageUpload(
+  imageUrls: string[] = [],
+  maxLength: number = 20,
+  draftKey?: string,
+) {
   const [imageFiles, setImageFiles] = useState<ImageItem[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isDraftRestored, setIsDraftRestored] = useState(!draftKey);
+  const hasDraftRef = useRef(false);
+  const hasWarnedDraftFailureRef = useRef(false);
+  const serializedCacheRef = useRef(new Map<string, SerializedFile>());
+
   useEffect(() => {
-    if (imageUrls.length === 0) return;
+    if (!draftKey) return;
+
+    const draft = readDraft<DraftImageItem[]>(draftKey);
+
+    if (draft && draft.length > 0) {
+      hasDraftRef.current = true;
+      setImageFiles(
+        draft.map((item) => {
+          const file = deserializeFile(item.serialized);
+          serializedCacheRef.current.set(item.id, item.serialized);
+
+          return {
+            id: item.id,
+            file,
+            previewUrl: URL.createObjectURL(file),
+            imageName: item.imageName,
+          };
+        }),
+      );
+    }
+
+    setIsDraftRestored(true);
+  }, [draftKey]);
+
+  useEffect(() => {
+    if (!draftKey || !isDraftRestored) return undefined;
+
+    const timer = setTimeout(async () => {
+      const cache = serializedCacheRef.current;
+      const isSaved = await Promise.all(
+        imageFiles.map(async (item) => {
+          const cached = cache.get(item.id);
+          const serialized = cached ?? (await serializeFile(item.file));
+          cache.set(item.id, serialized);
+
+          return { id: item.id, imageName: item.imageName, serialized };
+        }),
+      )
+        .then((draft: DraftImageItem[]) => writeDraft(draftKey, draft))
+        .catch(() => false);
+
+      if (isSaved) {
+        hasWarnedDraftFailureRef.current = false;
+        return;
+      }
+
+      if (hasWarnedDraftFailureRef.current) return;
+
+      hasWarnedDraftFailureRef.current = true;
+      toast.warn(
+        '이미지 용량이 커서 임시 저장되지 않았습니다. 새로고침하면 이미지가 사라질 수 있습니다.',
+      );
+    }, DRAFT_WRITE_DELAY_MS);
+
+    const flush = () => {
+      const cache = serializedCacheRef.current;
+      const cached = imageFiles.filter((item) => cache.has(item.id));
+      if (cached.length !== imageFiles.length) return;
+
+      clearTimeout(timer);
+      writeDraft(
+        draftKey,
+        cached.map((item) => ({
+          id: item.id,
+          imageName: item.imageName,
+          serialized: cache.get(item.id)!,
+        })),
+      );
+    };
+
+    window.addEventListener('pagehide', flush);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('pagehide', flush);
+    };
+  }, [draftKey, isDraftRestored, imageFiles]);
+
+  useEffect(() => {
+    if (imageUrls.length === 0 || hasDraftRef.current || !isDraftRestored)
+      return;
 
     const loadInitialImages = async () => {
       const items: ImageItem[] = await Promise.all(
@@ -46,7 +150,7 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     };
 
     loadInitialImages();
-  }, [imageUrls]);
+  }, [imageUrls, isDraftRestored]);
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -115,6 +219,8 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
   };
 
   const handleImageRemove = (id: string) => {
+    serializedCacheRef.current.delete(id);
+
     setImageFiles((prev) => {
       const target = prev.find((item) => item.id === id);
       if (target) URL.revokeObjectURL(target.previewUrl);
@@ -127,6 +233,10 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     });
   };
 
+  const clearImageDraft = useCallback(() => {
+    if (draftKey) clearDraft(draftKey);
+  }, [draftKey]);
+
   return {
     imageFiles,
     handleImageChange,
@@ -136,6 +246,7 @@ function useImageUpload(imageUrls: string[] = [], maxLength: number = 20) {
     onDragOver,
     onDrop,
     maxLength,
+    clearImageDraft,
   };
 }
 

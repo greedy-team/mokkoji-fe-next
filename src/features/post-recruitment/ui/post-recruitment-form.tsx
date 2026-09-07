@@ -13,6 +13,7 @@ import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
 import useImageUpload from '@/shared/model/useImageUpload';
+import useFormDraft from '@/shared/hooks/useFormDraft';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
 import { RecruitmentFormField, RecruitmentFormData } from '../model/type';
 import recruitmentFormReducer, {
@@ -36,6 +37,7 @@ const fields: RecruitmentFormField[] = [
 
 function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
   const [state, dispatch] = useReducer(recruitmentFormReducer, initialState);
+  const draftKey = `post-recruitment:${clubId ?? 'new'}`;
   const {
     imageFiles,
     handleImageChange,
@@ -44,8 +46,15 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
     handleSortEnd,
     onDragOver,
     onDrop,
-  } = useImageUpload();
+    clearImageDraft,
+  } = useImageUpload([], 20, `${draftKey}:images`);
   const { formData, errors } = state;
+
+  const clearDraft = useFormDraft<RecruitmentFormData>({
+    key: draftKey,
+    value: formData,
+    onRestore: (draft) => dispatch({ type: 'RESTORE_DRAFT', formData: draft }),
+  });
   const router = useRouter();
   const universityCode = useUniversityCode();
   const { mutate, isPending } = useServerAction(postRecruitmentForm, {
@@ -65,6 +74,8 @@ function PostRecruitmentForm({ clubInfo, clubId }: ClubInfoProp) {
         toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
         return;
       }
+      clearDraft();
+      clearImageDraft();
       router.push(`/${universityCode}/club`);
       toast.success('모집 공고가 성공적으로 업로드되었습니다!');
     },

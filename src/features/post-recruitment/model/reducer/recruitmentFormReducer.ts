@@ -34,6 +34,9 @@ export default function recruitmentFormReducer(
         errors: { ...state.errors, [name]: errorMsg },
       };
     }
+    case 'RESTORE_DRAFT': {
+      return { ...state, formData: action.formData };
+    }
     case 'RESET_FORM': {
       return initialState;
     }

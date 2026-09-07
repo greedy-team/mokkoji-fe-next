@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { parseAsStringLiteral, useQueryState } from 'nuqs';
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 import { ClubRecruitments } from '@/entities/club-detail/model/type';
 import { EditStep } from './types';
 
@@ -19,6 +19,10 @@ const stepParser = parseAsStringLiteral(EDIT_STEPS).withDefault(DEFAULT_STEP);
 // RSC 요청이 없으므로 스텝 전환이 즉시 일어난다.
 function useEditFlow() {
   const [currentStep, setCurrentStep] = useQueryState('step', stepParser);
+  const [selectedPostId, setSelectedPostId] = useQueryState(
+    'postId',
+    parseAsInteger,
+  );
   const [selectedPost, setSelectedPost] = useState<
     ClubRecruitments | undefined
   >(undefined);
@@ -30,6 +34,7 @@ function useEditFlow() {
 
   const startEdit = (post: ClubRecruitments) => {
     setSelectedPost(post);
+    setSelectedPostId(post.id);
     goToStep('basicInfoEditStep');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -51,17 +56,22 @@ function useEditFlow() {
   };
 
   const goToSelectPost = () => {
+    setSelectedPostId(null);
     goToStep('selectPostEditStep');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const complete = () => goToStep('completeEditStep', 'replace');
 
-  const reset = () => goToStep(DEFAULT_STEP, 'replace');
+  const reset = () => {
+    setSelectedPostId(null);
+    goToStep(DEFAULT_STEP, 'replace');
+  };
 
   return {
     currentStep,
     selectedPost,
+    selectedPostId,
     isSubmitting,
     startEdit,
     nextStep,

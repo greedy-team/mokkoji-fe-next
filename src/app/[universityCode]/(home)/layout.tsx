@@ -39,7 +39,7 @@ export default async function HomeLayout({
     <div className="flex h-screen w-full flex-col">
       <Header universityCode={universityCode} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer universityCode={universityCode} />
       <BottomNav />
     </div>
   );

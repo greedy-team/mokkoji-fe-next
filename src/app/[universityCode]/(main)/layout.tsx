@@ -50,7 +50,7 @@ export default async function MainLayout({
           <Header universityCode={universityCode} />
         </div>
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer universityCode={universityCode} />
         <BottomNav />
       </div>
     </QueryProvider>

@@ -22,7 +22,7 @@ function ClubDetailCommentInput({
 }: ClubDetailCommentInputProps) {
   const [commentContent, setCommentContent] = useState('');
   const [rating, setRating] = useState(0);
-  const { session } = useSession();
+  const { status } = useSession();
   const { mutate, isPending } = useServerAction(postComment, {
     showSuccessToast: false,
     onSuccess: async () => {
@@ -41,7 +41,7 @@ function ClubDetailCommentInput({
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!session) {
+    if (status !== 'authenticated') {
       toast.error('로그인 후 이용하실 수 있습니다.');
       return;
     }

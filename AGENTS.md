@@ -49,6 +49,17 @@ Before implementing a feature, fixing a bug, or refactoring behavior, read and a
 - Follow the skill's implementation and completion gates. File existence, generated tests, and successful lint/build alone do not establish behavior completion.
 - Agent handoffs include confirmed AC, existing changes, verification path, test commands/evidence, and remaining checks. Receiving agents read the skill before implementation.
 
+Verification commands (PowerShell: use `pnpm.cmd` if script execution policy blocks `pnpm`):
+
+| Command | Scope |
+|---|---|
+| `pnpm test:unit` | Node tests under `tests/unit/**/*.test.{cjs,mjs,js,ts}`, with tsx for TypeScript; fails when no files are found |
+| `pnpm typecheck` | TypeScript check without emitted files or incremental cache |
+| `pnpm verify` | Unit tests → typecheck → lint; stops on failure; CI runs this before build |
+| `pnpm test` | Existing Playwright E2E/Storybook projects; separate environment setup required |
+
+Use `node:test` for new Unit tests (`tests/unit/{domain}/Name.test.ts`). Runner options can be forwarded, e.g. `pnpm test:unit --test-name-pattern="name"`. `verify` does not include build or browser verification; run those when the task requires them. A filtered run does not replace the full regression command.
+
 ## Custom agents
 
 Project-scoped Codex agents live in `.codex/agents/`.

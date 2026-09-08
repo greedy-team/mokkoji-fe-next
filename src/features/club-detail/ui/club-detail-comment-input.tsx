@@ -6,7 +6,6 @@ import useServerAction from '@/shared/hooks/useServerAction';
 import { useSession } from '@/shared/lib/session-context';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
-import LoginRequired from '@/shared/ui/login-required';
 import { postComment } from '../api/comment-api';
 import StarRating from './rating-component';
 
@@ -23,7 +22,7 @@ function ClubDetailCommentInput({
 }: ClubDetailCommentInputProps) {
   const [commentContent, setCommentContent] = useState('');
   const [rating, setRating] = useState(0);
-  const { session } = useSession();
+  const { status } = useSession();
   const { mutate, isPending } = useServerAction(postComment, {
     showSuccessToast: false,
     onSuccess: async () => {
@@ -42,6 +41,10 @@ function ClubDetailCommentInput({
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (status !== 'authenticated') {
+      toast.error('로그인 후 이용하실 수 있습니다.');
+      return;
+    }
     if (rating === 0) {
       toast.warn('별점을 입력해주세요!');
       return;
@@ -52,10 +55,6 @@ function ClubDetailCommentInput({
     }
     await mutate(clubId, commentContent, rating);
   };
-
-  if (!session) {
-    return <LoginRequired />;
-  }
 
   return (
     <form

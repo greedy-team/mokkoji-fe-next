@@ -10,7 +10,9 @@ Prefer delegating each phase to specialized agents and tracking results. If a re
 
 ## Execution Order
 
-Must execute in order due to dependencies.
+Read `.agents/skills/verification-loop/SKILL.md` before implementation. Receive plans from chat or user-supplied files; do not generate per-task documents. Keep confirmed AC, scope, strategy and evidence in chat. Reuse approvals and honor user-requested stage checkpoints.
+
+The following is the implementation dependency order inside the verification loop, not before test design.
 
 ```
 1. API Layer         (api-builder)       — features/{domain}/api/
@@ -23,6 +25,18 @@ Must execute in order due to dependencies.
 ---
 
 ## Phase 1 — API Layer
+
+Before entering this or any later builder phase, complete the verification entry described below for its behavior.
+
+### Verification entry and handoffs (applies to every builder)
+
+Inspect code, existing changes, tests, runner collection and baseline. Present an AC-to-test strategy using the smallest suitable Unit/Integration/E2E level. Follow the skill's entry gates and refactoring/already-modified-code paths.
+
+Before each behavior-changing builder task, write and run the relevant test and confirm the expected behavior assertion fails. Environment/import errors or zero collected tests are not RED. Prepare necessary execution infrastructure separately from product behavior. Do not defer tests until page generation. When E2E is selected, call e2e-writer before the corresponding implementation; perform other test levels directly or through a suitable available agent.
+
+Append to every builder handoff: skill path, confirmed AC IDs, source/scope, owned files, existing changes to preserve, selected verification path, test paths/commands, observed RED or justified baseline, and remaining checks. A builder reads the skill, preserves assertions, implements minimally and returns actual GREEN evidence. Dependent work stays sequential; re-run relevant checks after integration changes.
+
+### API implementation
 
 If the plan includes API items, call the `api-builder` agent.
 
@@ -125,21 +139,21 @@ When starting each Phase:
 
 When each step completes:
 ```
-[Done] {target} completed | commit: {commit message}
+[Verified] {target} | AC: {ids} | checks: {commands and results}
 ```
 
 If failure:
 ```
 [Failed] {target} failed
 reason: {agent report content}
-→ Skip this item and continue (or ask user for decision)
+→ Hold dependent work; continue independent checks. Report blocked AC and missing evidence, not overall completion.
 ```
 
 ---
 
-## Phase 6 — E2E Test Writing
+## Phase 6 — Integrated Regression
 
-If the plan includes page items, call the `e2e-writer` agent.
+Run the selected regression after integration. Page existence alone does not require E2E. If E2E was selected, execute the previously written flows; test file generation is not verification. Newly discovered behavior gaps return to the skill's test/implementation loop.
 
 Call format:
 ```
@@ -165,7 +179,7 @@ pnpm lint
 
 If lint fails:
 - Print error list
-- Run `pnpm lint:fix` for auto-fixable items
+- Apply scoped fixes for relevant auto-fixable items; avoid repository-wide mutation to clear unrelated failures
 - Report unfixable items to user
 
 ```bash
@@ -180,6 +194,8 @@ If build fails:
 ---
 
 ## Final Report
+
+Use the verification-loop report: AC-to-test results, RED or baseline evidence, GREEN, regression and static checks with actual commands, existing/new failures and unverified scope. Use the summary below only with evidence-backed statuses. If required checks remain blocked, label the report partial/blocked. Include commits only when explicitly requested and actually created.
 
 ```
 [Project Build Complete]

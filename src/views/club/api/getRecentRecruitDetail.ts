@@ -19,7 +19,13 @@ async function getRecentRecruitDetail(id: number) {
         })
         .json();
     }
-    if (!response.data) return { ok: false, message: '데이터 없음' };
+    if (!response.data)
+      return {
+        ok: response.ok,
+        status: response.status,
+        message: response.message,
+        data: undefined,
+      };
     return {
       ok: true,
       data: response.data,

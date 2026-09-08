@@ -4,11 +4,10 @@ import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
 import { type Metadata } from 'next';
 import getClubDetail from '@/views/club/api/getClubDetail';
 import { getUniversityName } from '@/shared/lib/universityMeta';
-import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 interface PageProps {
   params: Promise<{ universityCode: string; id: string }>;
-  searchParams: Promise<{ tab: string }>;
+  searchParams: Promise<{ tab?: string; recruit?: string }>;
 }
 
 export async function generateMetadata({
@@ -47,10 +46,9 @@ export async function generateMetadata({
 }
 
 async function Page({ params, searchParams }: PageProps) {
-  const detailParams: Promise<{ id: string; universityCode: string }> = params;
   return (
     <Suspense fallback={<ClubDetailSkeleton />}>
-      <ClubDetailPage params={detailParams} searchParams={searchParams} />
+      <ClubDetailPage params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

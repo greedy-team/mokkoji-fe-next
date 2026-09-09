@@ -16,6 +16,8 @@ Read the user-provided spec file or confirmed task context in chat. Prefer the e
 
 Read `.agents/skills/verification-loop/SKILL.md`. Preserve source links, confirmed AC IDs, scope, unresolved questions, existing changes and verification evidence. Mark inferred AC as proposals; do not derive product requirements from implementation alone.
 
+Preserve the user's approval scope and requested checkpoints. Analysis may continue into strategy without repeated confirmation; implementation follows the agreed approval gate. Local commits at verified work-unit boundaries follow AGENTS.md and the commit skill. Preserve commit deferrals; pushes and publication need separate authorization.
+
 Extract from spec:
 - **APIs**: domain, method, endpoint, description, auth required
 - **Shared components**: component name, role, CSS file path
@@ -70,6 +72,8 @@ Compare spec items vs scan results:
 | Incomplete | Required implementation is missing or contradicts confirmed AC |
 
 Inspect relevant content, callers and tests. File discovery alone cannot mark work done. Pass incomplete and needs-verification items onward, distinguishing implementation from verification-only work.
+
+Check test premises against actual route guards and API contracts; route group names do not prove authentication requirements. Pass source locations and unresolved assumptions alongside AC. Existing evidence must apply to the current files and runtime, not removed experiments.
 
 When comparing filenames, consider PascalCase/kebab-case mix:
 - `SearchInput.tsx` = `search-input.tsx` → same component

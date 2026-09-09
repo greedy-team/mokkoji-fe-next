@@ -1,9 +1,11 @@
 ---
 name: commit
-description: Create repository-compliant git commits when the user asks to commit changes in mokkoji-fe-next.
+description: Create repository-compliant local commits at verified work-unit boundaries during authorized work in mokkoji-fe-next, or when explicitly requested.
 ---
 
 # 커밋 워크플로우
+
+승인된 작업에서는 관련 검증을 마친 의미 있는 작업 단위마다 로컬 커밋을 자율적으로 만든다. 파일이나 레이어마다 기계적으로 나누지 말고 구현과 회귀 테스트를 함께 검토 가능한 단위로 묶는다. RED 증거는 채팅에 남기고 기본적으로 GREEN과 관련 회귀 검증 후 커밋한다. 문서 변경은 형식·내용 검토로 검증한다. 커밋 범위를 먼저 알리고 결과를 보고하되 매번 승인을 묻지 않는다. 커밋 보류 요청은 존중하며 푸시는 별도 요청 시에만 수행한다.
 
 ## 1. 현재 상태 확인
 
@@ -82,7 +84,7 @@ EOF
 
 - 작업 종류(기능 추가, 리팩터링, 버그 수정, 설정 변경 등)가 다르면 커밋을 분리한다.
 - FSD 레이어 단위가 아니라 **작업 단위**로 쪼갠다.
-- 사용자에게 분리 방안을 제안하고 확인받은 뒤 진행한다.
+- 분리 방안을 알리고 승인된 범위에서 진행한다. 이미 커밋을 요청받았다면 통상적인 작업 단위 분리 때문에 재승인받지 않는다. 포함 범위가 불명확할 때만 확인한다.
 
 ## 안전 규칙
 

@@ -48,6 +48,8 @@ Before implementing a feature, fixing a bug, or refactoring behavior, read and a
 - Keep scope, source links, confirmed Acceptance Criteria, strategy, and results in chat by default. Do not create per-task spec, plan, or report files unless requested. Reuse approvals and honor user-requested stage checkpoints.
 - Follow the skill's implementation and completion gates. File existence, generated tests, and successful lint/build alone do not establish behavior completion.
 - Agent handoffs include confirmed AC, existing changes, verification path, test commands/evidence, and remaining checks. Receiving agents read the skill before implementation.
+- Once scope, AC and strategy are approved, continue through RED, implementation, GREEN and regression without repeated approval requests. Pause for material unresolved behavior or explicitly requested checkpoints.
+- During authorized work, create local commits at coherent work-unit boundaries after relevant verification, without requesting approval each time. Announce the scope and report the commit. Honor explicit requests to defer commits; push only when requested. Issue/PR creation, Discord posting and archiving also require their own authorization.
 
 Verification commands (PowerShell: use `pnpm.cmd` if script execution policy blocks `pnpm`):
 
@@ -59,6 +61,8 @@ Verification commands (PowerShell: use `pnpm.cmd` if script execution policy blo
 | `pnpm test` | Existing Playwright E2E/Storybook projects; separate environment setup required |
 
 Use `node:test` for new Unit tests (`tests/unit/{domain}/Name.test.ts`). Runner options can be forwarded, e.g. `pnpm test:unit --test-name-pattern="name"`. `verify` does not include build or browser verification; run those when the task requires them. A filtered run does not replace the full regression command.
+
+There is currently no `test:integration` script or dedicated server Integration harness. Inspect the current runner before choosing an execution command; do not assume removed experiments are available. Before installing dependencies, compare the active Node/pnpm versions with `package.json`, the lockfile and CI. A global pnpm may differ from the installed project version; when present, `node node_modules/pnpm/bin/pnpm.cjs` runs the latter.
 
 ## Custom agents
 

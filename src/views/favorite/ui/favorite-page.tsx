@@ -1,8 +1,8 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import FavoriteDateSection from '@/widgets/favorite/ui/favorite-date-section';
 import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
-import favoriteQueries from '@/widgets/favorite/api/queries';
-import getServerFavoriteList from '@/widgets/favorite/api/getServerFavoriteList';
+import favoriteQueries from '@/entities/favorite/api/queries';
+import getServerFavoriteList from '@/entities/favorite/api/getServerFavoriteList';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { getSession } from '@/shared/lib/cookie-session';
 import getServerQueryClient from '@/shared/lib/get-query-client';

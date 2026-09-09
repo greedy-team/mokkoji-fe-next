@@ -1,4 +1,5 @@
 import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
+import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ClubDetailTabs from '@/widgets/club-detail/ui/club-detail-tabs';
@@ -47,13 +48,17 @@ async function ClubDetailPage({
           category={recent.category}
           startDate={recent.recruitStart}
           endDate={recent.recruitEnd}
-          instagram={recent.instagramUrl}
-          clubId={id}
-          isFavorite={recent.isFavorite}
           createdAt={recent.createdAt}
           logo={recent.logo}
           status={recent.status}
           isAlwaysRecruiting={recent.isAlwaysRecruiting}
+          headerControl={
+            <RecruitDetailHeaderControl
+              instagram={recent.instagramUrl}
+              clubId={id}
+              isFavorite={recent.isFavorite || false}
+            />
+          }
         />
 
         <ClubDetailTabs

@@ -1,5 +1,5 @@
 import BottomNav from '@/shared/ui/bottom-nav';
-import Header from '@/shared/ui/Header';
+import Header from '@/widgets/header/ui/Header';
 import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
 

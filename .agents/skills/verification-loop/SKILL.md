@@ -1,6 +1,6 @@
 ---
 name: verification-loop
-description: Use when implementing a feature, fixing a bug, or refactoring behavior in mokkoji, before implementation begins. Applies to direct requests and selected tasks from Discord; excludes read-only analysis and document-only edits.
+description: Use when implementing a feature, fixing a bug, or refactoring behavior in mokkoji, before implementation begins. Applies to direct requests and selected tasks from Discord or Notion; excludes read-only analysis and document-only edits.
 metadata:
   version: '0.2'
 ---

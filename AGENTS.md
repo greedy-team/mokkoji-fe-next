@@ -41,9 +41,11 @@ app → views → widgets → features → entities → shared
 
 Use the matching skill under `.agents/skills/` for component generation, design tokens, Tailwind patterns, Figma parsing, widget composition, commits, issues, pull requests, and Discord/QA workflows. Load only the skills relevant to the current request.
 
+For development work sourced from a Notion meeting note or task page, use [plan-from-notion](.agents/skills/plan-from-notion/SKILL.md) to extract source-backed candidates and hand the selected task to verification-loop. General Notion summaries do not require the development pipeline.
+
 ## Verification policy
 
-Before implementing a feature, fixing a bug, or refactoring behavior, read and apply [verification-loop](.agents/skills/verification-loop/SKILL.md). This applies to direct requests, Discord/QA tasks, and spec-driven agents. Read-only analysis and document-only edits do not enter the implementation loop.
+Before implementing a feature, fixing a bug, or refactoring behavior, read and apply [verification-loop](.agents/skills/verification-loop/SKILL.md). This applies to direct requests, Discord/QA and Notion tasks, and spec-driven agents. Read-only analysis and document-only edits do not enter the implementation loop.
 
 - Keep scope, source links, confirmed Acceptance Criteria, strategy, and results in chat by default. Do not create per-task spec, plan, or report files unless requested. Reuse approvals and honor user-requested stage checkpoints.
 - Follow the skill's implementation and completion gates. File existence, generated tests, and successful lint/build alone do not establish behavior completion.

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';

@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { ClubType } from '@/shared/model/type';
 import stripHtmlTags from '@/shared/lib/stripHtmlTags';

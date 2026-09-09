@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import {
   Dialog,
   DialogTrigger,

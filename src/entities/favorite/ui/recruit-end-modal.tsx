@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { FavoriteDeadLineItem } from '@/entities/favorite/model/type';
 import formatKoreanDate from '@/features/favorite/util/formatKoreanDate';

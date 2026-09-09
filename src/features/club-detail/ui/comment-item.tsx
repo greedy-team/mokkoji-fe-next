@@ -3,7 +3,7 @@ import timeAgo from '@/entities/club-detail/util/timeAgo';
 import { ClubComment } from '@/entities/club-detail/model/type';
 import StarRating from '@/entities/club-detail/ui/review-star';
 import { deleteComment } from '@/features/club-detail/api/comment-api';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import detailCommentCorrectionIcon from '@/shared/assets/images/detail/comment/correction.svg';
 
 interface CommentItemProps {

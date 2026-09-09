@@ -2,7 +2,7 @@
 
 import React from 'react';
 import cn from '@/shared/lib/utils';
-import useNumberPagination from '@/shared/hooks/useNumberPagination';
+import useNumberPagination from '@/shared/hooks/use-number-pagination';
 import paginationEllipsesIcon from '@/shared/assets/images/pagination/ellipses.svg';
 import paginationNextIcon from '@/shared/assets/images/pagination/next.svg';
 import paginationPreviousIcon from '@/shared/assets/images/pagination/prev.svg';

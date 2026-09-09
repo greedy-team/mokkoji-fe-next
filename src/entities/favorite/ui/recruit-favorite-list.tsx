@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { FavoriteDateItem } from '@/entities/favorite/model/type';
 import formatDate from '@/entities/favorite/util/format-date';

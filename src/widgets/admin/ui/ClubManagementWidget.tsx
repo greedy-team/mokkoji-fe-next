@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import useInfiniteScroll from '@/shared/hooks/useInfiniteScroll';
+import useInfiniteScroll from '@/shared/hooks/use-infinite-scroll';
 import { AsyncBoundaryWithQuery } from '@/shared/ui/AsyncBoundary';
 import filterClubsByName from '@/features/admin/model/filter-clubs';
 import useAdminClubs from '@/widgets/admin/ui/use-admin-clubs';

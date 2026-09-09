@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import recruitUpIcon from '@/shared/assets/images/recruit/up.svg';
-import useScrollUp from '../model/useScrollUp';
+import useScrollUp from '../hooks/use-scroll-up';
 
 export default function ScrollTopButton() {
   const { isVisible } = useScrollUp();

@@ -3,7 +3,7 @@
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import { FavoriteDeadLineItem } from '@/entities/favorite/model/type';
-import formatKoreanDate from '@/features/favorite/util/formatKoreanDate';
+import formatKoreanDate from '@/entities/favorite/util/formatKoreanDate';
 import {
   Dialog,
   DialogContent,

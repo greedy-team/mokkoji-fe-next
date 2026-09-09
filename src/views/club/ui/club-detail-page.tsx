@@ -1,4 +1,4 @@
-import RecruitDetailHeader from '@/entities/club-detail/ui/recruit-detail-header';
+import RecruitDetailHeader from '@/widgets/club-detail/ui/recruit-detail-header';
 import RecruitHistorySection from '@/entities/club-detail/ui/recruit-history-section';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import ClubDetailTabs from '@/widgets/club-detail/ui/club-detail-tabs';

@@ -1,10 +1,10 @@
 'use client';
 
-import { type ReactNode } from 'react';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 
 import Link from 'next/link';
 
+import RecruitDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';
 import {
   ClubCategoryToLabel,
@@ -21,11 +21,13 @@ interface RecruitDetailHeaderProps {
   category: string;
   startDate?: string;
   endDate?: string;
+  instagram: string;
+  clubId: number;
+  isFavorite?: boolean;
   createdAt?: string;
   logo: string;
   status?: RecruitStatus;
   isAlwaysRecruiting: boolean;
-  headerControl: ReactNode;
 }
 
 function RecruitDetailHeader({
@@ -33,11 +35,13 @@ function RecruitDetailHeader({
   category,
   startDate,
   endDate,
+  instagram,
+  clubId,
+  isFavorite,
   logo,
   createdAt,
   status,
   isAlwaysRecruiting,
-  headerControl,
 }: RecruitDetailHeaderProps) {
   const universityCode = useUniversityCode();
   const [date] = (createdAt || '').split('T');
@@ -82,7 +86,13 @@ function RecruitDetailHeader({
             )}
           </div>
         </div>
-        <div className="shrink-0 lg:mt-0 lg:ml-auto">{headerControl}</div>
+        <div className="shrink-0 lg:mt-0 lg:ml-auto">
+          <RecruitDetailHeaderControl
+            instagram={instagram}
+            clubId={clubId}
+            isFavorite={isFavorite || false}
+          />
+        </div>
       </div>
     </header>
   );

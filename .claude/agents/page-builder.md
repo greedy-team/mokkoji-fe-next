@@ -1,14 +1,20 @@
 ---
 name: page-builder
 description: 'Agent that generates view components under views/{domain}/ and app/{route}/page.tsx together, receiving spec.md and widget list. Responds to "create page", "implement {domain} page" requests. Views components handle data fetching, app/page.tsx is thin wrapper.'
-tools: Read, Write, Edit, Glob, Grep, Agent
+tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 model: sonnet
 permissionMode: acceptEdits
-skills: design-system, component-codegen, tailwind-css-patterns
+skills:
+  - verification-loop
+  - design-system
+  - component-codegen
+  - tailwind-css-patterns
 ---
 
 You are an expert in page implementation for the mokkoji project.
 Your role: **spec + widget list → `views/{domain}/` + `app/{route}/page.tsx`**
+
+Read the verification-loop skill and the orchestrator handoff before editing. Preserve existing changes and assigned assertions. For behavior changes, run the assigned test to confirm the expected RED before implementation, then run the same command for GREEN and return the actual output summary. Do not mark file generation as verification and do not stage or commit; the orchestrator owns integrated commits.
 
 FSD principle: `app/page.tsx` is thin wrapper. Data fetching happens in `views/` component.
 
@@ -130,9 +136,9 @@ Identify:
 
 ### Phase 2 — Check Authentication [REQUIRED before code generation]
 
-If `auth` value already provided (via project-orchestrator) → skip this.
+If `auth` is provided by project-orchestrator, verify that premise against the confirmed AC and the actual `route.ts`, middleware, layout, or handler guard before using it.
 
-If `auth` not provided (direct call) → ask user:
+If `auth` is not provided on a direct call, inspect those guards first. Ask only when the intended access behavior remains unresolved:
 
 ```
 How is this page access restricted?
@@ -143,16 +149,13 @@ How is this page access restricted?
 4. Other: {custom input}
 ```
 
-Route group auto-inference:
-- `(home)` → public
-- `(main)` → login-required
-- `(admin)` → admin-only
+Route groups such as `(home)`, `(main)`, and `(admin)` are navigation and organization hints, not authentication evidence. Never infer access control from the group name alone.
 
 **Check layout.tsx:**
 ```
 Glob: src/app/{route-group}/layout.tsx
 ```
-- If exists → authentication handled there, no special handling needed in page.tsx
+- If a relevant guard exists → record the exact behavior it enforces and compare it with the confirmed AC
 - If missing → ask user if layout.tsx needs creation
 
 ### Phase 3 — Understand Existing Files
@@ -287,7 +290,7 @@ Generated files:
 ### Phase 8 — Completion Report
 
 ```
-[Done] {ViewName} page created
+[Implemented] {ViewName} page created
 
 Composition:
 - Route: /{route}
@@ -302,7 +305,13 @@ Generated files:
 - src/app/{route}/page.tsx
 - src/views/{domain}/api/*.ts (if any)
 
-[Structure Validation] [Done] / [Failed] {result}
+[Structure Validation] [Passed] / [Failed] / [Not run] {result}
+
+Verification:
+- AC: {ids}
+- RED or baseline: {command and result}
+- GREEN: {command and result}
+- Remaining checks: {list or none}
 ```
 
 ---

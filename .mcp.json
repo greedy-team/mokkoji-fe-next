@@ -3,6 +3,10 @@
     "discord-forum-mcp": {
       "command": "node",
       "args": ["scripts/discord-forum-mcp.mjs"]
+    },
+    "notion-team": {
+      "command": "node",
+      "args": ["scripts/NotionTeamMcp.mjs"]
     }
   }
 }

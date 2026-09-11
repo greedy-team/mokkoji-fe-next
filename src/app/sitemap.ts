@@ -4,6 +4,7 @@ import { Club, ClubsResponse } from '@/widgets/club/model/type';
 import serverApi from '@/shared/api/server-api';
 import { universityDisplayName } from '@/shared/lib/universityMeta';
 import { toUrlCode } from '@/shared/lib/urlCodeConverter';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 
 const BASE_URL = 'https://mokkoji.site';
 const CLUB_PAGE_SIZE = 100;
@@ -33,8 +34,11 @@ function fetchClubPage(universityCode: string, page: number) {
     .json<ApiResponse<ClubsResponse>>();
 }
 
-function hasRecruitment(club: Club): boolean {
-  return club.recruitmentPreviewResponse !== null;
+function hasContent(club: Club): boolean {
+  return (
+    club.recruitmentPreviewResponse !== null ||
+    Boolean(stripHtmlTags(club.description))
+  );
 }
 
 async function getClubIds(universityCode: string): Promise<number[]> {
@@ -43,7 +47,7 @@ async function getClubIds(universityCode: string): Promise<number[]> {
     if (!firstPageResponse.data) return [];
 
     const { clubs, page } = firstPageResponse.data;
-    const allIds = clubs.filter(hasRecruitment).map((club) => club.id);
+    const allIds = clubs.filter(hasContent).map((club) => club.id);
 
     const remainingPages = Array.from(
       { length: page.totalPages - 1 },
@@ -58,7 +62,7 @@ async function getClubIds(universityCode: string): Promise<number[]> {
 
     remainingPageResponses.forEach((pageResponse) => {
       pageResponse.data?.clubs
-        .filter(hasRecruitment)
+        .filter(hasContent)
         .forEach((club) => allIds.push(club.id));
     });
 

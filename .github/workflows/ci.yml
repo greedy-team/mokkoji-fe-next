@@ -25,5 +25,5 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - run: pnpm run lint
+      - run: pnpm run verify
       - run: pnpm run build

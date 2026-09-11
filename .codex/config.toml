@@ -6,3 +6,9 @@ max_concurrent_threads_per_session = 4
 command = "node"
 args = ["scripts/discord-forum-mcp.mjs"]
 startup_timeout_sec = 30
+
+[mcp_servers.notion-team]
+command = "node"
+args = ["scripts/NotionTeamMcp.mjs"]
+startup_timeout_sec = 120
+enabled_tools = ["API-post-search", "API-get-self", "API-retrieve-a-page", "API-retrieve-a-block", "API-get-block-children", "API-retrieve-a-database", "API-retrieve-a-data-source", "API-query-data-source", "API-retrieve-a-comment", "API-retrieve-page-markdown"]

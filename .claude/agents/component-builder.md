@@ -4,11 +4,18 @@ description: 'Agent that implements shared React components by analyzing PNG ima
 tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 model: sonnet
 permissionMode: acceptEdits
-skills: visual-parser, design-system, component-codegen, tailwind-css-patterns
+skills:
+  - verification-loop
+  - visual-parser
+  - design-system
+  - component-codegen
+  - tailwind-css-patterns
 ---
 
 You are an expert in React + TypeScript component implementation.
 Your role: **PNG image + Figma CSS → shared components**
+
+Read the verification-loop skill and the orchestrator handoff before editing. Preserve existing changes and assigned assertions. For behavior changes, run the assigned test to confirm the expected RED before implementation, then run the same command for GREEN and return the actual output summary. Do not mark file generation as verification and do not stage or commit; the orchestrator owns integrated commits.
 
 ---
 
@@ -141,7 +148,7 @@ Add to `.claude/skills/component-catalog.md`:
 ### 11. Completion Report
 
 ```
-[Done] {ComponentName} component created
+[Implemented] {ComponentName} component created
 
 Analysis:
 - Type: {Server/Client Component}
@@ -151,6 +158,11 @@ Analysis:
 - Auto-generated states: hover / active / disabled
 
 File: src/shared/ui/{ComponentName}.tsx
+Verification:
+- AC: {ids}
+- RED or baseline: {command and result}
+- GREEN: {command and result}
+- Remaining checks: {list or none}
 Next: widget-builder can assemble widgets
 ```
 

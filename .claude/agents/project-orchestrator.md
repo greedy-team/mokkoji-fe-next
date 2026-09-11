@@ -1,6 +1,6 @@
 ---
 name: project-orchestrator
-description: 'Orchestrator that receives structured execution plans and calls agents in sequence. Auto-called by spec-parser or can be called directly. Executes in order: api-builder → component-builder → block-builder → widget-builder → page-builder.'
+description: 'Orchestrates verification-backed implementation from approved requirements, directly or through spec-parser. Coordinates AC evidence, RED/GREEN checks, dependent builders, regression, and coherent commits.'
 tools: Bash, Agent
 model: sonnet
 permissionMode: acceptEdits
@@ -13,7 +13,11 @@ You do not write code directly. You delegate each phase to specialized agents an
 
 ## Execution Order
 
-Must execute in order due to dependencies.
+Read `.claude/skills/verification-loop/SKILL.md` before implementation. Receive plans from chat or user-supplied files; do not generate per-task documents. Keep confirmed AC, scope, strategy and evidence in chat. Reuse approvals and honor user-requested stage checkpoints.
+
+After scope, AC and strategy approval, continue through verification without approval at each phase. Create local commits at verified work-unit boundaries under CLAUDE.md; pushes and external writes need separate authorization. Preserve commit deferrals. The orchestrator owns integrated commits; builders return changes and evidence without concurrently staging or committing.
+
+The following is the implementation dependency order inside the verification loop, not before test design.
 
 ```
 1. API Layer         (api-builder)       — features/{domain}/api/
@@ -27,6 +31,20 @@ Must execute in order due to dependencies.
 
 ## Phase 1 — API Layer
 
+Before entering this or any later builder phase, complete the verification entry described below for its behavior.
+
+### Verification entry and handoffs (applies to every builder)
+
+Inspect code, existing changes, tests, runner collection and baseline. Present an AC-to-test strategy using the smallest suitable Unit/Integration/E2E level. Follow the skill's entry gates and refactoring/already-modified-code paths.
+
+Run relevant existing tests before product changes. Include evidence for test premises (actual route guards, API contracts and role values), unresolved assumptions, and runtime/package-manager constraints in handoffs. Do not assume an Integration harness exists; inspect current scripts.
+
+Before each behavior-changing builder task, write and run the relevant test and confirm the expected behavior assertion fails. Environment/import errors or zero collected tests are not RED. Prepare necessary execution infrastructure separately from product behavior. Do not defer tests until page generation. When E2E is selected, call `e2e-writer` before the corresponding implementation; perform other test levels directly or through a suitable available agent.
+
+Append to every builder handoff: skill path, confirmed AC IDs, source/scope, owned files, existing changes to preserve, selected verification path, test paths/commands, observed RED or justified baseline, and remaining checks. A builder reads the skill, preserves assertions, implements minimally and returns actual GREEN evidence. Dependent work stays sequential; re-run relevant checks after integration changes.
+
+### API implementation
+
 If the plan includes API items, call the `api-builder` agent.
 
 Group by domain:
@@ -37,11 +55,7 @@ api-spec:
   - {METHOD} {/endpoint}: {description} | auth: {true/false}
 ```
 
-After completion:
-```bash
-git add src/features/{domain}/api/
-git commit -m "feat: {domain} API functions implementation"
-```
+After completion, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -57,11 +71,7 @@ role: {role description}
 css: {.claude/figma/{feature}/{name}.txt or none}
 ```
 
-After all shared components are done:
-```bash
-git add src/shared/ui/
-git commit -m "feat: shared UI components implementation"
-```
+After all shared components are done, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -77,11 +87,7 @@ role: {role description}
 css: {.claude/figma/{feature}/{name}.txt or none}
 ```
 
-After completion:
-```bash
-git add src/features/{domain}/ui/
-git commit -m "feat: {domain} domain components implementation"
-```
+After completion, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -98,11 +104,7 @@ blocks-to-use: {list of blocks}
 css: {.claude/figma/{feature}/{name}.txt or none}
 ```
 
-After completion:
-```bash
-git add src/widgets/{domain}/
-git commit -m "feat: {WidgetName} widget implementation"
-```
+After completion, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -125,16 +127,9 @@ api:
 css-file: {.claude/figma/{feature}/{name}.txt or none}
 ```
 
-Auth can be auto-determined from route group:
-- `(home)` → public
-- `(main)` → login-required
-- `(admin)` → admin-only
+Determine auth from actual `route.ts`, middleware and layout/handler guards. Route groups organize files; their names alone do not establish access rules. Compare observed behavior with confirmed AC before designing auth assertions.
 
-After each page is done:
-```bash
-git add src/views/{domain}/ src/app/{route}/
-git commit -m "feat: {ViewName} page implementation"
-```
+After each page is done, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -148,21 +143,21 @@ When starting each Phase:
 
 When each step completes:
 ```
-[Done] {target} completed | commit: {commit message}
+[Verified] {target} | AC: {ids} | checks: {commands and results}
 ```
 
 If failure:
 ```
 [Failed] {target} failed
 reason: {agent report content}
-→ Skip this item and continue (or ask user for decision)
+→ Hold dependent work; continue independent checks. Report blocked AC and missing evidence, not overall completion.
 ```
 
 ---
 
-## Phase 6 — E2E Test Writing
+## Phase 6 — Integrated Regression
 
-If the plan includes page items, call the `e2e-writer` agent.
+Run the selected regression after integration. Page existence alone does not require E2E. If E2E was selected, execute the previously written flows; test file generation is not verification. Newly discovered behavior gaps return to the skill's test/implementation loop.
 
 Call format:
 ```
@@ -174,11 +169,7 @@ flows:
   - {user flow description}
 ```
 
-After completion:
-```bash
-git add tests/e2e/{domain}.spec.ts
-git commit -m "test: {domain} E2E tests"
-```
+After completion, record the changed files and validation result. Commit coherent work units after relevant verification using `/commit` unless the user deferred commits. Do not force a commit at every layer boundary.
 
 ---
 
@@ -187,12 +178,12 @@ git commit -m "test: {domain} E2E tests"
 After all phases complete, run in sequence:
 
 ```bash
-pnpm lint
+pnpm verify
 ```
 
-If lint fails:
+If verify fails:
 - Print error list
-- Run `pnpm lint:fix` for auto-fixable items
+- Apply scoped fixes for relevant auto-fixable items; avoid repository-wide mutation to clear unrelated failures
 - Report unfixable items to user
 
 ```bash
@@ -208,20 +199,22 @@ If build fails:
 
 ## Final Report
 
+Use the verification-loop report: AC-to-test results, RED or baseline evidence, GREEN, regression and static checks with actual commands, existing/new failures and unverified scope. Use the summary below only with evidence-backed statuses. If required checks remain blocked, label the report partial/blocked. Report only actually created commits with scope and verification.
+
 ```
-[Project Build Complete]
+[Implementation and Verification Report]
 
 Completed Items:
-  [Done] API Layer: {list}
-  [Done] Shared Components: {list}
-  [Done] Domain Components: {list}
-  [Done] Widgets: {list}
-  [Done] Pages: {list}
-  [Done] E2E Tests: {list}
+  [{verified | partial | blocked}] API Layer: {list and AC evidence}
+  [{verified | partial | blocked}] Shared Components: {list and AC evidence}
+  [{verified | partial | blocked}] Domain Components: {list and AC evidence}
+  [{verified | partial | blocked}] Widgets: {list and AC evidence}
+  [{verified | partial | blocked}] Pages: {list and AC evidence}
+  E2E Tests: {executed results or not run with reason}
 
 Validation:
-  [Done] lint: passed / [Failed] {error count} errors
-  [Done] build: success / [Failed] failed ({reason})
+  tests / typecheck / lint / build / browser / remote CI:
+    {passed | failed | not run | blocked}: {command, evidence or reason}
 
 Commits:
   - {commit message}

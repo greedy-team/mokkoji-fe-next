@@ -4,9 +4,10 @@ import getManagementClubs from './getManagementClubs';
 export const ADMIN_CLUBS_PAGE_SIZE = 20;
 
 const adminQueries = {
+  all: ['admin'] as const,
   clubs: (universityCode?: string) =>
     infiniteQueryOptions({
-      queryKey: ['admin', 'clubs', universityCode],
+      queryKey: [...adminQueries.all, 'clubs', universityCode],
       queryFn: ({ pageParam }) =>
         getManagementClubs({
           page: pageParam as number,

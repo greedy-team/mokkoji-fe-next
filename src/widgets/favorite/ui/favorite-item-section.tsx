@@ -2,7 +2,7 @@
 
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import favoriteQueries from '../api/queries';
+import favoriteQueries from '@/entities/favorite/api/queries';
 import FavoriteItemList from './favorite-item-list';
 
 function FavoriteItemSection() {

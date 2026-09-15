@@ -167,20 +167,22 @@ Before attaching a cache policy to a `serverApi` read, check four things:
 
 ## 6. react-query: keys live in `queries.ts`
 
-Each domain collects its keys in `{layer}/{domain}/api/queries.ts` as a single default-exported object of `queryOptions` / `infiniteQueryOptions` factories.
+Each domain collects its keys in `entities/{domain}/api/queries.ts` as a single default-exported object of `queryOptions` / `infiniteQueryOptions` factories, plus the `all` root prefix that invalidation goes through.
 
 ```ts
 const favoriteQueries = {
+  all: ['favorites'] as const,
   list: (params: { page: number; size: number }) =>
     queryOptions({
-      queryKey: ['favorites', params.page, params.size],
+      queryKey: [...favoriteQueries.all, 'list', params],
       queryFn: () => getClientFavoriteList(params),
       staleTime: 60 * 1000,
     }),
 };
 ```
 
-- Keys are hierarchical: domain first, then qualifier, then params — so `['favorites']` invalidates the whole domain.
+- Keys are three tiers — `[domain, qualifier, params]`. `all` is the domain root and the only literal in the file; every factory spreads it, and `invalidateQueries({ queryKey: favoriteQueries.all })` clears the domain.
+- The qualifier is mandatory even for a domain with one factory. Skipping it leaves siblings separated only by the runtime type of their first parameter.
 - Consumers spread the factory: `useSuspenseQuery(favoriteQueries.list(params))`. Reach for `.queryKey` alone only when prefetching with a different `queryFn`.
 - Per-query options (`staleTime`, `enabled`, `getNextPageParam`) belong in the factory, not in the component. [`createQueryClient`](../src/shared/lib/query-client.ts) sets no global defaults on purpose.
 - To prefetch an infinite query, override `queryFn` with the server fetcher while spreading the factory — see [prefetchAdminClubs.ts](../src/entities/admin/api/prefetchAdminClubs.ts).
@@ -189,11 +191,13 @@ const favoriteQueries = {
 
 **Placement**
 
-| Kind                         | Location                                            |
-| ---------------------------- | --------------------------------------------------- |
-| Server Action (mutation)     | `features/{domain}/api/`                            |
-| Read fetchers + `queries.ts` | `widgets/{domain}/api/` or `entities/{domain}/api/` |
-| Cross-domain client/helper   | `shared/api/`, `shared/lib/`                        |
+| Kind                                                   | Location                     |
+| ------------------------------------------------------ | ---------------------------- |
+| `queries.ts`, read fetchers (`getClient*` / `getServer*`), `prefetch*` | `entities/{domain}/api/`     |
+| Server Actions, `mutations.ts`, mutation fetchers       | `features/{domain}/api/`     |
+| Cross-domain client/helper                              | `shared/api/`, `shared/lib/` |
+
+Reads sit in `entities` so every layer above can reach the key; mutations sit in `features` because every consumer of one is already above it. See [`forbidden.md`](./forbidden.md) § `queries.ts` outside `entities`.
 
 **Rules**
 

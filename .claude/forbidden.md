@@ -64,11 +64,76 @@ Exception: `shared/lib/user-request.ts` calls bare `ky` on purpose — it *is* t
 
 Do not delete a `'server-only'` import to make an error go away. It means the call belongs on the other side of a Route Handler.
 
-### Inline `queryKey`
+### Inline `queryKey` — reads and invalidation alike
 
-Do not write a `queryKey` array inside a component or hook. Keys live in `{layer}/{domain}/api/queries.ts` as `queryOptions` / `infiniteQueryOptions` factories.
+Never write a key array outside `queries.ts`. This covers `useQuery` / `useSuspenseQuery` / `useInfiniteQuery` and equally `invalidateQueries`, `removeQueries`, `setQueryData`, `getQueryData`, and `cancelQueries`.
 
-**Why:** duplicated key literals drift, and invalidation then misses caches it was supposed to clear.
+**Why:** duplicated key literals drift, and invalidation then misses caches it was supposed to clear. Invalidation is where this actually bites — a read call site that spreads the factory stays correct for free, while a hand-written prefix silently stops matching the moment the factory's key shape changes.
+
+Each domain's keys live in `{layer}/{domain}/api/queries.ts` as one default-exported object. The object owns **both** halves: the factories and the prefixes callers invalidate through.
+
+```ts
+const favoriteQueries = {
+  all: ['favorites'] as const,
+  list: (params: { page: number; size: number }) =>
+    queryOptions({
+      queryKey: [...favoriteQueries.all, 'list', params],
+      queryFn: () => getClientFavoriteList(params),
+      staleTime: 60 * 1000,
+    }),
+  recruit: (yearMonth: string) =>
+    queryOptions({
+      queryKey: [...favoriteQueries.all, 'recruit', yearMonth],
+      queryFn: () => getClientFavoriteByDate(yearMonth),
+    }),
+};
+```
+
+```ts
+// Forbidden
+queryClient.invalidateQueries({ queryKey: ['favorites'] });
+// Correct
+queryClient.invalidateQueries({ queryKey: favoriteQueries.all });
+```
+
+Key shape is fixed at three tiers — `[domain, qualifier, params]`:
+
+- `all` is the domain root and the only literal in the file. Every factory spreads it.
+- The qualifier segment is mandatory even when a domain has one factory today. Without it, sibling factories are distinguished only by the runtime type of their first parameter, and the second factory added to the domain collides with the first.
+- Parameters come last. Pass an object rather than positional segments, so adding a parameter does not reshuffle the key.
+
+If a domain grows past one invalidation target, add the intermediate prefix to the object (`clubsAll: () => [...adminQueries.all, 'clubs'] as const`) — do not hand-write it at the call site. Reach for `.queryKey` alone only when prefetching with a different `queryFn` ([`api-conventions.md`](./api-conventions.md) §4).
+
+### `queries.ts` outside `entities`
+
+A domain's `queries.ts` lives in `entities/{domain}/api/`, never in `widgets`, `features`, or `views`.
+
+**Why:** a query key is a claim about domain data, not about one screen's composition, and its useful lifetime is longer than any single widget's. Placing it higher makes it unreachable from everything below — which is exactly how `shared/ui/favorite-button.tsx` ended up hand-writing `['favorites']`: the factory sat in `widgets/favorite`, so no lower layer could import it. `entities` is the lowest layer that may hold domain knowledge, so a key placed there is reachable, by the dependency arrow, from every layer that could ever need it.
+
+**The read fetchers follow the keys.** A `queryFn` references its fetcher, so a key in `entities` whose fetcher sits in `widgets` is a reverse import. `getClient*` and its `getServer*` pair belong in the same `entities/{domain}/api/` folder as the `queries.ts` that names them.
+
+Mutations do not move. `mutations.ts` and its `postClient*` / `deleteClient*` fetchers stay in `features/{domain}/api/` — a mutation is a user action, and every consumer of one sits above `features`.
+
+```
+entities/{domain}/api/     queries.ts, getClient*.ts, getServer*.ts, prefetch*.ts
+features/{domain}/api/     mutations.ts, postClient*.ts, Server Actions
+```
+
+If a widget is the only consumer of a query today, that is not a reason to keep the key next to it. The cost of the wrong placement is not paid at write time — it is paid by the next component that needs the same key and sits one layer too low to import it.
+
+### Cache knowledge below the domain layer
+
+A component that cannot import its domain's `queries.ts` must not invalidate that domain's cache. `shared/` sits below every domain, so a `shared/ui` component naming a domain key is always writing a literal it has no way to keep in sync.
+
+**Why:** the import is blocked by the dependency arrow, so the literal is unverifiable by construction — nothing fails when the key moves, and the stale prefix survives every refactor of the factory it was copied from.
+
+When a shared component appears to need invalidation, one of three things is true, in this order of likelihood:
+
+1. **No such query is mounted on the screens that render it.** Then the call is a no-op — delete it. `shared/ui/favorite-button.tsx` carried `invalidateQueries(['favorites'])` while the only screen holding a `favorites` cache renders `ClientFavoriteButton` instead.
+2. **The component belongs to the domain, not to `shared`.** Move it up and let it import the factory.
+3. **It is genuinely shared and the caller knows the cache.** Inject the domain-aware variant through a slot prop — the pattern [`club-item.tsx`](../src/entities/club/ui/club-item.tsx) already uses for `favoriteButton`.
+
+Adding a domain key file under `shared/` to satisfy the import is not a fourth option. It relocates the coupling instead of removing it.
 
 ### Swallowing errors in Server Actions
 

@@ -33,6 +33,7 @@ function isTabKey(value: string): value is TabKey {
 
 interface ClubDetailTabsProps {
   activeTab: string;
+  description?: string;
   recruitData?: ActiveRecruitmentData;
   clubId: number;
   selectedRecruitmentId?: number;
@@ -42,6 +43,7 @@ interface ClubDetailTabsProps {
 
 function ClubDetailTabs({
   activeTab,
+  description,
   recruitData,
   clubId,
   selectedRecruitmentId,
@@ -52,8 +54,10 @@ function ClubDetailTabs({
 
   const buildTabHref = (key: TabKey) => {
     const queryString = new URLSearchParams();
-    queryString.set('recruit', String(selectedRecruitmentId));
-    if (key !== 'recruit') queryString.set('tab', key);
+    if (selectedRecruitmentId) {
+      queryString.set('recruit', String(selectedRecruitmentId));
+    }
+    queryString.set('tab', key);
     return `/${universityCode}/club/${clubId}?${queryString.toString()}`;
   };
 
@@ -88,7 +92,7 @@ function ClubDetailTabs({
       }
 
       case 'about':
-        return <ClubDescriptionWidget clubId={clubId} />;
+        return <ClubDescriptionWidget description={description} />;
 
       case 'comments':
         return <ClubCommentsWidget clubId={clubId} />;

@@ -1,17 +1,14 @@
 import convertLinkText from '@/entities/club-detail/util/convertLinkText';
-import getClubDetail from '@/entities/club-detail/api/getClubDetail';
+import stripHtmlTags from '@/shared/lib/stripHtmlTags';
 
 interface ClubDescriptionWidgetProps {
-  clubId: number;
+  description?: string;
 }
 
-async function ClubDescriptionWidget({ clubId }: ClubDescriptionWidgetProps) {
-  const clubDetailResponse = await getClubDetail(clubId);
-  const description = clubDetailResponse.data?.description;
-
+function ClubDescriptionWidget({ description }: ClubDescriptionWidgetProps) {
   return (
     <div className="min-h-[300px] w-full">
-      {description ? (
+      {description && stripHtmlTags(description) ? (
         <p className="text-text-secondary text-sm leading-[1.4] break-words whitespace-pre-wrap lg:text-lg">
           <span
             dangerouslySetInnerHTML={{

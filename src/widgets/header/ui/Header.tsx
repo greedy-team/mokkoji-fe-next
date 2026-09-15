@@ -3,9 +3,9 @@ import React from 'react';
 import Image from 'next/image';
 import { getSession } from '@/shared/lib/cookie-session';
 import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
-import NavButton from './nav-button';
+import NavButton from '@/shared/ui/nav-button';
+import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';
 import HeaderMenuSection from './header-menu-section';
-import ScrollProgressBar from './scroll-progress-bar';
 
 interface HeaderProps {
   universityCode?: string;

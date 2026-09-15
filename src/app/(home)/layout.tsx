@@ -1,5 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
-import Header from '@/shared/ui/Header';
+import Header from '@/widgets/header/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';

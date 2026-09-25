@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import clientApi from '@/shared/api/client-api';
 import { useSession } from '@/shared/lib/session-context';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 export default function useLogout() {
   const router = useRouter();

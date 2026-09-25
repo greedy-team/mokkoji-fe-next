@@ -1,5 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import putEmail from '../../../features/my/api/putEmail';
 
 interface UseEmailEditProps {

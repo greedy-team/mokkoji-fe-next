@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import useScrollUp from '@/shared/model/useScrollUp';
+import useScrollUp from '@/shared/hooks/use-scroll-up';
 import { toast } from 'react-toastify';
 import postDiscordWebhook from '../api/postDiscordWebhook';
 import postFeedback from '../api/postFeedback';

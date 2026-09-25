@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 import cn from '@/shared/lib/utils';
 import { ClubType } from '@/shared/model/type';
 import ClubItem from '@/entities/club/ui/club-item';

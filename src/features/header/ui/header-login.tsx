@@ -1,15 +1,15 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import Image from 'next/image';
-import useClickOutside from '@/shared/model/useClickOutside';
+import useClickOutside from '@/shared/hooks/use-click-outside';
 import { useSession } from '@/shared/lib/session-context';
-import useLogout from '@/shared/hooks/useLogout';
+import useLogout from '@/shared/hooks/use-logout';
 import {
   ChevronIcon,
   UserIcon,

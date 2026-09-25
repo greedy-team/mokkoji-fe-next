@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import ClubDetailHeaderControl from '@/features/club-detail/ui/club-detail-header-control';
 import RadiusTag from '@/shared/ui/radius-tag';

@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import Link from 'next/link';
 import Image from 'next/image';

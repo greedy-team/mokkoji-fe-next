@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import useServerAction from '@/shared/hooks/useServerAction';
-import useLogout from '@/shared/hooks/useLogout';
+import useServerAction from '@/shared/hooks/use-server-action';
+import useLogout from '@/shared/hooks/use-logout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
 import deleteUser from '../api/deleteUser';

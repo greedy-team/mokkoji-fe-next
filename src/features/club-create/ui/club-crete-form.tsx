@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import useFormDraft from '@/shared/hooks/useFormDraft';
+import useFormDraft from '@/shared/hooks/use-form-draft';
 import {
   deserializeFile,
   serializeFile,
@@ -11,8 +11,8 @@ import {
 } from '@/shared/lib/formDraftStorage';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { toast } from 'react-toastify';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useUniversityCode from '@/shared/hooks/use-university-code';
+import useServerAction from '@/shared/hooks/use-server-action';
 import { useSession } from '@/shared/lib/session-context';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import convertImageToWebp, {

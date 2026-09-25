@@ -1,10 +1,10 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import { ClubInfoType } from '@/shared/model/type';
 import Input from '@/shared/ui/input';
 import Textarea from '@/shared/ui/textarea';
@@ -12,8 +12,8 @@ import DateRangePicker from '@/shared/ui/calendar/date-range-picker';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
-import useImageUpload from '@/shared/model/useImageUpload';
-import useFormDraft from '@/shared/hooks/useFormDraft';
+import useImageUpload from '@/shared/hooks/use-image-upload';
+import useFormDraft from '@/shared/hooks/use-form-draft';
 import ImageUploadSection from '@/shared/ui/image-upload-section';
 import { RecruitmentFormField, RecruitmentFormData } from '../model/type';
 import recruitmentFormReducer, {

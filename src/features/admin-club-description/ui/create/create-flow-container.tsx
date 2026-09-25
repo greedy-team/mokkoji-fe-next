@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { Suspense } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,9 +8,9 @@ import { toast } from 'react-toastify';
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
-import useServerAction from '@/shared/hooks/useServerAction';
-import useFormDraft from '@/shared/hooks/useFormDraft';
-import useClubRegisterForm from '@/features/admin-club-description/util/useClubRegisterForm';
+import useServerAction from '@/shared/hooks/use-server-action';
+import useFormDraft from '@/shared/hooks/use-form-draft';
+import useClubRegisterForm from '@/features/admin-club-description/util/use-club-register-form';
 import { postClubRegister } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useCreateFlow from './use-create-flow';

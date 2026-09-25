@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import useLogout from '@/shared/hooks/useLogout';
+import useLogout from '@/shared/hooks/use-logout';
 import ConfirmDialog from '@/shared/ui/ConfirmDialog';
 
 import Image from 'next/image';

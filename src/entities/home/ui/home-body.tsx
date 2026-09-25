@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 import headerSearchIcon from '@/shared/assets/images/header/search.svg';
 
 function HomeSearchBar() {

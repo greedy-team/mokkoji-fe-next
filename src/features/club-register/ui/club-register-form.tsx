@@ -1,13 +1,13 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useUniversityCode from '@/shared/hooks/use-university-code';
+import useServerAction from '@/shared/hooks/use-server-action';
 
 import { useReducer } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import SafeForm from '@/shared/ui/safe-form';
-import useFormDraft from '@/shared/hooks/useFormDraft';
+import useFormDraft from '@/shared/hooks/use-form-draft';
 import ClubInput from './club-input';
 import { ClubFormData, ClubRegisterFormField } from '../model/type';
 import { postClubRegister } from '../api/postClubRegister';

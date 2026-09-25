@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

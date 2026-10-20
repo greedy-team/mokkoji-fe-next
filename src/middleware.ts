@@ -2,8 +2,15 @@ import { NextRequest } from 'next/server';
 import handleDashboardAuth from '@/shared/lib/middleware/dashboard-auth';
 import handleMainAuth from '@/shared/lib/middleware/main-auth';
 import { normalizeUniversityCodeCasing } from '@/shared/lib/middleware/university-url';
+import handleVercelPreviewAuth from '@/shared/lib/middleware/vercel-preview-auth';
 
 export default async function middleware(req: NextRequest) {
+  // ── 배포 환경 게이트 (Vercel) ──────────────────────────────
+  // 앱 로직과 무관하게 Preview 배포 접근 자체를 막으므로 모든 처리보다 먼저 실행한다
+  const previewAuthResponse = handleVercelPreviewAuth(req);
+  if (previewAuthResponse) return previewAuthResponse;
+
+  // ── 앱 라우팅·인증 ─────────────────────────────────────────
   // 대시보드는 학교 코드 체계도 세션도 별개라 가장 먼저 분리한다
   const dashboardResponse = handleDashboardAuth(req);
   if (dashboardResponse) return dashboardResponse;

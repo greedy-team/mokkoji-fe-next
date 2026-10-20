@@ -12,8 +12,8 @@ export default function handleVercelPreviewAuth(
 ): NextResponse | null {
   if (process.env.VERCEL_ENV !== 'preview') return null;
 
-  const expectedUser = process.env.BASIC_AUTH_USER;
-  const expectedPassword = process.env.BASIC_AUTH_PASSWORD;
+  const expectedUser = process.env.DEVELOPER_ACCESS_USER;
+  const expectedPassword = process.env.DEVELOPER_ACCESS_PASSWORD;
   const credentials = parseBasicAuth(req.headers.get('authorization'));
 
   if (

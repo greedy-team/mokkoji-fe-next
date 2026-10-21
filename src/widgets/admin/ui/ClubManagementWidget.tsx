@@ -10,6 +10,7 @@ import { ClubCategoryLabel } from '@/shared/model/type';
 import ClubManagementRow from '@/features/admin/ui/ClubManagementRow';
 import DeleteDialog from '@/features/admin/ui/DeleteDialog';
 import deleteClubMutationOptions from '@/features/admin/api/mutations';
+import adminQueries from '@/entities/admin/api/queries';
 
 interface ClubListProps {
   searchClubQuery: string;
@@ -29,7 +30,7 @@ function ClubList({ searchClubQuery, universityCode }: ClubListProps) {
   const { mutate: deleteClubMutate, isPending: isDeleting } = useMutation({
     ...deleteClubMutationOptions(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'clubs'] });
+      queryClient.invalidateQueries({ queryKey: adminQueries.all });
     },
   });
 

@@ -70,6 +70,24 @@ Do not write a `queryKey` array inside a component or hook. Keys live in `{layer
 
 **Why:** duplicated key literals drift, and invalidation then misses caches it was supposed to clear.
 
+### Untyped mock handlers and copied mock types
+
+Every MSW handler in `src/mocks/handlers/` declares its response body type through the generic, and mock data in `src/mocks/data.ts` is typed with the real types imported from `entities` / `features` / `shared`. Redeclaring a response interface inside `src/mocks/` is forbidden.
+
+```ts
+// Forbidden
+http.get(apiUrl('/universities'), () => HttpResponse.json({ data: { universities } }));
+
+// Correct
+http.get<never, never, MockResponse<UniversitiesResponse>>(apiUrl('/universities'), () =>
+  HttpResponse.json({ data: { universities } }),
+);
+```
+
+**Why:** an untyped or copied shape keeps compiling after the real type changes, so mock mode drifts silently — the old `University` mock still returned `universityCode` long after the type moved to `code`. With the generic, `pnpm typecheck` fails the moment the two diverge.
+
+Mock code imports enums as types only (`` `${ClubCategory}` ``). A runtime enum import pulls the SVG assets of `shared/model/type` into the Node unit tests.
+
 ### Swallowing errors in Server Actions
 
 A Server Action must not return a bare `null`, rethrow raw, or hand-format an error message. Failures go through `createErrorResponse`, producing `{ ok, message, data?, status }`.

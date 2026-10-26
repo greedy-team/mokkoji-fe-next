@@ -7,7 +7,7 @@ function MSWProvider({ children }: { children: React.ReactNode }) {
   const [isReady, setIsReady] = useState(!isMockingEnabled);
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
+    if (isMockingEnabled) {
       import('@/mocks/browser').then(({ startMockWorker }) => {
         startMockWorker().then(() => setIsReady(true));
       });

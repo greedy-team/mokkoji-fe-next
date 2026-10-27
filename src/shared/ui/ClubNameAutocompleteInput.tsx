@@ -115,16 +115,14 @@ function ClubNameAutocompleteInput({
         className="border-gray2 absolute top-full left-0 z-20 w-full overflow-hidden rounded-lg border bg-white py-2 shadow-md"
       >
         {matchedClubs.map((club, index) => (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <li
             key={club.id}
             id={`${listId}-${index}`}
             role="option"
             aria-selected={index === activeIndex}
-            // click은 input blur로 목록이 닫힌 뒤에 발생하므로 mousedown에서 선택한다
-            onMouseDown={(event) => {
-              event.preventDefault();
-              selectClub(club);
-            }}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => selectClub(club)}
             className={cn(
               'text-text-secondary hover:bg-gray4 flex cursor-pointer items-center gap-2 px-4 py-2 text-sm lg:text-base',
               index === activeIndex && 'bg-gray4 text-text-primary',

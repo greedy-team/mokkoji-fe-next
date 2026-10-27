@@ -3,7 +3,6 @@ import Header from '@/shared/ui/Header';
 import Footer from '@/shared/ui/Footer';
 import type { Metadata } from 'next';
 import BottomNav from '@/shared/ui/bottom-nav';
-import QueryProvider from '@/shared/lib/QueryProvider';
 import { getUniversityName } from '@/shared/lib/universityMeta';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
@@ -36,23 +35,14 @@ export default async function MainLayout({
 }) {
   const { universityCode } = await params;
 
-  const userQueryOptions = {
-    queries: {
-      staleTime: 10 * 60 * 1000,
-      retry: 1,
-    },
-  };
-
   return (
-    <QueryProvider defaultOptions={userQueryOptions}>
-      <div className="flex h-screen w-full flex-col">
-        <div className="hidden sm:block">
-          <Header universityCode={universityCode} />
-        </div>
-        <main className="flex-1">{children}</main>
-        <Footer universityCode={universityCode} />
-        <BottomNav />
+    <div className="flex h-screen w-full flex-col">
+      <div className="hidden sm:block">
+        <Header universityCode={universityCode} />
       </div>
-    </QueryProvider>
+      <main className="flex-1">{children}</main>
+      <Footer universityCode={universityCode} />
+      <BottomNav />
+    </div>
   );
 }

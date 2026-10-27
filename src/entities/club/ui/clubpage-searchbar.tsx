@@ -3,6 +3,7 @@
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
 import { useState, useEffect } from 'react';
 import clubSearchIcon from '@/shared/assets/images/club/search.svg';
+import ClubNameAutocompleteInput from '@/shared/ui/ClubNameAutocompleteInput';
 
 function ClubPageSearchbar() {
   const [keyword, setKeyword] = useQueryState(
@@ -15,6 +16,7 @@ function ClubPageSearchbar() {
     'page',
     parseAsInteger.withOptions({ shallow: false, history: 'push' }),
   );
+
   const [inputValue, setInputValue] = useState(keyword);
 
   useEffect(() => {
@@ -36,10 +38,9 @@ function ClubPageSearchbar() {
           onSubmit={onSubmit}
           className="flex items-center justify-between gap-1 pb-5"
         >
-          <input
-            type="text"
+          <ClubNameAutocompleteInput
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={setInputValue}
             name="keyword"
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] text-xs placeholder-gray-300 outline-none sm:text-base"

@@ -1,139 +1,157 @@
 /* eslint-disable import/no-extraneous-dependencies, import/prefer-default-export */
 import { http, HttpResponse } from 'msw';
+import { getUniversityName } from '@/shared/lib/universityMeta';
+import type { AdminClubsData } from '@/entities/admin/api/getManagementClubs';
+import type {
+  AdminInfo,
+  ApplicationStatus,
+  ClubApplication,
+  ClubMasterApplication,
+  PaginationMeta,
+} from '@/features/admin/model/dashboard-types';
 import {
   adminClubs,
   clubApplications,
   clubMasterApplications,
-  knownApplicationIds,
-  type ApplicationStatus,
+  mockAdminInfo,
 } from '../data';
+import {
+  apiUrl,
+  errorResponse,
+  pageParams,
+  paginate,
+  type MockResponse,
+} from '../response';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
+interface RejectBody {
+  rejectReason?: string;
+}
 
-const url = (path: string) => `${baseUrl}${path}`;
+const filterApplications = <
+  T extends { status: ApplicationStatus; universityName: string },
+>(
+  applications: T[],
+  params: URLSearchParams,
+) => {
+  const status = params.get('status');
+  const universityCode = params.get('universityCode');
+  return applications.filter(
+    (application) =>
+      (!status || application.status === status) &&
+      (!universityCode ||
+        application.universityName === getUniversityName(universityCode)),
+  );
+};
 
-const buildPage = (totalElements: number, page: number, size: number) => ({
-  page,
-  size,
-  totalPages: Math.max(1, Math.ceil(totalElements / size)),
-  totalElements,
-});
-
-const notFound = (code: number, message: string) =>
-  HttpResponse.json({ code, message }, { status: 404 });
+const reviewHandlers = <
+  T extends { status: ApplicationStatus; rejectReason: string | null },
+>(
+  path: string,
+  findApplication: (applicationId: number) => T | undefined,
+  notFoundMessage: string,
+) => [
+  http.patch<{ applicationId: string }>(
+    apiUrl(`${path}/:applicationId/approve`),
+    ({ params }) => {
+      const application = findApplication(Number(params.applicationId));
+      if (!application) return errorResponse(404, notFoundMessage);
+      application.status = 'APPROVED';
+      application.rejectReason = null;
+      return new HttpResponse(null, { status: 200 });
+    },
+  ),
+  http.patch<{ applicationId: string }, RejectBody>(
+    apiUrl(`${path}/:applicationId/reject`),
+    async ({ params, request }) => {
+      const application = findApplication(Number(params.applicationId));
+      if (!application) return errorResponse(404, notFoundMessage);
+      const body = await request.json();
+      application.status = 'REJECTED';
+      application.rejectReason = body.rejectReason ?? null;
+      return new HttpResponse(null, { status: 200 });
+    },
+  ),
+];
 
 export const adminHandlers = [
-  http.get(url('/admin/club-master-applications'), ({ request }) => {
-    const params = new URL(request.url).searchParams;
-    const status = params.get('status') as ApplicationStatus | null;
-    const universityCode = params.get('universityCode');
-    const page = Number(params.get('page') ?? 1);
-    const size = Number(params.get('size') ?? 20);
+  http.get<never, never, MockResponse<AdminInfo>>(apiUrl('/admin/me'), () =>
+    HttpResponse.json({ data: mockAdminInfo }),
+  ),
 
-    let filtered = status
-      ? clubMasterApplications.filter((item) => item.status === status)
-      : clubMasterApplications;
+  http.get<
+    never,
+    never,
+    MockResponse<{
+      applications: ClubMasterApplication[];
+      pagination: PaginationMeta;
+    }>
+  >(apiUrl('/admin/club-master-applications'), ({ request }) => {
+    const { params, page, size } = pageParams(request);
+    const { items, pagination } = paginate(
+      filterApplications(clubMasterApplications, params),
+      page,
+      size,
+    );
+    return HttpResponse.json({ data: { applications: items, pagination } });
+  }),
 
-    if (universityCode) {
-      filtered = filtered.filter((item) =>
-        item.universityName.startsWith(universityCode),
+  ...reviewHandlers(
+    '/admin/club-master-applications',
+    (applicationId) =>
+      clubMasterApplications.find(({ id }) => id === applicationId),
+    '동아리장 권한 신청을 찾을 수 없습니다.',
+  ),
+
+  http.get<
+    never,
+    never,
+    MockResponse<{ applications: ClubApplication[]; page: PaginationMeta }>
+  >(apiUrl('/admin/club-applications'), ({ request }) => {
+    const { params, page, size } = pageParams(request);
+    const { items, pagination } = paginate(
+      filterApplications(clubApplications, params),
+      page,
+      size,
+    );
+    return HttpResponse.json({
+      data: { applications: items, page: pagination },
+    });
+  }),
+
+  ...reviewHandlers(
+    '/admin/club-applications',
+    (applicationId) =>
+      clubApplications.find(
+        (application) => application.applicationId === applicationId,
+      ),
+    '동아리 생성 신청을 찾을 수 없습니다.',
+  ),
+
+  http.get<never, never, MockResponse<AdminClubsData>>(
+    apiUrl('/admin/clubs'),
+    ({ request }) => {
+      const { params, page, size } = pageParams(request);
+      const universityCode = params.get('universityCode');
+      const { items, pagination } = paginate(
+        universityCode
+          ? adminClubs.filter((club) => club.universityCode === universityCode)
+          : adminClubs,
+        page,
+        size,
       );
-    }
-
-    return HttpResponse.json({
-      data: {
-        applications: filtered,
-        page: buildPage(filtered.length, page, size),
-      },
-    });
-  }),
-
-  http.post(
-    url('/admin/club-master-applications/:applicationId/approve'),
-    ({ params }) => {
-      const applicationId = Number(params.applicationId);
-      if (!knownApplicationIds.has(applicationId)) {
-        return notFound(40408, '동아리장 권한 신청을 찾을 수 없습니다.');
-      }
-      return new HttpResponse(null, { status: 200 });
+      return HttpResponse.json({ data: { clubs: items, page: pagination } });
     },
   ),
 
-  http.post(
-    url('/admin/club-master-applications/:applicationId/reject'),
+  http.delete<{ clubId: string }>(
+    apiUrl('/admin/clubs/:clubId'),
     ({ params }) => {
-      const applicationId = Number(params.applicationId);
-      if (!knownApplicationIds.has(applicationId)) {
-        return notFound(40408, '동아리장 권한 신청을 찾을 수 없습니다.');
-      }
-      return new HttpResponse(null, { status: 200 });
-    },
-  ),
-
-  http.get(url('/admin/clubs'), ({ request }) => {
-    const params = new URL(request.url).searchParams;
-    const universityCode = params.get('universityCode');
-    const page = Number(params.get('page') ?? 1);
-    const size = Number(params.get('size') ?? 20);
-
-    const filtered = universityCode
-      ? adminClubs.filter((item) =>
-          item.universityName.startsWith(universityCode),
-        )
-      : adminClubs;
-
-    return HttpResponse.json({
-      data: {
-        clubs: filtered,
-        pagination: buildPage(filtered.length, page, size),
-      },
-    });
-  }),
-
-  http.get(url('/admin/club-applications'), ({ request }) => {
-    const params = new URL(request.url).searchParams;
-    const status = params.get('status') as ApplicationStatus | null;
-    const universityCode = params.get('universityCode');
-    const page = Number(params.get('page') ?? 1);
-    const size = Number(params.get('size') ?? 20);
-
-    let filtered = status
-      ? clubApplications.filter((item) => item.status === status)
-      : clubApplications;
-
-    if (universityCode) {
-      filtered = filtered.filter((item) =>
-        item.universityName.startsWith(universityCode),
+      const index = adminClubs.findIndex(
+        (club) => club.clubId === Number(params.clubId),
       );
-    }
-
-    return HttpResponse.json({
-      data: {
-        applications: filtered,
-        page: buildPage(filtered.length, page, size),
-      },
-    });
-  }),
-
-  http.post(
-    url('/admin/club-applications/:applicationId/approve'),
-    ({ params }) => {
-      const applicationId = Number(params.applicationId);
-      if (!knownApplicationIds.has(applicationId)) {
-        return notFound(40407, '동아리 생성 신청을 찾을 수 없습니다.');
-      }
-      return new HttpResponse(null, { status: 200 });
-    },
-  ),
-
-  http.post(
-    url('/admin/club-applications/:applicationId/reject'),
-    ({ params }) => {
-      const applicationId = Number(params.applicationId);
-      if (!knownApplicationIds.has(applicationId)) {
-        return notFound(40407, '동아리 생성 신청을 찾을 수 없습니다.');
-      }
-      return new HttpResponse(null, { status: 200 });
+      if (index < 0) return errorResponse(404, '동아리를 찾을 수 없습니다.');
+      adminClubs.splice(index, 1);
+      return new HttpResponse(null, { status: 204 });
     },
   ),
 ];

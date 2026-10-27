@@ -5,7 +5,7 @@ import type { InputHTMLAttributes, KeyboardEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
-import getClubNameListOptions from '@/shared/api/queries';
+import { getClubNameListOptions } from '@/shared/api/queries';
 import type { ClubName } from '@/shared/api/getClientClubNameList';
 import filterClubNames from '@/shared/lib/filterClubNames';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';

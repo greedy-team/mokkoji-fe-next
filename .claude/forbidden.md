@@ -43,7 +43,7 @@ Presentational components do not fetch. Data is resolved in `views/` or `app/**/
 
 **Why:** fetching inside the composition layers makes those components untestable in isolation, unusable in Storybook, and impossible to reuse under a different data source.
 
-The accepted client-side pattern is a component reading an already-hydrated cache with `useSuspenseQuery(domainQueries.x())` — the fetch was scheduled by the view, not by the widget.
+The accepted client-side pattern is a component reading an already-hydrated cache with `useSuspenseQuery(getDomainOptions())` — the fetch was scheduled by the view, not by the widget.
 
 > Known violations: [ClubManagementWidget.tsx](../src/widgets/admin/ui/ClubManagementWidget.tsx), [favorite-dynamic-section.tsx](../src/widgets/favorite/ui/favorite-dynamic-section.tsx), [ClientFavoriteButton.tsx](../src/widgets/favorite/ui/ClientFavoriteButton.tsx) still hold their own `useQuery`/`useMutation`. Do not copy them into new code.
 
@@ -66,7 +66,7 @@ Do not delete a `'server-only'` import to make an error go away. It means the ca
 
 ### Inline `queryKey`
 
-Do not write a `queryKey` array inside a component or hook. Keys live in `{layer}/{domain}/api/queries.ts` as `queryOptions` / `infiniteQueryOptions` factories.
+Do not write a `queryKey` array inside a component or hook — for reads or for `invalidateQueries`. Keys live in `{layer}/{domain}/api/queries.ts`: each query is a `get{Name}Options` function returning `queryOptions` / `infiniteQueryOptions`, and invalidation uses the domain base key exported from the same file (see [`api-conventions.md`](./api-conventions.md) §6).
 
 **Why:** duplicated key literals drift, and invalidation then misses caches it was supposed to clear.
 

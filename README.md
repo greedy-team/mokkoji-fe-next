@@ -183,4 +183,55 @@
 - 에타에 매번 글을 올리지 않아도 돼요.
 
 ---
+## 🧭 개발 규칙
+
+자세한 규칙은 [`.claude/api-conventions.md`](.claude/api-conventions.md)와 [`.claude/forbidden.md`](.claude/forbidden.md)에 있습니다. 자주 쓰는 react-query 규칙만 요약합니다.
+
+### react-query 쿼리 정의
+
+- 쿼리는 도메인별 `{layer}/{domain}/api/queries.ts`에 `get{이름}Options` 함수로 만듭니다.
+- 도메인 기본 키(`favoriteBaseKey` 등)를 같은 파일에 두고, 모든 키와 캐시 무효화에 이 키를 씁니다. 컴포넌트에서 `queryKey` 배열을 직접 쓰지 않습니다.
+- 파일에서 내보내는 것이 함수 하나뿐이면 `export default`를 씁니다.
+
+```ts
+export const favoriteBaseKey = ['favorites'] as const;
+
+export function getFavoriteListOptions(params: { page: number; size: number }) {
+  return queryOptions({
+    queryKey: [...favoriteBaseKey, params.page, params.size],
+    queryFn: () => getClientFavoriteList(params),
+  });
+}
+
+// 사용
+useSuspenseQuery(getFavoriteListOptions({ page, size }));
+queryClient.invalidateQueries({ queryKey: favoriteBaseKey });
+```
+
+### staleTime
+
+| 범위 | 기본값 | 정하는 곳 |
+|---|---|---|
+| 사용자 페이지 | 10분 | `src/app/[universityCode]/layout.tsx`, `src/app/(home)/layout.tsx` |
+| 어드민 대시보드 | 0 | `src/app/(admin)/dashboard/layout.tsx` |
+
+쿼리별로 다르게 둘 때는 `get{이름}Options` 안에 설정하고 이유를 남깁니다. 현재 예외는 즐겨찾기 목록(`staleTime: 0`, 항상 최신 목록을 다시 불러옴) 하나입니다.
+
+---
+## 🗂️ 백엔드 백로그
+
+프론트 작업 중 확인했지만 백엔드 API가 필요해 보류한 항목입니다.
+
+### 동아리명 자동완성용 이름 목록 API
+
+- **현재**: 검색창 자동완성이 `GET /clubs?universityCode={code}&page=1&size=200`으로 동아리 목록을 받아 브라우저에서 이름을 거릅니다.
+- **문제**
+  - `size=200`으로 한 번만 받기 때문에, 동아리가 200개를 넘는 학교는 나머지 동아리가 자동완성에 나오지 않습니다.
+  - 이름(`id`, `name`)만 필요한데 소개글(HTML)·로고·모집 정보까지 함께 받아 응답이 무겁습니다.
+- **요청**: 학교별 동아리 이름만 반환하는 가벼운 API
+  - 예: `GET /clubs/names?universityCode=SEJONG` → `{ data: [{ id, name }] }`
+  - 페이지네이션 없이 해당 학교의 전체 동아리를 반환
+- **프론트 대응**: API가 생기면 `src/shared/api/getClientClubNameList.ts`의 요청 경로만 바꾸면 됩니다. 초성 검색은 지금처럼 프론트에서 처리합니다.
+
+---
 ## 대학 생활의 꽃, 동아리 활동을 모꼬지와 함께 해봐요! 🌻

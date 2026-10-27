@@ -109,12 +109,12 @@ Add a Route Handler whenever a client component needs authenticated data.
 
 Both unwrap the envelope and return the payload, so they are interchangeable as a `queryFn`.
 
-**Prefetch and hydrate** — the view (a Server Component) primes the cache with the *server* fetcher, wraps the tree in `HydrationBoundary`, and the client component reads it with `useSuspenseQuery(favoriteQueries.list(params))` — no data props.
+**Prefetch and hydrate** — the view (a Server Component) primes the cache with the *server* fetcher, wraps the tree in `HydrationBoundary`, and the client component reads it with `useSuspenseQuery(getFavoriteListOptions(params))` — no data props.
 
 ```ts
 const queryClient = getServerQueryClient();
 await queryClient.prefetchQuery({
-  queryKey: favoriteQueries.list({ page, size }).queryKey,
+  queryKey: getFavoriteListOptions({ page, size }).queryKey,
   queryFn: () => getServerFavoriteList({ page, size }),
 });
 ```
@@ -167,23 +167,27 @@ Before attaching a cache policy to a `serverApi` read, check four things:
 
 ## 6. react-query: keys live in `queries.ts`
 
-Each domain collects its keys in `{layer}/{domain}/api/queries.ts` as a single default-exported object of `queryOptions` / `infiniteQueryOptions` factories.
+Each domain collects its queries in `{layer}/{domain}/api/queries.ts`. One query is one function named `get{Name}Options` that returns `queryOptions` / `infiniteQueryOptions`. The domain's base key sits in the same file.
 
 ```ts
-const favoriteQueries = {
-  list: (params: { page: number; size: number }) =>
-    queryOptions({
-      queryKey: ['favorites', params.page, params.size],
-      queryFn: () => getClientFavoriteList(params),
-      staleTime: 60 * 1000,
-    }),
-};
+export const favoriteBaseKey = ['favorites'] as const;
+
+export function getFavoriteListOptions(params: { page: number; size: number }) {
+  return queryOptions({
+    queryKey: [...favoriteBaseKey, params.page, params.size],
+    queryFn: () => getClientFavoriteList(params),
+  });
+}
 ```
 
-- Keys are hierarchical: domain first, then qualifier, then params — so `['favorites']` invalidates the whole domain.
-- Consumers spread the factory: `useSuspenseQuery(favoriteQueries.list(params))`. Reach for `.queryKey` alone only when prefetching with a different `queryFn`.
-- Per-query options (`staleTime`, `enabled`, `getNextPageParam`) belong in the factory, not in the component. [`createQueryClient`](../src/shared/lib/query-client.ts) sets no global defaults on purpose.
-- To prefetch an infinite query, override `queryFn` with the server fetcher while spreading the factory — see [prefetchAdminClubs.ts](../src/entities/admin/api/prefetchAdminClubs.ts).
+- **Naming**: `get{Name}Options` — `getFavoriteListOptions`, `getAdminClubListOptions`. Mutations follow the same shape: `{verb}{Name}MutationOptions`.
+- **Exports**: named exports. A file that exports a single function uses `export default` instead, as `import/prefer-default-export` requires.
+- **Keys** are hierarchical — base key first, then qualifier, then params — and every key is built from the base key.
+- **Invalidation** uses the base key too: `invalidateQueries({ queryKey: favoriteBaseKey })`. Never write the key array again at the call site. When a lower layer must invalidate (e.g. `shared/ui/favorite-button.tsx`), the base key lives in that lower layer — `favoriteBaseKey` is in `shared/api/queries.ts` for this reason.
+- **Consumers** spread the options: `useSuspenseQuery(getFavoriteListOptions(params))`. Reach for `.queryKey` alone only when prefetching with a different `queryFn`.
+- **staleTime** comes from the layout's `QueryProvider` default: 10 minutes under `[universityCode]` and the root `(home)`, 0 under `(admin)/dashboard`. Override it in an options function only with a written reason. The favorites list sets `staleTime: 0` so it is always refetched, accepting one duplicate request after hydration.
+- Other per-query options (`enabled`, `getNextPageParam`) belong in the options function, not in the component.
+- To prefetch an infinite query, override `queryFn` with the server fetcher while spreading the options — see [prefetchAdminClubs.ts](../src/entities/admin/api/prefetchAdminClubs.ts).
 
 ## 7. API function file conventions
 

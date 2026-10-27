@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev --turbopack",
-    "dev:mock": "node scripts/DevMock.mjs",
+    "dev:mock": "node --import tsx scripts/DevMock.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -31,6 +31,46 @@ test('공유 쿼리 파라미터가 붙어도 같은 주소로 본다', () => {
   );
 });
 
+test('추적 파라미터가 붙어도 같은 주소로 본다', () => {
+  assert.equal(
+    isApplyFormLink(
+      'https://forms.gle/abc123?fbclid=IwAR0&utm_source=instagram',
+      'https://forms.gle/abc123',
+    ),
+    true,
+  );
+});
+
+test('쿼리로 폼을 구분하는 주소는 식별자가 다르면 판정하지 않는다', () => {
+  assert.equal(
+    isApplyFormLink(
+      'https://forms.office.com/Pages/ResponsePage.aspx?id=BBBB',
+      'https://forms.office.com/Pages/ResponsePage.aspx?id=AAAA',
+    ),
+    false,
+  );
+});
+
+test('쿼리로 폼을 구분하는 주소는 식별자가 같으면 판정한다', () => {
+  assert.equal(
+    isApplyFormLink(
+      'https://forms.office.com/Pages/ResponsePage.aspx?id=AAAA&utm_medium=story',
+      'https://forms.office.com/Pages/ResponsePage.aspx?id=AAAA',
+    ),
+    true,
+  );
+});
+
+test('쿼리 순서가 달라도 같은 주소로 본다', () => {
+  assert.equal(
+    isApplyFormLink(
+      'https://forms.office.com/r/abc?page=2&id=AAAA',
+      'https://forms.office.com/r/abc?id=AAAA&page=2',
+    ),
+    true,
+  );
+});
+
 test('프로토콜 차이는 같은 주소로 본다', () => {
   assert.equal(
     isApplyFormLink('http://forms.gle/abc123', 'https://forms.gle/abc123'),

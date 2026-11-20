@@ -3,6 +3,8 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import RecruitDetailView from '@/entities/club-detail/ui/recruit-detail-view';
 import NavigateRecruitForm from '@/features/club-detail/ui/navigate-recruit-form';
+import postApplyClick from '@/features/club-detail/api/postApplyClick';
+import shouldCollectApplyClick from '@/entities/club-detail/util/shouldCollectApplyClick';
 import { RecruitStatus } from '@/shared/model/type';
 
 interface RecruitDetail {
@@ -58,6 +60,15 @@ function ClubRecruitWidget({
     };
   }, []);
 
+  // 응답을 기다리면 새 탭 열림이 늦어지므로 await하지 않는다.
+  const handleApplyFormLinkClick = () => {
+    const { recruitForm, status } = recruitDetail;
+    if (!shouldCollectApplyClick({ recruitForm, recruitStatus: status })) {
+      return;
+    }
+    postApplyClick(selectedRecruitmentId);
+  };
+
   return (
     <div className="relative">
       <RecruitDetailView
@@ -66,6 +77,7 @@ function ClubRecruitWidget({
         recruitForm={recruitDetail.recruitForm}
         imageUrls={recruitDetail.imageUrls}
         recentRecruitId={selectedRecruitmentId}
+        onApplyFormLinkClick={handleApplyFormLinkClick}
       />
       <div ref={recruitHistoryRef}>{historySlot}</div>
       {mounted && (
@@ -74,6 +86,7 @@ function ClubRecruitWidget({
           style={{ opacity: visible ? 1 : 0 }}
         >
           <NavigateRecruitForm
+            recruitmentId={selectedRecruitmentId}
             recruitForm={recruitDetail.recruitForm}
             recruitStatus={recruitDetail.status}
           />

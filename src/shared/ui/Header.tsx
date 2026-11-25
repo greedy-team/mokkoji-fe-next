@@ -5,6 +5,7 @@ import { getSession } from '@/shared/lib/cookie-session';
 import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 import NavButton from './nav-button';
 import HeaderMenuSection from './header-menu-section';
+import NotificationBell from './notification-bell';
 import ScrollProgressBar from './scroll-progress-bar';
 
 interface HeaderProps {
@@ -42,7 +43,11 @@ async function Header({ universityCode }: HeaderProps) {
           <NavButton label="고객센터" href={`/${universityCode}/support`} />
         </nav>
       )}
-      <div className="ml-auto hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
+      {/* 모바일은 헤더 우측 전체가 숨겨지고 하단 탭바를 쓰므로, 종만 따로 띄운다 */}
+      <div className="ml-auto flex flex-shrink-0 items-center lg:hidden">
+        <NotificationBell />
+      </div>
+      <div className="hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:ml-auto lg:flex lg:gap-3">
         <HeaderMenuSection role={role} session={session} />
       </div>
       <span className="absolute bottom-0 left-0 hidden h-0.5 w-screen bg-gray-200 transition-colors duration-500 lg:flex" />

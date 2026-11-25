@@ -25,17 +25,17 @@ function NotificationBellButton({
       onClick={onToggle}
       aria-label={label}
       aria-expanded={isOpen}
-      className="hover:bg-gray4 relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors"
+      className="hover:bg-gray3 relative flex cursor-pointer items-center rounded-full px-3 py-1.5 transition-all"
     >
       <Bell
-        size={20}
+        size={22}
         className={cn(
           'transition-colors',
           isOpen ? 'text-primary-500' : 'text-text-secondary',
         )}
       />
       {hasUnread && (
-        <span className="bg-alert-500 absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-white px-1 text-xs font-bold text-white">
+        <span className="bg-alert-500 absolute top-0.5 right-1.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full border border-white px-[3px] text-[10px] leading-none font-bold text-white">
           {unreadCount > MAX_BADGE_COUNT ? `${MAX_BADGE_COUNT}+` : unreadCount}
         </span>
       )}

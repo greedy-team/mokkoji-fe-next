@@ -18,6 +18,10 @@ import resolveRoleChange from './resolveRoleChange';
 
 const SUBSCRIBE_URL = '/api/notifications/subscribe';
 
+const MAX_RETRY_COUNT = 5;
+const BASE_RETRY_DELAY = 3000;
+const MAX_RETRY_DELAY = 60000;
+
 /**
  * 알림 SSE를 구독한다. 루트에서 한 번만 마운트해 전역으로 연결을 유지한다.
  *
@@ -49,7 +53,10 @@ function useNotificationStream() {
   useEffect(() => {
     if (status !== 'authenticated') return undefined;
 
-    const source = new EventSource(SUBSCRIBE_URL);
+    let source: EventSource;
+    let retryCount = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    let stopped = false;
 
     const syncRole = async (incoming: UserRole | null) => {
       const { shouldUpdate, role } = resolveRoleChange(
@@ -72,46 +79,80 @@ function useNotificationStream() {
       if (role) await syncRole(role);
     };
 
-    source.addEventListener(SSE_EVENTS.CONNECT, (event) => {
-      try {
-        const payload: ConnectPayload = JSON.parse(
-          (event as MessageEvent).data,
-        );
-        syncRole(payload.role);
-      } catch {
-        // connect 페이로드가 깨져도 연결 자체는 유지한다
-      }
-    });
+    const connect = () => {
+      source = new EventSource(SUBSCRIBE_URL);
 
-    source.addEventListener(SSE_EVENTS.NOTIFICATION, (event) => {
-      queryClientRef.current.invalidateQueries({
-        queryKey: notificationBaseKey,
+      source.addEventListener('open', () => {
+        retryCount = 0;
       });
 
-      try {
-        const payload: NotificationPushPayload = JSON.parse(
-          (event as MessageEvent).data,
-        );
-        toast.info(`${payload.title}\n${payload.content}`);
-      } catch {
-        // 내용을 못 읽어도 목록은 이미 재조회를 걸었다
-      }
-    });
+      source.addEventListener(SSE_EVENTS.CONNECT, (event) => {
+        try {
+          const payload: ConnectPayload = JSON.parse(
+            (event as MessageEvent).data,
+          );
+          syncRole(payload.role);
+        } catch {
+          // connect 페이로드가 깨져도 연결 자체는 유지한다
+        }
+      });
 
-    // role-changed는 값이 없는 신호라 현재 role을 다시 조회해 쿠키에 반영한다.
-    // router.refresh()만 하면 쿠키의 낡은 role을 서버가 다시 읽어 화면이 그대로다.
-    source.addEventListener(SSE_EVENTS.ROLE_CHANGED, () => {
-      refetchRole();
-    });
+      source.addEventListener(SSE_EVENTS.NOTIFICATION, (event) => {
+        queryClientRef.current.invalidateQueries({
+          queryKey: notificationBaseKey,
+        });
+
+        try {
+          const payload: NotificationPushPayload = JSON.parse(
+            (event as MessageEvent).data,
+          );
+          toast.info(`${payload.title}\n${payload.content}`);
+        } catch {
+          // 내용을 못 읽어도 목록은 이미 재조회를 걸었다
+        }
+      });
+
+      // role-changed는 값이 없는 신호라 현재 role을 다시 조회해 쿠키에 반영한다.
+      // router.refresh()만 하면 쿠키의 낡은 role을 서버가 다시 읽어 화면이 그대로다.
+      source.addEventListener(SSE_EVENTS.ROLE_CHANGED, () => {
+        refetchRole();
+      });
+
+      // EventSource의 자동 재연결은 끌 수도, 횟수를 제한할 수도 없다.
+      // 연결이 계속 실패하면 3초마다 영원히 재시도하는데, 매 시도가 백엔드에서
+      // DB 커넥션을 쓰기 때문에(subscribe → getUserRole) 풀이 고갈되고
+      // 알림과 무관한 요청까지 타임아웃된다. 직접 닫고 백오프로 다시 연다.
+      source.addEventListener('error', () => {
+        source.close();
+        if (stopped) return;
+
+        retryCount += 1;
+        if (retryCount > MAX_RETRY_COUNT) return;
+
+        const delay = Math.min(
+          BASE_RETRY_DELAY * 2 ** (retryCount - 1),
+          MAX_RETRY_DELAY,
+        );
+        retryTimer = setTimeout(connect, delay);
+      });
+    };
+
+    connect();
 
     // 새로고침·탭 닫기에서 브라우저가 연결을 정리하기를 기다리면, 서버는
     // 다음 heartbeat(최대 30초)까지 끊긴 줄 모르고 emitter를 들고 있는다.
     // 그동안 HTTP/1.1의 호스트당 연결 6개 제한을 SSE가 잠식해, 같은 호스트의
     // 다른 요청이 연결 수립 단계에서 대기한다. 떠나는 시점에 직접 닫는다.
-    const closeOnLeave = () => source.close();
+    const closeOnLeave = () => {
+      stopped = true;
+      clearTimeout(retryTimer);
+      source.close();
+    };
     window.addEventListener('pagehide', closeOnLeave);
 
     return () => {
+      stopped = true;
+      clearTimeout(retryTimer);
       window.removeEventListener('pagehide', closeOnLeave);
       source.close();
     };

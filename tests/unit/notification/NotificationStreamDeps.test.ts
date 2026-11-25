@@ -93,3 +93,40 @@ test('적용한 role을 기억해 같은 변경을 반복하지 않는다', () =
     '서버에 보내기 전에 적용한 role을 기록해야 중복 적용을 막는다',
   );
 });
+
+test('재연결에 상한과 백오프가 있다', () => {
+  // EventSource의 자동 재연결은 끌 수 없고 횟수 제한도 없다. 연결이 계속
+  // 실패하면 3초마다 영원히 재시도하는데, 매 시도가 백엔드에서 DB 커넥션을
+  // 쓰기 때문에(subscribe → getUserRole) 풀이 고갈돼 알림과 무관한 요청까지
+  // 30초 타임아웃이 난다. 실제로 겪은 장애다.
+  assert.match(
+    source,
+    /retryCount > MAX_RETRY_COUNT/,
+    '재시도 횟수에 상한이 없으면 실패가 계속될 때 백엔드 커넥션을 소진한다',
+  );
+
+  assert.match(
+    source,
+    /Math\.min\(/,
+    '백오프에 상한이 없으면 지연이 무한정 커진다',
+  );
+
+  assert.match(
+    source,
+    /source\.close\(\);/,
+    'error에서 close하지 않으면 EventSource가 자체 재연결을 계속한다',
+  );
+});
+
+test('언마운트 후에는 재연결하지 않는다', () => {
+  assert.match(
+    source,
+    /stopped = true;/,
+    '정리 후에도 예약된 재연결이 남으면 떠난 페이지가 연결을 연다',
+  );
+  assert.match(
+    source,
+    /clearTimeout\(retryTimer\)/,
+    '예약된 재연결 타이머를 지워야 한다',
+  );
+});

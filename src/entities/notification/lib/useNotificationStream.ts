@@ -35,9 +35,16 @@ function useNotificationStream() {
   const roleRef = useRef<UserRole | undefined>(session?.role);
   const routerRef = useRef(router);
   const queryClientRef = useRef(queryClient);
-  roleRef.current = session?.role;
   routerRef.current = router;
   queryClientRef.current = queryClient;
+
+  // 쿠키를 갱신해도 AppSessionProvider의 session은 그대로라, session?.role을
+  // 그대로 쓰면 재연결마다 같은 변경을 다시 적용하고 refresh()가 반복된다.
+  // 반복되는 refresh는 진행 중인 문서·API 요청을 계속 취소시킨다.
+  // 이미 반영한 role은 여기 남겨두고, 세션이 실제로 따라잡으면 그때 맞춘다.
+  if (session?.role !== undefined && roleRef.current === undefined) {
+    roleRef.current = session.role;
+  }
 
   useEffect(() => {
     if (status !== 'authenticated') return undefined;
@@ -50,6 +57,10 @@ function useNotificationStream() {
         incoming,
       );
       if (!shouldUpdate || !role) return;
+
+      // 서버에 보내기 전에 기록해, 응답을 기다리는 동안 들어온 같은 이벤트가
+      // 같은 변경을 또 적용하지 않도록 한다
+      roleRef.current = role;
 
       const changed = await patchSessionRole(role);
       if (changed) routerRef.current.refresh();

@@ -76,3 +76,20 @@ test('페이지를 떠날 때도 연결을 닫는다', () => {
     'cleanup에서 리스너를 떼지 않으면 언마운트 후에도 핸들러가 남는다',
   );
 });
+
+test('적용한 role을 기억해 같은 변경을 반복하지 않는다', () => {
+  // 쿠키를 갱신해도 AppSessionProvider의 session은 그대로라, session?.role을
+  // 매 렌더 덮어쓰면 재연결마다 같은 변경이 다시 적용되고 refresh()가 반복된다.
+  // 반복되는 refresh는 진행 중인 문서·API 요청을 취소시킨다(실제로 겪음).
+  assert.doesNotMatch(
+    source,
+    /^\s*roleRef\.current = session\?\.role;\s*$/m,
+    'roleRef를 매 렌더 session?.role로 덮어쓰면 낡은 값이 되살아난다',
+  );
+
+  assert.match(
+    source,
+    /roleRef\.current = role;/,
+    '서버에 보내기 전에 적용한 role을 기록해야 중복 적용을 막는다',
+  );
+});

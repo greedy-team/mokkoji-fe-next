@@ -27,11 +27,13 @@ function NotificationBellButton({
       aria-expanded={isOpen}
       className="hover:bg-gray3 relative flex cursor-pointer items-center rounded-full px-3 py-1.5 transition-all"
     >
+      {/* 프로필 아이콘이 채워진 도형이라, 선 아이콘인 종은 굵기와 색을 올려야 무게가 맞는다 */}
       <Bell
-        size={22}
+        size={24}
+        strokeWidth={2.2}
         className={cn(
           'transition-colors',
-          isOpen ? 'text-primary-500' : 'text-text-secondary',
+          isOpen ? 'text-primary-500' : 'text-text-primary',
         )}
       />
       {hasUnread && (

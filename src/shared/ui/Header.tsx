@@ -5,7 +5,6 @@ import { getSession } from '@/shared/lib/cookie-session';
 import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 import NavButton from './nav-button';
 import HeaderMenuSection from './header-menu-section';
-import NotificationBell from './notification-bell';
 import ScrollProgressBar from './scroll-progress-bar';
 
 interface HeaderProps {
@@ -43,12 +42,7 @@ async function Header({ universityCode }: HeaderProps) {
           <NavButton label="고객센터" href={`/${universityCode}/support`} />
         </nav>
       )}
-      {/* 종은 한 번만 마운트한다. 두 군데에 두면 같은 쿼리를 두 컴포넌트가
-          구독해, 한쪽이 정리될 때 진행 중인 요청이 취소된다. */}
-      <div className="ml-auto flex flex-shrink-0 items-center">
-        <NotificationBell />
-      </div>
-      <div className="hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
+      <div className="ml-auto hidden flex-shrink-0 items-center gap-1 sm:gap-2 lg:flex lg:gap-3">
         <HeaderMenuSection role={role} session={session} />
       </div>
       <span className="absolute bottom-0 left-0 hidden h-0.5 w-screen bg-gray-200 transition-colors duration-500 lg:flex" />

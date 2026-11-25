@@ -35,7 +35,7 @@ function NotificationBellButton({
         )}
       />
       {hasUnread && (
-        <span className="bg-alert-500 absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full border-[1.5px] border-white px-1 text-[10px] font-bold text-white">
+        <span className="bg-alert-500 absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-white px-1 text-xs font-bold text-white">
           {unreadCount > MAX_BADGE_COUNT ? `${MAX_BADGE_COUNT}+` : unreadCount}
         </span>
       )}

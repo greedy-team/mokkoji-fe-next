@@ -1,0 +1,61 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { test } from 'node:test';
+
+// jsdom·testing-library가 없어 훅을 렌더할 수 없으므로 소스를 정적으로 검사한다.
+// 노리는 회귀는 하나다: effect 의존성에 매 렌더 새로 만들어지는 값이 들어가
+// EventSource가 중복으로 열리는 것. 2026-11-25에 router를 넣어 실제로 겪었고,
+// dev 로그에 한 사용자의 subscribe 연결이 4개 쌓였다.
+const source = readFileSync(
+  'src/entities/notification/lib/useNotificationStream.ts',
+  'utf8',
+);
+
+const dependencyArray = source.match(/\n\s*\}, \[([^\]]*)\]\);/);
+
+test('SSE effect의 의존성 배열을 찾을 수 있다', () => {
+  assert.ok(dependencyArray, 'useEffect 의존성 배열을 찾지 못했다');
+});
+
+test('SSE effect는 status에만 의존한다', () => {
+  const dependencies = dependencyArray![1]
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  assert.deepEqual(
+    dependencies,
+    ['status'],
+    `의존성에 ${dependencies.join(', ')}가 있다. router·queryClient처럼 매 렌더 ` +
+      '새로 만들어지는 값을 넣으면 effect가 재실행돼 EventSource가 중복으로 열린다. ' +
+      'ref로 넘길 것.',
+  );
+});
+
+test('effect 안에서 router·queryClient를 직접 쓰지 않는다', () => {
+  const effectBody = source
+    .slice(source.indexOf('useEffect(() => {'), source.lastIndexOf('}, ['))
+    // 주석 안의 router.refresh() 언급은 코드가 아니다
+    .replace(/\/\/[^\n]*/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+
+  // ref 경유(routerRef.current)는 허용, 직접 참조(router.)는 금지
+  assert.doesNotMatch(
+    effectBody,
+    /(?<!Ref\.current)\brouter\.(refresh|push|replace)\(/,
+    'effect 안에서 router를 직접 호출하면 의존성을 되돌리기 쉽다. routerRef.current를 쓸 것',
+  );
+  assert.doesNotMatch(
+    effectBody,
+    /(?<!Ref\.current)\bqueryClient\.invalidateQueries\(/,
+    'effect 안에서 queryClient를 직접 쓰면 의존성을 되돌리기 쉽다. queryClientRef.current를 쓸 것',
+  );
+});
+
+test('연결 해제가 cleanup에 있다', () => {
+  assert.match(
+    source,
+    /return \(\) => source\.close\(\);/,
+    'cleanup에서 close하지 않으면 언마운트 후에도 연결이 남는다',
+  );
+});

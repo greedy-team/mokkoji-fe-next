@@ -42,9 +42,15 @@ function useNotificationStream() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  // 콜백이 매 렌더마다 새 EventSource를 만들지 않도록 최신 role만 참조한다
+  // effect가 status에만 반응하도록 나머지는 ref로 넘긴다.
+  // router를 의존성에 두면 router.refresh()가 router를 새로 만들어
+  // effect가 재실행되고, 연결이 닫히기 전에 새로 열려 중복으로 쌓인다.
   const roleRef = useRef<UserRole | undefined>(session?.role);
+  const routerRef = useRef(router);
+  const queryClientRef = useRef(queryClient);
   roleRef.current = session?.role;
+  routerRef.current = router;
+  queryClientRef.current = queryClient;
 
   useEffect(() => {
     if (status !== 'authenticated') return undefined;
@@ -59,7 +65,7 @@ function useNotificationStream() {
       if (!shouldUpdate || !role) return;
 
       const changed = await putSessionRole(role);
-      if (changed) router.refresh();
+      if (changed) routerRef.current.refresh();
     };
 
     const refetchRole = async () => {
@@ -86,7 +92,9 @@ function useNotificationStream() {
     });
 
     source.addEventListener(SSE_EVENTS.NOTIFICATION, (event) => {
-      queryClient.invalidateQueries({ queryKey: notificationBaseKey });
+      queryClientRef.current.invalidateQueries({
+        queryKey: notificationBaseKey,
+      });
 
       try {
         const payload: NotificationPushPayload = JSON.parse(
@@ -105,7 +113,7 @@ function useNotificationStream() {
     });
 
     return () => source.close();
-  }, [status, queryClient, router]);
+  }, [status]);
 }
 
 export default useNotificationStream;

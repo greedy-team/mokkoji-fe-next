@@ -25,7 +25,7 @@ function NotificationBellButton({
       onClick={onToggle}
       aria-label={label}
       aria-expanded={isOpen}
-      className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[#e6e6e6]"
+      className="hover:bg-gray4 relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors"
     >
       <Bell
         size={20}

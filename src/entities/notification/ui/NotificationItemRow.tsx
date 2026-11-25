@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Bell, CircleX, ShieldCheck, Trash2, Repeat } from 'lucide-react';
 import cn from '@/shared/lib/utils';

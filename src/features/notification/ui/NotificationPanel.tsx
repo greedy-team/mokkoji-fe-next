@@ -36,7 +36,7 @@ function NotificationPanel({
         <span className="text-sm font-bold">알림</span>
         {unreadCount > 0 && (
           <>
-            <span className="bg-primary-500 ml-1.5 rounded-full px-1.5 py-px text-[10px] font-bold text-[#04341a]">
+            <span className="bg-primary-500 text-text-primary ml-1.5 rounded-full px-1.5 py-px text-[10px] font-bold">
               {unreadCount}
             </span>
             <button

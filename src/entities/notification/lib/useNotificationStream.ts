@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import type { UserRole } from '@/shared/model/type';
+import getClientUserRole from '../api/getClientUserRole';
+import patchSessionRole from '../api/patchSessionRole';
 import { notificationBaseKey } from '../api/queries';
 import {
   SSE_EVENTS,
@@ -15,21 +17,6 @@ import {
 import resolveRoleChange from './resolveRoleChange';
 
 const SUBSCRIBE_URL = '/api/notifications/subscribe';
-
-async function putSessionRole(role: UserRole): Promise<boolean> {
-  try {
-    const response = await fetch('/api/auth/session/role', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role }),
-    });
-    if (!response.ok) return false;
-    const result = await response.json();
-    return result?.changed === true;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * 알림 SSE를 구독한다. 루트에서 한 번만 마운트해 전역으로 연결을 유지한다.
@@ -64,20 +51,14 @@ function useNotificationStream() {
       );
       if (!shouldUpdate || !role) return;
 
-      const changed = await putSessionRole(role);
+      const changed = await patchSessionRole(role);
       if (changed) routerRef.current.refresh();
     };
 
     const refetchRole = async () => {
-      try {
-        const response = await fetch('/api/users/role');
-        if (!response.ok) return;
-        const result = await response.json();
-        const role: UserRole | undefined = result?.data?.role;
-        if (role) await syncRole(role);
-      } catch {
-        // 조회 실패 시 다음 재연결의 connect 이벤트가 복구한다
-      }
+      // 조회 실패 시 다음 재연결의 connect 이벤트가 복구한다
+      const role = await getClientUserRole();
+      if (role) await syncRole(role);
     };
 
     source.addEventListener(SSE_EVENTS.CONNECT, (event) => {

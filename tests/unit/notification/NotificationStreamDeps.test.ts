@@ -53,9 +53,26 @@ test('effect 안에서 router·queryClient를 직접 쓰지 않는다', () => {
 });
 
 test('연결 해제가 cleanup에 있다', () => {
+  const cleanup = source.slice(source.lastIndexOf('return () =>'));
+
+  assert.match(
+    cleanup,
+    /source\.close\(\)/,
+    'cleanup에서 close하지 않으면 언마운트 후에도 연결이 남는다',
+  );
+});
+
+test('페이지를 떠날 때도 연결을 닫는다', () => {
+  // 브라우저의 정리를 기다리면 서버가 최대 30초간 emitter를 들고 있어,
+  // HTTP/1.1의 호스트당 연결 6개 제한을 SSE가 잠식한다.
   assert.match(
     source,
-    /return \(\) => source\.close\(\);/,
-    'cleanup에서 close하지 않으면 언마운트 후에도 연결이 남는다',
+    /addEventListener\('pagehide'/,
+    'pagehide에서 close하지 않으면 새로고침 때마다 연결이 쌓인다',
+  );
+  assert.match(
+    source,
+    /removeEventListener\('pagehide'/,
+    'cleanup에서 리스너를 떼지 않으면 언마운트 후에도 핸들러가 남는다',
   );
 });

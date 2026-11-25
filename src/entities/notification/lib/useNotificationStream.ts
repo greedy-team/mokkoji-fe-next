@@ -93,7 +93,17 @@ function useNotificationStream() {
       refetchRole();
     });
 
-    return () => source.close();
+    // 새로고침·탭 닫기에서 브라우저가 연결을 정리하기를 기다리면, 서버는
+    // 다음 heartbeat(최대 30초)까지 끊긴 줄 모르고 emitter를 들고 있는다.
+    // 그동안 HTTP/1.1의 호스트당 연결 6개 제한을 SSE가 잠식해, 같은 호스트의
+    // 다른 요청이 연결 수립 단계에서 대기한다. 떠나는 시점에 직접 닫는다.
+    const closeOnLeave = () => source.close();
+    window.addEventListener('pagehide', closeOnLeave);
+
+    return () => {
+      window.removeEventListener('pagehide', closeOnLeave);
+      source.close();
+    };
   }, [status]);
 }
 

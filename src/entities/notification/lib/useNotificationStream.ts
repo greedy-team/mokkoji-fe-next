@@ -33,19 +33,16 @@ function useNotificationStream() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  // effect가 status에만 반응하도록 나머지는 ref로 넘긴다.
   // router를 의존성에 두면 router.refresh()가 router를 새로 만들어
-  // effect가 재실행되고, 연결이 닫히기 전에 새로 열려 중복으로 쌓인다.
+  // effect가 재실행되고 연결이 중복으로 쌓인다
   const roleRef = useRef<UserRole | undefined>(session?.role);
   const routerRef = useRef(router);
   const queryClientRef = useRef(queryClient);
   routerRef.current = router;
   queryClientRef.current = queryClient;
 
-  // 쿠키를 갱신해도 AppSessionProvider의 session은 그대로라, session?.role을
-  // 그대로 쓰면 재연결마다 같은 변경을 다시 적용하고 refresh()가 반복된다.
-  // 반복되는 refresh는 진행 중인 문서·API 요청을 계속 취소시킨다.
-  // 이미 반영한 role은 여기 남겨두고, 세션이 실제로 따라잡으면 그때 맞춘다.
+  // 쿠키를 갱신해도 session은 그대로라, 매 렌더 덮어쓰면 이미 반영한 변경을
+  // 또 적용하고 refresh()가 반복된다. 세션이 아직 비었을 때만 초기화한다.
   if (session?.role !== undefined && roleRef.current === undefined) {
     roleRef.current = session.role;
   }
@@ -65,8 +62,7 @@ function useNotificationStream() {
       );
       if (!shouldUpdate || !role) return;
 
-      // 서버에 보내기 전에 기록해, 응답을 기다리는 동안 들어온 같은 이벤트가
-      // 같은 변경을 또 적용하지 않도록 한다
+      // 응답을 기다리는 사이 같은 이벤트가 또 와도 중복 적용되지 않게 먼저 기록
       roleRef.current = role;
 
       const changed = await patchSessionRole(role);
@@ -118,10 +114,8 @@ function useNotificationStream() {
         refetchRole();
       });
 
-      // EventSource의 자동 재연결은 끌 수도, 횟수를 제한할 수도 없다.
-      // 연결이 계속 실패하면 3초마다 영원히 재시도하는데, 매 시도가 백엔드에서
-      // DB 커넥션을 쓰기 때문에(subscribe → getUserRole) 풀이 고갈되고
-      // 알림과 무관한 요청까지 타임아웃된다. 직접 닫고 백오프로 다시 연다.
+      // EventSource의 자동 재연결은 끌 수도 횟수를 제한할 수도 없어서,
+      // 직접 닫고 백오프로 다시 연다
       source.addEventListener('error', () => {
         source.close();
         if (stopped) return;
@@ -139,10 +133,8 @@ function useNotificationStream() {
 
     connect();
 
-    // 새로고침·탭 닫기에서 브라우저가 연결을 정리하기를 기다리면, 서버는
-    // 다음 heartbeat(최대 30초)까지 끊긴 줄 모르고 emitter를 들고 있는다.
-    // 그동안 HTTP/1.1의 호스트당 연결 6개 제한을 SSE가 잠식해, 같은 호스트의
-    // 다른 요청이 연결 수립 단계에서 대기한다. 떠나는 시점에 직접 닫는다.
+    // 브라우저의 정리를 기다리면 서버가 다음 heartbeat(최대 30초)까지
+    // 끊긴 줄 모르고 emitter를 들고 있다
     const closeOnLeave = () => {
       stopped = true;
       clearTimeout(retryTimer);

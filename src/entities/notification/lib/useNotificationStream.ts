@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSession } from '@/shared/lib/session-context';
 import type { UserRole } from '@/shared/model/type';
-import getClientUserRole from '../api/getClientUserRole';
 import patchSessionRole from '../api/patchSessionRole';
 import { notificationBaseKey } from '../api/queries';
 import {
@@ -55,30 +54,12 @@ function useNotificationStream() {
     let retryTimer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
 
-    const syncRole = async (incoming: UserRole | null) => {
-      const { shouldUpdate, role } = resolveRoleChange(
-        roleRef.current,
-        incoming,
-      );
-      if (!shouldUpdate || !role) return;
-
-      // 응답을 기다리는 사이 같은 이벤트가 또 와도 중복 적용되지 않게 먼저 기록
-      const previousRole = roleRef.current;
+    // 실패하면 roleRef를 그대로 둬서 다음 connect에서 다시 시도하게 한다
+    const syncSessionRole = async () => {
+      const { ok, role, changed } = await patchSessionRole();
+      if (!ok) return;
       roleRef.current = role;
-
-      const { ok, changed } = await patchSessionRole(role);
-      if (!ok) {
-        // 쿠키 갱신에 실패하면 되돌려, 다음 connect에서 다시 시도하게 한다
-        roleRef.current = previousRole;
-        return;
-      }
       if (changed) routerRef.current.refresh();
-    };
-
-    const refetchRole = async () => {
-      // 조회 실패 시 다음 재연결의 connect 이벤트가 복구한다
-      const role = await getClientUserRole();
-      if (role) await syncRole(role);
     };
 
     const connect = () => {
@@ -93,7 +74,11 @@ function useNotificationStream() {
           const payload: ConnectPayload = JSON.parse(
             (event as MessageEvent).data,
           );
-          syncRole(payload.role);
+          const { shouldUpdate } = resolveRoleChange(
+            roleRef.current,
+            payload.role,
+          );
+          if (shouldUpdate) syncSessionRole();
         } catch {
           // connect 페이로드가 깨져도 연결 자체는 유지한다
         }
@@ -114,10 +99,9 @@ function useNotificationStream() {
         }
       });
 
-      // role-changed는 값이 없는 신호라 현재 role을 다시 조회해 쿠키에 반영한다.
-      // router.refresh()만 하면 쿠키의 낡은 role을 서버가 다시 읽어 화면이 그대로다.
+      // router.refresh()만 하면 쿠키의 낡은 role을 서버가 다시 읽어 화면이 그대로다
       source.addEventListener(SSE_EVENTS.ROLE_CHANGED, () => {
-        refetchRole();
+        syncSessionRole();
       });
 
       // EventSource의 자동 재연결은 끌 수도 횟수를 제한할 수도 없어서,

@@ -131,18 +131,17 @@ test('언마운트 후에는 재연결하지 않는다', () => {
   );
 });
 
-test('쿠키 갱신 실패 시 적용한 role을 되돌린다', () => {
-  // roleRef를 먼저 기록해 중복 적용을 막는데, PATCH가 실패해도 그대로 두면
-  // 재연결에서 같은 role을 받아도 "이미 반영됨"으로 보고 재시도하지 않는다.
-  assert.match(
-    source,
-    /const previousRole = roleRef\.current;/,
-    '실패 시 되돌릴 이전 값을 보관해야 한다',
-  );
-  assert.match(
-    source,
-    /roleRef\.current = previousRole;/,
-    'PATCH 실패 시 roleRef를 되돌려야 다음 connect에서 재시도한다',
+test('쿠키 갱신이 성공한 뒤에만 role을 기록한다', () => {
+  // 실패했는데 roleRef를 먼저 바꿔두면, 재연결에서 같은 role을 받아도
+  // "이미 반영됨"으로 보고 재시도하지 않는다.
+  const syncCall = source.indexOf('await patchSessionRole(');
+  const okCheck = source.indexOf('if (!ok) return;');
+  const record = source.indexOf('roleRef.current = role;');
+
+  assert.ok(syncCall !== -1, 'patchSessionRole 호출을 찾지 못했다');
+  assert.ok(
+    syncCall < okCheck && okCheck < record,
+    '서버가 확정한 role을 실패 확인 뒤에 기록해야 다음 connect에서 재시도한다',
   );
 });
 

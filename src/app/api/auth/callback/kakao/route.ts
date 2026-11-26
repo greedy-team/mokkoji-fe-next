@@ -1,10 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { NextRequest, NextResponse } from 'next/server';
 import serverApi from '@/shared/api/server-api';
-import {
-  LoginSuccessResponse,
-  RoleResponse,
-} from '@/features/login/model/type';
+import { LoginSuccessResponse } from '@/features/login/model/type';
 import UserInfoType from '@/entities/my/model/type';
 import getTokenExpiration from '@/shared/lib/getTokenExpiration';
 import { buildSessionCookie, CookieSession } from '@/shared/lib/cookie-session';
@@ -39,17 +36,6 @@ export async function GET(request: NextRequest) {
     });
     const userResponseBody: { data: UserInfoType } = await userResponse.json();
 
-    let role: string | undefined;
-    try {
-      const rolesResponse = await serverApi.get('users/roles', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const rolesResponseBody: RoleResponse = await rolesResponse.json();
-      role = rolesResponseBody.data?.role;
-    } catch {
-      // role 조회 실패해도 로그인은 성공 처리
-    }
-
     const apiUniversityCode = toApiCode(
       userResponseBody.data.universityCode ?? 'SEJONG',
     );
@@ -58,7 +44,7 @@ export async function GET(request: NextRequest) {
       accessToken,
       refreshToken,
       user: userResponseBody.data,
-      role: role as CookieSession['role'],
+      role: userResponseBody.data.role as CookieSession['role'],
       expiresAt: getTokenExpiration(accessToken) ?? undefined,
       universityCode: apiUniversityCode,
     };

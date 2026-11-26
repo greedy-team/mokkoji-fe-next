@@ -130,3 +130,38 @@ test('언마운트 후에는 재연결하지 않는다', () => {
     '예약된 재연결 타이머를 지워야 한다',
   );
 });
+
+test('쿠키 갱신 실패 시 적용한 role을 되돌린다', () => {
+  // roleRef를 먼저 기록해 중복 적용을 막는데, PATCH가 실패해도 그대로 두면
+  // 재연결에서 같은 role을 받아도 "이미 반영됨"으로 보고 재시도하지 않는다.
+  assert.match(
+    source,
+    /const previousRole = roleRef\.current;/,
+    '실패 시 되돌릴 이전 값을 보관해야 한다',
+  );
+  assert.match(
+    source,
+    /roleRef\.current = previousRole;/,
+    'PATCH 실패 시 roleRef를 되돌려야 다음 connect에서 재시도한다',
+  );
+});
+
+test('bfcache 복원 시 연결을 다시 연다', () => {
+  // pagehide에서 닫은 뒤 뒤로가기로 복원되면 effect가 다시 돌지 않는다.
+  // pageshow에서 되살리지 않으면 이후 알림과 권한 변경을 받지 못한다.
+  assert.match(
+    source,
+    /addEventListener\('pageshow'/,
+    'pageshow에서 재연결하지 않으면 bfcache 복원 후 알림이 끊긴다',
+  );
+  assert.match(
+    source,
+    /event\.persisted/,
+    'bfcache 복원(persisted)일 때만 재연결해야 한다',
+  );
+  assert.match(
+    source,
+    /removeEventListener\('pageshow'/,
+    'cleanup에서 리스너를 떼야 한다',
+  );
+});

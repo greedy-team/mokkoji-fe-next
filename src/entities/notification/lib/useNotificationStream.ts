@@ -63,9 +63,15 @@ function useNotificationStream() {
       if (!shouldUpdate || !role) return;
 
       // 응답을 기다리는 사이 같은 이벤트가 또 와도 중복 적용되지 않게 먼저 기록
+      const previousRole = roleRef.current;
       roleRef.current = role;
 
-      const changed = await patchSessionRole(role);
+      const { ok, changed } = await patchSessionRole(role);
+      if (!ok) {
+        // 쿠키 갱신에 실패하면 되돌려, 다음 connect에서 다시 시도하게 한다
+        roleRef.current = previousRole;
+        return;
+      }
       if (changed) routerRef.current.refresh();
     };
 
@@ -140,12 +146,24 @@ function useNotificationStream() {
       clearTimeout(retryTimer);
       source.close();
     };
+
+    // bfcache로 복원되면 effect가 다시 돌지 않으므로, pagehide에서 닫은 연결을
+    // 여기서 직접 되살린다. 그러지 않으면 뒤로가기 이후 알림이 끊긴다.
+    const reopenOnRestore = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      stopped = false;
+      retryCount = 0;
+      connect();
+    };
+
     window.addEventListener('pagehide', closeOnLeave);
+    window.addEventListener('pageshow', reopenOnRestore);
 
     return () => {
       stopped = true;
       clearTimeout(retryTimer);
       window.removeEventListener('pagehide', closeOnLeave);
+      window.removeEventListener('pageshow', reopenOnRestore);
       source.close();
     };
   }, [status]);

@@ -5,6 +5,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev --turbopack",
+    "dev:https": "next dev --turbopack --experimental-https --hostname local.mokkoji.site -p 3000",
     "dev:mock": "node --import tsx scripts/DevMock.mjs",
     "build": "next build",
     "start": "next start",

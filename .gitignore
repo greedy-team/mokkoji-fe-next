@@ -63,3 +63,7 @@ nginx/active/
 .omc/
 .serena/
 scripts/token-now.py
+
+# IDE
+.idea/
+.vscode/

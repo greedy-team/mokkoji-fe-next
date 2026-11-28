@@ -14,7 +14,7 @@ import Input from '@/shared/ui/input';
 import cn from '@/shared/lib/utils';
 import Image from 'next/image';
 import nextBlackIcon from '@/shared/assets/images/nextBlack.svg';
-import useEmailEdit from '../../../entities/my/model/useEmailEdit';
+import useEmailEdit from '../model/useEmailEdit';
 
 type EmailChangeDialogProps = {
   initialEmail?: string;

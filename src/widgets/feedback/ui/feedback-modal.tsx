@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useScrollUp from '@/shared/hooks/use-scroll-up';
 import { toast } from 'react-toastify';
 import postDiscordWebhook from '../api/postDiscordWebhook';
@@ -12,16 +12,25 @@ function FeedbackModal() {
   const [comment, setComment] = useState('');
   const { isVisible } = useScrollUp();
   const [isOpen, setIsOpen] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   const handleSubmit = async () => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setIsSubmitting(true);
     try {
       await postDiscordWebhook({ rating, comment });
       await postFeedback({ rating, content: comment });
       toast.success('의견 감사합니다!', { autoClose: 2000 });
       setRating(0);
       setComment('');
+      setIsOpen(false);
     } catch {
       toast.error('전송에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -71,11 +80,11 @@ function FeedbackModal() {
       />
 
       <button
-        disabled={rating === 0 && comment.length <= 0}
+        disabled={isSubmitting || (rating === 0 && comment.length <= 0)}
         onClick={handleSubmit}
         className="bg-lightmode-tag w-full cursor-pointer rounded-lg py-3 text-sm transition-colors disabled:bg-gray-200 disabled:text-gray-400"
       >
-        확인
+        {isSubmitting ? '전송 중...' : '확인'}
       </button>
     </div>
   );

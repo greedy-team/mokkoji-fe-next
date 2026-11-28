@@ -28,6 +28,7 @@ interface RecruitDetailHeaderProps {
   logo: string;
   status?: RecruitStatus;
   isAlwaysRecruiting: boolean;
+  hasRecruitment?: boolean;
 }
 
 function RecruitDetailHeader({
@@ -42,6 +43,7 @@ function RecruitDetailHeader({
   createdAt,
   status,
   isAlwaysRecruiting,
+  hasRecruitment = true,
 }: RecruitDetailHeaderProps) {
   const universityCode = useUniversityCode();
   const [date] = (createdAt || '').split('T');
@@ -66,26 +68,30 @@ function RecruitDetailHeader({
         </div>
       </div>
       <div className="flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:text-xl">
-        <RadiusTag
-          recruitStatus={status}
-          className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-2.5 lg:text-[14px]"
-        />
-        <div className="flex flex-col">
-          <PeriodSection
-            startDate={startDate}
-            endDate={endDate}
-            isDecorated={false}
-            className="mt-1 text-sm whitespace-nowrap lg:text-lg"
-            isAlwaysRecruiting={isAlwaysRecruiting}
+        {hasRecruitment && (
+          <RadiusTag
+            recruitStatus={status}
+            className="shrink-0 px-3 py-2 text-xs whitespace-nowrap lg:px-4 lg:py-2.5 lg:text-[14px]"
           />
-          <div className="mr-auto shrink-0">
-            {date && (
-              <p className="mt-1 text-sm text-[#9C9C9C]">
-                작성일 · {formattedDate}
-              </p>
-            )}
+        )}
+        {hasRecruitment && (
+          <div className="flex flex-col">
+            <PeriodSection
+              startDate={startDate}
+              endDate={endDate}
+              isDecorated={false}
+              className="mt-1 text-sm whitespace-nowrap lg:text-lg"
+              isAlwaysRecruiting={isAlwaysRecruiting}
+            />
+            <div className="mr-auto shrink-0">
+              {date && (
+                <p className="mt-1 text-sm text-[#9C9C9C]">
+                  작성일 · {formattedDate}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="shrink-0 lg:mt-0 lg:ml-auto">
           <RecruitDetailHeaderControl
             instagram={instagram}

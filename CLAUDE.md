@@ -15,7 +15,7 @@ Sanctioned choice per concern. The full dependency list is `package.json` — th
 |---|---|
 | Framework | Next.js 15 App Router + React 19 + TypeScript |
 | HTTP | ky — preconfigured instances in `shared/api/` |
-| Client cache | @tanstack/react-query — keys in `{domain}/api/queries.ts` |
+| Client cache | @tanstack/react-query — `get{Name}Options` functions in `{domain}/api/queries.ts` |
 | URL state | nuqs |
 | Styling | Tailwind CSS v4 `@theme` tokens + cva + `cn` (`@/shared/lib/utils`) |
 | UI primitives | @radix-ui |

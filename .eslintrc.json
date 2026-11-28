@@ -13,7 +13,6 @@
     "prettier",
     "airbnb-typescript"
   ],
-
   "rules": {
     "jsx-a11y/label-has-associated-control": [
       2,
@@ -39,7 +38,52 @@
     ],
     "react/function-component-definition": [
       2,
-      { "namedComponents": ["function-declaration"] }
+      {
+        "namedComponents": ["function-declaration"]
+      }
+    ],
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          {
+            "target": "./src/shared",
+            "from": [
+              "./src/entities",
+              "./src/features",
+              "./src/widgets",
+              "./src/views",
+              "./src/app"
+            ],
+            "message": "shared는 의존성 화살표의 끝이라 어떤 레이어도 import할 수 없습니다. 상위 레이어가 필요하다면 그 파일은 shared 소속이 아닙니다."
+          },
+          {
+            "target": "./src/entities",
+            "from": [
+              "./src/features",
+              "./src/widgets",
+              "./src/views",
+              "./src/app"
+            ],
+            "message": "entities는 features/widgets/views/app을 import할 수 없습니다."
+          },
+          {
+            "target": "./src/features",
+            "from": ["./src/widgets", "./src/views", "./src/app"],
+            "message": "features는 widgets/views/app을 import할 수 없습니다."
+          },
+          {
+            "target": "./src/widgets",
+            "from": ["./src/views", "./src/app"],
+            "message": "widgets는 views/app을 import할 수 없습니다."
+          },
+          {
+            "target": "./src/views",
+            "from": ["./src/app"],
+            "message": "views는 app을 import할 수 없습니다."
+          }
+        ]
+      }
     ]
   },
   "parser": "@typescript-eslint/parser",

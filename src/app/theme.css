@@ -11,6 +11,7 @@
   --color-disabled: #cccccc;
   --color-gray: #8b95a1;
   --color-gray2: #d6d6d6;
+  --color-gray3: #e6e6e6; /* 헤더 아이콘 버튼 hover */
   --color-gray4: #f8f8f8;
   --color-darkmode-line: #43e780; /* 다크모드 시 LINE */
   --color-darkmode-tag: #1ae166; /* 다크모드 시 TAG */

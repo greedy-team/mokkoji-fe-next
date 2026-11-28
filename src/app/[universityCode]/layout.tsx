@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import QueryProvider from '@/shared/lib/QueryProvider';
 import { isValidUniversityCode } from '@/shared/lib/universityMeta';
+import NotificationStreamMount from '@/widgets/notification/ui/NotificationStreamMount';
 
 const userQueryOptions = {
   queries: {
@@ -23,6 +24,9 @@ export default async function UniversityCodeLayout({
   }
 
   return (
-    <QueryProvider defaultOptions={userQueryOptions}>{children}</QueryProvider>
+    <QueryProvider defaultOptions={userQueryOptions}>
+      <NotificationStreamMount />
+      {children}
+    </QueryProvider>
   );
 }

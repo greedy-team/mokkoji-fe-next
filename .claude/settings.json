@@ -36,7 +36,17 @@
       "mcp__discord-forum-mcp__get_forum_tags",
       "mcp__discord-forum-mcp__read_messages",
       "mcp__discord-forum-mcp__send_message",
-      "mcp__discord-forum-mcp__update_forum_post"
+      "mcp__discord-forum-mcp__update_forum_post",
+      "mcp__notion-team__API-post-search",
+      "mcp__notion-team__API-get-self",
+      "mcp__notion-team__API-retrieve-a-page",
+      "mcp__notion-team__API-retrieve-a-block",
+      "mcp__notion-team__API-get-block-children",
+      "mcp__notion-team__API-retrieve-a-database",
+      "mcp__notion-team__API-retrieve-a-data-source",
+      "mcp__notion-team__API-query-data-source",
+      "mcp__notion-team__API-retrieve-a-comment",
+      "mcp__notion-team__API-retrieve-page-markdown"
     ]
   }
 }

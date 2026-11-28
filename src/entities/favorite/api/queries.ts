@@ -2,19 +2,19 @@ import { queryOptions } from '@tanstack/react-query';
 import getClientFavoriteList from './getClientFavoriteList';
 import getClientFavoriteByDate from './getClientFavoriteByDate';
 
-const favoriteQueries = {
-  all: ['favorites'] as const,
-  list: (params: { page: number; size: number }) =>
-    queryOptions({
-      queryKey: [...favoriteQueries.all, 'list', params],
-      queryFn: () => getClientFavoriteList(params),
-      staleTime: 60 * 1000,
-    }),
-  recruit: (yearMonth: string) =>
-    queryOptions({
-      queryKey: [...favoriteQueries.all, 'recruit', yearMonth],
-      queryFn: () => getClientFavoriteByDate(yearMonth),
-    }),
-};
+export const favoriteBaseKey = ['favorites'] as const;
 
-export default favoriteQueries;
+export function getFavoriteListOptions(params: { page: number; size: number }) {
+  return queryOptions({
+    queryKey: [...favoriteBaseKey, params.page, params.size],
+    queryFn: () => getClientFavoriteList(params),
+    staleTime: 0,
+  });
+}
+
+export function getFavoriteRecruitOptions(yearMonth: string) {
+  return queryOptions({
+    queryKey: [...favoriteBaseKey, 'recruit', yearMonth],
+    queryFn: () => getClientFavoriteByDate(yearMonth),
+  });
+}

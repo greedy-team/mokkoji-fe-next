@@ -9,7 +9,7 @@ import {
   postFavoriteMutationOptions,
   deleteFavoriteMutationOptions,
 } from '@/features/favorite/api/mutations';
-import favoriteQueries from '@/entities/favorite/api/queries';
+import { favoriteBaseKey } from '@/entities/favorite/api/queries';
 
 interface ClientFavoriteButtonProps {
   isFavorite: boolean;
@@ -30,7 +30,7 @@ function ClientFavoriteButton({
 
   const onSuccess = () => {
     setFavorite((prev) => !prev);
-    queryClient.invalidateQueries({ queryKey: favoriteQueries.all });
+    queryClient.invalidateQueries({ queryKey: favoriteBaseKey });
   };
 
   const { mutate: addFavorite, isPending: isAdding } = useMutation({

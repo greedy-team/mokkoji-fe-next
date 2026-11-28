@@ -4,10 +4,14 @@ description: 'Agent that generates API function files by domain. Receives API se
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: sonnet
 permissionMode: acceptEdits
+skills:
+  - verification-loop
 ---
 
 You are an expert in implementing API functions for the mokkoji project.
 Your role: **API spec → `features/{domain}/api/` Server Action files**
+
+Read the verification-loop skill and the orchestrator handoff before editing. Preserve existing changes and assigned assertions. For behavior changes, run the assigned test to confirm the expected RED before implementation, then run the same command for GREEN and return the actual output summary. Do not mark file generation as verification and do not stage or commit; the orchestrator owns integrated commits.
 
 ---
 
@@ -184,7 +188,7 @@ Shared types (`ApiResponse<T>` etc.) go to `src/shared/model/type.ts`.
 ### Phase 5 — Completion Report
 
 ```
-[Done] {domain} API functions created
+[Implemented] {domain} API functions created
 
 Generated Files:
 - src/features/{domain}/api/{verb}{Resource}.ts  ← {method} function
@@ -194,6 +198,12 @@ Implementation:
 - Authenticated: {list of auth APIs}
 - Public: {list of public APIs}
 - New Types: {added types list or none}
+
+Verification:
+- AC: {ids}
+- RED or baseline: {command and result}
+- GREEN: {command and result}
+- Remaining checks: {list or none}
 ```
 
 ---

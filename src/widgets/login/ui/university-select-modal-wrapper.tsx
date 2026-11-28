@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { University } from '@/entities/university/model/type';
 import patchUniversityCode from '@/features/my/api/patchUniversityCode';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import { toUrlCode } from '@/shared/lib/urlCodeConverter';
 import { Button } from '@/shared/ui/button';
 import {

@@ -1,6 +1,6 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { Button } from '@/shared/ui/button';
 import { AlertCircle, RotateCcw, ArrowLeft } from 'lucide-react';

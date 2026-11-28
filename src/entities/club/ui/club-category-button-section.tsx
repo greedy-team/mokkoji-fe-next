@@ -8,7 +8,7 @@ import {
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import cn from '@/shared/lib/utils';
-import useUrlParams from '@/shared/model/useUrlParams';
+import useUrlParams from '@/shared/hooks/use-url-params';
 
 const categories: ClubCategory[] = [
   ClubCategory.CULTURAL_ART,

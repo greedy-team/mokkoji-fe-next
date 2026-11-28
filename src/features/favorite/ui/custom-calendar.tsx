@@ -12,7 +12,7 @@ import Image from 'next/image';
 import favoriteNextIcon from '@/shared/assets/images/favorite/next.svg';
 import favoritePreviousIcon from '@/shared/assets/images/favorite/prev.svg';
 import getWeekdays from '../util/get-week-days';
-import useCalendarDeadline from '../model/useCalendarDeadline';
+import useCalendarDeadline from '../model/use-calendar-deadline';
 
 const getMonthIndex = (date: Date) => date.getFullYear() * 12 + date.getMonth();
 

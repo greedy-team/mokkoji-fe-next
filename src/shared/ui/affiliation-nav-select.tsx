@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ClubAffiliation, ClubAffiliationLabel } from '@/shared/model/type';
-import useUrlParams from '@/shared/model/useUrlParams';
+import useUrlParams from '@/shared/hooks/use-url-params';
 
 function AffiliationNavSelect() {
   const { active, handleChange: changeAffiliation } =

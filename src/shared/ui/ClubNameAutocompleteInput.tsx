@@ -8,7 +8,7 @@ import { Search } from 'lucide-react';
 import getClubNameListOptions from '@/shared/api/queries';
 import type { ClubName } from '@/shared/api/getClientClubNameList';
 import filterClubNames from '@/shared/lib/filterClubNames';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 import cn from '@/shared/lib/utils';
 
 interface ClubNameAutocompleteInputProps

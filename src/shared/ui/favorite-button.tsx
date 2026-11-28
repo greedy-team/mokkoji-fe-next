@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
 import { useSession } from '@/shared/lib/session-context';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ManageClub } from '@/shared/model/type';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import {
   Dialog,
   DialogContent,

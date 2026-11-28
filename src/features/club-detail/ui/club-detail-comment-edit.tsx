@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import useServerAction from '@/shared/hooks/useServerAction';
+import useServerAction from '@/shared/hooks/use-server-action';
 import { Button } from '@/shared/ui/button';
 import Textarea from '@/shared/ui/textarea';
 import { useSession } from '@/shared/lib/session-context';

@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import ky from 'ky';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
-import useFormDraft from '@/shared/hooks/useFormDraft';
+import useUniversityCode from '@/shared/hooks/use-university-code';
+import useFormDraft from '@/shared/hooks/use-form-draft';
 import {
   deserializeFile,
   serializeFile,
@@ -19,7 +19,7 @@ import convertImageToWebp, {
 import { Button } from '@/shared/ui/button';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
-import useClubForm from '@/features/admin-club-description/util/useClubForm';
+import useClubForm from '@/features/admin-club-description/util/use-club-form';
 import { patchClubInfo } from '@/features/admin-club-description/api/postClubRegister';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import useEditFlow from './use-edit-flow';

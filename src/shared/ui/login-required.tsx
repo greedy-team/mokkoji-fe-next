@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 function LoginRequired() {
   const universityCode = useUniversityCode();

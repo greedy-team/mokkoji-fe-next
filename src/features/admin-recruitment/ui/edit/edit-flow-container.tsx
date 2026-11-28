@@ -1,19 +1,19 @@
 'use client';
 
-import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import useUniversityCode from '@/shared/hooks/use-university-code';
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import uploadToPresignedUrl from '@/shared/api/uploadToPresignedUrl';
 import { ClubInfoType } from '@/shared/model/type';
-import useImageUpload from '@/shared/model/useImageUpload';
-import useFormDraft from '@/shared/hooks/useFormDraft';
+import useImageUpload from '@/shared/hooks/use-image-upload';
+import useFormDraft from '@/shared/hooks/use-form-draft';
 import { Button } from '@/shared/ui/button';
 import AdminPageHeader from '@/features/admin/ui/components/admin-page-header';
 import DotsPulseLoader from '@/shared/ui/DotsPulseLoader';
 import SharedLoading from '@/shared/ui/loading';
-import useRecruitmentForm from '@/features/admin-recruitment/util/useRecruitmentForm';
+import useRecruitmentForm from '@/features/admin-recruitment/util/use-recruitment-form';
 import patchRecruitmentForm from '@/features/admin-recruitment/api/patchRecruitmentForm';
 import deleteRecruitmentForm from '@/features/admin-recruitment/api/deleteRecruitmentForm';
 import getRecruitmentDetail from '@/features/admin-recruitment/api/getRecruitmentDetail';

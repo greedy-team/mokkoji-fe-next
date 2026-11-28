@@ -9,6 +9,7 @@ let nextConfig: NextConfig = {
   reactStrictMode: false,
   transpilePackages: ['msw', 'next-auth'],
   output: 'standalone',
+  allowedDevOrigins: ['local.mokkoji.site'],
   pageExtensions: isProd
     ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js', 'dev.tsx'],

@@ -217,6 +217,35 @@ queryClient.invalidateQueries({ queryKey: favoriteBaseKey });
 
 쿼리별로 다르게 둘 때는 `get{이름}Options` 안에 설정하고 이유를 남깁니다. 현재 예외는 즐겨찾기 목록(`staleTime: 0`, 항상 최신 목록을 다시 불러옴) 하나입니다.
 
+### 로컬에서 운영과 같은 쿠키 조건으로 띄우기 (`pnpm dev:https`)
+
+브라우저는 쿠키를 보낼지 정할 때 "같은 사이트"인지를 본다. 상위 도메인이 같으면(`local.mokkoji.site` ↔ `api.dev.mokkoji.site`) 같은 사이트이고, `localhost` ↔ `api.dev.mokkoji.site` 는 다른 사이트라 백엔드가 준 쿠키가 서드파티로 막힌다. 그래서 백엔드 쿠키 인증을 로컬에서 확인하려면 로컬 프론트도 `mokkoji.site` 아래 이름으로 띄운다. 평소 개발은 지금처럼 `pnpm dev` 를 쓴다.
+
+1. hosts 파일에 한 줄 추가 (관리자 권한). 내 PC 에서만 `local.mokkoji.site` 가 내 컴퓨터를 가리킨다.
+   - Windows: `C:\Windows\System32\drivers\etc\hosts`
+   - macOS·Linux: `/etc/hosts`
+
+   ```
+   127.0.0.1 local.mokkoji.site
+   ```
+
+2. `.env.local` 을 아래 값으로 바꾼다.
+
+   ```
+   NEXT_PUBLIC_API_URL=https://api.dev.mokkoji.site/api/dev
+   NEXT_PUBLIC_BASE_URL=https://local.mokkoji.site:3000
+   ```
+
+3. `pnpm dev:https` 로 실행하고 `https://local.mokkoji.site:3000` 을 연다.
+   - 쿠키가 `Secure` 라서 https 로 띄운다. 처음 실행할 때 Next 가 mkcert 로 로컬 인증서를 만들어 `certificates/` 에 두고, 이 인증서를 믿도록 OS 에 로컬 인증 기관을 설치한다 (Windows 는 확인 창이 한 번 뜬다).
+   - `next.config.ts` 의 `allowedDevOrigins` 는 `localhost` 가 아닌 주소에서 개발 서버 리소스(`/_next/*`, HMR)를 받도록 허용하는 설정이다.
+
+처음 한 번, 팀에서 설정해 둘 것
+
+- 카카오 개발자 콘솔 → 카카오 로그인 → Redirect URI 에 `https://local.mokkoji.site:3000/api/auth/callback/kakao` 추가
+- dev 백엔드 CORS 허용 출처(`cors.allowedOrigins`)에 `https://local.mokkoji.site:3000` 추가
+- `api.dev.mokkoji.site` 가 dev 백엔드를 가리키고 인증서가 있어야 한다 (가비아 DNS + 서버 nginx·certbot)
+
 ---
 ## 🗂️ 백엔드 백로그
 

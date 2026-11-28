@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import headerMokkojiLogoIcon from '@/shared/assets/images/header/mokkojiLogo.svg';
 import NavButton from '@/shared/ui/nav-button';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';

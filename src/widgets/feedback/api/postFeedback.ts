@@ -9,7 +9,7 @@ async function postFeedback({
   rating,
   content,
 }: PostFeedbackRequest): Promise<void> {
-  await clientApi.post('api/feedbacks', {
+  await clientApi.post('feedbacks', {
     json: { rating, content },
   });
 }

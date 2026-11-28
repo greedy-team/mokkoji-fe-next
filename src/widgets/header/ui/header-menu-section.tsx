@@ -21,7 +21,7 @@ function HeaderMenuSection({ role, session }: HeaderMenuSectionProps) {
         sessionRole={role}
         manageClubInfo={session?.manageClubInfo || []}
       />
-      <HeaderLogin userName={session?.user?.name || ''} />
+      <HeaderLogin />
     </>
   );
 }

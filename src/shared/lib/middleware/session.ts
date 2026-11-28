@@ -4,103 +4,73 @@ import {
   RequestCookies,
 } from 'next/dist/compiled/@edge-runtime/cookies';
 import {
-  SESSION_COOKIE_NAME,
-  SESSION_COOKIE_OPTIONS,
-  parseSessionCookie,
-  CookieSession,
-} from '@/shared/lib/cookie-session';
-import getTokenExpiration from '@/shared/lib/getTokenExpiration';
+  ACCESS_TOKEN_COOKIE_NAME,
+  LEGACY_SESSION_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_NAME,
+  buildForwardedCookieHeader,
+  needsTokenRefresh,
+  relaySetCookies,
+} from '@/shared/lib/auth-cookie';
 
 /**
  * 메인 서비스 세션의 토큰 수명 관리를 담당한다.
- * 쿠키 읽기 → 만료 판정 → 갱신 → 쿠키 반영까지가 하나의 관심사다.
+ * 토큰은 백엔드가 발급한 HttpOnly 쿠키에 있고, 여기서는 만료 직전이면 갱신을 부탁해 받은 쿠키를 반영한다.
  */
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface SessionState {
-  session: CookieSession | null;
-  /** 요청 시점에 accessToken이 만료돼 있었는지 */
-  isExpired: boolean;
-  /** 갱신 또는 폐기로 세션이 바뀌어 쿠키를 다시 써야 하는지 */
-  isUpdated: boolean;
+  isAuthenticated: boolean;
+  /** 백엔드 갱신 응답의 Set-Cookie. 성공이면 새 토큰, 실패면 백엔드가 만료시킨 쿠키가 담긴다 */
+  refreshedCookies: Headers | null;
 }
 
 /**
- * refreshToken을 사용하여 백엔드에 새 accessToken을 요청한다.
- * 미들웨어는 Edge Runtime에서 실행되므로 ky 대신 네이티브 fetch를 사용한다.
- * @returns 새 accessToken 또는 null(실패 시)
+ * 미들웨어는 Edge Runtime 에서 실행되므로 ky 대신 네이티브 fetch 를 사용한다.
+ * 백엔드에는 브라우저가 보낸 refresh 쿠키를 그대로 실어 보낸다.
  */
-async function refreshAccessToken(
-  refreshToken: string,
-): Promise<string | null> {
+async function refreshTokens(req: NextRequest): Promise<Response | null> {
+  const cookieHeader = buildForwardedCookieHeader(
+    (name) => req.cookies.get(name)?.value,
+  );
+  if (!cookieHeader) return null;
   try {
-    const res = await fetch(`${API_URL}/users/auth/refresh`, {
+    return await fetch(`${API_URL}/users/auth/refresh`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${refreshToken}` },
+      headers: { Cookie: cookieHeader },
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.data?.accessToken ?? null;
   } catch {
     return null;
   }
 }
 
-/**
- * 쿠키에서 세션을 읽고, 만료됐으면 갱신까지 마친 상태를 돌려준다.
- * refreshToken마저 무효면 세션을 폐기(null)해 로그아웃으로 처리한다.
- */
 export async function resolveSession(req: NextRequest): Promise<SessionState> {
-  const session = parseSessionCookie(
-    req.cookies.get(SESSION_COOKIE_NAME)?.value,
-  );
+  const accessToken = req.cookies.get(ACCESS_TOKEN_COOKIE_NAME)?.value;
+  const refreshToken = req.cookies.get(REFRESH_TOKEN_COOKIE_NAME)?.value;
 
-  // expiresAt이 없으면 만료 판단 불가 → 만료되지 않은 것으로 간주
-  const isExpired = session?.expiresAt
-    ? Date.now() >= session.expiresAt
-    : false;
-
-  if (!session || !isExpired || !session.refreshToken) {
-    return { session, isExpired, isUpdated: false };
+  if (!needsTokenRefresh({ accessToken, refreshToken, now: Date.now() })) {
+    return { isAuthenticated: !!accessToken, refreshedCookies: null };
   }
 
-  const newToken = await refreshAccessToken(session.refreshToken);
-  if (!newToken) {
-    return { session: null, isExpired, isUpdated: true };
+  const response = await refreshTokens(req);
+  if (!response) {
+    return { isAuthenticated: false, refreshedCookies: null };
   }
-
-  return {
-    session: {
-      ...session,
-      accessToken: newToken,
-      expiresAt: getTokenExpiration(newToken) ?? undefined,
-    },
-    isExpired,
-    isUpdated: true,
-  };
+  return { isAuthenticated: response.ok, refreshedCookies: response.headers };
 }
 
-/** 갱신되거나 폐기된 세션을 응답 쿠키에 반영한다. */
+/** 갱신으로 받은 쿠키를 브라우저 응답에 옮기고, 쿠키 인증 전의 세션 쿠키가 남아 있으면 지운다. */
 export function applySessionCookie(
+  req: NextRequest,
   response: NextResponse,
-  { session, isUpdated }: SessionState,
+  { refreshedCookies }: SessionState,
 ): void {
-  if (!isUpdated) return;
-
-  if (session) {
-    response.cookies.set(
-      SESSION_COOKIE_NAME,
-      encodeURIComponent(JSON.stringify(session)),
-      SESSION_COOKIE_OPTIONS,
-    );
-  } else {
-    response.cookies.delete(SESSION_COOKIE_NAME);
+  if (refreshedCookies) {
+    relaySetCookies(refreshedCookies, response.headers);
   }
-}
-
-export function clearSessionCookie(response: NextResponse): void {
-  response.cookies.delete(SESSION_COOKIE_NAME);
+  if (req.cookies.has(LEGACY_SESSION_COOKIE_NAME)) {
+    response.cookies.delete(LEGACY_SESSION_COOKIE_NAME);
+  }
 }
 
 /**

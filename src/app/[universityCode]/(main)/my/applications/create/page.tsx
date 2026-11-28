@@ -1,4 +1,4 @@
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
 import getClubApplicationStatus from '@/entities/my/api/getClubApplicationStatus';
 import { toCreateCardItem } from '@/entities/my/lib/application-card';

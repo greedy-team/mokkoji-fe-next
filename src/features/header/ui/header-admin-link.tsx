@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import useUniversityCode from '@/shared/hooks/use-university-code';
-import { ApiResponse, UserRole } from '@/shared/model/type';
+import { UserRole } from '@/shared/model/type';
+import { useSession } from '@/shared/lib/session-context';
 import cn from '@/shared/lib/utils';
 
 interface HeaderAdminLinkProps {
@@ -22,9 +22,9 @@ const ALLOWED_ROLES = [
 function HeaderAdminLink({ isLoggedIn, className }: HeaderAdminLinkProps) {
   const universityCode = useUniversityCode();
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(false);
+  const { session } = useSession();
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (!isLoggedIn) {
@@ -32,23 +32,11 @@ function HeaderAdminLink({ isLoggedIn, className }: HeaderAdminLinkProps) {
       return;
     }
 
-    if (isChecking) return;
-
-    setIsChecking(true);
-    try {
-      const response = await fetch('/api/users/role');
-      const body: ApiResponse<{ role: UserRole }> = await response.json();
-      const role = body.data?.role;
-
-      if (role && ALLOWED_ROLES.includes(role)) {
-        router.push(`/${universityCode}/admin`);
-      } else {
-        toast.warning('관리자 전용 페이지입니다!');
-      }
-    } catch {
+    const role = session?.role;
+    if (role && ALLOWED_ROLES.includes(role)) {
+      router.push(`/${universityCode}/admin`);
+    } else {
       toast.warning('관리자 전용 페이지입니다!');
-    } finally {
-      setIsChecking(false);
     }
   };
 

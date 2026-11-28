@@ -17,16 +17,11 @@ import {
 } from '@/shared/ui/icons/header-icons';
 import headerProfileIcon from '@/shared/assets/images/header/profile.svg';
 
-interface HeaderLoginProps {
-  userName: string;
-}
-
-function HeaderLogin({ userName }: HeaderLoginProps) {
+function HeaderLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const { status } = useSession();
-  const isLoggedIn =
-    status === 'authenticated' || (status === 'loading' && !!userName);
+  const isLoggedIn = status === 'authenticated';
   const dropdownRef = useRef<HTMLDivElement>(null);
   const universityCode = useUniversityCode();
   const logout = useLogout();

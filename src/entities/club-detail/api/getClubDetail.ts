@@ -3,13 +3,13 @@ import { ApiResponse } from '@/shared/model/type';
 import { ClubDetail } from '@/entities/club-detail/model/type';
 import api from '@/shared/api/auth-api';
 import serverApi from '@/shared/api/server-api';
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 
 async function getClubDetail(id: number) {
   const session = await getSession();
   try {
     let response: ApiResponse<ClubDetail>;
-    if (session?.accessToken) {
+    if (session) {
       response = await api.get(`clubs/${id}`).json();
     } else {
       response = await serverApi

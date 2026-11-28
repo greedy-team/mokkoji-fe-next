@@ -1,4 +1,4 @@
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import { DetailParams, UserRole } from '@/shared/model/type';
 import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 import PostRecruitmentPage from '@/views/post-recruitment/post-recruitment-page';

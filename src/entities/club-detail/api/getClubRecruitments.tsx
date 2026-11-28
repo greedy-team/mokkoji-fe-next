@@ -1,7 +1,7 @@
 import createErrorResponse from '@/shared/lib/error-message';
 import { ApiResponse } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import { ClubRecruitmentsResponse } from '@/entities/club-detail/model/type';
 
@@ -9,7 +9,7 @@ async function getClubRecruitments(clubId: number) {
   const session = await getSession();
   try {
     let response: ApiResponse<ClubRecruitmentsResponse>;
-    if (session?.accessToken) {
+    if (session) {
       response = await api.get(`recruitments/club/${clubId}`).json();
     } else {
       response = await serverApi

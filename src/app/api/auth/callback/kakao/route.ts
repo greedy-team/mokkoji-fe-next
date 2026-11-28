@@ -34,8 +34,10 @@ export async function GET(request: NextRequest) {
       ? `/${state}/my?newUser=true`
       : `/${state}/my`;
     const response = NextResponse.redirect(new URL(redirectUrl, request.url));
-    relaySetCookies(loginResponse.headers, response.headers);
+    // delete 는 NextResponse 내부 쿠키 목록을 기준으로 Set-Cookie 를 다시 쓴다.
+    // relay 보다 뒤에 두면 직접 append 한 인증 쿠키가 지워지므로 순서를 바꾸지 말 것.
     response.cookies.delete(LEGACY_SESSION_COOKIE_NAME);
+    relaySetCookies(loginResponse.headers, response.headers);
 
     return response;
   } catch (error) {

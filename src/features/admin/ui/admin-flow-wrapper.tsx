@@ -1,4 +1,4 @@
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import getClubManageInfo from '@/shared/api/manage-api';
 import AdminFlowContainer from './admin-flow-container';
 

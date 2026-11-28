@@ -4,7 +4,7 @@ import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
 import { getFavoriteListOptions } from '@/entities/favorite/api/queries';
 import getServerFavoriteList from '@/entities/favorite/api/getServerFavoriteList';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import getServerQueryClient from '@/shared/lib/get-query-client';
 import LoginRequired from '@/shared/ui/login-required';
 import ScrollProgressBar from '@/shared/ui/scroll-progress-bar';

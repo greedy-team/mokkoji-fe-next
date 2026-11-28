@@ -12,7 +12,7 @@ const postApplyClick = async (
   if (!recruitmentId) return false;
 
   try {
-    await send(`api/recruitments/${recruitmentId}/apply-click`);
+    await send(`recruitments/${recruitmentId}/apply-click`);
     return true;
   } catch {
     return false;

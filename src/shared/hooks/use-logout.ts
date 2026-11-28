@@ -12,8 +12,9 @@ export default function useLogout() {
   const universityCode = useUniversityCode();
 
   return useCallback(async () => {
-    await clientApi.post('api/auth/logout');
-    refresh();
+    // 이미 만료돼 실패해도 화면은 로그아웃 상태로 돌린다
+    await clientApi.post('users/auth/logout').catch(() => undefined);
+    await refresh();
     router.replace(`/${universityCode}`);
     router.refresh();
   }, [router, refresh, universityCode]);

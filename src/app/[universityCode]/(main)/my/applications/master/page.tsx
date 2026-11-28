@@ -1,4 +1,4 @@
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import LoginRequired from '@/shared/ui/login-required';
 import getMyClubMasterApplications from '@/entities/my/api/getMyClubMasterApplications';
 import { toMasterCardItem } from '@/entities/my/lib/application-card';

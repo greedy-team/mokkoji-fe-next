@@ -1,4 +1,4 @@
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
 import getClubManageInfo from '@/shared/api/manage-api';
 import UniversitySelectModalWrapper from '@/widgets/login/ui/university-select-modal-wrapper';

@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useSession } from '@/shared/lib/session-context';
 import { ClubComment } from '@/entities/club-detail/model/type';
 import ClubDetailCommentInput from '@/features/club-detail/ui/club-detail-comment-input';
 import ClubDetailComment from '@/features/club-detail/ui/club-detail-comment';
@@ -12,20 +11,18 @@ interface ClubCommentsWidgetProps {
 }
 
 function ClubCommentsWidget({ clubId }: ClubCommentsWidgetProps) {
-  const { session, status } = useSession();
   const [comments, setComments] = useState<ClubComment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadComments = useCallback(async () => {
-    const data = await fetchComments(clubId, session?.accessToken);
+    const data = await fetchComments(clubId);
     setComments([...data].reverse());
     setIsLoading(false);
-  }, [clubId, session?.accessToken]);
+  }, [clubId]);
 
   useEffect(() => {
-    if (status === 'loading') return;
     loadComments();
-  }, [status, loadComments]);
+  }, [loadComments]);
 
   if (isLoading) {
     return (

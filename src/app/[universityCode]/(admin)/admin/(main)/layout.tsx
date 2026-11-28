@@ -2,7 +2,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Footer from '@/shared/ui/Footer';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import getCurrentUserRole from '@/shared/api/getCurrentUserRole';
+import getSession from '@/shared/lib/cookie-session';
 import { UserRole } from '@/shared/model/type';
 import AdminHeader from '@/shared/ui/AdminHeader';
 import { getUniversityName } from '@/shared/lib/universityMeta';
@@ -44,8 +44,7 @@ export default async function AdminLayout({
 }) {
   const { universityCode } = await params;
 
-  const { data } = await getCurrentUserRole();
-  const role = data?.role as UserRole | undefined;
+  const role = (await getSession())?.role;
 
   if (!role || !ALLOWED_ROLES.includes(role)) {
     redirect(`/${universityCode}`);

@@ -7,7 +7,6 @@ import {
 import {
   applySessionCookie,
   applySetCookie,
-  clearSessionCookie,
   resolveSession,
   type SessionState,
 } from './session';
@@ -23,23 +22,12 @@ const MOBILE_USER_AGENT =
 
 function decideResponse(
   req: NextRequest,
-  { session, isExpired, isUpdated }: SessionState,
+  { isAuthenticated }: SessionState,
 ): NextResponse {
   const { nextUrl } = req;
-  const isPublic = isPublicPath(nextUrl.pathname);
-  const loginUrl = `/${extractUniversityCode(nextUrl.pathname)}/login`;
 
-  // accessToken 만료 + refreshToken 없음 → 세션 쿠키 삭제, 비공개 경로면 로그인으로
-  if (session && isExpired && !session.refreshToken && !isUpdated) {
-    const response = isPublic
-      ? NextResponse.next()
-      : NextResponse.redirect(new URL(loginUrl, nextUrl));
-    clearSessionCookie(response);
-    return response;
-  }
-
-  // 비로그인 상태에서 비공개 경로 접근 → 로그인으로
-  if (!session?.accessToken && !isPublic) {
+  if (!isAuthenticated && !isPublicPath(nextUrl.pathname)) {
+    const loginUrl = `/${extractUniversityCode(nextUrl.pathname)}/login`;
     return NextResponse.redirect(new URL(loginUrl, nextUrl));
   }
 
@@ -76,7 +64,7 @@ export default async function handleMainAuth(
 
   const response = decideResponse(req, sessionState);
 
-  applySessionCookie(response, sessionState);
+  applySessionCookie(req, response, sessionState);
   applyDeviceTypeCookie(req, response);
   applySetCookie(req, response);
 

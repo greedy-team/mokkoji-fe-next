@@ -1,63 +1,40 @@
+import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
-import { UserRole } from '@/shared/model/type';
-import UserInfoType from '@/shared/model/user';
-
-/* ────────────────────────────────────────────
- * 상수 & 타입 (미들웨어·RSC 공용)
- * ──────────────────────────────────────────── */
-
-export const SESSION_COOKIE_NAME = 'app-session';
-
-export const SESSION_COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
-  path: '/',
-  maxAge: 60 * 60 * 24 * 3, // 3일
-};
-
-export interface CookieSession {
-  accessToken: string;
-  refreshToken: string;
-  user: UserInfoType;
-  role?: UserRole;
-  expiresAt?: number;
-  universityCode?: string;
-}
-
-/* ────────────────────────────────────────────
- * 순수 유틸 (Edge Runtime 호환)
- * ──────────────────────────────────────────── */
+import api from '@/shared/api/auth-api';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_NAME,
+} from '@/shared/lib/auth-cookie';
+import type { Session } from '@/shared/model/session';
+import type { ApiResponse, UserRole } from '@/shared/model/type';
+import type UserInfoType from '@/shared/model/user';
 
 /**
- * encodeURIComponent로 인코딩된 쿠키 문자열을 CookieSession으로 파싱한다.
- * 미들웨어에서는 req.cookies로 꺼낸 raw 값을, RSC에서는 getSession()이 내부적으로 사용한다.
+ * 로그인한 사용자 정보와 role 을 백엔드에서 조회한다.
+ * role 을 쿠키에 두면 사용자가 고칠 수 있고 권한이 바뀌어도 남으므로 백엔드 값을 쓴다.
+ * cache 로 감싸 한 요청 안에서는 layout·Header·페이지가 몇 번 불러도 한 번만 조회한다.
  */
-export function parseSessionCookie(
-  raw: string | undefined,
-): CookieSession | null {
-  if (!raw) return null;
+const getSession = cache(async (): Promise<Session | null> => {
+  const cookieStore = await cookies();
+  const hasAuthCookie =
+    cookieStore.has(ACCESS_TOKEN_COOKIE_NAME) ||
+    cookieStore.has(REFRESH_TOKEN_COOKIE_NAME);
+  if (!hasAuthCookie) return null;
+
   try {
-    return JSON.parse(decodeURIComponent(raw)) as CookieSession;
+    const response = await api
+      .get('users', { cache: 'no-store' })
+      .json<ApiResponse<UserInfoType>>();
+    if (!response.data) return null;
+    return {
+      user: response.data,
+      role: response.data.role as UserRole,
+      universityCode: response.data.universityCode ?? undefined,
+    };
   } catch {
     return null;
   }
-}
+});
 
-/* ────────────────────────────────────────────
- * RSC / Server Action 전용 (next/headers 의존)
- * ──────────────────────────────────────────── */
-
-export async function getSession(): Promise<CookieSession | null> {
-  const cookieStore = await cookies();
-  const raw = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-  return parseSessionCookie(raw);
-}
-
-export function buildSessionCookie(session: CookieSession) {
-  return {
-    name: SESSION_COOKIE_NAME,
-    value: encodeURIComponent(JSON.stringify(session)),
-    ...SESSION_COOKIE_OPTIONS,
-  };
-}
+export default getSession;

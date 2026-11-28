@@ -30,7 +30,7 @@ test('모집글 번호를 경로에 담아 보낸다', async () => {
 
   await postApplyClick(42, recordingSend);
 
-  assert.deepEqual(calledPaths, ['api/recruitments/42/apply-click']);
+  assert.deepEqual(calledPaths, ['recruitments/42/apply-click']);
 });
 
 test('모집글 번호가 없으면 요청을 보내지 않는다', async () => {

@@ -4,74 +4,68 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
-import { UserRole } from '@/shared/model/type';
-import UserInfoType from '@/shared/model/user';
-
-interface SessionData {
-  user: UserInfoType;
-  role?: UserRole;
-  accessToken?: string;
-  universityCode?: string;
-  expiresAt?: number;
-}
+import clientApi from '@/shared/api/client-api';
+import type { Session } from '@/shared/model/session';
+import type { ApiResponse, UserRole } from '@/shared/model/type';
+import type UserInfoType from '@/shared/model/user';
 
 interface SessionContextValue {
-  session: SessionData | null;
-  status: 'loading' | 'authenticated' | 'unauthenticated';
-  refresh: () => void;
+  session: Session | null;
+  status: 'authenticated' | 'unauthenticated';
+  refresh: () => Promise<void>;
 }
 
 const SessionContext = createContext<SessionContextValue>({
   session: null,
-  status: 'loading',
-  refresh: () => {},
+  status: 'unauthenticated',
+  refresh: async () => {},
 });
 
+async function fetchSession(): Promise<Session | null> {
+  try {
+    const response = await clientApi
+      .get('users')
+      .json<ApiResponse<UserInfoType>>();
+    if (!response.data) return null;
+    return {
+      user: response.data,
+      role: response.data.role as UserRole,
+      universityCode: response.data.universityCode ?? undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 서버(루트 layout)가 한 번 조회한 세션을 받아 들고 있는다. 화면 권한 표시는 추가 요청 없이 이 값을 쓴다.
+ * 로그아웃·정보 수정처럼 세션이 바뀐 뒤에만 refresh 로 다시 조회한다.
+ */
 export function AppSessionProvider({
+  initialSession = null,
   children,
 }: {
+  initialSession?: Session | null;
   children: React.ReactNode;
 }) {
-  const [session, setSession] = useState<SessionData | null>(null);
-  const [status, setStatus] =
-    useState<SessionContextValue['status']>('loading');
+  const [session, setSession] = useState<Session | null>(initialSession);
 
-  const fetchSession = useCallback(async () => {
-    try {
-      const res = await fetch('/api/auth/session');
-      const json = await res.json();
-      if (json?.user) {
-        setSession(json);
-        setStatus('authenticated');
-      } else {
-        setSession(null);
-        setStatus('unauthenticated');
-      }
-    } catch {
-      setSession(null);
-      setStatus('unauthenticated');
-    }
+  const refresh = useCallback(async () => {
+    setSession(await fetchSession());
   }, []);
 
-  useEffect(() => {
-    fetchSession();
-  }, [fetchSession]);
-
-  useEffect(() => {
-    if (!session?.expiresAt) return undefined;
-    const delay = session.expiresAt - Date.now();
-    if (delay <= 0) return undefined;
-    const timer = setTimeout(() => window.location.reload(), delay);
-    return () => clearTimeout(timer);
-  }, [session?.expiresAt]);
-
   const value = useMemo(
-    () => ({ session, status, refresh: fetchSession }),
-    [session, status, fetchSession],
+    () => ({
+      session,
+      status: session
+        ? ('authenticated' as const)
+        : ('unauthenticated' as const),
+      refresh,
+    }),
+    [session, refresh],
   );
 
   return (

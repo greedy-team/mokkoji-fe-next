@@ -6,6 +6,7 @@ import ClarityProvider from '@/_providers/clarity-provider';
 import Script from 'next/script';
 import DevToDoPin from '@/shared/ui/DevToDoPin';
 import { AppSessionProvider } from '@/shared/lib/session-context';
+import getSession from '@/shared/lib/cookie-session';
 import { ToastContainer } from 'react-toastify';
 import MSWProvider from '@/_providers/msw-provider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -73,7 +74,7 @@ export default function RootLayout({
       <body className="scrollbar-hide">
         <NuqsAdapter>
           <MSWProvider>
-            <AppSessionProvider>
+            <AppSessionProvider initialSession={await getSession()}>
               <DevToDoPin>
                 <WebVitalProvider />
                 <ToastContainer

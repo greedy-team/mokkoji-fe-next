@@ -5,7 +5,7 @@ import {
 } from '@/shared/model/type';
 import api from '@/shared/api/auth-api';
 import createErrorResponse from '@/shared/lib/error-message';
-import { getSession } from '@/shared/lib/cookie-session';
+import getSession from '@/shared/lib/cookie-session';
 import serverApi from '@/shared/api/server-api';
 import { ClubsResponse } from '../model/type';
 
@@ -44,7 +44,7 @@ async function getClubList({
   });
 
   try {
-    const isAuthenticated = !!session?.accessToken;
+    const isAuthenticated = !!session;
     const client = isAuthenticated ? api : serverApi;
 
     const response = await client

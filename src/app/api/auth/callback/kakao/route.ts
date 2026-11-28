@@ -1,13 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 import { NextRequest, NextResponse } from 'next/server';
 import serverApi from '@/shared/api/server-api';
+import { LoginSuccessResponse } from '@/features/login/model/type';
 import {
-  LoginSuccessResponse,
-  RoleResponse,
-} from '@/features/login/model/type';
-import UserInfoType from '@/entities/my/model/type';
-import getTokenExpiration from '@/shared/lib/getTokenExpiration';
-import { buildSessionCookie, CookieSession } from '@/shared/lib/cookie-session';
+  LEGACY_SESSION_COOKIE_NAME,
+  relaySetCookies,
+} from '@/shared/lib/auth-cookie';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
 
 export async function GET(request: NextRequest) {
@@ -32,42 +30,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(`/${state}/login`, request.url));
     }
 
-    const { accessToken, refreshToken, isNewUser } = loginResponseBody.data;
-
-    const userResponse = await serverApi.get('users', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const userResponseBody: { data: UserInfoType } = await userResponse.json();
-
-    let role: string | undefined;
-    try {
-      const rolesResponse = await serverApi.get('users/roles', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const rolesResponseBody: RoleResponse = await rolesResponse.json();
-      role = rolesResponseBody.data?.role;
-    } catch {
-      // role 조회 실패해도 로그인은 성공 처리
-    }
-
-    const apiUniversityCode = toApiCode(
-      userResponseBody.data.universityCode ?? 'SEJONG',
-    );
-
-    const session: CookieSession = {
-      accessToken,
-      refreshToken,
-      user: userResponseBody.data,
-      role: role as CookieSession['role'],
-      expiresAt: getTokenExpiration(accessToken) ?? undefined,
-      universityCode: apiUniversityCode,
-    };
-
-    const redirectUrl = isNewUser
+    const redirectUrl = loginResponseBody.data.isNewUser
       ? `/${state}/my?newUser=true`
       : `/${state}/my`;
     const response = NextResponse.redirect(new URL(redirectUrl, request.url));
-    response.cookies.set(buildSessionCookie(session));
+    relaySetCookies(loginResponse.headers, response.headers);
+    response.cookies.delete(LEGACY_SESSION_COOKIE_NAME);
 
     return response;
   } catch (error) {

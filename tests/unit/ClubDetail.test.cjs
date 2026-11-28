@@ -234,7 +234,7 @@ test('최근 모집공고 조회는 정상 빈 응답과 실패 응답의 상태
       '@/shared/lib/error-message': () => ({ ok: false, status: 500 }),
       '@/shared/api/auth-api': api,
       '@/shared/api/server-api': api,
-      '@/shared/lib/cookie-session': { getSession: async () => null },
+      '@/shared/lib/cookie-session': async () => null,
     });
     const result = await getRecent(1);
     assert.equal(result.ok, response.ok);

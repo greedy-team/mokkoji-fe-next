@@ -1,4 +1,4 @@
-import MyPage from '@/entities/my/ui/my-page';
+import MyPage from '@/views/my/ui/my-page';
 
 interface PageProps {
   params: Promise<{ universityCode: string }>;

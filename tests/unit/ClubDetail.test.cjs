@@ -78,7 +78,7 @@ async function page({
         throw new Error('NOT_FOUND');
       },
     },
-    '@/entities/club-detail/ui/recruit-detail-header': 'header',
+    '@/widgets/club-detail/ui/recruit-detail-header': 'header',
     '@/entities/club-detail/ui/recruit-history-section': 'history',
     '@/shared/ui/error-boundary-ui': 'error',
     '@/widgets/club-detail/ui/club-detail-tabs': 'tabs',

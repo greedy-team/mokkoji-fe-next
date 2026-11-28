@@ -1,11 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
+import ClubNameAutocompleteInput from '@/shared/ui/ClubNameAutocompleteInput';
 import headerSearchIcon from '@/shared/assets/images/header/search.svg';
 
 function HomeSearchBar() {
   const universityCode = useUniversityCode();
+  const [keyword, setKeyword] = useState('');
 
   return (
     <div className="mb-5 flex flex-col items-center py-5 lg:mb-[15px]">
@@ -15,10 +18,11 @@ function HomeSearchBar() {
           method="GET"
           className="flex items-center justify-between gap-1 pb-2 text-xs lg:text-xl"
         >
-          <input
-            type="text"
+          <ClubNameAutocompleteInput
             required
             name="q"
+            value={keyword}
+            onChange={setKeyword}
             placeholder="어떤 동아리를 찾고 계신가요?"
             className="w-[90%] py-5 outline-none focus:placeholder-gray-300 lg:indent-2"
           />

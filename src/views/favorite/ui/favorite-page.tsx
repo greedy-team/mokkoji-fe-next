@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import FavoriteDateSection from '@/widgets/favorite/ui/favorite-date-section';
 import FavoriteItemSection from '@/widgets/favorite/ui/favorite-item-section';
-import favoriteQueries from '@/widgets/favorite/api/queries';
+import { getFavoriteListOptions } from '@/widgets/favorite/api/queries';
 import getServerFavoriteList from '@/widgets/favorite/api/getServerFavoriteList';
 import ScrollTopButton from '@/shared/ui/scroll-top-button';
 import { getSession } from '@/shared/lib/cookie-session';
@@ -26,7 +26,7 @@ async function FavoritePage({ page, size }: FavoritePageProps) {
 
   const queryClient = getServerQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: favoriteQueries.list({ page, size }).queryKey,
+    queryKey: getFavoriteListOptions({ page, size }).queryKey,
     queryFn: () => getServerFavoriteList({ page, size }),
   });
 

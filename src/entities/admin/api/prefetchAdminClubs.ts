@@ -1,5 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import adminQueries, { ADMIN_CLUBS_PAGE_SIZE } from './queries';
+import { ADMIN_CLUBS_PAGE_SIZE, getAdminClubListOptions } from './queries';
 import getServerManagementClubs from './getServerManagementClubs';
 
 function prefetchAdminClubs(
@@ -9,7 +9,7 @@ function prefetchAdminClubs(
   if (!universityCode) return null;
 
   return queryClient.prefetchInfiniteQuery({
-    ...adminQueries.clubs(universityCode),
+    ...getAdminClubListOptions(universityCode),
     queryFn: ({ pageParam }) =>
       getServerManagementClubs({
         page: pageParam as number,

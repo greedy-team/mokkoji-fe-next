@@ -10,6 +10,7 @@ import {
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import convertLinkText from '@/entities/club-detail/util/convertLinkText';
+import isApplyFormLink from '@/entities/club-detail/util/isApplyFormLink';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import detailLinkIcon from '@/shared/assets/images/detail/link.svg';
 import detailSpeakerIcon from '@/shared/assets/images/detail/speaker.svg';
@@ -20,6 +21,7 @@ interface RecruitDetailViewProps {
   recruitForm: string;
   imageUrls: string[];
   recentRecruitId: number;
+  onApplyFormLinkClick?: () => void;
 }
 
 function RecruitDetailView({
@@ -28,6 +30,7 @@ function RecruitDetailView({
   recruitForm,
   imageUrls,
   recentRecruitId,
+  onApplyFormLinkClick,
 }: RecruitDetailViewProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
@@ -63,6 +66,20 @@ function RecruitDetailView({
     router.push(`/${universityCode}/club/${clubId}`);
   };
 
+  // 본문 링크는 convertLinkText가 만든 HTML이라 핸들러를 직접 달 수 없어 위임받는다.
+  const handleContentClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (!onApplyFormLinkClick) return;
+
+    const anchor = (event.target as HTMLElement).closest('a');
+    if (!anchor) return;
+
+    if (!isApplyFormLink(anchor.getAttribute('href') ?? '', recruitForm)) {
+      return;
+    }
+
+    onApplyFormLinkClick();
+  };
+
   return (
     <div className="flex flex-col">
       {!isRecentRecruitment && (
@@ -76,7 +93,10 @@ function RecruitDetailView({
         </button>
       )}
       <h1 className="lg:text-md lg:mb-5 lg:text-lg lg:font-bold">[{title}]</h1>
+      {/* 실제 클릭 대상은 본문 안의 <a>라 키보드로도 Tab·Enter로 접근된다. */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */}
       <p
+        onClick={handleContentClick}
         dangerouslySetInnerHTML={{ __html: convertLinkText(content) }}
         className="text-text-secondary overflow-wrap-break-word mb-3 text-sm leading-[1.4] break-all whitespace-pre-wrap lg:max-w-4xl lg:text-lg"
       />

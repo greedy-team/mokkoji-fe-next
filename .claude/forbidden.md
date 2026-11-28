@@ -37,13 +37,36 @@ Also forbidden: importing another domain's slice inside the same layer. A widget
 
 If two domains need the same thing, move it down to `shared` (or the relevant `entities` slice) instead of importing sideways.
 
+### `shared` importing anything
+
+`shared/` is the end of the arrow, so it imports from no layer at all — not `entities`, not `features`, not `widgets`, not `views`. Inside `shared` a file may import other `shared` files and third-party packages, nothing else.
+
+**Why:** `shared` is the only layer every other layer depends on. One import out of it makes the whole graph circular, and the module that reached upward can no longer be lifted into another project, which was the entire reason for putting it there.
+
+The arrow rule above already covers this. It is restated because the failure mode is specific: a `shared` component grows a feature-shaped need — a session, a role check, a domain modal — and reaching upward looks like the smallest fix. It never is. A `shared/ui` file that needs a domain component is not a shared component; it is a widget filed in the wrong place. Move the file, do not add the import.
+
+### Re-export shims across a layer boundary
+
+A file whose entire body imports one thing from another layer and re-exports it is forbidden.
+
+```tsx
+// Forbidden — shared/ui/login-required.tsx
+import LoginRequired from '@/widgets/login/ui/login-required';
+
+export default LoginRequired;
+```
+
+**Why:** this is a reverse import wearing a disguise. The violation is not removed, only moved into a file nobody reads — and it gets worse, because call sites now import `@/shared/...` and no grep, audit, or reviewer can see which layer they actually reached. A direct reverse import is at least visible.
+
+The shims are what a well-meant cleanup produces when the implementation is lifted to the correct layer but the call sites are left untouched. Finish the move: delete the file at the old path and repoint every caller at the real one. If a caller cannot legally import the implementation, that caller is the misplaced file — fix it there.
+
 ### Fetching inside `widgets` and `features/ui`
 
 Presentational components do not fetch. Data is resolved in `views/` or `app/**/page.tsx` and passed down as props, or primed via react-query prefetch + `HydrationBoundary` (see [`api-conventions.md`](./api-conventions.md) §4).
 
 **Why:** fetching inside the composition layers makes those components untestable in isolation, unusable in Storybook, and impossible to reuse under a different data source.
 
-The accepted client-side pattern is a component reading an already-hydrated cache with `useSuspenseQuery(domainQueries.x())` — the fetch was scheduled by the view, not by the widget.
+The accepted client-side pattern is a component reading an already-hydrated cache with `useSuspenseQuery(getDomainOptions())` — the fetch was scheduled by the view, not by the widget.
 
 > Known violations: [ClubManagementWidget.tsx](../src/widgets/admin/ui/ClubManagementWidget.tsx), [favorite-dynamic-section.tsx](../src/widgets/favorite/ui/favorite-dynamic-section.tsx), [ClientFavoriteButton.tsx](../src/widgets/favorite/ui/ClientFavoriteButton.tsx) still hold their own `useQuery`/`useMutation`. Do not copy them into new code.
 
@@ -66,9 +89,27 @@ Do not delete a `'server-only'` import to make an error go away. It means the ca
 
 ### Inline `queryKey`
 
-Do not write a `queryKey` array inside a component or hook. Keys live in `{layer}/{domain}/api/queries.ts` as `queryOptions` / `infiniteQueryOptions` factories.
+Do not write a `queryKey` array inside a component or hook — for reads or for `invalidateQueries`. Keys live in `{layer}/{domain}/api/queries.ts`: each query is a `get{Name}Options` function returning `queryOptions` / `infiniteQueryOptions`, and invalidation uses the domain base key exported from the same file (see [`api-conventions.md`](./api-conventions.md) §6).
 
 **Why:** duplicated key literals drift, and invalidation then misses caches it was supposed to clear.
+
+### Untyped mock handlers and copied mock types
+
+Every MSW handler in `src/mocks/handlers/` declares its response body type through the generic, and mock data in `src/mocks/data.ts` is typed with the real types imported from `entities` / `features` / `shared`. Redeclaring a response interface inside `src/mocks/` is forbidden.
+
+```ts
+// Forbidden
+http.get(apiUrl('/universities'), () => HttpResponse.json({ data: { universities } }));
+
+// Correct
+http.get<never, never, MockResponse<UniversitiesResponse>>(apiUrl('/universities'), () =>
+  HttpResponse.json({ data: { universities } }),
+);
+```
+
+**Why:** an untyped or copied shape keeps compiling after the real type changes, so mock mode drifts silently — the old `University` mock still returned `universityCode` long after the type moved to `code`. With the generic, `pnpm typecheck` fails the moment the two diverge.
+
+Mock code imports enums as types only (`` `${ClubCategory}` ``). A runtime enum import pulls the SVG assets of `shared/model/type` into the Node unit tests.
 
 ### Swallowing errors in Server Actions
 

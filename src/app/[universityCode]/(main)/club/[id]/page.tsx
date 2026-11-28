@@ -1,12 +1,9 @@
 import ClubDetailPage from '@/views/club/ui/club-detail-page';
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
 import ClubDetailSkeleton from '@/entities/club/ui/club-detail-skeleton';
 import { type Metadata } from 'next';
 import getClubDetail from '@/views/club/api/getClubDetail';
-import getRecentRecruitDetail from '@/views/club/api/getRecentRecruitDetail';
 import { getUniversityName } from '@/shared/lib/universityMeta';
-import ErrorBoundaryUi from '@/shared/ui/error-boundary-ui';
 
 interface PageProps {
   params: Promise<{ universityCode: string; id: string }>;
@@ -49,28 +46,9 @@ export async function generateMetadata({
 }
 
 async function Page({ params, searchParams }: PageProps) {
-  const { id, universityCode } = await params;
-  const { tab = 'recruit', recruit } = await searchParams;
-
-  let recent;
-  try {
-    recent = await getRecentRecruitDetail(Number(id));
-  } catch {
-    return <ErrorBoundaryUi />;
-  }
-
-  if (recent.status === 404 || !recent.data) notFound();
-  if (!recent.ok) return <ErrorBoundaryUi />;
-
   return (
     <Suspense fallback={<ClubDetailSkeleton />}>
-      <ClubDetailPage
-        id={Number(id)}
-        universityCode={universityCode}
-        tab={tab}
-        recruit={recruit}
-        recent={recent.data}
-      />
+      <ClubDetailPage params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

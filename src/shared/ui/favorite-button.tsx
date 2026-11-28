@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
+import { favoriteBaseKey } from '@/shared/api/queries';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -48,7 +49,7 @@ function FavoriteButton({
           return;
         }
         setFavorite((prev) => !prev);
-        queryClient.invalidateQueries({ queryKey: ['favorites'] });
+        queryClient.invalidateQueries({ queryKey: favoriteBaseKey });
       }, 600),
     [favorite, session, clubId, queryClient, universityCode],
   );

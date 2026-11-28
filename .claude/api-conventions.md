@@ -9,13 +9,13 @@ All HTTP goes through a preconfigured ky instance in `shared/api/`.
 | Instance                      | Runtime      | Auth                                      | Use for                                                 |
 | ----------------------------- | ------------ | ----------------------------------------- | ------------------------------------------------------- |
 | `shared/api/server-api.ts`    | server       | none                                      | Anonymous reads whose response is identical for everyone |
-| `shared/api/auth-api.ts`      | server only  | user session Bearer, auto-injected        | Reads and Server Actions whose response is per-user      |
-| `shared/api/client-api.ts`    | browser only | none (cookie flows through Route Handler) | Client-side reads, always aimed at our own `app/api/**` |
+| `shared/api/auth-api.ts`      | server only  | forwards the user's auth cookies, auto-injected | Reads and Server Actions whose response is per-user |
+| `shared/api/client-api.ts`    | browser only | backend HttpOnly cookies (`credentials: 'include'`) | Client-side reads and mutations, straight to the backend |
 | `shared/api/dashboard-api.ts` | server only  | dashboard session Bearer                  | Admin dashboard endpoints                               |
 
 `auth-api`, `dashboard-api`, and every `getServer*` function import `'server-only'`. `client-api` throws if it is reached on the server. These two guards are the enforcement.
 
-`client-api` has `prefixUrl: '/'`, so paths are relative with no leading slash: `clientApi.get('api/favorites')`.
+`client-api` has `prefixUrl` set to the backend (`NEXT_PUBLIC_API_URL`), so paths are backend paths with no leading slash: `clientApi.get('favorites')`.
 
 ### Choosing between `server-api` and `auth-api`
 
@@ -24,8 +24,8 @@ The question is not "does this endpoint need a token" but **"is this response sh
 Endpoints that serve both audiences branch on the session to pick the client:
 
 ```ts
-const isAuthenticated = !!session?.accessToken;
-const client = isAuthenticated ? api : serverApi;
+const session = await getSession();
+const client = session ? api : serverApi;
 ```
 
 Personal responses are never cached — `cache: 'no-store'`. Anonymous responses are the only ones *allowed* into the shared cache, but being allowed is not a reason to cache: see §5 for what disqualifies a read. Reads that are personal by nature (`entities/my/*`) use `auth-api` + `no-store` unconditionally.
@@ -77,49 +77,29 @@ const { mutate, isPending } = useServerAction(postClubRegister, {
 - `onSuccess` runs only after a successful action and may be async.
 - **Double-submit protection lives at the call site.** `mutate` does not guard on `isPending` internally, so the caller must bind `isPending` to the submit control's `disabled`. Omitting this leaves the form racing.
 
-## 4. Client-side reads: Route Handler + SSR prefetch
+## 4. Authentication: backend cookies, no proxy
 
-The browser never talks to the backend directly. The chain is:
+The backend issues `access_token` / `refresh_token` as HttpOnly cookies on `Domain=.mokkoji.site`, so the browser and the Next server both receive them. Nothing in the frontend reads or stores a token.
 
 ```
-client component → queries.ts → getClient*() → clientApi → app/api/**/route.ts → proxy helper → backend
+browser : client component → queries.ts → getClient*() → clientApi ──(cookies, credentials: 'include')──▶ backend
+server  : RSC / Server Action → auth-api ──(forwards the two auth cookies + Origin)──▶ backend
 ```
 
-**Route Handler** — a thin proxy over one of two helpers, chosen by which session the endpoint belongs to:
+- **No proxy Route Handlers.** The browser calls the backend directly. Route Handlers remain only where the browser cannot call the backend itself: the Kakao OAuth callback (it relays the backend's `Set-Cookie` with `relaySetCookies`) and the dashboard (`requestByAdmin`, separate session).
+- **Token refresh** happens in two places, both sending the `refresh_token` cookie to `users/auth/refresh`:
+  - middleware, before a server render, when the access token is missing or about to expire (`needsTokenRefresh`); the new cookies go to the browser and to the same request's RSC (`applySetCookie`).
+  - `client-api`, when a browser request gets 401; it refreshes once (shared across concurrent requests) and retries.
+- **Who is logged in** comes from the backend, not from a cookie value. `getSession()` (`shared/lib/cookie-session.ts`) calls `GET users` and is `cache`-wrapped, so one request makes one call no matter how many components ask. The root layout passes its result to `AppSessionProvider`; client components read `useSession()` and never fetch it again. App Router keeps layouts across navigations, so the server call happens on a full load and on pages that check the role themselves (admin layouts, post-recruitment, my page).
+- **State-changing requests** from the server carry `Origin: NEXT_PUBLIC_BASE_URL`, because the backend checks the origin of cookie-authenticated POST/PUT/PATCH/DELETE.
 
-| Helper                                | Session           | Token refresh                                |
-| ------------------------------------- | ----------------- | -------------------------------------------- |
-| `shared/lib/user-request.ts` (`requestByUser`)   | user cookie session      | on 401, refreshes once, rewrites the cookie, retries |
-| `shared/lib/admin-request.ts` (`requestByAdmin`) | dashboard session | none — a 401 is returned as-is               |
+### Client-side reads
 
-```ts
-export async function GET(request: NextRequest) {
-  return requestByUser('favorites', {
-    searchParams: request.nextUrl.searchParams,
-  });
-}
-```
+A client component reads with `useSuspenseQuery(get{Name}Options())`; the `queryFn` is the `getClient*` fetcher calling the backend directly. No server twin and no `HydrationBoundary` are needed for per-user data.
 
-Add a Route Handler whenever a client component needs authenticated data.
+`useSuspenseQuery` also runs during server rendering, where `client-api` throws. Render such a subtree on the client only — `next/dynamic` with `ssr: false` — inside `AsyncBoundaryWithQuery`. Reference: [favorite-list-section.tsx](../src/widgets/favorite/ui/favorite-list-section.tsx).
 
-**Paired fetchers** — the same resource gets two functions in the same `api/` folder:
-
-- `getClient*.ts` → `clientApi`, hits `api/...`
-- `getServer*.ts` → `auth-api` + `'server-only'`, hits the backend directly
-
-Both unwrap the envelope and return the payload, so they are interchangeable as a `queryFn`.
-
-**Prefetch and hydrate** — the view (a Server Component) primes the cache with the *server* fetcher, wraps the tree in `HydrationBoundary`, and the client component reads it with `useSuspenseQuery(getFavoriteListOptions(params))` — no data props.
-
-```ts
-const queryClient = getServerQueryClient();
-await queryClient.prefetchQuery({
-  queryKey: getFavoriteListOptions({ page, size }).queryKey,
-  queryFn: () => getServerFavoriteList({ page, size }),
-});
-```
-
-`getServerQueryClient` is `cache`-wrapped, so one client is shared per request. Wrap suspending subtrees in `AsyncBoundaryWithQuery` (not bare `Suspense`) so an error reset also resets the query cache.
+Server prefetch (`getServer*` + `prefetchQuery` + `HydrationBoundary`) is still the pattern for data that must be in the first HTML, such as SEO content or the dashboard ([prefetchAdminClubs.ts](../src/entities/admin/api/prefetchAdminClubs.ts)). `getServerQueryClient` is `cache`-wrapped, so one client is shared per request. Wrap suspending subtrees in `AsyncBoundaryWithQuery` (not bare `Suspense`) so an error reset also resets the query cache.
 
 Reference: [favorite-page.tsx](../src/views/favorite/ui/favorite-page.tsx) + [favorite-item-section.tsx](../src/widgets/favorite/ui/favorite-item-section.tsx).
 
@@ -185,7 +165,7 @@ export function getFavoriteListOptions(params: { page: number; size: number }) {
 - **Keys** are hierarchical — base key first, then qualifier, then params — and every key is built from the base key.
 - **Invalidation** uses the base key too: `invalidateQueries({ queryKey: favoriteBaseKey })`. Never write the key array again at the call site. A component that cannot import its domain's `queries.ts` (anything in `shared/`) does not invalidate that domain's cache — see [`forbidden.md`](./forbidden.md) § Cache knowledge below the domain layer.
 - **Consumers** spread the options: `useSuspenseQuery(getFavoriteListOptions(params))`. Reach for `.queryKey` alone only when prefetching with a different `queryFn`.
-- **staleTime** comes from the layout's `QueryProvider` default: 10 minutes under `[universityCode]` and the root `(home)`, 0 under `(admin)/dashboard`. Override it in an options function only with a written reason. The favorites list sets `staleTime: 0` so it is always refetched, accepting one duplicate request after hydration.
+- **staleTime** comes from the layout's `QueryProvider` default: 10 minutes under `[universityCode]` and the root `(home)`, 0 under `(admin)/dashboard`. Override it in an options function only with a written reason. The favorites list sets `staleTime: 0` so it is always refetched when the page is opened.
 - Other per-query options (`enabled`, `getNextPageParam`) belong in the options function, not in the component.
 - To prefetch an infinite query, override `queryFn` with the server fetcher while spreading the options — see [prefetchAdminClubs.ts](../src/entities/admin/api/prefetchAdminClubs.ts).
 

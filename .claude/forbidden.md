@@ -62,7 +62,7 @@ The shims are what a well-meant cleanup produces when the implementation is lift
 
 ### Fetching inside `widgets` and `features/ui`
 
-Presentational components do not fetch. Data is resolved in `views/` or `app/**/page.tsx` and passed down as props, or primed via react-query prefetch + `HydrationBoundary` (see [`api-conventions.md`](./api-conventions.md) §4).
+Presentational components do not fetch. Data is resolved in `views/` or `app/**/page.tsx` and passed down as props, primed via react-query prefetch + `HydrationBoundary`, or read through the domain's `get{Name}Options` with `useSuspenseQuery` (see [`api-conventions.md`](./api-conventions.md) §4).
 
 **Why:** fetching inside the composition layers makes those components untestable in isolation, unusable in Storybook, and impossible to reuse under a different data source.
 
@@ -78,14 +78,14 @@ Never call `fetch` directly, and never call `ky.create` outside `shared/api/`. P
 
 **Why:** the instances carry auth injection, the `server-only` / browser guards, and the base URL. A hand-rolled call quietly ships without any of them.
 
-Exception: `shared/lib/user-request.ts` calls bare `ky` on purpose — it *is* the proxy layer and must control `throwHttpErrors` and headers itself. Route Handlers use `requestByUser`, not their own ky.
+Exceptions: `shared/lib/admin-request.ts` calls bare `ky` on purpose — it *is* the dashboard proxy layer and must control `throwHttpErrors` and headers itself. The middleware (Edge Runtime) uses native `fetch` for token refresh. `client-api` retries a request with bare `ky` after refreshing, so the retry does not loop through its own hooks.
 
 ### Crossing the server/client boundary with the wrong client
 
 - `client-api` on the server — throws at runtime by design.
 - `auth-api` / `dashboard-api` / any `getServer*` imported into a client component — `server-only` breaks the build.
 
-Do not delete a `'server-only'` import to make an error go away. It means the call belongs on the other side of a Route Handler.
+Do not delete a `'server-only'` import to make an error go away. It means the call belongs on the other side — a client component uses its `getClient*` fetcher through `client-api` instead.
 
 ### Inline `queryKey` — reads and invalidation alike
 

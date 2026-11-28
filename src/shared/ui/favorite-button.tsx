@@ -3,11 +3,9 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import throttle from 'lodash/throttle';
-import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
 import useUniversityCode from '@/shared/hooks/useUniversityCode';
 import { toApiCode } from '@/shared/lib/urlCodeConverter';
-import { favoriteBaseKey } from '@/shared/api/queries';
 import FavoriteThread from './favorite-thread';
 import postFavorite from '../api/post-favorite';
 import deleteFavorite from '../api/delete-favorite';
@@ -27,7 +25,6 @@ function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { session } = useSession();
-  const queryClient = useQueryClient();
   const universityCode = useUniversityCode();
 
   const handleToggle = useMemo(
@@ -49,9 +46,8 @@ function FavoriteButton({
           return;
         }
         setFavorite((prev) => !prev);
-        queryClient.invalidateQueries({ queryKey: favoriteBaseKey });
       }, 600),
-    [favorite, session, clubId, queryClient, universityCode],
+    [favorite, session, clubId, universityCode],
   );
 
   return (

@@ -1,7 +1,8 @@
 import { queryOptions } from '@tanstack/react-query';
-import { favoriteBaseKey } from '@/shared/api/queries';
 import getClientFavoriteList from './getClientFavoriteList';
 import getClientFavoriteByDate from './getClientFavoriteByDate';
+
+export const favoriteBaseKey = ['favorites'] as const;
 
 export function getFavoriteListOptions(params: { page: number; size: number }) {
   return queryOptions({

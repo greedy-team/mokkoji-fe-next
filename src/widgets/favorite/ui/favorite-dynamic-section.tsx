@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import CustomCalendar from '@/features/favorite/ui/custom-calendar';
 import RecruitFavoriteList from '@/entities/favorite/ui/recruit-favorite-list';
 import RecruitDeadlineSoonList from '@/entities/favorite/ui/recruit-dead-line-list';
-import { getFavoriteRecruitOptions } from '../api/queries';
+import { getFavoriteRecruitOptions } from '@/entities/favorite/api/queries';
 
 function FavoriteDynamicSection() {
   const [value, setValue] = useState<Date>(new Date());

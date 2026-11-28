@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from '@/shared/lib/session-context';
-import { favoriteBaseKey } from '@/shared/api/queries';
 import FavoriteThread from '@/shared/ui/favorite-thread';
 import {
   postFavoriteMutationOptions,
   deleteFavoriteMutationOptions,
-} from '../api/mutations';
+} from '@/features/favorite/api/mutations';
+import { favoriteBaseKey } from '@/entities/favorite/api/queries';
 
 interface ClientFavoriteButtonProps {
   isFavorite: boolean;

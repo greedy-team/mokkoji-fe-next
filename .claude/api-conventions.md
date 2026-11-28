@@ -167,7 +167,7 @@ Before attaching a cache policy to a `serverApi` read, check four things:
 
 ## 6. react-query: keys live in `queries.ts`
 
-Each domain collects its queries in `{layer}/{domain}/api/queries.ts`. One query is one function named `get{Name}Options` that returns `queryOptions` / `infiniteQueryOptions`. The domain's base key sits in the same file.
+Each domain collects its queries in `entities/{domain}/api/queries.ts` (§7). One query is one function named `get{Name}Options` that returns `queryOptions` / `infiniteQueryOptions`. The domain's base key sits in the same file.
 
 ```ts
 export const favoriteBaseKey = ['favorites'] as const;
@@ -183,7 +183,7 @@ export function getFavoriteListOptions(params: { page: number; size: number }) {
 - **Naming**: `get{Name}Options` — `getFavoriteListOptions`, `getAdminClubListOptions`. Mutations follow the same shape: `{verb}{Name}MutationOptions`.
 - **Exports**: named exports. A file that exports a single function uses `export default` instead, as `import/prefer-default-export` requires.
 - **Keys** are hierarchical — base key first, then qualifier, then params — and every key is built from the base key.
-- **Invalidation** uses the base key too: `invalidateQueries({ queryKey: favoriteBaseKey })`. Never write the key array again at the call site. When a lower layer must invalidate (e.g. `shared/ui/favorite-button.tsx`), the base key lives in that lower layer — `favoriteBaseKey` is in `shared/api/queries.ts` for this reason.
+- **Invalidation** uses the base key too: `invalidateQueries({ queryKey: favoriteBaseKey })`. Never write the key array again at the call site. A component that cannot import its domain's `queries.ts` (anything in `shared/`) does not invalidate that domain's cache — see [`forbidden.md`](./forbidden.md) § Cache knowledge below the domain layer.
 - **Consumers** spread the options: `useSuspenseQuery(getFavoriteListOptions(params))`. Reach for `.queryKey` alone only when prefetching with a different `queryFn`.
 - **staleTime** comes from the layout's `QueryProvider` default: 10 minutes under `[universityCode]` and the root `(home)`, 0 under `(admin)/dashboard`. Override it in an options function only with a written reason. The favorites list sets `staleTime: 0` so it is always refetched, accepting one duplicate request after hydration.
 - Other per-query options (`enabled`, `getNextPageParam`) belong in the options function, not in the component.
@@ -193,11 +193,13 @@ export function getFavoriteListOptions(params: { page: number; size: number }) {
 
 **Placement**
 
-| Kind                         | Location                                            |
-| ---------------------------- | --------------------------------------------------- |
-| Server Action (mutation)     | `features/{domain}/api/`                            |
-| Read fetchers + `queries.ts` | `widgets/{domain}/api/` or `entities/{domain}/api/` |
-| Cross-domain client/helper   | `shared/api/`, `shared/lib/`                        |
+| Kind                                                   | Location                     |
+| ------------------------------------------------------ | ---------------------------- |
+| `queries.ts`, read fetchers (`getClient*` / `getServer*`), `prefetch*` | `entities/{domain}/api/`     |
+| Server Actions, `mutations.ts`, mutation fetchers       | `features/{domain}/api/`     |
+| Cross-domain client/helper                              | `shared/api/`, `shared/lib/` |
+
+Reads sit in `entities` so every layer above can reach the key; mutations sit in `features` because every consumer of one is already above it. See [`forbidden.md`](./forbidden.md) § `queries.ts` outside `entities`.
 
 **Rules**
 
